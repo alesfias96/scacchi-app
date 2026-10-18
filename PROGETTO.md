@@ -298,6 +298,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 8. Analisi partite              | Revisione automatica; momenti critici; mosse mancate spiegate                                                                                                  | Si impara dalle proprie partite                       |
 | 9. Statistiche                  | Metriche, grafici, livello stimato, profondità di calcolo nel tempo                                                                                            | Progressi misurabili                                  |
 | 10. Estensioni                  | Maia (avversario "umano"); AI locale per spiegazioni più naturali; conoscenza avanzata; installatori e aggiornamenti                                           | App completa                                          |
+| 11. Appunti personali           | Uno spazio dove scrivere e ritrovare idee, pensieri e note di studio, collegabili a partite e posizioni                                                        | Le proprie idee restano nell'app                      |
 
 ---
 
@@ -308,7 +309,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 1. Fondamenta                   | ✅ completata |
 | 1-bis. Temi e personalizzazione | ✅ completata |
 | 2. Regole e partita             | ✅ completata |
-| 3. Motore                       | 🔵 in test    |
+| 3. Motore                       | ✅ completata |
 | 4. Database                     | ⚪ da fare    |
 | 5. Analisi                      | ⚪ da fare    |
 | 6. Allenamento calcolo          | ⚪ da fare    |
@@ -316,6 +317,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 8. Analisi partite              | ⚪ da fare    |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
+| 11. Appunti personali           | ⚪ da fare    |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -374,6 +376,9 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-18 | Contro il computer o con l'orologio si gioca solo dall'ultima posizione; "annulla" contro il computer ritira anche la sua risposta | Comportamento prevedibile; torna sempre il turno della persona                                                                                                              |
 | 2026-10-18 | Tempo scaduto con l'avversario senza materiale per vincere = patta                                                                 | Regolamento FIDE                                                                                                                                                            |
 | 2026-10-18 | L'ultima configurazione di partita si salva in `settings.json` (`GameSetup` in `app-settings`)                                     | La finestra "Nuova partita" ripropone le scelte precedenti anche dopo il riavvio                                                                                            |
+| 2026-10-18 | Fase 3 approvata ("va abbastanza bene")                                                                                            | Conferma di Alessandro                                                                                                                                                      |
+| 2026-10-18 | Copia FEN/PGN negli appunti: problema noto, rimandato                                                                              | Nell'app la copia non arriva negli appunti; Alessandro preferisce rimandare. Soluzione proposta: `tauri-plugin-clipboard-manager` (vedi §12)                                |
+| 2026-10-18 | Nuova Fase 11 "Appunti personali", in fondo alla roadmap                                                                           | Richiesta di Alessandro: uno spazio per salvare idee e pensieri, da fare alla fine                                                                                          |
 
 ---
 
@@ -389,6 +394,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8 — Analisi partite.** Momenti critici, mosse mancate spiegate, grafico della valutazione; varianti nella lista mosse (albero al posto della sostituzione del seguito: richiede di estendere `Game`).
 - **Fase 9 — Statistiche.** Crate `crates/stats`; libreria dei grafici da scegliere (offline, rispettosa dei temi).
 - **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
+- **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
 ---
@@ -410,4 +416,5 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.
 - **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.
 - **Shell:** comandi molto lunghi con più `heredoc` e apostrofi possono rompersi; i file si scrivono con lo strumento di scrittura.
+- **Problema noto — appunti:** "Copia FEN" e "Copia PGN" usano `navigator.clipboard.writeText`, che dentro l'app non scrive negli appunti (probabilmente perché il motore web la blocca quando non parte nell'istante del clic). Soluzione proposta e rimandata: il plugin ufficiale `tauri-plugin-clipboard-manager`, con il solo permesso di scrittura.
 - **Gusti di Alessandro:** cornici attorno alla scacchiera, pezzi puliti e minimal, tanta scelta di stili, ogni scelta valida in tutta l'app; a ogni fase chiede ritocchi estetici.
