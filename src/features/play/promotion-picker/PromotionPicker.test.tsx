@@ -3,6 +3,7 @@
  */
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { pieceImageUrl } from '../../../components/piece-icon/pieceImageUrl';
 import { useSettingsStore } from '../../../state/settingsStore';
 import { PromotionPicker } from './PromotionPicker';
 
@@ -17,7 +18,9 @@ describe('PromotionPicker', () => {
     render(<PromotionPicker side="black" onChoose={vi.fn()} onCancel={vi.fn()} />);
 
     const knightImage = screen.getByRole('button', { name: 'Cavallo' }).querySelector('img');
-    expect(knightImage?.getAttribute('src')).toContain('gettoni/bN.svg');
+    // Si confronta con l'immagine attesa, non con il nome del file: Vite
+    // inserisce le immagini piccole direttamente nel codice (indirizzi `data:`).
+    expect(knightImage?.getAttribute('src')).toBe(pieceImageUrl('gettoni', 'bN'));
     expect(screen.getAllByRole('button')).toHaveLength(4);
   });
 

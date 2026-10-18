@@ -48,7 +48,7 @@ mod tests {
         let game = import_game("  rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1 \n")
             .expect("FEN valida");
 
-        assert!(game.moves().is_empty());
+        assert_eq!(game.moves(), []);
         assert_eq!(game.view().position.turn, Side::Black);
     }
 

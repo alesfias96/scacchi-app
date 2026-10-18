@@ -16,7 +16,11 @@ import { Chessboard } from './Chessboard';
 const chessgroundMock = vi.hoisted(() => {
   const set = vi.fn();
   const destroy = vi.fn();
-  const create = vi.fn((_element: HTMLElement, _config: Config) => ({ set, destroy }));
+  // Il tipo tra < > dice quali argomenti riceve la funzione vera di chessground,
+  // così i test possono leggere la configurazione passata (mock.calls).
+  const create = vi.fn<
+    (element: HTMLElement, config: Config) => { set: typeof set; destroy: typeof destroy }
+  >(() => ({ set, destroy }));
   return { create, set, destroy };
 });
 

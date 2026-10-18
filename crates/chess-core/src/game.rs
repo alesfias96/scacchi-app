@@ -265,7 +265,7 @@ mod tests {
     fn a_new_game_starts_from_the_initial_position() {
         let view = Game::new().view();
 
-        assert!(view.moves.is_empty());
+        assert_eq!(view.moves, []);
         assert_eq!(view.cursor, 0);
         assert_eq!(view.position.legal_moves.len(), 20);
         assert_eq!(view.result, None);
@@ -296,7 +296,7 @@ mod tests {
             game.play_uci("e2e5"),
             Err(GameError::IllegalMove("e2e5".to_owned()))
         );
-        assert!(game.moves().is_empty());
+        assert_eq!(game.moves(), []);
     }
 
     #[test]

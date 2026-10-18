@@ -8,6 +8,8 @@
  *   Di base risponde "modalità chiara"; i singoli test possono cambiarlo.
  * - Simula `scrollIntoView` (che jsdom non ha): l'elenco delle mosse lo usa
  *   per tenere in vista la mossa evidenziata. Nei test non fa nulla.
+ * - Simula `window.scrollTo` (che jsdom non ha): il router lo chiama a ogni
+ *   cambio di pagina per riportarla in cima. Nei test non fa nulla.
  */
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
@@ -21,6 +23,8 @@ window.matchMedia = (query: string) =>
   }) as unknown as MediaQueryList;
 
 Element.prototype.scrollIntoView = () => undefined;
+
+window.scrollTo = () => undefined;
 
 afterEach(() => {
   cleanup();

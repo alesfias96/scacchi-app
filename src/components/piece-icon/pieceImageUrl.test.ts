@@ -25,11 +25,18 @@ const PIECES: PieceCode[] = [
 ];
 
 describe('pieceImageUrl', () => {
-  it('trova un’immagine per ogni pezzo di ogni stile', () => {
+  // Vite inserisce le immagini piccole direttamente nel codice (indirizzi
+  // `data:`), quindi non si può controllare il nome del file. Si verifica invece
+  // che ogni combinazione abbia un'immagine e che siano tutte diverse: così si
+  // scopre anche un file copiato per sbaglio da un altro stile o pezzo.
+  it('trova un’immagine diversa per ogni pezzo di ogni stile', () => {
+    const urls = new Set<string>();
     for (const style of STYLES) {
       for (const piece of PIECES) {
-        expect(pieceImageUrl(style, piece)).toContain(`${piece}.svg`);
+        urls.add(pieceImageUrl(style, piece));
       }
     }
+
+    expect(urls.size).toBe(STYLES.length * PIECES.length);
   });
 });
