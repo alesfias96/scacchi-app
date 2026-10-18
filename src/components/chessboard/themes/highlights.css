@@ -1,0 +1,114 @@
+/*
+ * SEGNI E MOVIMENTO — case raggiungibili, evidenziazioni, pezzi sollevati.
+ *
+ * Sostituisce i colori predefiniti di chessground con segni più moderni e
+ * discreti, uguali su ogni scacchiera. I colori e le misure sono token in
+ * src/styles/tokens.css.
+ *
+ * Leggerezza: si animano solo opacità e dimensione dell'immagine, su pochi
+ * elementi alla volta (le case raggiungibili di un pezzo, il pezzo sotto il
+ * cursore). Le case hanno già la loro posizione in `transform`, che quindi
+ * non si tocca. Con "riduci movimento" attivo nel sistema le durate sono 0.
+ */
+
+/* ---------- Case raggiungibili ---------- */
+
+/* Pallino al centro della casa vuota; compare con una breve dissolvenza. */
+[data-board] cg-board square.move-dest {
+  background: radial-gradient(
+    circle,
+    var(--board-dest-color) calc(var(--board-dest-size) / 2),
+    transparent calc(var(--board-dest-size) / 2 + 1%)
+  );
+  animation: dest-appear var(--duration-medium) var(--easing-standard);
+}
+
+/* Casa con un pezzo da catturare: un anello lungo il bordo, che non copre il pezzo. */
+[data-board] cg-board square.oc.move-dest {
+  background: radial-gradient(
+    circle,
+    transparent calc(70% - var(--board-capture-ring)),
+    var(--board-dest-color) calc(71% - var(--board-capture-ring))
+  );
+}
+
+/* Casa sotto il cursore (o sotto il pezzo trascinato): si illumina tutta. */
+[data-board] cg-board square.move-dest:hover,
+[data-board] cg-board square.move-dest.hover {
+  background: var(--board-dest-hover-color);
+}
+
+@keyframes dest-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- Evidenziazioni ---------- */
+
+[data-board] cg-board square.selected {
+  background-color: var(--board-selected-color);
+}
+
+[data-board] cg-board square.last-move {
+  background-color: var(--board-last-move-color);
+}
+
+/* Re sotto scacco: un alone rosso morbido, che compare con una dissolvenza. */
+[data-board] cg-board square.check {
+  background: radial-gradient(
+    circle,
+    var(--board-check-color) 0%,
+    transparent var(--board-check-spread)
+  );
+  animation: dest-appear var(--duration-medium) var(--easing-standard);
+}
+
+/* ---------- Pezzi ---------- */
+
+/*
+ * L'immagine resta centrata nella casa: così si può ingrandire (pezzo
+ * sollevato) senza spostare il pezzo, la cui posizione è in `transform`.
+ */
+[data-pieces] .cg-wrap piece {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  transition: background-size var(--duration-fast) var(--easing-standard);
+}
+
+/*
+ * I pezzi che il giocatore di turno può muovere: cursore "mano aperta" e un
+ * leggero ingrandimento al passaggio. `data-movable` è il colore che può
+ * muovere, impostato da Chessboard.tsx solo quando la scacchiera è interattiva.
+ * I pezzi normalmente non ricevono il mouse (lo riceve la scacchiera sotto):
+ * qui lo ricevono solo per mostrare il cursore; trascinamento e clic
+ * continuano a funzionare perché arrivano comunque alla scacchiera.
+ */
+[data-movable='white'] .cg-wrap.manipulable piece.white:not(.ghost, .anim, .fading),
+[data-movable='black'] .cg-wrap.manipulable piece.black:not(.ghost, .anim, .fading) {
+  cursor: grab;
+  pointer-events: auto;
+}
+
+[data-movable='white'] .cg-wrap.manipulable piece.white:not(.ghost, .anim, .fading):hover,
+[data-movable='black'] .cg-wrap.manipulable piece.black:not(.ghost, .anim, .fading):hover {
+  background-size: var(--piece-hover-size);
+}
+
+/* Il pezzo trascinato: "mano chiusa", sollevato e con la sua ombra. */
+[data-pieces] .cg-wrap piece.dragging {
+  background-size: var(--piece-drag-size);
+  cursor: grabbing;
+  filter: drop-shadow(var(--piece-drag-shadow));
+  pointer-events: auto;
+}
+
+/* Il segnaposto lasciato sulla casa di partenza durante il trascinamento. */
+[data-pieces] .cg-wrap piece.ghost {
+  opacity: var(--piece-ghost-opacity);
+}

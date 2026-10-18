@@ -1,8 +1,10 @@
 # src/components/chessboard — La scacchiera
 
 Il componente che disegna la scacchiera, con la sua cornice. Usa **chessground**, la stessa
-scacchiera di Lichess: animazioni fluide, coordinate, evidenziazione dello scacco e dell'ultima mossa,
-trascinamento dei pezzi.
+scacchiera di Lichess: pezzi che scivolano, coordinate, evidenziazione dello scacco e dell'ultima mossa,
+trascinamento dei pezzi. Sopra ci sono i nostri segni (`themes/highlights.css`): pallini discreti
+sulle case raggiungibili, anelli sui pezzi da catturare, la "mano" sui pezzi che si possono muovere,
+il pezzo che si solleva con la sua ombra quando lo si trascina.
 
 Può essere **in sola lettura** (come l'anteprima nelle Impostazioni) oppure
 **interattiva** (come in Gioca): in quel caso il giocatore di turno può muovere solo verso
@@ -18,15 +20,16 @@ sotto c'è chessground. Per cambiare libreria basterebbe modificare questa carte
 
 ## Contenuto
 
-| Elemento                | Cosa fa                                                                                                                            |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `Chessboard.tsx`        | Il componente: crea la scacchiera, la aggiorna quando la posizione cambia, la libera quando viene rimossa, applica lo stile scelto |
-| `Chessboard.module.css` | La cornice e la forma quadrata                                                                                                     |
-| `Chessboard.test.tsx`   | I test, con chessground simulato                                                                                                   |
-| `buildDests.ts`         | Trasforma le mosse legali di Rust nel formato di chessground (per ogni casa, dove può andare il pezzo)                             |
-| `isSquareKey.ts`        | Controlla che un testo sia una casa valida (da a1 a h8)                                                                            |
-| `*.test.ts`             | I test delle due funzioni qui sopra                                                                                                |
-| `themes/`               | Gli stili delle scacchiere e dei set di pezzi (vedi il README della cartella)                                                      |
+| Elemento                  | Cosa fa                                                                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `Chessboard.tsx`          | Il componente: crea la scacchiera, la aggiorna quando la posizione cambia, la libera quando viene rimossa, applica lo stile scelto |
+| `Chessboard.module.css`   | La cornice e la forma quadrata                                                                                                     |
+| `Chessboard.test.tsx`     | I test, con chessground simulato                                                                                                   |
+| `buildDests.ts`           | Trasforma le mosse legali di Rust nel formato di chessground (per ogni casa, dove può andare il pezzo)                             |
+| `isSquareKey.ts`          | Controlla che un testo sia una casa valida (da a1 a h8)                                                                            |
+| `prefersReducedMotion.ts` | Dice se il sistema chiede di ridurre le animazioni (allora i pezzi non scivolano)                                                  |
+| `*.test.ts`               | I test delle funzioni qui sopra                                                                                                    |
+| `themes/`                 | Gli stili delle scacchiere e dei set di pezzi (vedi il README della cartella)                                                      |
 
 ## Eccezione alla regola dei CSS Modules
 

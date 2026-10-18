@@ -2,7 +2,7 @@
  * Chessboard — la scacchiera grafica, usata in tutte le sezioni dell'app.
  *
  * Cosa fa: disegna una posizione usando chessground, la scacchiera di Lichess
- * (animazioni fluide, coordinate, evidenziazione dello scacco), dentro una
+ * (pezzi che scivolano, coordinate, evidenziazione dello scacco), dentro una
  * cornice. Questo componente è un "involucro": traduce le proprietà React
  * nella configurazione di chessground, così il resto dell'app non dipende
  * direttamente dalla libreria.
@@ -21,7 +21,8 @@
  * - `legalMoves` e `onMove`: facoltativi. Se c'è `onMove` la scacchiera è
  *   interattiva: il giocatore di turno può trascinare (o cliccare) i suoi
  *   pezzi, ma solo verso le case permesse da `legalMoves`. A mossa fatta
- *   viene chiamato `onMove` con casa di partenza e di arrivo. Senza `onMove`
+ *   viene chiamato `onMove` con casa di partenza e di arrivo. I pezzi che si
+ *   possono muovere mostrano la "mano" al passaggio del cursore. Senza `onMove`
  *   la scacchiera è in sola lettura;
  * - `resyncKey`: facoltativo. Cambiarlo riporta i pezzi alla posizione
  *   ricevuta, ad esempio dopo una promozione annullata (quando il pedone è
@@ -39,6 +40,7 @@ import { useLoadedSettings } from '../../state/settingsStore';
 import { buildDests } from './buildDests';
 import styles from './Chessboard.module.css';
 import { isSquareKey } from './isSquareKey';
+import { prefersReducedMotion } from './prefersReducedMotion';
 
 // Stili globali della scacchiera: unica eccezione alla regola dei CSS Modules
 // (vedi README di questa cartella).
@@ -68,6 +70,12 @@ export interface ChessboardProps {
   /** Cambiarlo riporta i pezzi alla posizione ricevuta (vedi descrizione sopra). */
   resyncKey?: number;
 }
+
+/**
+ * Durata dell'animazione di un pezzo che si sposta, in millisecondi: abbastanza
+ * da seguire il movimento con l'occhio, abbastanza breve da non far aspettare.
+ */
+const MOVE_ANIMATION_MS = 220;
 
 /** Nessuna mossa possibile: valore usato quando `legalMoves` non viene passato. */
 const NO_MOVES: readonly LegalMove[] = [];
@@ -120,6 +128,9 @@ export function Chessboard({
       orientation,
       coordinates: true,
       viewOnly: !isInteractive,
+      // Pezzi che scivolano da una casa all'altra; spenti se il sistema chiede
+      // di ridurre le animazioni.
+      animation: { enabled: !prefersReducedMotion(), duration: MOVE_ANIMATION_MS },
       // `lastMove` va sempre indicato, anche vuoto: così chessground toglie
       // l'evidenziazione quando si torna alla posizione di partenza.
       lastMove: lastMoveKeys,
@@ -162,9 +173,15 @@ export function Chessboard({
     };
   }, []);
 
-  // data-board e data-pieces attivano gli stili scelti (vedi themes/).
+  // data-board e data-pieces attivano gli stili scelti (vedi themes/);
+  // data-movable indica il colore che può muovere (cursore a mano sui suoi pezzi).
   return (
-    <div className={styles.frame} data-board={board} data-pieces={pieces}>
+    <div
+      className={styles.frame}
+      data-board={board}
+      data-pieces={pieces}
+      data-movable={isInteractive ? turn : undefined}
+    >
       <div ref={containerRef} className={styles.board} />
     </div>
   );

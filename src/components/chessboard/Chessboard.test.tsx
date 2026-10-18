@@ -164,4 +164,26 @@ describe('Chessboard', () => {
       expect.objectContaining({ fen: STARTING_BOARD }),
     );
   });
+
+  it('indica il colore che può muovere, per il cursore a mano sui suoi pezzi', () => {
+    const { container, rerender } = render(
+      <Chessboard boardFen={STARTING_BOARD} turn="black" inCheck={false} onMove={vi.fn()} />,
+    );
+    expect(container.querySelector('[data-board]')?.getAttribute('data-movable')).toBe('black');
+
+    rerender(<Chessboard boardFen={STARTING_BOARD} turn="black" inCheck={false} />);
+    expect(container.querySelector('[data-board]')?.hasAttribute('data-movable')).toBe(false);
+  });
+
+  it('anima i pezzi, tranne se il sistema chiede di ridurre le animazioni', () => {
+    render(<Chessboard boardFen={STARTING_BOARD} turn="white" inCheck={false} />);
+    expect(chessgroundMock.create.mock.calls[0]?.[1].animation?.enabled).toBe(true);
+
+    const matchMedia = vi.spyOn(window, 'matchMedia').mockReturnValue({
+      matches: true,
+    } as MediaQueryList);
+    render(<Chessboard boardFen={STARTING_BOARD} turn="white" inCheck={false} />);
+    expect(chessgroundMock.create.mock.calls[1]?.[1].animation?.enabled).toBe(false);
+    matchMedia.mockRestore();
+  });
 });

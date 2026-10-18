@@ -3,6 +3,7 @@
  * Importato una sola volta, da Chessboard.tsx.
  */
 @import './boards.css';
+@import './highlights.css';
 @import './pieces-icona.css';
 @import './pieces-morbido.css';
 @import './pieces-legno.css';

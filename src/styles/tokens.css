@@ -61,6 +61,22 @@
   --frame-marmo: #4c5a53;
   --frame-ardesia: #3a4756;
   --frame-torneo: #2f4a39;
+  /*
+   * Segni sopra le case (usati da components/chessboard/themes/highlights.css).
+   * Sono semi-trasparenti: si vedono bene su ogni scacchiera, chiara o scura.
+   */
+  --board-dest-color: rgb(24 28 24 / 30%); /* pallino delle case raggiungibili */
+  --board-dest-size: 30%; /* diametro del pallino, rispetto alla casa */
+  --board-capture-ring: 9%; /* spessore dell'anello sulle case con un pezzo da catturare */
+  --board-dest-hover-color: rgb(255 244 214 / 35%); /* casa sotto il pezzo trascinato */
+  --board-selected-color: rgb(240 186 72 / 50%); /* casa del pezzo scelto (ottone) */
+  --board-last-move-color: rgb(240 196 92 / 34%); /* le due case dell'ultima mossa */
+  --board-check-color: rgb(214 40 40 / 85%); /* alone del re sotto scacco */
+  --board-check-spread: 72%; /* fin dove arriva l'alone, rispetto alla casa */
+  --piece-hover-size: 106%; /* pezzo muovibile sotto il cursore: leggermente più grande */
+  --piece-drag-size: 114%; /* pezzo trascinato: "sollevato" dalla scacchiera */
+  --piece-drag-shadow: 0 0.35rem 0.45rem rgb(0 0 0 / 35%); /* ombra del pezzo sollevato */
+  --piece-ghost-opacity: 35%; /* segnaposto lasciato sulla casa di partenza */
 
   /* ---------- Dimensioni del layout ---------- */
   --sidebar-width: 14.5rem;
@@ -85,6 +101,7 @@
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;
+  --duration-medium: 180ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -92,5 +109,6 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;
+    --duration-medium: 0ms;
   }
 }
