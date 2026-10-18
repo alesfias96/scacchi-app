@@ -21,6 +21,7 @@ L'app è divisa in tre strati, come un ristorante:
 | Ponte       | `src-tauri/`                                                                        | il cameriere                                                                      | Porta le richieste dall'interfaccia al nucleo e riporta le risposte |
 | Nucleo      | `crates/`                                                                           | Il nucleo: le librerie Rust con la logica (regole, motore, partita, impostazioni) |
 | `scripts/`  | Comandi di servizio (ad esempio lo scaricamento di Stockfish, il motore di scacchi) |
+| `data/`     | Dati inclusi nell'app, presi da fonti libere (l'elenco delle aperture di Lichess)   |
 
 ---
 

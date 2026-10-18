@@ -49,7 +49,9 @@ Obiettivi, in ordine di importanza:
 | Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza  | ✅ deciso                                              |
 | Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)    | ✅ deciso                                              |
 | Motore "umano"           | Maia (via lc0), opzionale                                                            | ✅ deciso                                              |
-| Database                 | SQLite tramite `sqlx` (con migrazioni)                                               | ✅ deciso                                              |
+| Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app        | ✅ deciso                                              |
+| Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                        | ✅ deciso                                              |
+| File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust             | ✅ deciso                                              |
 | Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
 | Scacchiera               | `chessground` avvolto in un componente React                                         | ✅ deciso                                              |
 | Stato interfaccia        | Zustand                                                                              | ✅ deciso                                              |
@@ -162,19 +164,22 @@ app-scacchi/
 │   ├── chess-core/             posizione, mosse, regole, partita, PGN/FEN/SAN (su shakmaty)
 │   ├── app-settings/           impostazioni dell'utente (e ultima partita scelta): valori, salvataggio
 │   ├── engine/                 dialogo con i motori (protocollo UCI): analisi, mosse, livelli
-│   ├── game-session/           partita in corso: avversario, livello, orologio, chi può muovere
+│   ├── game-session/           partita in corso: avversario, livello, orologio, chi può muovere,
+│   │                           tempo di ogni mossa, fotografia da salvare e ripresa
+│   ├── openings/               riconoscimento delle aperture (elenco di Lichess)
 │   ├── analysis/               rilevatori: minacce, tattiche, struttura,
 │   │                           sicurezza del re, fase di gioco
 │   ├── tutor/                  unisce analisi e conoscenza, produce spiegazioni
 │   ├── training/               generazione e verifica degli esercizi di calcolo
 │   ├── stats/                  calcolo delle statistiche
-│   └── storage/                database SQLite, schema, migrazioni
+│   └── storage/                database SQLite delle partite, schema (migrations/), archivio
 │
 ├── src-tauri/                  PONTE — solo comandi ed eventi
 │   ├── src/commands/           un file per gruppo di comandi
 │   ├── src/events/             eventi inviati all'interfaccia (mossa del computer, analisi live)
-│   ├── src/reactions/          ciò che succede dopo ogni cambiamento (computer, orologio, analisi)
-│   ├── src/state/              stato condiviso dell'app (partita in corso, motori attivi)
+│   ├── src/reactions/          ciò che succede dopo ogni cambiamento (computer, orologio, analisi,
+│   │                           salvataggio) e all'avvio (ripresa della partita)
+│   ├── src/state/              stato condiviso dell'app (partita in corso, motori, database)
 │   └── binaries/               eseguibili dei motori (Stockfish; poi lc0), scaricati, non in git
 │
 ├── src/                        INTERFACCIA REACT
@@ -203,7 +208,9 @@ app-scacchi/
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/, promotion-picker/,
 │   │   │                       game-result-banner/, import-export/, position-panel/,
-│   │   │                       player-bar/, clock-face/, new-game-dialog/, analysis-panel/
+│   │   │                       player-bar/, clock-face/, new-game-dialog/, analysis-panel/,
+│   │                       opening-label/, pgn-file/
+│   │   ├── archive/            archivio delle partite: filtri, rivedi, continua, elimina
 │   │   ├── training/           esercizi di calcolo e visualizzazione
 │   │   ├── tutor/              pannello del tutor, apribile ovunque
 │   │   ├── review/             analisi delle partite giocate
@@ -220,7 +227,7 @@ app-scacchi/
 │   ├── middlegame/             concetti di mediogioco
 │   └── endgames/               finali
 │
-└── data/                       dati importati (puzzle Lichess, nomi aperture)
+└── data/                       dati inclusi nell'app: openings/ (aperture di Lichess); poi i puzzle
 ```
 
 ### Convenzione per ogni componente React
@@ -310,7 +317,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 1-bis. Temi e personalizzazione | ✅ completata |
 | 2. Regole e partita             | ✅ completata |
 | 3. Motore                       | ✅ completata |
-| 4. Database                     | ⚪ da fare    |
+| 4. Database                     | 🔵 in test    |
 | 5. Analisi                      | ⚪ da fare    |
 | 6. Allenamento calcolo          | ⚪ da fare    |
 | 7. Tutor                        | ⚪ da fare    |
@@ -379,6 +386,15 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-18 | Fase 3 approvata ("va abbastanza bene")                                                                                            | Conferma di Alessandro                                                                                                                                                      |
 | 2026-10-18 | Copia FEN/PGN negli appunti: problema noto, rimandato                                                                              | Nell'app la copia non arriva negli appunti; Alessandro preferisce rimandare. Soluzione proposta: `tauri-plugin-clipboard-manager` (vedi §12)                                |
 | 2026-10-18 | Nuova Fase 11 "Appunti personali", in fondo alla roadmap                                                                           | Richiesta di Alessandro: uno spazio per salvare idee e pensieri, da fare alla fine                                                                                          |
+| 2026-10-18 | Fase 4: si salvano tutte le partite con almeno una mossa (computer, due giocatori, incollate)                                      | Scelta 1A di Alessandro                                                                                                                                                     |
+| 2026-10-18 | Partita con l'orologio ripresa con l'orologio fermo fino alla mossa successiva                                                     | Scelta 2A di Alessandro: chiudere l'app non fa perdere la partita                                                                                                           |
+| 2026-10-18 | Riconoscimento delle aperture già nella Fase 4 (elenco Lichess, CC0, nomi in inglese)                                              | Scelta 3A di Alessandro: serve all'archivio e alle statistiche                                                                                                              |
+| 2026-10-18 | Colonne per valutazioni e statistiche già nello schema, riempite nella Fase 8                                                      | Scelta 4A di Alessandro: lo schema non dovrà cambiare                                                                                                                       |
+| 2026-10-18 | Nuove crate `openings` e `storage`; `game-session` produce la "fotografia" da salvare                                              | Ogni crate un compito: le regole non sanno del database, il database non sa delle regole                                                                                    |
+| 2026-10-18 | Salvataggi in coda con un unico lavoratore, solo quando la partita cambia davvero                                                  | Nessun blocco durante il gioco; una versione vecchia non sovrascrive mai una nuova                                                                                          |
+| 2026-10-18 | All'avvio si riprende l'ultima partita non finita                                                                                  | Nessuna partita va persa (traguardo della Fase 4)                                                                                                                           |
+| 2026-10-18 | Nuova sezione "Archivio" nella barra laterale                                                                                      | Rivedere, continuare, eliminare e filtrare le partite                                                                                                                       |
+| 2026-10-18 | File `.pgn` con la finestra di sistema (`tauri-plugin-dialog` 2.8); la lettura accetta codifiche vecchie                           | Promesso nella Fase 2; nessun permesso da dare all'interfaccia (lo fa Rust)                                                                                                 |
 
 ---
 
@@ -387,7 +403,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato prima di scrivere codice.
 
 - **Fase 3 — Motore.** Fatta (vedi registro §10). Da riprendere più avanti: più varianti nell'analisi (`MultiPV`) e il motore "umano" Maia (Fase 10).
-- **Fase 4 — Database.** Crate `crates/storage` (SQLite con `sqlx`, migrazioni, file nella `app_data_dir`). Schema prima delle schermate (§4.3). Salvataggio a ogni mossa e ripresa all'avvio; archivio partite con ricerca; file `.pgn` con `tauri-plugin-dialog`.
+- **Fase 4 — Database.** Fatta (vedi registro §10). Per la Fase 8: riempire le colonne `eval_*`, `best_move_uci`, `centipawn_loss`, `game_phase`, `tactical_themes`, `missed_threats` della tabella `moves` (vedi `crates/storage/migrations/`).
 - **Fase 5 — Analisi.** Crate `crates/analysis`, un rilevatore per file (pezzi indifesi, minacce, tattiche, struttura pedonale, sicurezza del re, attività, fase di gioco), ognuno con test su FEN note.
 - **Fase 6 — Allenamento.** Crate `crates/training`; puzzle di Lichess (CSV, licenza CC0) in `data/`; puzzle per profondità, visualizzazione, "cosa minaccia?", ripasso degli errori con ripetizione dilazionata.
 - **Fase 7 — Tutor.** Crate `crates/tutor` e `knowledge/` con testi curati; pannello richiamabile ovunque con una scorciatoia unica.
@@ -417,4 +433,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.
 - **Shell:** comandi molto lunghi con più `heredoc` e apostrofi possono rompersi; i file si scrivono con lo strumento di scrittura.
 - **Problema noto — appunti:** "Copia FEN" e "Copia PGN" usano `navigator.clipboard.writeText`, che dentro l'app non scrive negli appunti (probabilmente perché il motore web la blocca quando non parte nell'istante del clic). Soluzione proposta e rimandata: il plugin ufficiale `tauri-plugin-clipboard-manager`, con il solo permesso di scrittura.
+- **sqlx 0.9:** le query costruite con `format!` non sono accettate (protezione contro l'SQL injection): si usano testi fissi o `QueryBuilder` (senza parametro di durata, `QueryBuilder<Sqlite>`). Con SQLite in memoria serve una sola connessione (`max_connections(1)`), altrimenti ogni connessione vede un database diverso.
+- **Comandi Tauri sincroni** girano sul thread principale: le finestre di sistema "bloccanti" (`blocking_save_file`) vanno aperte in un comando `async`, dentro `spawn_blocking`.
+- **Aperture:** i nomi di Lichess sono in inglese; la ricerca nell'archivio va fatta in inglese ("Sicilian") o per codice ECO.
 - **Gusti di Alessandro:** cornici attorno alla scacchiera, pezzi puliti e minimal, tanta scelta di stili, ogni scelta valida in tutta l'app; a ogni fase chiede ritocchi estetici.

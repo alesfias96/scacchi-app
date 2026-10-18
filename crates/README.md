@@ -14,16 +14,18 @@ Le crate vengono aggiunte una alla volta, solo quando servono.
 | `app-settings/` | Le impostazioni dell'utente (tema, scacchiera, pezzi, notazione, suoni, ultima partita scelta) |
 | `engine/`       | Il dialogo con i motori di scacchi (Stockfish): analisi, mosse del computer, livelli di gioco  |
 | `game-session/` | La partita in corso: avversario, livello, orologio, chi può muovere, abbandono e tempo scaduto |
+| `openings/`     | Il riconoscimento delle aperture (elenco di Lichess): codice ECO e nome                        |
+| `storage/`      | Il database delle partite (SQLite): salvataggio a ogni mossa, archivio, ripresa                |
 
 Come si usano tra loro: `game-session` usa `chess-core` (le regole), `engine` (i livelli e le
-richieste) e `app-settings` (la configurazione scelta); `engine` usa `chess-core` per scrivere
-le varianti in notazione SAN. Nessuna crate conosce Tauri.
+richieste), `app-settings` (la configurazione scelta) e `openings` (l'apertura giocata);
+`storage` salva e rilegge le "fotografie" delle partite di `game-session`; `engine` usa
+`chess-core` per scrivere le varianti in notazione SAN. Nessuna crate conosce Tauri.
 
 ## Crate che verranno aggiunte
 
 | Crate       | Fase | Compito                                                                 |
 | ----------- | ---- | ----------------------------------------------------------------------- |
-| `storage/`  | 4    | Il database: salvataggio di partite, mosse, progressi                   |
 | `analysis/` | 5    | I rilevatori: minacce, tattiche, struttura dei pedoni, sicurezza del re |
 | `training/` | 6    | Gli esercizi di calcolo e visualizzazione                               |
 | `tutor/`    | 7    | Unisce analisi e conoscenza strategica e produce le spiegazioni         |

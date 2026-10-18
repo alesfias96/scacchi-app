@@ -9,7 +9,8 @@ I componenti usati da più sezioni stanno invece in `src/components/`.
 | Cartella    | Sezione      | Disponibile                                                                       |
 | ----------- | ------------ | --------------------------------------------------------------------------------- |
 | `play/`     | Gioca        | Dalla Fase 1 (posizione), dalla Fase 2 (mosse), dalla Fase 3 (contro il computer) |
-| `settings/` | Impostazioni | Tema dell'app, scacchiera e pezzi                                                 |
+| `archive/`  | Archivio     | Dalla Fase 4: tutte le partite salvate, con filtri; rivedi, continua, elimina     |
+| `settings/` | Impostazioni | Tema dell'app, scacchiera, pezzi, notazione, suoni                                |
 
 ## Sezioni che verranno aggiunte
 

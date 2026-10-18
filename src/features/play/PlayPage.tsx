@@ -9,8 +9,11 @@
  * - Accanto alla scacchiera, se l'analisi è accesa: la barra di valutazione;
  *   sulla scacchiera la freccia della mossa migliore.
  * - Nel pannello: l'annuncio di fine partita, le mosse con i comandi (scorri,
- *   nuova partita, annulla, abbandona, gira), l'analisi, la situazione, copia
- *   e incolla di posizioni (FEN) e partite (PGN).
+ *   nuova partita, annulla, abbandona, gira) con il nome dell'apertura,
+ *   l'analisi, la situazione, copia e incolla di posizioni (FEN) e partite
+ *   (PGN), salvataggio e apertura di file `.pgn`.
+ * La partita si salva da sola nell'archivio a ogni mossa; quando si apre una
+ * partita (dall'archivio o all'avvio) il proprio colore va in basso.
  * Le frecce ←/→ e i tasti Home/Fine scorrono la partita. Ogni mossa ha il suo
  * suono (mossa, presa, fine partita), se i suoni sono attivi nelle Impostazioni.
  *
@@ -31,7 +34,7 @@ import { EvalBar } from '../../components/eval-bar/EvalBar';
 import { PanelCard } from '../../components/panel-card/PanelCard';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
-import { exportPgn } from '../../services/gameService';
+import { exportPgn, savePgnFile } from '../../services/gameService';
 import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
@@ -41,6 +44,8 @@ import { GameResultBanner } from './game-result-banner/GameResultBanner';
 import { ImportExport } from './import-export/ImportExport';
 import { MoveList } from './move-list/MoveList';
 import { NewGameDialog } from './new-game-dialog/NewGameDialog';
+import { OpeningLabel } from './opening-label/OpeningLabel';
+import { PgnFileButtons } from './pgn-file/PgnFileButtons';
 import { PlayerBar } from './player-bar/PlayerBar';
 import { describePlayer } from './player-bar/describePlayer';
 import { PositionPanel } from './position-panel/PositionPanel';
@@ -69,6 +74,9 @@ export function PlayPage() {
   const resign = useGameStore((state) => state.resign);
   const newGame = useGameStore((state) => state.newGame);
   const importText = useGameStore((state) => state.importText);
+  const openFile = useGameStore((state) => state.openFile);
+  const storageError = useGameStore((state) => state.storageError);
+  const dismissStorageError = useGameStore((state) => state.dismissStorageError);
   const analysisEnabled = useEngineStore((state) => state.analysisEnabled);
   const latestAnalysis = useEngineStore((state) => state.latest);
   const engineError = useEngineStore((state) => state.engineError);
@@ -93,6 +101,16 @@ export function PlayPage() {
 
   const game = session?.game ?? null;
   useMoveSound(game, sounds === 'on');
+
+  // A ogni partita diversa (nuova, ripresa all'avvio, aperta dall'archivio)
+  // il colore della persona va in basso: il nero se il computer ha il bianco.
+  const sessionId = session?.id;
+  const computerSide = session?.computer?.side;
+  useEffect(() => {
+    if (sessionId !== undefined) {
+      setOrientation(computerSide === 'white' ? 'black' : 'white');
+    }
+  }, [sessionId, computerSide]);
 
   /** Riporta i pezzi alla posizione vera (dopo una mossa annullata o rifiutata). */
   const resyncBoard = useCallback(() => {
@@ -150,9 +168,8 @@ export function PlayPage() {
   }, [resyncBoard]);
 
   /**
-   * Avvia la partita scelta nella finestra "Nuova partita": ricorda le scelte,
-   * spegne l'analisi contro il computer (sarebbe un aiuto) e mette in basso
-   * il colore della persona.
+   * Avvia la partita scelta nella finestra "Nuova partita": ricorda le scelte
+   * e spegne l'analisi contro il computer (sarebbe un aiuto).
    */
   const startGame = useCallback(
     async (setup: GameSetup) => {
@@ -162,8 +179,6 @@ export function PlayPage() {
         void setAnalysisEnabled(false);
       }
       await newGame(setup);
-      const computerSide = useGameStore.getState().session?.computer?.side;
-      setOrientation(computerSide === 'white' ? 'black' : 'white');
     },
     [updateSettings, setAnalysisEnabled, newGame],
   );
@@ -262,8 +277,14 @@ export function PlayPage() {
               {actionError}
             </p>
           )}
+          {storageError !== null && (
+            <div className={styles.notice} role="alert">
+              <span>Archivio: {storageError}</span>
+              <Button onClick={dismissStorageError}>Chiudi</Button>
+            </div>
+          )}
           {engineError !== null && (
-            <div className={styles.engineError} role="alert">
+            <div className={styles.notice} role="alert">
               <span>Stockfish: {engineError}</span>
               <Button onClick={dismissEngineError}>Chiudi</Button>
             </div>
@@ -274,6 +295,7 @@ export function PlayPage() {
           {result !== null && <GameResultBanner result={result} />}
 
           <PanelCard title="Mosse">
+            <OpeningLabel opening={session.opening} />
             <MoveList
               moves={game.moves}
               cursor={game.cursor}
@@ -319,6 +341,10 @@ export function PlayPage() {
 
           <PanelCard title="Copia e incolla">
             <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
+          </PanelCard>
+
+          <PanelCard title="File PGN">
+            <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
           </PanelCard>
         </div>
       </div>

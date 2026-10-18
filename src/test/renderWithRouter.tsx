@@ -20,7 +20,7 @@ import type { ReactElement } from 'react';
 
 export function renderWithRouter(element: ReactElement, path = '/') {
   const rootRoute = createRootRoute({ component: () => element });
-  const pages = ['/', '/impostazioni'].map((pagePath) =>
+  const pages = ['/', '/archivio', '/impostazioni'].map((pagePath) =>
     createRoute({ getParentRoute: () => rootRoute, path: pagePath, component: () => null }),
   );
   const router = createRouter({

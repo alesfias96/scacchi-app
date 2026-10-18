@@ -33,4 +33,12 @@ describe('Sidebar', () => {
     expect(tutorButton.hasAttribute('disabled')).toBe(true);
     expect(tutorButton.textContent).toContain('Fase 7');
   });
+
+  it('porta all’archivio delle partite', async () => {
+    renderWithRouter(<Sidebar />, '/archivio');
+
+    const archiveLink = await screen.findByRole('link', { name: 'Archivio' });
+
+    expect(archiveLink.getAttribute('aria-current')).toBe('page');
+  });
 });

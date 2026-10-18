@@ -27,10 +27,19 @@ const serviceMock = vi.hoisted(() => ({
   resignGame: vi.fn(),
   importGame: vi.fn(),
   exportPgn: vi.fn(),
+  savePgnFile: vi.fn(),
+  openPgnFile: vi.fn(),
   listenToGameUpdates: vi.fn(),
 }));
 
 vi.mock('../../services/gameService', () => serviceMock);
+
+const archiveMock = vi.hoisted(() => ({
+  openSavedGame: vi.fn(),
+  listenToStorageErrors: vi.fn(),
+}));
+
+vi.mock('../../services/archiveService', () => archiveMock);
 
 const engineServiceMock = vi.hoisted(() => ({
   fetchEngineLevels: vi.fn(),
@@ -91,6 +100,8 @@ const AFTER_E4_GAME: GameView = {
 /** Una partita a due giocatori, senza orologio. */
 function twoPlayers(game: GameView): SessionView {
   return {
+    id: 'partita-a-due',
+    opening: null,
     game,
     opponent: 'twoPlayers',
     computer: null,
@@ -124,6 +135,7 @@ const PROMOTION = twoPlayers({
 /** Contro il computer (con il nero), mentre il computer pensa. */
 const COMPUTER_THINKING: SessionView = {
   ...AFTER_E4,
+  id: 'partita-col-computer',
   opponent: 'computer',
   computer: { side: 'black', level: { level: 4, name: 'Circolo', elo: 1400 } },
   timeControl: { initialSeconds: 300, incrementSeconds: 0 },
@@ -142,6 +154,7 @@ describe('PlayPage', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     serviceMock.listenToGameUpdates.mockResolvedValue(() => undefined);
+    archiveMock.listenToStorageErrors.mockResolvedValue(() => undefined);
     engineServiceMock.listenToAnalysis.mockResolvedValue(() => undefined);
     engineServiceMock.listenToEngineErrors.mockResolvedValue(() => undefined);
     engineServiceMock.setAnalysis.mockResolvedValue(undefined);
@@ -159,7 +172,12 @@ describe('PlayPage', () => {
       };
     });
     chessgroundMock.state.config = undefined;
-    useGameStore.setState({ session: null, loadError: null, actionError: null });
+    useGameStore.setState({
+      session: null,
+      loadError: null,
+      actionError: null,
+      storageError: null,
+    });
     useEngineStore.setState({ analysisEnabled: false, latest: null, engineError: null });
     useSettingsStore.setState({
       settings: {
@@ -277,6 +295,7 @@ describe('PlayPage', () => {
     serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
     serviceMock.startNewGame.mockResolvedValue({
       ...COMPUTER_THINKING,
+      id: 'partita-nuova',
       computer: { side: 'white', level: { level: 4, name: 'Circolo', elo: 1400 } },
     });
     render(<PlayPage />);
@@ -330,5 +349,32 @@ describe('PlayPage', () => {
       expect.objectContaining({ orig: 'e7', dest: 'e5' }),
     ]);
     expect(screen.getByText('profondità 10')).toBeDefined();
+  });
+
+  it('mostra il nome dell’apertura sopra le mosse', async () => {
+    serviceMock.fetchGame.mockResolvedValue({
+      ...AFTER_E4,
+      opening: { eco: 'B00', name: "King's Pawn Game" },
+    });
+
+    render(<PlayPage />);
+    await pageReady();
+
+    expect(screen.getByText('B00')).toBeDefined();
+    expect(screen.getByText("King's Pawn Game")).toBeDefined();
+  });
+
+  it('una partita aperta col nero mostra il nero in basso', async () => {
+    serviceMock.fetchGame.mockResolvedValue({
+      ...COMPUTER_THINKING,
+      computer: { side: 'white', level: { level: 4, name: 'Circolo', elo: 1400 } },
+    });
+
+    render(<PlayPage />);
+    await pageReady();
+
+    await waitFor(() => {
+      expect(chessgroundMock.state.config?.orientation).toBe('black');
+    });
   });
 });

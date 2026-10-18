@@ -13,7 +13,7 @@ export interface AvailableSection {
   /** Il nome mostrato all'utente. */
   label: string;
   /** L'indirizzo della pagina, come definito in src/app/router.tsx. */
-  to: '/' | '/impostazioni';
+  to: '/' | '/archivio' | '/impostazioni';
 }
 
 /** Una sezione non ancora costruita: visibile ma disattivata. */
@@ -32,6 +32,7 @@ export type NavigationItem = AvailableSection | UpcomingSection;
 /** Le sezioni principali, nell'ordine in cui compaiono. */
 export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   { id: 'play', label: 'Gioca', to: '/' },
+  { id: 'archive', label: 'Archivio', to: '/archivio' },
   { id: 'training', label: 'Allenamento', availableFromPhase: 6 },
   { id: 'tutor', label: 'Tutor', availableFromPhase: 7 },
   { id: 'review', label: 'Analisi partite', availableFromPhase: 8 },

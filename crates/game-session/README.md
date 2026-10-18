@@ -9,7 +9,10 @@ davvero** una partita:
 - **chi può fare cosa**: contro il computer si muovono solo i propri pezzi e solo dall'ultima posizione;
   con l'orologio le mosse non si ritirano; contro il computer "annulla" ritira anche la sua risposta;
 - **l'abbandono**;
-- **le richieste per il motore** quando tocca al computer: posizione, tempo, livello.
+- **le richieste per il motore** quando tocca al computer: posizione, tempo, livello;
+- **il tempo di ogni mossa** (quanto ha pensato ciascuno) e l'**apertura** giocata;
+- la **"fotografia"** da salvare nell'archivio e la **ripresa** da una fotografia (con l'orologio
+  fermo fino alla mossa successiva: il tempo ad app chiusa non conta).
 
 Non avvia il motore e non conosce Tauri: prepara solo le richieste. Il ponte `src-tauri` le manda
 a Stockfish e riporta qui le sue mosse. Ogni richiesta ha un **contrassegno**: se nel frattempo la

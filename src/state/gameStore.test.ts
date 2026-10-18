@@ -15,13 +15,24 @@ const serviceMock = vi.hoisted(() => ({
   resignGame: vi.fn(),
   importGame: vi.fn(),
   exportPgn: vi.fn(),
+  savePgnFile: vi.fn(),
+  openPgnFile: vi.fn(),
   listenToGameUpdates: vi.fn(),
 }));
 
 vi.mock('../services/gameService', () => serviceMock);
 
+const archiveMock = vi.hoisted(() => ({
+  openSavedGame: vi.fn(),
+  listenToStorageErrors: vi.fn(),
+}));
+
+vi.mock('../services/archiveService', () => archiveMock);
+
 /** Una partita appena cominciata, a due giocatori. */
 const NEW_GAME: SessionView = {
+  id: 'partita',
+  opening: null,
   game: {
     position: {
       fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -53,7 +64,13 @@ describe('gameStore', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     serviceMock.listenToGameUpdates.mockResolvedValue(() => undefined);
-    useGameStore.setState({ session: null, loadError: null, actionError: null });
+    archiveMock.listenToStorageErrors.mockResolvedValue(() => undefined);
+    useGameStore.setState({
+      session: null,
+      loadError: null,
+      actionError: null,
+      storageError: null,
+    });
   });
 
   // Va per primo: l'ascolto degli eventi si attiva una volta sola, al primo caricamento.
@@ -130,5 +147,25 @@ describe('gameStore', () => {
     serviceMock.importGame.mockRejectedValue('PGN non valido');
 
     await expect(useGameStore.getState().importText('ciao')).rejects.toBe('PGN non valido');
+  });
+
+  it('apre una partita dell’archivio', async () => {
+    archiveMock.openSavedGame.mockResolvedValue(AFTER_E4);
+
+    await useGameStore.getState().openSaved('partita');
+
+    expect(archiveMock.openSavedGame).toHaveBeenCalledWith('partita');
+    expect(useGameStore.getState().session).toEqual(AFTER_E4);
+  });
+
+  it('apre un file PGN, e se si annulla non cambia nulla', async () => {
+    useGameStore.setState({ session: NEW_GAME });
+    serviceMock.openPgnFile.mockResolvedValueOnce(null).mockResolvedValueOnce(AFTER_E4);
+
+    await useGameStore.getState().openFile();
+    expect(useGameStore.getState().session).toEqual(NEW_GAME);
+
+    await useGameStore.getState().openFile();
+    expect(useGameStore.getState().session).toEqual(AFTER_E4);
   });
 });

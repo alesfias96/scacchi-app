@@ -1,8 +1,8 @@
 # data/openings — L'elenco delle aperture
 
-| File                     | Cosa contiene                                                                                   |
-| ------------------------ | ----------------------------------------------------------------------------------------------- |
-| `lichess-openings.tsv`   | Circa 3.900 aperture e varianti: codice ECO (es. `B90`), nome inglese e mosse in notazione PGN |
+| File                   | Cosa contiene                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| `lichess-openings.tsv` | Circa 3.900 aperture e varianti: codice ECO (es. `B90`), nome inglese e mosse in notazione PGN |
 
 **Fonte:** [lichess-org/chess-openings](https://github.com/lichess-org/chess-openings), i file
 `a.tsv` … `e.tsv` uniti in uno solo (una riga di intestazione, poi una riga per apertura, colonne

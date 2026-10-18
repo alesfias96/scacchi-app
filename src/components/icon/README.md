@@ -1,6 +1,6 @@
 # components/icon — Le icone dell'app
 
-Piccole icone a tratto (frecce, copia, incolla, altoparlante, …) disegnate direttamente nel
+Piccole icone a tratto (frecce, copia, incolla, altoparlante, bandierina, dischetto, cartella, …) disegnate direttamente nel
 codice: niente file esterni, funzionano offline e prendono automaticamente il
 colore del testo, quindi si adattano a ogni tema.
 

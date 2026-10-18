@@ -19,7 +19,9 @@ export type IconName =
   | 'paste'
   | 'soundOn'
   | 'soundOff'
-  | 'flag';
+  | 'flag'
+  | 'save'
+  | 'open';
 
 export const ICON_PATHS: Record<IconName, readonly string[]> = {
   /** Vai all'inizio: freccia a sinistra con barra. */
@@ -45,5 +47,9 @@ export const ICON_PATHS: Record<IconName, readonly string[]> = {
   /** Suoni disattivati: altoparlante barrato da una croce. */
   /** Abbandona: una bandierina sull'asta. */
   flag: ['M5 21V4', 'M5 4h11l-2.5 4 2.5 4H5'],
+  /** Salva in un file: un dischetto. */
+  save: ['M5 4h11l3 3v13H5z', 'M8 4v5h7V4', 'M8 20v-6h8v6'],
+  /** Apri un file: una cartella. */
+  open: ['M3 7V5h6l2 2h10v12H3z', 'M3 10h18'],
   soundOff: ['M4 9h4l5-4v14l-5-4H4z', 'M16 9l5 6', 'M21 9l-5 6'],
 };

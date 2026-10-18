@@ -3,6 +3,7 @@
  *
  * Usa TanStack Router. Ogni sezione utilizzabile ha un indirizzo:
  * - "/"              → Gioca
+ * - "/archivio"      → Archivio delle partite
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -14,6 +15,7 @@ import {
   createRoute,
   createRouter,
 } from '@tanstack/react-router';
+import { ArchivePage } from '../features/archive/ArchivePage';
 import { PlayPage } from '../features/play/PlayPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
 import { RootLayout } from './root-layout/RootLayout';
@@ -29,13 +31,19 @@ const playRoute = createRoute({
   component: PlayPage,
 });
 
+const archiveRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/archivio',
+  component: ArchivePage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
   component: SettingsPage,
 });
 
-const routeTree = rootRoute.addChildren([playRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([playRoute, archiveRoute, settingsRoute]);
 
 /**
  * Crea il router dell'app.

@@ -11,5 +11,5 @@ con l'indicazione della fase in cui arriveranno.
 | -------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `Sidebar.tsx`        | Il componente che disegna la barra laterale, con i collegamenti alle sezioni                                        |
 | `Sidebar.module.css` | I suoi stili (colori dal tema attivo)                                                                               |
-| `Sidebar.test.tsx`   | I suoi test: sezione attiva, Impostazioni, sezioni disattivate                                                      |
+| `Sidebar.test.tsx`   | I suoi test: sezione attiva, Archivio, Impostazioni, sezioni disattivate                                            |
 | `navigation.ts`      | L'elenco delle sezioni: nome, indirizzo o fase di disponibilità. Per aggiungere una sezione si modifica questo file |

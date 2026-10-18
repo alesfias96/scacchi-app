@@ -98,6 +98,26 @@ export function exportPgn(): Promise<string> {
 }
 
 /**
+ * Salva la partita in un file `.pgn`, scelto con la finestra del sistema.
+ *
+ * @returns `true` se il file è stato salvato, `false` se l'utente ha annullato.
+ * @throws se il file non si può scrivere (con il motivo).
+ */
+export function savePgnFile(): Promise<boolean> {
+  return invoke<boolean>('save_pgn_file');
+}
+
+/**
+ * Apre un file `.pgn`, scelto con la finestra del sistema, al posto della partita in corso.
+ *
+ * @returns la nuova partita, oppure `null` se l'utente ha annullato.
+ * @throws se il file non si legge o non contiene una partita valida (con il motivo).
+ */
+export function openPgnFile(): Promise<SessionView | null> {
+  return invoke<SessionView | null>('open_pgn_file');
+}
+
+/**
  * Ascolta le partite cambiate "da sole": mossa del computer, tempo scaduto.
  *
  * @param onUpdate - chiamata con la partita aggiornata a ogni cambiamento.

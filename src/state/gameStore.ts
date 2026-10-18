@@ -7,18 +7,21 @@
  * così le regole degli scacchi restano tutte nel nucleo Rust.
  *
  * La partita può anche cambiare "da sola" (mossa del computer, tempo
- * scaduto): Rust lo annuncia con un evento, che questo stato ascolta dal
- * primo caricamento in poi.
+ * scaduto, partita ripresa all'avvio): Rust lo annuncia con un evento, che
+ * questo stato ascolta dal primo caricamento in poi, insieme agli eventuali
+ * problemi del database delle partite.
  */
 import { create } from 'zustand';
 import type { GameSetup } from '../bindings/GameSetup';
 import type { SessionView } from '../bindings/SessionView';
 import { describeError } from '../lib/describeError';
+import { listenToStorageErrors, openSavedGame } from '../services/archiveService';
 import {
   fetchGame,
   goToPly,
   importGame,
   listenToGameUpdates,
+  openPgnFile,
   playMove,
   resignGame,
   startNewGame,
@@ -33,6 +36,8 @@ export interface GameState {
   loadError: string | null;
   /** Il messaggio dell'ultima azione non riuscita (es. mossa rifiutata), oppure `null`. */
   actionError: string | null;
+  /** L'ultimo problema del database delle partite (es. salvataggio non riuscito), oppure `null`. */
+  storageError: string | null;
   /** Legge la partita in corso da Rust e comincia ad ascoltarne i cambiamenti. */
   load: () => Promise<void>;
   /** Comincia una nuova partita, come scelto nella finestra "Nuova partita". */
@@ -45,6 +50,15 @@ export interface GameState {
   goTo: (ply: number) => Promise<void>;
   /** Abbandona la partita. */
   resign: () => Promise<void>;
+  /**
+   * Apre una partita dell'archivio.
+   * Come `importText`, in caso di errore lo rilancia (lo mostra l'archivio).
+   */
+  openSaved: (id: string) => Promise<void>;
+  /** Apre un file `.pgn` scelto con la finestra del sistema (se l'utente non annulla). */
+  openFile: () => Promise<void>;
+  /** Toglie il messaggio del problema del database. */
+  dismissStorageError: () => void;
   /**
    * Sostituisce la partita con un testo FEN o PGN.
    * A differenza delle altre azioni, in caso di errore lo rilancia: chi la
@@ -74,6 +88,7 @@ export const useGameStore = create<GameState>()((set) => {
     session: null,
     loadError: null,
     actionError: null,
+    storageError: null,
 
     load: async () => {
       if (!isListening) {
@@ -81,6 +96,9 @@ export const useGameStore = create<GameState>()((set) => {
         try {
           await listenToGameUpdates((session) => {
             set({ session });
+          });
+          await listenToStorageErrors((storageError) => {
+            set({ storageError });
           });
         } catch {
           // Senza eventi la partita funziona lo stesso: mancano solo le
@@ -101,6 +119,26 @@ export const useGameStore = create<GameState>()((set) => {
     undo: () => run(undoMove),
     goTo: (ply) => run(() => goToPly(ply)),
     resign: () => run(resignGame),
+
+    openSaved: async (id) => {
+      const session = await openSavedGame(id);
+      set({ session, actionError: null });
+    },
+
+    openFile: async () => {
+      try {
+        const session = await openPgnFile();
+        if (session !== null) {
+          set({ session, actionError: null });
+        }
+      } catch (error) {
+        set({ actionError: describeError(error) });
+      }
+    },
+
+    dismissStorageError: () => {
+      set({ storageError: null });
+    },
 
     importText: async (text) => {
       const session = await importGame(text);

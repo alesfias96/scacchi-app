@@ -12,6 +12,9 @@ computer e il tempo scaduto arrivano da Rust come eventi.
 Ogni mossa ha il suo suono (colpo di legno; doppio colpo per le prese; melodia a fine
 partita), spegnibile nelle Impostazioni: vedi `src/sounds/`.
 
+Ogni partita si salva da sola nell'archivio a ogni mossa (sezione "Archivio"); all'avvio
+l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa successiva.
+
 ## Come si usa
 
 - **Nuova partita** apre la finestra in cui si sceglie l'avversario, il colore, il livello del
@@ -44,3 +47,5 @@ partita), spegnibile nelle Impostazioni: vedi `src/sounds/`.
 | `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                                              |
 | `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                                         |
 | `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                               |
+| `pgn-file/`           | Salvare la partita in un file `.pgn` e aprirne uno, con la finestra del sistema                                   |
+| `opening-label/`      | Il nome dell'apertura giocata, sopra l'elenco delle mosse                                                         |

@@ -8,6 +8,8 @@ import { describePlayer } from './describePlayer';
 /** Una partita di prova: contano solo avversario, orologio e "sta pensando". */
 function session(overrides: Partial<SessionView>): SessionView {
   return {
+    id: 'partita',
+    opening: null,
     game: {
       position: { fen: '', boardFen: '', turn: 'white', inCheck: false, legalMoves: [] },
       moves: [],

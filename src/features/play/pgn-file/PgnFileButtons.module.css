@@ -1,0 +1,20 @@
+/* File PGN: due pulsanti della stessa larghezza e una riga per la conferma. */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+/* La riga della conferma ha sempre la stessa altezza: le schede non "saltano". */
+.feedback {
+  min-height: calc(var(--text-small) * var(--leading-body));
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

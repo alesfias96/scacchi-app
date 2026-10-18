@@ -103,6 +103,10 @@
   --dialog-width: 32rem;
   --import-text-rows-height: 10rem; /* area di testo per incollare FEN o PGN */
   --dialog-width-wide: 44rem; /* finestra "Nuova partita" */
+  --archive-max-width: 64rem; /* larghezza massima della sezione Archivio */
+  --archive-filter-min-width: 16rem; /* colonne dei filtri dell'archivio */
+  --archive-details-min-width: 16rem; /* dettagli di una partita nell'elenco */
+  --outcome-badge-width: 5.5rem; /* etichetta vinta / persa / patta */
   --choice-min-width: 7.5rem; /* riquadri delle scelte a pastiglie */
   --number-input-width: 7rem; /* campi numerici (minuti, secondi) */
   --eval-bar-width: 1.5rem; /* barra di valutazione */

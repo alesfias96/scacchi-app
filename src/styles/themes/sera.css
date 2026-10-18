@@ -22,6 +22,9 @@
   --color-accent-soft: #3a2f20;
   --color-on-accent: #1d1408; /* testo sopra il colore d'accento */
   --color-danger: #f2a49e;
+  --color-danger-soft: #3d2422; /* fondo delle etichette "persa" */
+  --color-success: #9fd6ac; /* partite vinte */
+  --color-success-soft: #22362a;
   --color-overlay: rgb(0 0 0 / 60%); /* velo dietro le finestre di dialogo */
 
   /* Barra laterale */
