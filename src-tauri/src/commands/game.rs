@@ -25,7 +25,7 @@ use crate::state::session_state::SessionState;
 /// - Riceve: l'operazione, che può fallire con un errore della partita.
 /// - Restituisce: la nuova descrizione della partita, oppure il messaggio
 ///   d'errore da mostrare (in quel caso la partita resta com'era).
-fn change(
+pub(crate) fn change(
     app: &AppHandle,
     operation: impl FnOnce(&mut GameSession, Instant) -> Result<(), SessionError>,
 ) -> Result<SessionView, String> {
@@ -54,8 +54,8 @@ pub fn get_game(app: AppHandle) -> SessionView {
 /// - Riceve: avversario, colore, livello e tempo.
 #[tauri::command]
 pub fn new_game(app: AppHandle, setup: GameSetup) -> Result<SessionView, String> {
-    change(&app, |session, _| {
-        *session = GameSession::start(&setup, coin_flip());
+    change(&app, |session, now| {
+        *session = GameSession::start(&setup, coin_flip(), now);
         Ok(())
     })
 }
@@ -76,7 +76,7 @@ pub fn play_move(app: AppHandle, uci: String) -> Result<SessionView, String> {
 /// - Nome per l'interfaccia: `undo_move`.
 #[tauri::command]
 pub fn undo_move(app: AppHandle) -> Result<SessionView, String> {
-    change(&app, |session, _| session.undo())
+    change(&app, GameSession::undo)
 }
 
 /// Mostra la posizione dopo un certo numero di mosse.
@@ -102,8 +102,8 @@ pub fn go_to_ply(app: AppHandle, ply: usize) -> Result<SessionView, String> {
 #[tauri::command]
 pub fn import_game_text(app: AppHandle, text: String) -> Result<SessionView, String> {
     let imported = import_game(&text).map_err(|error| error.to_string())?;
-    change(&app, |session, _| {
-        *session = GameSession::from_game(imported);
+    change(&app, |session, now| {
+        *session = GameSession::from_game(imported, now);
         Ok(())
     })
 }

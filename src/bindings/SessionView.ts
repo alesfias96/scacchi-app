@@ -2,6 +2,7 @@
 import type { ClockView } from "./ClockView";
 import type { ComputerView } from "./ComputerView";
 import type { GameView } from "./GameView";
+import type { Opening } from "./Opening";
 import type { OpponentKind } from "./OpponentKind";
 import type { TimeControl } from "./TimeControl";
 
@@ -14,9 +15,17 @@ import type { TimeControl } from "./TimeControl";
  */
 export type SessionView = { 
 /**
+ * Il nome unico della partita (con cui è salvata nell'archivio).
+ */
+id: string, 
+/**
  * La partita: posizione mostrata, mosse, risultato.
  */
 game: GameView, 
+/**
+ * L'apertura giocata, se riconosciuta.
+ */
+opening: Opening | null, 
 /**
  * Contro chi si gioca.
  */

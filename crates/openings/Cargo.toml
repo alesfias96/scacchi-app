@@ -1,0 +1,27 @@
+# =============================================================================
+# Crate "openings" — il riconoscimento delle aperture
+# -----------------------------------------------------------------------------
+# Contiene l'elenco delle aperture di Lichess (data/openings/, licenza CC0) e
+# sa dire quale apertura è stata giocata in una partita (codice ECO e nome).
+# Non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "openings"
+description = "Riconoscimento delle aperture (codice ECO e nome)"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = ["dep:serde", "dep:ts-rs"]
+
+[dependencies]
+shakmaty.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

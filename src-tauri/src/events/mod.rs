@@ -8,3 +8,4 @@
 pub mod analysis;
 pub mod engine_error;
 pub mod game_updated;
+pub mod storage_error;

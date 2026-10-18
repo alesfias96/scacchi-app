@@ -18,6 +18,9 @@
 //! - [`computer_view`]: il computer avversario come mostrarlo;
 //! - [`session_view`]: tutto ciò che l'interfaccia mostra;
 //! - [`engine_request`]: la richiesta di una mossa al motore;
+//! - [`move_timer`]: il tempo impiegato per ogni mossa;
+//! - [`session_snapshot`]: la "fotografia" da salvare nell'archivio e da cui ripartire;
+//! - [`session_id`]: il nome unico di ogni partita e la sua data;
 //! - [`coin_flip`]: il sorteggio del colore;
 //! - [`session_error`]: gli errori possibili.
 
@@ -27,7 +30,10 @@ pub mod coin_flip;
 pub mod computer_view;
 pub mod engine_request;
 pub mod game_session;
+pub mod move_timer;
 pub mod session_error;
+pub mod session_id;
+pub mod session_snapshot;
 pub mod session_view;
 
 pub use clock::Clock;
@@ -36,5 +42,8 @@ pub use coin_flip::coin_flip;
 pub use computer_view::ComputerView;
 pub use engine_request::EngineRequest;
 pub use game_session::GameSession;
+pub use move_timer::MoveTiming;
 pub use session_error::SessionError;
+pub use session_id::now_unix_ms;
+pub use session_snapshot::{MoveSnapshot, SessionSnapshot};
 pub use session_view::SessionView;

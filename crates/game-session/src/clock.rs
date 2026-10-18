@@ -51,6 +51,24 @@ impl Clock {
         }
     }
 
+    /// Un orologio ripreso da una partita salvata: i tempi rimasti, fermo.
+    ///
+    /// Ripartirà alla prossima mossa (come all'inizio di una partita): il
+    /// tempo passato ad app chiusa non viene contato. Se la partita era
+    /// finita (`finished`), resta fermo per sempre.
+    #[must_use]
+    pub fn restore(control: TimeControl, white_ms: u32, black_ms: u32, finished: bool) -> Self {
+        Self {
+            control,
+            remaining: [
+                Duration::from_millis(u64::from(white_ms)),
+                Duration::from_millis(u64::from(black_ms)),
+            ],
+            running: None,
+            stopped: finished,
+        }
+    }
+
     /// Il tempo scelto per la partita.
     #[must_use]
     pub fn control(&self) -> TimeControl {
@@ -199,6 +217,19 @@ mod tests {
             clock.flagged(start + Duration::from_secs(181)),
             Some(Side::Black)
         );
+    }
+
+    #[test]
+    fn a_restored_clock_waits_for_the_next_move() {
+        let start = Instant::now();
+        let mut clock = Clock::restore(blitz().control(), 90_000, 80_000, false);
+        assert_eq!(clock.running_side(), None);
+
+        clock.press(Side::White, start + Duration::from_secs(30));
+
+        // Il tempo del Bianco non è sceso: l'orologio era fermo.
+        assert_eq!(clock.view(start + Duration::from_secs(30)).white_ms, 90_000);
+        assert_eq!(clock.running_side(), Some(Side::Black));
     }
 
     #[test]

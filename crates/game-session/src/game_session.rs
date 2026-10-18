@@ -6,11 +6,14 @@ use std::time::{Duration, Instant};
 use app_settings::{ColorChoice, GameSetup, OpponentKind};
 use chess_core::{Game, Side, to_pgn};
 use engine::{SearchLimits, SearchPosition, levels, strength};
+use openings::Opening;
 
 use crate::clock::{Clock, to_millis};
 use crate::computer_view::ComputerView;
 use crate::engine_request::EngineRequest;
+use crate::move_timer::MoveTimer;
 use crate::session_error::SessionError;
+use crate::session_id::{new_session_id, now_unix_ms};
 use crate::session_view::SessionView;
 
 /// Senza orologio, il computer non risponde prima di così: una risposta
@@ -27,17 +30,17 @@ const MIN_REPLY_TIME_FRACTION: u32 = 60;
 static NEXT_TOKEN: AtomicU64 = AtomicU64::new(1);
 
 /// Un nuovo contrassegno, diverso da tutti i precedenti.
-fn next_token() -> u64 {
+pub(crate) fn next_token() -> u64 {
     NEXT_TOKEN.fetch_add(1, Ordering::Relaxed)
 }
 
 /// Il computer avversario.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct Computer {
+pub(crate) struct Computer {
     /// Il suo colore.
-    side: Side,
+    pub(crate) side: Side,
     /// Il suo livello, da 1 a 10.
-    level: u8,
+    pub(crate) level: u8,
 }
 
 /// La partita in corso, con le regole del modo di gioco scelto.
@@ -49,47 +52,83 @@ struct Computer {
 /// - **Con l'orologio** le mosse non si ritirano.
 ///
 /// Il tempo non viene mai letto da qui dentro: ogni funzione che ne ha
-/// bisogno riceve l'istante `now`.
+/// bisogno riceve l'istante `now` (solo la data di inizio, da salvare
+/// nell'archivio, viene letta dall'orologio del sistema).
+///
+/// I campi sono visibili al resto della crate perché la "fotografia" da
+/// salvare nell'archivio (`session_snapshot.rs`) li legge e li ricostruisce.
 #[derive(Debug, Clone)]
 pub struct GameSession {
+    /// Il nome unico della partita, con cui viene salvata nell'archivio.
+    pub(crate) id: String,
+    /// Quando è cominciata, in millesimi di secondo dal 1970.
+    pub(crate) started_at_ms: i64,
     /// La partita.
-    game: Game,
+    pub(crate) game: Game,
     /// Il computer avversario, se c'è.
-    computer: Option<Computer>,
+    pub(crate) computer: Option<Computer>,
     /// L'orologio, se c'è.
-    clock: Option<Clock>,
+    pub(crate) clock: Option<Clock>,
+    /// Il tempo impiegato per ogni mossa.
+    pub(crate) timer: MoveTimer,
     /// Il contrassegno dello stato attuale (vedi [`EngineRequest`]).
-    token: u64,
+    pub(crate) token: u64,
 }
 
 impl Default for GameSession {
     /// Una partita a due giocatori, senza orologio, dalla posizione iniziale.
     fn default() -> Self {
-        Self::from_game(Game::new())
+        Self::from_game(Game::new(), Instant::now())
     }
 }
 
 impl GameSession {
     /// Una partita a due giocatori senza orologio, a partire da `game`
-    /// (usata ad esempio per una partita incollata).
+    /// (usata ad esempio per una partita incollata). Il cronometro delle
+    /// mosse parte da `now`.
     #[must_use]
-    pub fn from_game(game: Game) -> Self {
+    pub fn from_game(game: Game, now: Instant) -> Self {
         Self {
+            id: new_session_id(),
+            started_at_ms: now_unix_ms(),
             game,
             computer: None,
             clock: None,
+            timer: MoveTimer::new(now),
             token: next_token(),
         }
     }
 
+    /// Il nome unico della partita.
+    #[must_use]
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+
+    /// La "versione" della partita: cambia a ogni mossa, mossa ritirata,
+    /// abbandono o tempo scaduto, ma non quando si scorrono le mosse. Serve a
+    /// salvare la partita solo quando è cambiata davvero.
+    #[must_use]
+    pub fn revision(&self) -> u64 {
+        self.token
+    }
+
+    /// `true` se nella partita è stata giocata almeno una mossa (solo allora
+    /// vale la pena salvarla nell'archivio).
+    #[must_use]
+    pub fn has_moves(&self) -> bool {
+        !self.game.moves().is_empty()
+    }
+
     /// Comincia una partita nuova, come scelto nella finestra "Nuova partita".
     ///
-    /// - Riceve: la configurazione e il risultato del "lancio della moneta",
-    ///   usato solo se il colore è da estrarre a sorte (vedi [`crate::coin_flip`]).
+    /// - Riceve: la configurazione, il risultato del "lancio della moneta"
+    ///   (usato solo se il colore è da estrarre a sorte, vedi [`crate::coin_flip`])
+    ///   e l'istante in cui comincia.
     /// - Restituisce: la partita, pronta a cominciare.
     #[must_use]
-    pub fn start(setup: &GameSetup, coin: Side) -> Self {
-        let mut session = Self::from_game(Game::new());
+    pub fn start(setup: &GameSetup, coin: Side, now: Instant) -> Self {
+        let mut session = Self::from_game(Game::new(), now);
         if setup.opponent == OpponentKind::Computer {
             let human = match setup.color {
                 ColorChoice::White => Side::White,
@@ -109,7 +148,9 @@ impl GameSession {
     #[must_use]
     pub fn view(&self, now: Instant) -> SessionView {
         SessionView {
+            id: self.id.clone(),
             game: self.game.view(),
+            opening: self.opening(),
             opponent: if self.computer.is_some() {
                 OpponentKind::Computer
             } else {
@@ -222,7 +263,7 @@ impl GameSession {
     /// # Errors
     ///
     /// [`SessionError::UndoNotAllowed`] se la partita ha l'orologio.
-    pub fn undo(&mut self) -> Result<(), SessionError> {
+    pub fn undo(&mut self, now: Instant) -> Result<(), SessionError> {
         if self.clock.is_some() {
             return Err(SessionError::UndoNotAllowed);
         }
@@ -241,6 +282,7 @@ impl GameSession {
             }
             None => self.game.undo(),
         }
+        self.timer.truncate(self.game.moves().len(), now);
         self.token = next_token();
         Ok(())
     }
@@ -320,15 +362,28 @@ impl GameSession {
         to_pgn(&self.game)
     }
 
+    /// L'apertura giocata (la più precisa riconosciuta), se c'è.
+    #[must_use]
+    pub fn opening(&self) -> Option<Opening> {
+        openings::identify(
+            &self.game.starting_fen(),
+            &self.uci_moves(self.game.moves().len()),
+        )
+    }
+
     /// Dopo una mossa: aggiorna l'orologio (e lo ferma se la partita è finita)
     /// e cambia il contrassegno.
     fn after_move(&mut self, mover: Side, now: Instant) {
+        let mut clock_after_ms = None;
         if let Some(clock) = &mut self.clock {
             clock.press(mover, now);
             if self.game.final_result().is_some() {
                 clock.stop(now);
             }
+            clock_after_ms = Some(to_millis(clock.remaining(mover, now)));
         }
+        self.timer
+            .record(self.game.moves().len(), now, clock_after_ms);
         self.token = next_token();
     }
 
@@ -374,7 +429,7 @@ impl GameSession {
     }
 
     /// Le prime `count` mosse della partita, in notazione UCI.
-    fn uci_moves(&self, count: usize) -> Vec<String> {
+    pub(crate) fn uci_moves(&self, count: usize) -> Vec<String> {
         self.game.moves()[..count]
             .iter()
             .map(|record| record.uci.clone())
@@ -427,8 +482,11 @@ mod tests {
     #[test]
     fn the_computer_moves_when_it_is_its_turn() {
         let now = Instant::now();
-        let mut session =
-            GameSession::start(&against_computer(ColorChoice::White, None), Side::White);
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::White, None),
+            Side::White,
+            now,
+        );
         assert_eq!(session.engine_request(now), None);
 
         session.play("e2e4", now).expect("mossa legale");
@@ -447,7 +505,12 @@ mod tests {
 
     #[test]
     fn the_computer_starts_when_the_human_plays_black() {
-        let session = GameSession::start(&against_computer(ColorChoice::Random, None), Side::Black);
+        let now = Instant::now();
+        let session = GameSession::start(
+            &against_computer(ColorChoice::Random, None),
+            Side::Black,
+            now,
+        );
 
         let view = session.view(Instant::now());
         assert_eq!(view.computer.expect("computer").side, Side::White);
@@ -459,12 +522,15 @@ mod tests {
     #[test]
     fn an_old_computer_move_is_discarded() {
         let now = Instant::now();
-        let mut session =
-            GameSession::start(&against_computer(ColorChoice::White, None), Side::White);
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::White, None),
+            Side::White,
+            now,
+        );
         session.play("e2e4", now).expect("mossa legale");
         let request = session.engine_request(now).expect("tocca al computer");
 
-        session.undo().expect("si può ritirare");
+        session.undo(now).expect("si può ritirare");
 
         assert_eq!(
             session.play_engine(request.token, "e7e5", now),
@@ -476,15 +542,18 @@ mod tests {
     #[test]
     fn undo_against_the_computer_takes_back_both_moves() {
         let now = Instant::now();
-        let mut session =
-            GameSession::start(&against_computer(ColorChoice::White, None), Side::White);
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::White, None),
+            Side::White,
+            now,
+        );
         session.play("e2e4", now).expect("mossa legale");
         let request = session.engine_request(now).expect("tocca al computer");
         session
             .play_engine(request.token, "e7e5", now)
             .expect("mossa del computer");
 
-        session.undo().expect("si può ritirare");
+        session.undo(now).expect("si può ritirare");
 
         assert_eq!(session.view(now).game.moves.len(), 0);
         assert!(session.view(now).can_move);
@@ -493,8 +562,11 @@ mod tests {
     #[test]
     fn against_the_computer_moves_are_played_only_from_the_last_position() {
         let now = Instant::now();
-        let mut session =
-            GameSession::start(&against_computer(ColorChoice::White, None), Side::White);
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::White, None),
+            Side::White,
+            now,
+        );
         session.play("e2e4", now).expect("mossa legale");
         let request = session.engine_request(now).expect("tocca al computer");
         session
@@ -512,6 +584,7 @@ mod tests {
         let mut session = GameSession::start(
             &against_computer(ColorChoice::White, Some(BLITZ)),
             Side::White,
+            start,
         );
         session.play("e2e4", start).expect("mossa legale");
 
@@ -522,7 +595,7 @@ mod tests {
         assert_eq!(request.limits.black_time_ms, Some(170_000));
         assert_eq!(request.limits.white_increment_ms, Some(2_000));
         assert_eq!(request.limits.move_time_ms, None);
-        assert_eq!(session.undo(), Err(SessionError::UndoNotAllowed));
+        assert_eq!(session.undo(later), Err(SessionError::UndoNotAllowed));
         assert!(!session.view(later).can_undo);
     }
 
@@ -534,7 +607,7 @@ mod tests {
             time_control: Some(BLITZ),
             ..GameSetup::default()
         };
-        let mut session = GameSession::start(&setup, Side::White);
+        let mut session = GameSession::start(&setup, Side::White, start);
         session.play("e2e4", start).expect("mossa legale");
         assert_eq!(
             session.time_until_flag(start),
@@ -556,8 +629,11 @@ mod tests {
     #[test]
     fn resigning_against_the_computer_makes_the_computer_win() {
         let now = Instant::now();
-        let mut session =
-            GameSession::start(&against_computer(ColorChoice::Black, None), Side::White);
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::Black, None),
+            Side::White,
+            now,
+        );
 
         session.resign(now).expect("la partita non è finita");
 

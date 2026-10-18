@@ -19,6 +19,8 @@ resolver = "3"
 # - crates/app-settings: le impostazioni dell'utente (tema, scacchiera, pezzi).
 # - crates/engine: il dialogo con i motori di scacchi (Stockfish) tramite il protocollo UCI.
 # - crates/game-session: la partita in corso con avversario, livello e orologio.
+# - crates/openings: il riconoscimento delle aperture (elenco di Lichess).
+# - crates/storage: il database delle partite (SQLite).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -26,6 +28,8 @@ members = [
     "crates/app-settings",
     "crates/engine",
     "crates/game-session",
+    "crates/openings",
+    "crates/storage",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -62,6 +66,8 @@ chess-core = { path = "crates/chess-core" }
 app-settings = { path = "crates/app-settings" }
 engine = { path = "crates/engine" }
 game-session = { path = "crates/game-session" }
+openings = { path = "crates/openings" }
+storage = { path = "crates/storage" }
 
 # Desktop.
 tauri = { version = "2", features = [] }
@@ -79,4 +85,8 @@ serde_json = "1"
 ts-rs = "12"
 # Esecuzione "asincrona": dialogare con i motori senza mai bloccare l'app.
 # È la stessa libreria che Tauri usa internamente.
+# Il database SQLite, con le migrazioni dello schema (SQLite è incluso nell'app).
+sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio", "sqlite", "migrate", "macros"] }
+# Le finestre di sistema per salvare e aprire file (.pgn).
+tauri-plugin-dialog = "2"
 tokio = { version = "1", features = ["io-util", "macros", "process", "rt", "sync", "time"] }

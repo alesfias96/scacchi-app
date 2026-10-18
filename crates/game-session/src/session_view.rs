@@ -2,6 +2,7 @@
 
 use app_settings::{OpponentKind, TimeControl};
 use chess_core::GameView;
+use openings::Opening;
 
 use crate::clock_view::ClockView;
 use crate::computer_view::ComputerView;
@@ -23,8 +24,12 @@ use crate::computer_view::ComputerView;
     ts(export)
 )]
 pub struct SessionView {
+    /// Il nome unico della partita (con cui è salvata nell'archivio).
+    pub id: String,
     /// La partita: posizione mostrata, mosse, risultato.
     pub game: GameView,
+    /// L'apertura giocata, se riconosciuta.
+    pub opening: Option<Opening>,
     /// Contro chi si gioca.
     pub opponent: OpponentKind,
     /// Il computer avversario, se si gioca contro il computer.

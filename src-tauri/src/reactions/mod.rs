@@ -5,8 +5,12 @@
 //! dell'orologio e far seguire all'analisi la posizione mostrata. Le decisioni
 //! ("tocca al computer?", "quando scade il tempo?") le prende la crate
 //! `game-session`: qui si eseguono soltanto, senza mai bloccare l'interfaccia.
+//! Qui stanno anche il salvataggio delle partite nel database e la ripresa
+//! della partita lasciata a metà all'avvio.
 
 pub mod after_change;
 pub mod computer_move;
 pub mod flag_timer;
 pub mod follow_analysis;
+pub mod resume_game;
+pub mod save_worker;

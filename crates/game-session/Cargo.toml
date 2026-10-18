@@ -22,6 +22,7 @@ bindings = [
     "chess-core/bindings",
     "engine/bindings",
     "app-settings/bindings",
+    "openings/bindings",
 ]
 
 [dependencies]
@@ -30,6 +31,8 @@ engine.workspace = true
 # La configurazione della partita (avversario, colore, livello, tempo) è
 # un'impostazione dell'utente: il suo tipo vive in app-settings.
 app-settings.workspace = true
+# Il riconoscimento dell'apertura giocata.
+openings.workspace = true
 thiserror.workspace = true
 serde = { workspace = true, optional = true }
 ts-rs = { workspace = true, optional = true }

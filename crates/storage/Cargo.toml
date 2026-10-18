@@ -1,0 +1,45 @@
+# =============================================================================
+# Crate "storage" — il database delle partite
+# -----------------------------------------------------------------------------
+# Salva le partite (e tutte le loro mosse) in un file SQLite e le rilegge:
+# archivio, ricerca, ripresa della partita lasciata a metà. Lo schema è
+# descritto dai file in migrations/, applicati in ordine all'apertura.
+# Non sa nulla dell'interfaccia grafica né di Tauri: riceve il percorso del file.
+# =============================================================================
+
+[package]
+name = "storage"
+description = "Database delle partite (SQLite, con migrazioni)"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:serde",
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "app-settings/bindings",
+    "openings/bindings",
+    "game-session/bindings",
+]
+
+[dependencies]
+chess-core.workspace = true
+app-settings.workspace = true
+openings.workspace = true
+# La "fotografia" della partita da salvare (SessionSnapshot).
+game-session.workspace = true
+sqlx.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[dev-dependencies]
+# Per i test asincroni.
+tokio.workspace = true
+
+[lints]
+workspace = true
