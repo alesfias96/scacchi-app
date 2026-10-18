@@ -8,9 +8,36 @@ import { MoveList } from './MoveList';
 
 /** 1. e4 e5 2. Nf3 */
 const MOVES: MoveRecord[] = [
-  { ply: 1, moveNumber: 1, side: 'white', san: 'e4', uci: 'e2e4', from: 'e2', to: 'e4' },
-  { ply: 2, moveNumber: 1, side: 'black', san: 'e5', uci: 'e7e5', from: 'e7', to: 'e5' },
-  { ply: 3, moveNumber: 2, side: 'white', san: 'Nf3', uci: 'g1f3', from: 'g1', to: 'f3' },
+  {
+    ply: 1,
+    moveNumber: 1,
+    side: 'white',
+    san: 'e4',
+    uci: 'e2e4',
+    from: 'e2',
+    to: 'e4',
+    capture: false,
+  },
+  {
+    ply: 2,
+    moveNumber: 1,
+    side: 'black',
+    san: 'e5',
+    uci: 'e7e5',
+    from: 'e7',
+    to: 'e5',
+    capture: false,
+  },
+  {
+    ply: 3,
+    moveNumber: 2,
+    side: 'white',
+    san: 'Nf3',
+    uci: 'g1f3',
+    from: 'g1',
+    to: 'f3',
+    capture: false,
+  },
 ];
 
 describe('MoveList', () => {

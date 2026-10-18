@@ -8,7 +8,17 @@
 
 /** I nomi delle icone disponibili. */
 export type IconName =
-  'first' | 'previous' | 'next' | 'last' | 'flip' | 'undo' | 'plus' | 'copy' | 'paste';
+  | 'first'
+  | 'previous'
+  | 'next'
+  | 'last'
+  | 'flip'
+  | 'undo'
+  | 'plus'
+  | 'copy'
+  | 'paste'
+  | 'soundOn'
+  | 'soundOff';
 
 export const ICON_PATHS: Record<IconName, readonly string[]> = {
   /** Vai all'inizio: freccia a sinistra con barra. */
@@ -29,4 +39,8 @@ export const ICON_PATHS: Record<IconName, readonly string[]> = {
   copy: ['M9 9h11v11H9z', 'M5 15H4V4h11v1'],
   /** Incolla: un portablocchi. */
   paste: ['M9 3h6v4H9z', 'M9 5H5v16h14V5h-4'],
+  /** Suoni attivi: altoparlante con due onde. */
+  soundOn: ['M4 9h4l5-4v14l-5-4H4z', 'M16.5 8.5a5 5 0 0 1 0 7', 'M19 6a8.5 8.5 0 0 1 0 12'],
+  /** Suoni disattivati: altoparlante barrato da una croce. */
+  soundOff: ['M4 9h4l5-4v14l-5-4H4z', 'M16 9l5 6', 'M21 9l-5 6'],
 };

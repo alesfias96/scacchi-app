@@ -2,9 +2,9 @@
  * SettingsPage — la sezione "Impostazioni".
  *
  * Cosa fa: permette di scegliere il tema dell'app, lo stile della scacchiera,
- * lo stile dei pezzi e la notazione delle mosse. Ogni scelta si applica subito a tutta l'app, viene
- * salvata e ritrovata alla riapertura. Accanto, una scacchiera di anteprima
- * mostra il risultato.
+ * lo stile dei pezzi, la notazione delle mosse e i suoni. Ogni scelta si applica
+ * subito a tutta l'app, viene salvata e ritrovata alla riapertura. Accanto,
+ * una scacchiera di anteprima mostra il risultato.
  *
  * Riceve: niente.
  * Restituisce: la pagina della sezione.
@@ -14,9 +14,11 @@ import { Chessboard } from '../../components/chessboard/Chessboard';
 import { OptionGroup } from '../../components/option-group/OptionGroup';
 import { useInitialPosition } from '../../hooks/useInitialPosition';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
+import { playMoveSound } from '../../sounds/playMoveSound';
 import { BOARD_OPTIONS } from './options/boardOptions';
 import { NOTATION_OPTIONS } from './options/notationOptions';
 import { PIECE_OPTIONS } from './options/pieceOptions';
+import { SOUND_OPTIONS } from './options/soundOptions';
 import { THEME_OPTIONS } from './options/themeOptions';
 import styles from './SettingsPage.module.css';
 
@@ -82,6 +84,19 @@ export function SettingsPage() {
             value={settings.notation}
             onChange={(notation) => {
               change({ notation });
+            }}
+          />
+          <OptionGroup
+            legend="Suoni"
+            name="sounds"
+            options={SOUND_OPTIONS}
+            value={settings.sounds}
+            onChange={(sounds) => {
+              change({ sounds });
+              // Chi riaccende i suoni sente subito come suona una mossa.
+              if (sounds === 'on') {
+                playMoveSound();
+              }
             }}
           />
         </div>

@@ -14,4 +14,11 @@ describe('Icon', () => {
     expect(svg?.getAttribute('aria-hidden')).toBe('true');
     expect(svg?.querySelectorAll('path')).toHaveLength(ICON_PATHS.flip.length);
   });
+
+  it('nella variante grande aggiunge la sua classe', () => {
+    const normal = render(<Icon name="soundOn" />).container.querySelector('svg');
+    const large = render(<Icon name="soundOn" size="large" />).container.querySelector('svg');
+
+    expect(large?.getAttribute('class')).not.toBe(normal?.getAttribute('class'));
+  });
 });

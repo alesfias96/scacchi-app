@@ -78,6 +78,7 @@
   --move-number-width: 2.25rem; /* colonna dei numeri di mossa */
   --control-size: 2.5rem; /* pulsanti con sola icona */
   --icon-size: 1.25rem;
+  --icon-size-large: 2.25rem; /* icone delle anteprime nelle Impostazioni */
   --promotion-piece-size: 4.5rem; /* pezzi nella scelta della promozione */
   --dialog-width: 32rem;
   --import-text-rows-height: 10rem; /* area di testo per incollare FEN o PGN */

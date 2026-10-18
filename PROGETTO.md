@@ -57,6 +57,7 @@ Obiettivi, in ordine di importanza:
 | Temi                     | Studio (predefinito), Sera, Giorno, Automatico; scelti nelle Impostazioni            | ✅ deciso                                              |
 | Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app      | ✅ deciso                                              |
 | Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app | ✅ deciso                                              |
+| Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili               | ✅ deciso                                              |
 | Grafici statistiche      | da decidere più avanti                                                               | ⚪ aperto                                              |
 | Linguaggio del tutor     | regole → poi AI locale (Ollama)                                                      | ⚪ aperto                                              |
 | Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                              | ✅ deciso                                              |
@@ -201,7 +202,8 @@ app-scacchi/
 │   │   ├── review/             analisi delle partite giocate
 │   │   ├── progress/           statistiche e livello
 │   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione
-│   ├── hooks/                  hook React condivisi
+│   ├── sounds/                 suoni del gioco (mossa, presa, fine partita), creati con Web Audio
+│   ├── hooks/                  hook React condivisi (tastiera, suoni, tema di sistema)
 │   ├── lib/                    piccole utility (notazione, errori, appunti)
 │   └── test/                   impostazioni comuni dei test
 │
@@ -298,7 +300,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | ------------------------------- | ------------- |
 | 1. Fondamenta                   | ✅ completata |
 | 1-bis. Temi e personalizzazione | ✅ completata |
-| 2. Regole e partita             | 🔵 in test    |
+| 2. Regole e partita             | ✅ completata |
 | 3. Motore                       | ⚪ da fare    |
 | 4. Database                     | ⚪ da fare    |
 | 5. Analisi                      | ⚪ da fare    |
@@ -348,3 +350,45 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-18 | Una mossa giocata da una posizione passata sostituisce il seguito                        | Semplice e prevedibile; le varianti arriveranno nella Fase 8                                                                                                                |
 | 2026-10-18 | Copia/incolla di FEN e PGN negli appunti; salvataggio su file nella Fase 4               | Il salvataggio su file richiede l'archivio partite                                                                                                                          |
 | 2026-10-18 | Componenti comuni `Button`, `Icon`, `PanelCard`, `PieceIcon`                             | Stesso aspetto ovunque; sostituiscono la cartella `ui/` prevista                                                                                                            |
+| 2026-10-18 | Progetto sotto git (ramo `main`), un commit per ogni passo                               | Ogni fase è reversibile e si vede esattamente cosa cambia                                                                                                                   |
+| 2026-10-18 | Suoni del gioco creati con Web Audio: mossa, presa, fine partita; impostazione "Suoni"   | Richiesta di Alessandro. Nessun file né licenza (i suoni classici di Lichess non sono liberi); suonano solo avanzando di una mossa                                          |
+| 2026-10-18 | `MoveRecord` dice se la mossa è una presa (`capture`)                                    | L'interfaccia sceglie il suono senza conoscere le regole                                                                                                                    |
+| 2026-10-18 | "Annulla" toglie l'ultima mossa della partita; "Nuova partita" senza conferma            | Comportamenti confermati da Alessandro                                                                                                                                      |
+| 2026-10-18 | Fase 2 approvata; `PASSAGGIO-CONSEGNE.md` cancellato                                     | Conferma di Alessandro; appunti per le fasi future e trappole note riportati in §11 e §12                                                                                   |
+
+---
+
+## 11. Appunti tecnici per le fasi successive
+
+Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato prima di scrivere codice.
+
+- **Fase 3 — Motore.**
+  - Nuova crate `crates/engine`: un "trait" `Engine` con un'unica implementazione UCI (`uci`, `isready`, `ucinewgame`, `position fen … moves …`, `go depth|movetime|wtime/btime`, lettura di `info … score cp|mate … pv …` e `bestmove`), asincrona con tokio e cancellabile (`stop`).
+  - Stockfish come sidecar: binari in `src-tauri/binaries/` con il nome della piattaforma (`stockfish-x86_64-pc-windows-msvc.exe`, `stockfish-aarch64-apple-darwin`, `stockfish-x86_64-apple-darwin`, `stockfish-x86_64-unknown-linux-gnu`), `bundle.externalBin` in `tauri.conf.json`, `tauri-plugin-shell` con il permesso in `capabilities/default.json`. Licenza GPL-3.0 da annotare.
+  - **Da decidere:** come procurarsi i binari (script npm multipiattaforma che li scarica, oppure a mano) e la scala dei livelli (`Skill Level` 0–20, `UCI_LimitStrength` + `UCI_Elo` 1320–3190, oppure livelli con nomi).
+  - Analisi live come eventi Tauri (`emit`, nuova cartella `src-tauri/src/events/`), mai come attesa bloccante.
+  - Interfaccia: `components/eval-bar/`, frecce della mossa migliore (`drawable.autoShapes` di chessground), variante principale nella notazione scelta, scelta del colore, orologio (conteggio in Rust). La scacchiera resta bloccata durante il turno del computer; i suoni delle sue mosse partono già da soli (`useMoveSound`).
+- **Fase 4 — Database.** Crate `crates/storage` (SQLite con `sqlx`, migrazioni, file nella `app_data_dir`). Schema prima delle schermate (§4.3). Salvataggio a ogni mossa e ripresa all'avvio; archivio partite con ricerca; file `.pgn` con `tauri-plugin-dialog`.
+- **Fase 5 — Analisi.** Crate `crates/analysis`, un rilevatore per file (pezzi indifesi, minacce, tattiche, struttura pedonale, sicurezza del re, attività, fase di gioco), ognuno con test su FEN note.
+- **Fase 6 — Allenamento.** Crate `crates/training`; puzzle di Lichess (CSV, licenza CC0) in `data/`; puzzle per profondità, visualizzazione, "cosa minaccia?", ripasso degli errori con ripetizione dilazionata.
+- **Fase 7 — Tutor.** Crate `crates/tutor` e `knowledge/` con testi curati; pannello richiamabile ovunque con una scorciatoia unica.
+- **Fase 8 — Analisi partite.** Momenti critici, mosse mancate spiegate, grafico della valutazione; varianti nella lista mosse (albero al posto della sostituzione del seguito: richiede di estendere `Game`).
+- **Fase 9 — Statistiche.** Crate `crates/stats`; libreria dei grafici da scegliere (offline, rispettosa dei temi).
+- **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
+- **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
+
+---
+
+## 12. Trappole note e lezioni imparate
+
+- **shakmaty:** serve `fen.parse::<Fen>()`, altrimenti errore E0282.
+- **Clippy pedantic:** nei test non `assert!(v.is_empty())` ma `assert_eq!(v, [])`.
+- **ESLint strict:** niente cast `as HTMLInputElement` (si usa `getByRole<HTMLInputElement>(…)`); niente `invoke<void>`; `FormEvent` è deprecato (`SyntheticEvent`); `Array.prototype.at` non disponibile (libreria ES2021); niente parametri inutilizzati, nemmeno con `_` (per i finti si dichiara il tipo con `vi.fn<…>()`).
+- **CSS Modules:** con `noUncheckedIndexedAccess` le classi sono `string | undefined`: sempre tramite `classNames()`.
+- **Test:** la pulizia tra un test e l'altro e le simulazioni che jsdom non ha (`matchMedia`, `scrollIntoView`, `scrollTo`) stanno in `src/test/setup.ts`; per i suoni c'è `src/test/fakeAudioContext.ts`.
+- **Vite inserisce le immagini piccole nel codice** (indirizzi `data:`): i test non devono cercare il nome del file nell'indirizzo, ma confrontare con `pieceImageUrl(…)`.
+- **Prettier** riformatta le tabelle Markdown: dopo aver scritto un README eseguire `npm run format`.
+- **Tipi in `src/bindings/`:** li genera `ts-rs` con `npm run test:rust`; non si scrivono a mano.
+- **npm audit:** mai `npm audit fix --force`.
+- **`tauri-specta`** è stato scartato perché instabile; non va riproposto. Il pacchetto chessground si chiama `@lichess-org/chessground`.
+- **Gusti di Alessandro:** cornici attorno alla scacchiera, pezzi puliti e minimal, tanta scelta di stili, ogni scelta valida in tutta l'app; a ogni fase chiede ritocchi estetici.

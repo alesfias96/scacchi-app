@@ -3,6 +3,7 @@ import type { AppTheme } from "./AppTheme";
 import type { BoardStyle } from "./BoardStyle";
 import type { Notation } from "./Notation";
 import type { PieceStyle } from "./PieceStyle";
+import type { SoundSetting } from "./SoundSetting";
 
 /**
  * Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
@@ -27,4 +28,8 @@ pieces: PieceStyle,
 /**
  * Il modo di scrivere le mosse nella lista della partita.
  */
-notation: Notation, };
+notation: Notation, 
+/**
+ * Se suonano mosse, prese e fine partita.
+ */
+sounds: SoundSetting, };

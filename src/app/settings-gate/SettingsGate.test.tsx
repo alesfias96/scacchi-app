@@ -25,6 +25,7 @@ describe('SettingsGate', () => {
       board: 'rovere',
       pieces: 'icona',
       notation: 'figurine',
+      sounds: 'on',
     });
 
     render(

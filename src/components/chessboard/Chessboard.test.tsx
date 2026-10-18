@@ -37,7 +37,13 @@ describe('Chessboard', () => {
     chessgroundMock.set.mockClear();
     chessgroundMock.destroy.mockClear();
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'rovere', pieces: 'icona', notation: 'figurine' },
+      settings: {
+        theme: 'studio',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
   });
 
@@ -80,7 +86,13 @@ describe('Chessboard', () => {
 
   it('applica lo stile di scacchiera e pezzi scelto nelle impostazioni', () => {
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'marmo', pieces: 'gettoni', notation: 'figurine' },
+      settings: {
+        theme: 'studio',
+        board: 'marmo',
+        pieces: 'gettoni',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
 
     const { container } = render(

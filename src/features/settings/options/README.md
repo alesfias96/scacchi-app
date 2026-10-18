@@ -13,3 +13,4 @@ Quando in Rust si aggiunge uno stile, va aggiunta qui la sua voce.
 | `boardOptions.tsx`    | Gli stili della scacchiera: Rovere, Noce, Acero, Marmo, Ardesia, Torneo |
 | `pieceOptions.tsx`    | Gli stili dei pezzi: Icona, Morbido, Legno, Metallo, Gettoni, Classico  |
 | `notationOptions.tsx` | Le notazioni delle mosse: Figurine, Italiana, Internazionale            |
+| `soundOptions.tsx`    | I suoni del gioco: Attivi, Disattivati                                  |

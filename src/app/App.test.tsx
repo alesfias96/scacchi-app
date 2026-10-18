@@ -8,7 +8,13 @@ import { App } from './App';
 
 vi.mock('../services/settingsService', () => ({
   fetchSettings: () =>
-    Promise.resolve({ theme: 'studio', board: 'rovere', pieces: 'icona', notation: 'figurine' }),
+    Promise.resolve({
+      theme: 'studio',
+      board: 'rovere',
+      pieces: 'icona',
+      notation: 'figurine',
+      sounds: 'on',
+    }),
   saveSettings: () => Promise.resolve(),
 }));
 

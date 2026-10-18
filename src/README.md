@@ -16,8 +16,9 @@ Mostra le informazioni che arrivano dal nucleo Rust e gli invia ciò che fai (cl
 | `assets/`     | Le immagini incluse nell'app: scacchiere e set di pezzi                                    |
 | `bindings/`   | I tipi di dati generati automaticamente da Rust — **non si modificano a mano**             |
 | `services/`   | Le chiamate al nucleo Rust                                                                 |
-| `state/`      | Lo stato condiviso tra le sezioni (per ora le impostazioni)                                |
-| `hooks/`      | Hook React condivisi (modalità chiara/scura del sistema, posizione iniziale)               |
+| `state/`      | Lo stato condiviso tra le sezioni: impostazioni e partita in corso                         |
+| `hooks/`      | Hook React condivisi (modalità chiara/scura, posizione iniziale, tastiera, suoni)          |
+| `sounds/`     | I suoni del gioco (mossa, presa, fine partita), creati al momento dall'app                 |
 | `components/` | Componenti riutilizzabili da più sezioni (scacchiera, gruppo di scelte)                    |
 | `features/`   | Le sezioni dell'app (Gioca, Impostazioni)                                                  |
 | `lib/`        | Piccole funzioni di supporto condivise                                                     |

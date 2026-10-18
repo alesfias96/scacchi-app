@@ -10,3 +10,9 @@
   stroke-linejoin: round;
   stroke-width: 2;
 }
+
+/* Variante grande, per le anteprime nelle Impostazioni. */
+.large {
+  width: var(--icon-size-large);
+  height: var(--icon-size-large);
+}

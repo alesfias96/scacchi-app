@@ -33,4 +33,9 @@ from: string,
 /**
  * Casa di arrivo (es. `"f3"`; per l'arrocco è la casa d'arrivo del re).
  */
-to: string, };
+to: string, 
+/**
+ * Vero se la mossa cattura un pezzo (presa en passant compresa).
+ * L'interfaccia lo usa per scegliere il suono della mossa.
+ */
+capture: boolean, };

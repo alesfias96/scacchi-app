@@ -15,3 +15,5 @@ prima di farla.
 | `PiecePreview.module.css`    | I suoi stili                                                                                          |
 | `NotationPreview.tsx`        | Due mosse d'esempio scritte nella notazione (♞f3 / Cf3 / Nf3)                                         |
 | `NotationPreview.module.css` | I suoi stili                                                                                          |
+| `SoundPreview.tsx`           | L'altoparlante acceso o spento                                                                        |
+| `SoundPreview.module.css`    | I suoi stili                                                                                          |

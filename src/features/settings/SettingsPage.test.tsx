@@ -13,6 +13,11 @@ const settingsServiceMock = vi.hoisted(() => ({
 
 vi.mock('../../services/settingsService', () => settingsServiceMock);
 
+// Il suono d'esempio è simulato: si controlla solo che parta.
+const soundMock = vi.hoisted(() => ({ playMoveSound: vi.fn() }));
+
+vi.mock('../../sounds/playMoveSound', () => soundMock);
+
 // La posizione dell'anteprima resta "in caricamento": qui si controllano le scelte.
 vi.mock('../../services/positionService', () => ({
   fetchInitialPosition: () => new Promise(() => undefined),
@@ -21,9 +26,16 @@ vi.mock('../../services/positionService', () => ({
 describe('SettingsPage', () => {
   beforeEach(() => {
     settingsServiceMock.saveSettings.mockReset();
+    soundMock.playMoveSound.mockReset();
     settingsServiceMock.saveSettings.mockResolvedValue(undefined);
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'rovere', pieces: 'icona', notation: 'figurine' },
+      settings: {
+        theme: 'studio',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'figurine',
+        sounds: 'on',
+      },
       saveError: null,
     });
   });
@@ -47,6 +59,7 @@ describe('SettingsPage', () => {
       board: 'marmo',
       pieces: 'icona',
       notation: 'figurine',
+      sounds: 'on',
     });
   });
 
@@ -72,5 +85,17 @@ describe('SettingsPage', () => {
     fireEvent.click(screen.getByRole('radio', { name: /Italiana/ }));
 
     expect(useSettingsStore.getState().settings?.notation).toBe('italiana');
+  });
+
+  it('spegne e riaccende i suoni; riaccendendoli fa sentire una mossa', () => {
+    render(<SettingsPage />);
+
+    fireEvent.click(screen.getByRole('radio', { name: /Disattivati/ }));
+    expect(useSettingsStore.getState().settings?.sounds).toBe('off');
+    expect(soundMock.playMoveSound).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('radio', { name: /Attivi/ }));
+    expect(useSettingsStore.getState().settings?.sounds).toBe('on');
+    expect(soundMock.playMoveSound).toHaveBeenCalledOnce();
   });
 });

@@ -4,6 +4,7 @@ use crate::app_theme::AppTheme;
 use crate::board_style::BoardStyle;
 use crate::notation::Notation;
 use crate::piece_style::PieceStyle;
+use crate::sound_setting::SoundSetting;
 
 /// Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
 ///
@@ -22,21 +23,24 @@ pub struct Settings {
     pub pieces: PieceStyle,
     /// Il modo di scrivere le mosse nella lista della partita.
     pub notation: Notation,
+    /// Se suonano mosse, prese e fine partita.
+    pub sounds: SoundSetting,
 }
 
 #[cfg(test)]
 mod tests {
     use super::Settings;
-    use crate::{AppTheme, BoardStyle, Notation, PieceStyle};
+    use crate::{AppTheme, BoardStyle, Notation, PieceStyle, SoundSetting};
 
     #[test]
-    fn the_defaults_are_studio_rovere_icona_figurine() {
+    fn the_defaults_are_studio_rovere_icona_figurine_with_sounds() {
         let settings = Settings::default();
 
         assert_eq!(settings.theme, AppTheme::Studio);
         assert_eq!(settings.board, BoardStyle::Rovere);
         assert_eq!(settings.pieces, PieceStyle::Icona);
         assert_eq!(settings.notation, Notation::Figurine);
+        assert_eq!(settings.sounds, SoundSetting::On);
     }
 
     #[test]
@@ -46,13 +50,14 @@ mod tests {
             board: BoardStyle::Marmo,
             pieces: PieceStyle::Gettoni,
             notation: Notation::Italiana,
+            sounds: SoundSetting::Off,
         };
 
         let json = serde_json::to_string(&settings).expect("conversione in JSON");
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana"}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off"}"#
         );
     }
 
@@ -65,5 +70,6 @@ mod tests {
         assert_eq!(settings.board, BoardStyle::Rovere);
         assert_eq!(settings.pieces, PieceStyle::Icona);
         assert_eq!(settings.notation, Notation::Figurine);
+        assert_eq!(settings.sounds, SoundSetting::On);
     }
 }

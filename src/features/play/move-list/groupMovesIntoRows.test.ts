@@ -8,7 +8,7 @@ import { groupMovesIntoRows } from './groupMovesIntoRows';
 
 /** Crea una mossa di prova (solo i campi che contano qui sono realistici). */
 function move(ply: number, moveNumber: number, side: Side, san: string): MoveRecord {
-  return { ply, moveNumber, side, san, uci: '', from: '', to: '' };
+  return { ply, moveNumber, side, san, uci: '', from: '', to: '', capture: false };
 }
 
 describe('groupMovesIntoRows', () => {

@@ -26,7 +26,13 @@ describe('ThemeController', () => {
 
   it('applica il tema scelto', () => {
     useSettingsStore.setState({
-      settings: { theme: 'sera', board: 'rovere', pieces: 'icona', notation: 'figurine' },
+      settings: {
+        theme: 'sera',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
 
     render(<ThemeController />);
@@ -37,7 +43,13 @@ describe('ThemeController', () => {
   it('con il tema automatico segue la modalità scura del sistema', () => {
     simulateSystemDarkMode(true);
     useSettingsStore.setState({
-      settings: { theme: 'auto', board: 'rovere', pieces: 'icona', notation: 'figurine' },
+      settings: {
+        theme: 'auto',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
 
     render(<ThemeController />);
@@ -48,7 +60,13 @@ describe('ThemeController', () => {
   it('con il tema automatico segue la modalità chiara del sistema', () => {
     simulateSystemDarkMode(false);
     useSettingsStore.setState({
-      settings: { theme: 'auto', board: 'rovere', pieces: 'icona', notation: 'figurine' },
+      settings: {
+        theme: 'auto',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
 
     render(<ThemeController />);

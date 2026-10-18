@@ -17,6 +17,7 @@ const DEFAULTS: Settings = {
   board: 'rovere',
   pieces: 'icona',
   notation: 'figurine',
+  sounds: 'on',
 };
 
 describe('settingsStore', () => {

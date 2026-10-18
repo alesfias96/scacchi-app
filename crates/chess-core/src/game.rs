@@ -117,6 +117,7 @@ impl Game {
 
         let before = self.current().clone();
         let mut after = before.clone();
+        let capture = chess_move.is_capture();
         // Calcola la notazione SAN (con + o # finale) e intanto gioca la mossa.
         let san = SanPlus::from_move_and_play_unchecked(&mut after, chess_move).to_string();
         let uci = UciMove::from_standard(chess_move);
@@ -134,6 +135,7 @@ impl Game {
             uci: uci.to_string(),
             from,
             to,
+            capture,
         });
         self.hashes.push(after.zobrist_hash(EnPassantMode::Legal));
         self.positions.push(after);
@@ -325,6 +327,16 @@ mod tests {
 
         assert_eq!(last_san(&game), "exd6");
         assert_eq!(game.view().position.board_fen, "4k3/8/3P4/8/8/8/8/4K3");
+        assert!(game.moves()[0].capture);
+    }
+
+    #[test]
+    fn marks_which_moves_are_captures() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4", "d7d5", "e4d5"]);
+
+        let captures: Vec<bool> = game.moves().iter().map(|record| record.capture).collect();
+        assert_eq!(captures, [false, false, true]);
     }
 
     #[test]

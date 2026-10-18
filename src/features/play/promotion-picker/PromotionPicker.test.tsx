@@ -10,7 +10,13 @@ import { PromotionPicker } from './PromotionPicker';
 describe('PromotionPicker', () => {
   beforeEach(() => {
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'rovere', pieces: 'gettoni', notation: 'figurine' },
+      settings: {
+        theme: 'studio',
+        board: 'rovere',
+        pieces: 'gettoni',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
   });
 

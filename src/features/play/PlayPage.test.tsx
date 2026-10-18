@@ -49,7 +49,18 @@ const AFTER_E4: GameView = {
     inCheck: false,
     legalMoves: [{ from: 'e7', to: 'e5', uci: 'e7e5' }],
   },
-  moves: [{ ply: 1, moveNumber: 1, side: 'white', san: 'e4', uci: 'e2e4', from: 'e2', to: 'e4' }],
+  moves: [
+    {
+      ply: 1,
+      moveNumber: 1,
+      side: 'white',
+      san: 'e4',
+      uci: 'e2e4',
+      from: 'e2',
+      to: 'e4',
+      capture: false,
+    },
+  ],
   cursor: 1,
   lastMove: { from: 'e2', to: 'e4', uci: 'e2e4' },
   result: null,
@@ -87,7 +98,13 @@ describe('PlayPage', () => {
     chessgroundMock.state.config = undefined;
     useGameStore.setState({ game: null, loadError: null, actionError: null });
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'rovere', pieces: 'icona', notation: 'italiana' },
+      settings: {
+        theme: 'studio',
+        board: 'rovere',
+        pieces: 'icona',
+        notation: 'italiana',
+        sounds: 'on',
+      },
     });
   });
 

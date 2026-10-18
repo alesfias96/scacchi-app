@@ -15,7 +15,13 @@ import { pieceImageUrl } from './pieceImageUrl';
 describe('PieceIcon', () => {
   beforeEach(() => {
     useSettingsStore.setState({
-      settings: { theme: 'studio', board: 'rovere', pieces: 'legno', notation: 'figurine' },
+      settings: {
+        theme: 'studio',
+        board: 'rovere',
+        pieces: 'legno',
+        notation: 'figurine',
+        sounds: 'on',
+      },
     });
   });
 

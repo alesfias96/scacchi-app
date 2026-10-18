@@ -8,7 +8,8 @@
  * - la situazione (chi muove, mosse possibili, scacco);
  * - l'elenco delle mosse con i comandi (scorri, nuova partita, annulla, gira);
  * - copia e incolla di posizioni (FEN) e partite (PGN).
- * Le frecce ←/→ e i tasti Home/Fine scorrono la partita.
+ * Le frecce ←/→ e i tasti Home/Fine scorrono la partita. Ogni mossa ha il suo
+ * suono (mossa, presa, fine partita), se i suoni sono attivi nelle Impostazioni.
  *
  * Tutte le regole sono applicate da Rust: questa pagina invia le mosse e
  * mostra la partita aggiornata che riceve.
@@ -22,6 +23,7 @@ import type { Side } from '../../bindings/Side';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { PanelCard } from '../../components/panel-card/PanelCard';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
+import { useMoveSound } from '../../hooks/useMoveSound';
 import { exportPgn } from '../../services/gameService';
 import { useGameStore } from '../../state/gameStore';
 import { useLoadedSettings } from '../../state/settingsStore';
@@ -43,7 +45,7 @@ interface PendingPromotion {
 const NO_MOVES: readonly LegalMove[] = [];
 
 export function PlayPage() {
-  const { notation } = useLoadedSettings();
+  const { notation, sounds } = useLoadedSettings();
   const game = useGameStore((state) => state.game);
   const loadError = useGameStore((state) => state.loadError);
   const actionError = useGameStore((state) => state.actionError);
@@ -148,6 +150,7 @@ export function PlayPage() {
     [cursor, totalMoves, goTo],
   );
   useGameKeyboard(keyboardActions, pendingPromotion === null);
+  useMoveSound(game, sounds === 'on');
 
   if (loadError !== null) {
     return (
