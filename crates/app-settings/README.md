@@ -8,6 +8,9 @@ Descrive le scelte che valgono in tutta l'app e sa salvarle e rileggerle da un f
 - **notazione delle mosse**: Figurine (predefinita), Italiana, Internazionale;
 - **suoni** di mosse, prese e fine partita: Attivi (predefinito), Disattivati.
 
+Ricorda anche l'**ultima configurazione di partita** scelta (avversario, colore, livello del
+computer, tempo), così la finestra "Nuova partita" la ripropone.
+
 Le impostazioni vengono salvate in un piccolo file `settings.json`, nella cartella di
 configurazione dell'app (su Windows in `AppData\Roaming`). Il percorso lo decide il ponte
 `src-tauri`: questa crate riceve solo il percorso, quindi funziona uguale su ogni sistema.

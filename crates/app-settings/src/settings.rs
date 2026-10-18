@@ -2,6 +2,7 @@
 
 use crate::app_theme::AppTheme;
 use crate::board_style::BoardStyle;
+use crate::game_setup::GameSetup;
 use crate::notation::Notation;
 use crate::piece_style::PieceStyle;
 use crate::sound_setting::SoundSetting;
@@ -25,12 +26,14 @@ pub struct Settings {
     pub notation: Notation,
     /// Se suonano mosse, prese e fine partita.
     pub sounds: SoundSetting,
+    /// L'ultima configurazione scelta per una nuova partita.
+    pub game_setup: GameSetup,
 }
 
 #[cfg(test)]
 mod tests {
     use super::Settings;
-    use crate::{AppTheme, BoardStyle, Notation, PieceStyle, SoundSetting};
+    use crate::{AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting};
 
     #[test]
     fn the_defaults_are_studio_rovere_icona_figurine_with_sounds() {
@@ -51,13 +54,14 @@ mod tests {
             pieces: PieceStyle::Gettoni,
             notation: Notation::Italiana,
             sounds: SoundSetting::Off,
+            game_setup: GameSetup::default(),
         };
 
         let json = serde_json::to_string(&settings).expect("conversione in JSON");
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off"}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}}}"#
         );
     }
 

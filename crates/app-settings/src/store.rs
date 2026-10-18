@@ -54,7 +54,9 @@ pub fn save(path: &Path, settings: &Settings) -> Result<(), StoreError> {
 #[cfg(test)]
 mod tests {
     use super::{load, load_or_default, save};
-    use crate::{AppTheme, BoardStyle, Notation, PieceStyle, Settings, SoundSetting, StoreError};
+    use crate::{
+        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, Settings, SoundSetting, StoreError,
+    };
     use std::path::PathBuf;
 
     /// Una cartella temporanea diversa per ogni test, così i test non si disturbano.
@@ -83,6 +85,7 @@ mod tests {
             pieces: PieceStyle::Metallo,
             notation: Notation::Internazionale,
             sounds: SoundSetting::Off,
+            game_setup: GameSetup::default(),
         };
 
         save(&path, &settings).expect("salvataggio riuscito");

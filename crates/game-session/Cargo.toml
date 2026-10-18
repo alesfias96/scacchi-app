@@ -1,0 +1,38 @@
+# =============================================================================
+# Crate "game-session" — la partita in corso, con avversario e orologio
+# -----------------------------------------------------------------------------
+# Unisce la partita (chess-core), il livello del computer (engine) e
+# l'orologio: decide chi può muovere, quando tocca al computer e cosa
+# chiedergli, e quando una partita finisce per tempo o per abbandono.
+# Non avvia motori e non conosce Tauri: prepara solo le richieste.
+# =============================================================================
+
+[package]
+name = "game-session"
+description = "La partita in corso: avversario, livello del computer, orologio"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": genera i tipi TypeScript corrispondenti (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:serde",
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "engine/bindings",
+    "app-settings/bindings",
+]
+
+[dependencies]
+chess-core.workspace = true
+engine.workspace = true
+# La configurazione della partita (avversario, colore, livello, tempo) è
+# un'impostazione dell'utente: il suo tipo vive in app-settings.
+app-settings.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

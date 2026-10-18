@@ -1,0 +1,31 @@
+# =============================================================================
+# Crate "engine" — il dialogo con i motori di scacchi
+# -----------------------------------------------------------------------------
+# Parla con Stockfish (e in futuro con altri motori) tramite il protocollo
+# UCI: gli manda la posizione, gli chiede di pensare, legge le sue risposte.
+# Tutto è asincrono: mentre il motore pensa, l'app non si blocca mai.
+# Non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "engine"
+description = "Dialogo con i motori di scacchi (protocollo UCI)"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = ["dep:serde", "dep:ts-rs", "chess-core/bindings"]
+
+[dependencies]
+# Le regole degli scacchi: servono per scrivere la variante del motore in notazione SAN.
+chess-core.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

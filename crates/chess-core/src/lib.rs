@@ -20,7 +20,8 @@
 //! - [`game_result`]: il risultato e il motivo della fine della partita;
 //! - [`game_error`]: gli errori possibili durante la partita;
 //! - [`pgn_export`] e [`pgn_import`]: scrittura e lettura del formato PGN;
-//! - [`game_import`]: importazione da testo (riconosce FEN o PGN).
+//! - [`game_import`]: importazione da testo (riconosce FEN o PGN);
+//! - [`line_view`]: una sequenza di mosse (es. la variante del motore) in notazione SAN.
 
 pub mod game;
 pub mod game_error;
@@ -28,6 +29,7 @@ pub mod game_import;
 pub mod game_result;
 pub mod game_view;
 pub mod legal_move;
+pub mod line_view;
 pub mod move_record;
 pub mod pgn_export;
 pub mod pgn_import;
@@ -42,6 +44,7 @@ pub use game_import::import_game;
 pub use game_result::{GameEndReason, GameResult};
 pub use game_view::GameView;
 pub use legal_move::LegalMove;
+pub use line_view::{LineView, describe_line};
 pub use move_record::MoveRecord;
 pub use pgn_export::to_pgn;
 pub use pgn_import::from_pgn;

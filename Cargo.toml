@@ -17,9 +17,16 @@ resolver = "3"
 # - src-tauri: il "ponte" tra interfaccia e nucleo, e l'eseguibile dell'app.
 # - crates/chess-core: le regole degli scacchi.
 # - crates/app-settings: le impostazioni dell'utente (tema, scacchiera, pezzi).
-# Le altre crate del nucleo (crates/engine, ...) verranno aggiunte qui
-# una alla volta.
-members = ["src-tauri", "crates/chess-core", "crates/app-settings"]
+# - crates/engine: il dialogo con i motori di scacchi (Stockfish) tramite il protocollo UCI.
+# - crates/game-session: la partita in corso con avversario, livello e orologio.
+# Le altre crate del nucleo verranno aggiunte qui una alla volta.
+members = [
+    "src-tauri",
+    "crates/chess-core",
+    "crates/app-settings",
+    "crates/engine",
+    "crates/game-session",
+]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
 [workspace.package]
@@ -53,6 +60,8 @@ module_name_repetitions = "allow"
 # Crate interne del progetto.
 chess-core = { path = "crates/chess-core" }
 app-settings = { path = "crates/app-settings" }
+engine = { path = "crates/engine" }
+game-session = { path = "crates/game-session" }
 
 # Desktop.
 tauri = { version = "2", features = [] }
@@ -68,3 +77,6 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 # Generazione automatica dei tipi TypeScript a partire dai tipi Rust.
 ts-rs = "12"
+# Esecuzione "asincrona": dialogare con i motori senza mai bloccare l'app.
+# È la stessa libreria che Tauri usa internamente.
+tokio = { version = "1", features = ["io-util", "macros", "process", "rt", "sync", "time"] }

@@ -1,0 +1,38 @@
+//! La partita in corso come la mostra l'interfaccia.
+
+use app_settings::{OpponentKind, TimeControl};
+use chess_core::GameView;
+
+use crate::clock_view::ClockView;
+use crate::computer_view::ComputerView;
+
+/// Tutto ciò che l'interfaccia deve sapere sulla partita in corso: la
+/// partita stessa, l'avversario, l'orologio e cosa si può fare adesso.
+///
+/// Le decisioni ("si può muovere?", "si può ritirare la mossa?") le prende
+/// Rust: l'interfaccia si limita a seguirle.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct SessionView {
+    /// La partita: posizione mostrata, mosse, risultato.
+    pub game: GameView,
+    /// Contro chi si gioca.
+    pub opponent: OpponentKind,
+    /// Il computer avversario, se si gioca contro il computer.
+    pub computer: Option<ComputerView>,
+    /// Il tempo scelto, se la partita ha l'orologio.
+    pub time_control: Option<TimeControl>,
+    /// I tempi dell'orologio, se la partita ha l'orologio.
+    pub clock: Option<ClockView>,
+    /// `true` se la persona può muovere un pezzo adesso.
+    pub can_move: bool,
+    /// `true` se si può ritirare la mossa.
+    pub can_undo: bool,
+    /// `true` se si sta aspettando la mossa del computer.
+    pub computer_thinking: bool,
+}

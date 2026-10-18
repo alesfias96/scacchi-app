@@ -3,4 +3,4 @@
 /**
  * Il motivo per cui la partita è finita.
  */
-export type GameEndReason = "checkmate" | "stalemate" | "insufficientMaterial" | "threefoldRepetition" | "fiftyMoveRule";
+export type GameEndReason = "checkmate" | "stalemate" | "insufficientMaterial" | "threefoldRepetition" | "fiftyMoveRule" | "timeout" | "timeoutVsInsufficientMaterial" | "resignation";

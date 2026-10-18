@@ -21,6 +21,13 @@ pub enum GameEndReason {
     ThreefoldRepetition,
     /// Cinquanta mosse per parte senza catture né mosse di pedone: patta.
     FiftyMoveRule,
+    /// Un giocatore ha finito il tempo sull'orologio: vince l'avversario.
+    Timeout,
+    /// Un giocatore ha finito il tempo, ma l'avversario non ha pezzi
+    /// sufficienti per dare scacco matto: per regolamento è patta.
+    TimeoutVsInsufficientMaterial,
+    /// Un giocatore ha abbandonato: vince l'avversario.
+    Resignation,
 }
 
 /// Il risultato di una partita finita.

@@ -2,8 +2,8 @@
 # Crate "src-tauri" — il ponte dell'app
 # -----------------------------------------------------------------------------
 # Contiene l'eseguibile dell'applicazione desktop. Il suo compito è aprire
-# la finestra e, nei prossimi passi, mettere in comunicazione l'interfaccia
-# (React) con il nucleo Rust (le crate in crates/). Non contiene logica di gioco.
+# la finestra e mettere in comunicazione l'interfaccia (React) con il nucleo
+# Rust (le crate in crates/) e con il motore Stockfish. Non contiene logica di gioco.
 # =============================================================================
 
 [package]
@@ -30,6 +30,12 @@ tauri.workspace = true
 chess-core = { workspace = true, features = ["bindings"] }
 # Le impostazioni dell'utente, con i tipi convertibili per l'interfaccia.
 app-settings = { workspace = true, features = ["bindings"] }
+# Il dialogo con Stockfish (analisi e mosse del computer).
+engine = { workspace = true, features = ["bindings"] }
+# La partita in corso: avversario, livello, orologio.
+game-session = { workspace = true, features = ["bindings"] }
+# Per aspettare senza bloccare (ad esempio l'istante in cui scade il tempo).
+tokio.workspace = true
 
 # Eredita le regole di qualità definite nel Cargo.toml della radice.
 [lints]

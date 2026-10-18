@@ -4,6 +4,7 @@
 //! logica: ricevono la richiesta, chiamano il nucleo (`crates/`) e
 //! restituiscono il risultato.
 
+pub mod engine;
 pub mod game;
 pub mod position;
 pub mod settings;

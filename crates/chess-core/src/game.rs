@@ -38,6 +38,9 @@ pub struct Game {
     moves: Vec<MoveRecord>,
     /// Quante mosse sono state giocate fino alla posizione mostrata.
     cursor: usize,
+    /// Il risultato deciso fuori dalla scacchiera (tempo scaduto o abbandono),
+    /// valido alla fine della partita; `None` se non c'è.
+    adjudication: Option<GameResult>,
 }
 
 impl Default for Game {
@@ -63,6 +66,7 @@ impl Game {
             hashes: vec![hash],
             moves: Vec::new(),
             cursor: 0,
+            adjudication: None,
         }
     }
 
@@ -79,6 +83,30 @@ impl Game {
     #[must_use]
     pub fn moves(&self) -> &[MoveRecord] {
         &self.moves
+    }
+
+    /// Quante mosse sono state giocate fino alla posizione mostrata.
+    #[must_use]
+    pub fn cursor(&self) -> usize {
+        self.cursor
+    }
+
+    /// `true` se è mostrata l'ultima posizione della partita.
+    #[must_use]
+    pub fn is_at_end(&self) -> bool {
+        self.cursor == self.moves.len()
+    }
+
+    /// Chi deve muovere nella posizione mostrata.
+    #[must_use]
+    pub fn turn(&self) -> Side {
+        Side::from(self.current().turn())
+    }
+
+    /// Chi deve muovere nell'ultima posizione della partita.
+    #[must_use]
+    pub fn last_turn(&self) -> Side {
+        Side::from(self.positions[self.moves.len()].turn())
     }
 
     /// La posizione di partenza in notazione FEN.
@@ -150,6 +178,50 @@ impl Game {
             self.hashes.pop();
         }
         self.cursor = self.moves.len();
+        self.adjudication = None;
+    }
+
+    /// Il giocatore `side` abbandona: vince l'avversario.
+    ///
+    /// # Errors
+    ///
+    /// [`GameError::GameOver`] se la partita è già finita.
+    pub fn resign(&mut self, side: Side) -> Result<(), GameError> {
+        self.adjudicate(GameResult::decisive(
+            side.opponent(),
+            GameEndReason::Resignation,
+        ))
+    }
+
+    /// Il giocatore `loser` ha finito il tempo sull'orologio.
+    ///
+    /// Di regola vince l'avversario; ma se l'avversario non ha più pezzi
+    /// sufficienti per dare scacco matto (ad esempio ha solo il re), la
+    /// partita è patta.
+    ///
+    /// # Errors
+    ///
+    /// [`GameError::GameOver`] se la partita è già finita.
+    pub fn time_forfeit(&mut self, loser: Side) -> Result<(), GameError> {
+        let winner = loser.opponent();
+        let last = &self.positions[self.moves.len()];
+        let result = if last.has_insufficient_material(winner.into()) {
+            GameResult::draw(GameEndReason::TimeoutVsInsufficientMaterial)
+        } else {
+            GameResult::decisive(winner, GameEndReason::Timeout)
+        };
+        self.adjudicate(result)
+    }
+
+    /// Chiude la partita con un risultato deciso fuori dalla scacchiera e
+    /// mostra l'ultima posizione.
+    fn adjudicate(&mut self, result: GameResult) -> Result<(), GameError> {
+        if self.final_result().is_some() {
+            return Err(GameError::GameOver);
+        }
+        self.adjudication = Some(result);
+        self.cursor = self.moves.len();
+        Ok(())
     }
 
     /// Mostra la posizione dopo `ply` mosse (0 = posizione di partenza).
@@ -205,6 +277,11 @@ impl Game {
 
     /// Elimina le mosse dopo il cursore, prima di giocarne una nuova.
     fn truncate_after_cursor(&mut self) {
+        // Un risultato deciso fuori dalla scacchiera valeva per la fine della
+        // partita: se il seguito viene sostituito, non vale più.
+        if self.cursor < self.moves.len() {
+            self.adjudication = None;
+        }
         self.moves.truncate(self.cursor);
         self.positions.truncate(self.cursor + 1);
         self.hashes.truncate(self.cursor + 1);
@@ -237,6 +314,8 @@ impl Game {
                     Some(GameResult::draw(GameEndReason::ThreefoldRepetition))
                 } else if position.halfmoves() >= FIFTY_MOVE_RULE_HALFMOVES {
                     Some(GameResult::draw(GameEndReason::FiftyMoveRule))
+                } else if ply == self.moves.len() {
+                    self.adjudication.clone()
                 } else {
                     None
                 }
@@ -458,5 +537,75 @@ mod tests {
         let record = &game.moves()[0];
         assert_eq!(record.side, Side::Black);
         assert_eq!(record.move_number, 1);
+    }
+
+    #[test]
+    fn tells_whose_turn_it_is_at_the_cursor_and_at_the_end() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4"]);
+        game.go_to(0);
+
+        assert_eq!(game.cursor(), 0);
+        assert!(!game.is_at_end());
+        assert_eq!(game.turn(), Side::White);
+        assert_eq!(game.last_turn(), Side::Black);
+    }
+
+    #[test]
+    fn resigning_ends_the_game() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4"]);
+        game.go_to(0);
+
+        game.resign(Side::Black).expect("la partita non è finita");
+
+        let result = game.result().expect("partita finita");
+        assert_eq!(result.winner, Some(Side::White));
+        assert_eq!(result.reason, GameEndReason::Resignation);
+        assert_eq!(game.view().cursor, 1);
+        assert_eq!(game.play_uci("e7e5"), Err(GameError::GameOver));
+        assert_eq!(game.resign(Side::White), Err(GameError::GameOver));
+    }
+
+    #[test]
+    fn running_out_of_time_loses_the_game() {
+        let mut game = Game::new();
+
+        game.time_forfeit(Side::White)
+            .expect("la partita non è finita");
+
+        let result = game.final_result().expect("partita finita");
+        assert_eq!(result.winner, Some(Side::Black));
+        assert_eq!(result.reason, GameEndReason::Timeout);
+    }
+
+    #[test]
+    fn running_out_of_time_is_a_draw_if_the_opponent_cannot_mate() {
+        // Il nero ha solo il re: non può dare matto, quindi il tempo del bianco
+        // scaduto non gli dà la vittoria.
+        let mut game = Game::from_fen("4k3/8/8/8/8/8/4P3/4K3 w - - 0 1").expect("FEN valida");
+
+        game.time_forfeit(Side::White)
+            .expect("la partita non è finita");
+
+        let result = game.final_result().expect("partita finita");
+        assert_eq!(result.winner, None);
+        assert_eq!(result.reason, GameEndReason::TimeoutVsInsufficientMaterial);
+    }
+
+    #[test]
+    fn undo_or_a_new_continuation_cancels_the_resignation() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4", "e7e5"]);
+        game.resign(Side::White).expect("la partita non è finita");
+
+        game.go_to(1);
+        game.play_uci("c7c5")
+            .expect("mossa legale da una posizione passata");
+        assert_eq!(game.final_result(), None);
+
+        game.resign(Side::White).expect("la partita non è finita");
+        game.undo();
+        assert_eq!(game.final_result(), None);
     }
 }

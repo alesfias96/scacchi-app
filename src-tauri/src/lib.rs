@@ -5,10 +5,14 @@
 //!
 //! - `commands/`: le richieste che l'interfaccia può fare.
 //! - `state/`: le informazioni tenute in memoria mentre l'app è aperta
-//!   (ad esempio la partita in corso).
-//! - Gli eventi (`events/`) verranno aggiunti nelle prossime fasi.
+//!   (la partita in corso, i motori Stockfish).
+//! - `events/`: i messaggi inviati all'interfaccia in tempo reale
+//!   (mossa del computer, analisi, problemi del motore).
+//! - `reactions/`: ciò che succede da solo dopo ogni cambiamento della partita.
 
 mod commands;
+mod events;
+mod reactions;
 mod state;
 
 /// Avvia l'applicazione desktop.
@@ -23,8 +27,10 @@ mod state;
 /// stato incerto.
 pub fn run() {
     tauri::Builder::default()
-        // La partita in corso: Tauri la custodisce e la passa ai comandi che la chiedono.
-        .manage(state::game_state::GameState::default())
+        // La partita in corso e i motori: Tauri li custodisce e li passa ai
+        // comandi che li chiedono.
+        .manage(state::session_state::SessionState::default())
+        .manage(state::engines_state::EnginesState::default())
         // Elenco dei comandi che l'interfaccia può chiamare per nome.
         .invoke_handler(tauri::generate_handler![
             commands::position::initial_position,
@@ -35,6 +41,9 @@ pub fn run() {
             commands::game::go_to_ply,
             commands::game::import_game_text,
             commands::game::export_pgn,
+            commands::game::resign_game,
+            commands::engine::get_engine_levels,
+            commands::engine::set_analysis,
             commands::settings::get_settings,
             commands::settings::save_settings,
         ])
