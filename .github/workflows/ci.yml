@@ -1,0 +1,87 @@
+# =============================================================================
+# Controllo continuo (CI) su Windows, macOS e Linux
+# -----------------------------------------------------------------------------
+# A ogni invio di modifiche su GitHub, tre computer (uno per sistema operativo)
+# scaricano il progetto, eseguono tutti i controlli di qualità e i test,
+# poi compilano l'app e ne creano l'installatore.
+# Se una piattaforma si rompe, GitHub lo segnala con una X rossa.
+# =============================================================================
+
+name: CI
+
+on:
+  # Ogni invio di modifiche, su qualsiasi ramo.
+  push:
+  # Ogni richiesta di unione (pull request).
+  pull_request:
+  # Avvio manuale dalla pagina "Actions" di GitHub.
+  workflow_dispatch:
+
+# Se arriva un nuovo invio mentre il precedente è ancora in corso sullo
+# stesso ramo, il vecchio viene annullato: conta solo l'ultima versione.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-build:
+    name: ${{ matrix.name }}
+    strategy:
+      # Se una piattaforma fallisce, le altre continuano: così si vede
+      # subito se il problema riguarda un solo sistema.
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: macOS
+            os: macos-latest
+          - name: Linux
+            os: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@v4
+
+      - name: Installa le librerie di sistema richieste da Tauri (solo Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf build-essential libssl-dev libxdo-dev
+
+      - name: Installa Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installa Rust con formattatore e correttore
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Riusa le compilazioni Rust precedenti (più veloce)
+        uses: Swatinem/rust-cache@v2
+
+      - name: Installa le dipendenze dell'interfaccia
+        run: npm ci
+
+      - name: Esegui tutti i controlli e i test
+        run: npm run check
+
+      # I test Rust rigenerano i tipi TypeScript in src/bindings: se risultano
+      # diversi da quelli salvati, qualcuno ha cambiato un tipo Rust senza
+      # salvare i tipi aggiornati.
+      - name: Verifica che i tipi generati da Rust siano aggiornati
+        run: git diff --exit-code -- src/bindings
+
+      - name: Compila l'app e crea l'installatore
+        run: npm run tauri build
+
+      - name: Salva l'installatore tra i risultati
+        uses: actions/upload-artifact@v4
+        with:
+          name: scacchi-${{ matrix.name }}
+          path: target/release/bundle/
+          retention-days: 7

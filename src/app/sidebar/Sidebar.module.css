@@ -1,0 +1,77 @@
+/* Barra laterale: colori dal tema attivo (variabili --color-sidebar-*). */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-3);
+  border-right: var(--border-width) solid var(--color-sidebar-border);
+  background: var(--color-sidebar);
+  color: var(--color-sidebar-text);
+}
+
+.brand {
+  padding: 0 var(--space-3);
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+/* L'elenco occupa lo spazio libero e spinge le Impostazioni in fondo. */
+.list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-medium);
+  background: transparent;
+  color: var(--color-sidebar-text);
+  font-weight: var(--weight-medium);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-standard);
+}
+
+.item:hover:not(:disabled) {
+  background: var(--color-sidebar-raised);
+}
+
+.item:disabled {
+  color: var(--color-sidebar-text-muted);
+  cursor: default;
+}
+
+/* Sezione aperta: fondo in rilievo e pallino nel colore d'accento del tema. */
+.item[aria-current='page'] {
+  background: var(--color-sidebar-raised);
+  font-weight: var(--weight-semibold);
+}
+
+.item[aria-current='page']::after {
+  content: '';
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-round);
+  background: var(--color-sidebar-accent);
+}
+
+.phase {
+  font-size: var(--text-small);
+  font-weight: var(--weight-regular);
+}
+
+.item:focus-visible {
+  outline-color: var(--color-sidebar-accent);
+}

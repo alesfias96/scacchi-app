@@ -1,0 +1,28 @@
+# =============================================================================
+# Crate "chess-core" — le regole degli scacchi
+# -----------------------------------------------------------------------------
+# Conosce le regole: posizioni, mosse legali, scacco, notazioni.
+# Non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "chess-core"
+description = "Regole degli scacchi e descrizione delle posizioni"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+# Senza questa opzione la crate resta pura logica, senza dipendenze extra.
+bindings = ["dep:serde", "dep:ts-rs"]
+
+[dependencies]
+shakmaty.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

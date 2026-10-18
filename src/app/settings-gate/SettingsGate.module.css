@@ -1,0 +1,6 @@
+/* Messaggio mostrato solo se le impostazioni non si possono leggere. */
+
+.error {
+  padding: var(--space-6);
+  color: var(--color-danger);
+}

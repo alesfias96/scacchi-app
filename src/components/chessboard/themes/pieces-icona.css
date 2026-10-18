@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Icona: forme geometriche con contorno netto.
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='icona'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='icona'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/icona/wP.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/icona/wN.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/icona/wB.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/icona/wR.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/icona/wQ.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/icona/wK.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/icona/bP.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/icona/bN.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/icona/bB.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/icona/bR.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/icona/bQ.svg');
+}
+
+[data-pieces='icona'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/icona/bK.svg');
+}

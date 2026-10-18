@@ -1,0 +1,8 @@
+/* Il pezzo riempie il suo contenitore, senza deformarsi. */
+
+.icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

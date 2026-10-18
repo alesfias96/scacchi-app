@@ -1,0 +1,22 @@
+# File che NON vanno salvati nella cronologia del codice (git):
+# sono generati automaticamente e si possono ricreare in qualsiasi momento.
+
+# Dipendenze dell'interfaccia (si ricreano con `npm install`)
+node_modules/
+
+# Interfaccia compilata da Vite
+dist/
+
+# Compilazioni Rust (pesanti, si ricreano con cargo)
+target/
+
+# Schemi generati da Tauri durante la compilazione
+src-tauri/gen/schemas/
+
+# File di sistema e degli editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log

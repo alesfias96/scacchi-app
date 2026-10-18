@@ -1,0 +1,41 @@
+/*
+ * TEMA "GIORNO" — chiaro e arioso, dettagli verdi. Font: Plus Jakarta Sans.
+ *
+ * Si attiva su <html> (e su qualsiasi elemento, ad esempio le anteprime
+ * nelle Impostazioni) che ha l'attributo data-theme="giorno"
+ * (anche con il tema "Automatico" quando il sistema operativo è in modalità chiara).
+ */
+
+[data-theme='giorno'] {
+  color-scheme: light;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Area di lavoro */
+  --color-background: #f1f2ef;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f2ef;
+  --color-border: #e1e4df;
+  --color-text: #1b1d1a;
+  --color-text-muted: #646a63;
+  --color-accent: #2e6a4f;
+  --color-accent-soft: #e3efe8;
+  --color-on-accent: #ffffff; /* testo sopra il colore d'accento */
+  --color-danger: #a8241c;
+  --color-overlay: rgb(18 32 26 / 35%); /* velo dietro le finestre di dialogo */
+
+  /* Barra laterale */
+  --color-sidebar: #ffffff;
+  --color-sidebar-raised: #e3efe8;
+  --color-sidebar-text: #1b1d1a;
+  --color-sidebar-text-muted: #6d736b;
+  --color-sidebar-accent: #2e6a4f;
+  --color-sidebar-border: #e1e4df;
+
+  /* Pezzi indicati nel pannello (cerchio bianco / nero) */
+  --color-piece-white: #f8f4ec;
+  --color-piece-black: #2c2722;
+  --color-piece-edge: #2a2520;
+
+  --shadow-board: 0 18px 44px rgb(52 40 24 / 22%);
+}

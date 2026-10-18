@@ -1,0 +1,41 @@
+/*
+ * TEMA "SERA" — scuro e raccolto, dettagli ambra. Font: Manrope.
+ *
+ * Si attiva su <html> (e su qualsiasi elemento, ad esempio le anteprime
+ * nelle Impostazioni) che ha l'attributo data-theme="sera"
+ * (anche con il tema "Automatico" quando il sistema operativo è in modalità scura).
+ */
+
+[data-theme='sera'] {
+  color-scheme: dark;
+
+  --font-sans: 'Manrope', system-ui, sans-serif;
+
+  /* Area di lavoro */
+  --color-background: #191715;
+  --color-surface: #221f1c;
+  --color-surface-muted: #2a2622;
+  --color-border: #3a352f;
+  --color-text: #efe9df;
+  --color-text-muted: #a0978a;
+  --color-accent: #e3a857;
+  --color-accent-soft: #3a2f20;
+  --color-on-accent: #1d1408; /* testo sopra il colore d'accento */
+  --color-danger: #f2a49e;
+  --color-overlay: rgb(0 0 0 / 60%); /* velo dietro le finestre di dialogo */
+
+  /* Barra laterale */
+  --color-sidebar: #121110;
+  --color-sidebar-raised: #2a2622;
+  --color-sidebar-text: #efe9df;
+  --color-sidebar-text-muted: #8a8174;
+  --color-sidebar-accent: #e3a857;
+  --color-sidebar-border: #2a2622;
+
+  /* Pezzi indicati nel pannello (cerchio bianco / nero) */
+  --color-piece-white: #f8f4ec;
+  --color-piece-black: #0f0d0b;
+  --color-piece-edge: #2a2520;
+
+  --shadow-board: 0 24px 60px rgb(0 0 0 / 55%);
+}

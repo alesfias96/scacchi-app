@@ -1,0 +1,18 @@
+/*
+ * La scacchiera: cornice nel colore dello stile scelto (--board-frame-color,
+ * impostato da themes/boards.css), case sempre quadrate.
+ */
+
+.frame {
+  padding: var(--board-frame-width);
+  border-radius: var(--board-frame-radius);
+  background: var(--board-frame-color);
+  box-shadow: var(--shadow-board);
+}
+
+.board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--board-inner-radius);
+  overflow: hidden;
+}

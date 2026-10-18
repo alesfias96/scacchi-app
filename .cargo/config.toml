@@ -1,0 +1,7 @@
+# Impostazioni di Cargo valide per tutto il progetto.
+
+[env]
+# Cartella in cui ts-rs scrive i tipi TypeScript generati dai tipi Rust.
+# Il percorso è relativo alla radice del progetto, quindi funziona
+# allo stesso modo su Windows, macOS e Linux.
+TS_RS_EXPORT_DIR = { value = "src/bindings", relative = true }

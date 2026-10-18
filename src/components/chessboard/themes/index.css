@@ -1,0 +1,11 @@
+/*
+ * Raccoglie tutti gli stili di scacchiera e pezzi.
+ * Importato una sola volta, da Chessboard.tsx.
+ */
+@import './boards.css';
+@import './pieces-icona.css';
+@import './pieces-morbido.css';
+@import './pieces-legno.css';
+@import './pieces-metallo.css';
+@import './pieces-gettoni.css';
+@import './pieces-classico.css';

@@ -1,0 +1,12 @@
+/* Struttura della finestra: barra laterale fissa + area di lavoro che scorre. */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  height: 100%;
+}
+
+.main {
+  overflow: auto;
+  padding: var(--space-6) var(--space-7);
+}

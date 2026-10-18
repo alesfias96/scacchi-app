@@ -1,0 +1,70 @@
+# =============================================================================
+# Workspace Rust del progetto
+# -----------------------------------------------------------------------------
+# Questo file non è un programma: è l'elenco di tutte le parti Rust del
+# progetto ("crate"). Cargo, lo strumento di Rust, le compila e le testa
+# tutte insieme con un solo comando (es. `cargo test --workspace`).
+#
+# Regola del progetto: una crate si aggiunge a `members` solo nel momento
+# in cui serve davvero (vedi PROGETTO.md §10).
+# =============================================================================
+
+[workspace]
+# Versione 3 del risolutore di dipendenze, quella prevista dall'edizione 2024.
+resolver = "3"
+
+# Elenco delle crate del workspace.
+# - src-tauri: il "ponte" tra interfaccia e nucleo, e l'eseguibile dell'app.
+# - crates/chess-core: le regole degli scacchi.
+# - crates/app-settings: le impostazioni dell'utente (tema, scacchiera, pezzi).
+# Le altre crate del nucleo (crates/engine, ...) verranno aggiunte qui
+# una alla volta.
+members = ["src-tauri", "crates/chess-core", "crates/app-settings"]
+
+# Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Alessandro"]
+
+# Regole di qualità valide per tutte le crate (ognuna le eredita con
+# `[lints] workspace = true`). Con `npm run rust:lint` ogni avviso
+# diventa un errore, quindi il codice deve rispettarle tutte.
+[workspace.lints.rust]
+# Vietato il codice "unsafe": Rust garantisce la sicurezza della memoria
+# solo se non la si scavalca.
+unsafe_code = "forbid"
+# Ogni elemento pubblico (funzioni, strutture, moduli) deve avere un
+# commento di documentazione: è la regola dei "commenti esaustivi".
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+# Clippy è il correttore di Rust. "all" = regole standard,
+# "pedantic" = regole più severe su chiarezza e documentazione.
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+# Unica eccezione: permette nomi come `chess_core::PositionView` dentro un
+# modulo `position_view`. Vietarli porterebbe a nomi meno chiari.
+module_name_repetitions = "allow"
+
+# Versioni delle dipendenze condivise: ogni crate le richiama con
+# `nome.workspace = true`, così tutto il progetto usa la stessa versione.
+[workspace.dependencies]
+# Crate interne del progetto.
+chess-core = { path = "crates/chess-core" }
+app-settings = { path = "crates/app-settings" }
+
+# Desktop.
+tauri = { version = "2", features = [] }
+tauri-build = { version = "2", features = [] }
+
+# Regole degli scacchi: posizioni, mosse legali, notazioni FEN e UCI.
+shakmaty = "0.30"
+# Definizione semplice di tipi di errore con messaggi chiari.
+thiserror = "2"
+# Conversione dei dati in JSON per inviarli all'interfaccia.
+serde = { version = "1", features = ["derive"] }
+# Lettura e scrittura di file JSON (usato per il file delle impostazioni).
+serde_json = "1"
+# Generazione automatica dei tipi TypeScript a partire dai tipi Rust.
+ts-rs = "12"

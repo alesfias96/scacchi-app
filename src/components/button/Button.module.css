@@ -1,0 +1,56 @@
+/*
+ * Pulsante: tre aspetti (pieno, tenue, icona), colori dal tema attivo.
+ * Disattivato = semitrasparente e non cliccabile.
+ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-size);
+  padding: 0 var(--space-4);
+  border: none;
+  border-radius: var(--radius-medium);
+  font: inherit;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--easing-standard),
+    opacity var(--duration-fast) var(--easing-standard);
+}
+
+.button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.secondary,
+.icon {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.secondary:hover:not(:disabled),
+.icon:hover:not(:disabled) {
+  background: var(--color-accent-soft);
+}
+
+.icon {
+  width: var(--control-size);
+  padding: 0;
+}

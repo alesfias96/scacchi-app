@@ -1,0 +1,10 @@
+# Uniforma le fine riga tra Windows (CRLF) e macOS/Linux (LF).
+# Nella cronologia del codice tutti i file di testo vengono salvati con LF,
+# così lavorare da sistemi diversi non crea modifiche "fantasma".
+* text=auto eol=lf
+
+# File binari: non vanno mai toccati.
+*.png binary
+*.ico binary
+*.icns binary
+*.exe binary

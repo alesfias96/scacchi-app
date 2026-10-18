@@ -1,0 +1,67 @@
+/*
+ * STILI DELLA SCACCHIERA — immagine delle case e colore della cornice.
+ *
+ * Lo stile è scelto dall'attributo data-board sulla cornice della scacchiera
+ * (impostato da Chessboard.tsx in base alle impostazioni dell'utente).
+ * Il colore di ogni cornice è un token in src/styles/tokens.css.
+ */
+
+/* Comune a tutti gli stili: l'immagine copre esattamente le 64 case. */
+[data-board] cg-board {
+  background-color: transparent;
+  background-size: 100% 100%;
+}
+
+/* Noce: legno scuro e caldo */
+[data-board='noce'] {
+  --board-frame-color: var(--frame-noce);
+}
+
+[data-board='noce'] cg-board {
+  background-image: url('../../../assets/boards/noce.jpg');
+}
+
+/* Acero: legno chiaro e luminoso */
+[data-board='acero'] {
+  --board-frame-color: var(--frame-acero);
+}
+
+[data-board='acero'] cg-board {
+  background-image: url('../../../assets/boards/acero.jpg');
+}
+
+/* Rovere: legno intermedio, il più classico */
+[data-board='rovere'] {
+  --board-frame-color: var(--frame-rovere);
+}
+
+[data-board='rovere'] cg-board {
+  background-image: url('../../../assets/boards/rovere.jpg');
+}
+
+/* Marmo: bianco venato e verde salvia */
+[data-board='marmo'] {
+  --board-frame-color: var(--frame-marmo);
+}
+
+[data-board='marmo'] cg-board {
+  background-image: url('../../../assets/boards/marmo.jpg');
+}
+
+/* Ardesia: grigio-blu opaco */
+[data-board='ardesia'] {
+  --board-frame-color: var(--frame-ardesia);
+}
+
+[data-board='ardesia'] cg-board {
+  background-image: url('../../../assets/boards/ardesia.jpg');
+}
+
+/* Torneo: colori piatti verde e crema */
+[data-board='torneo'] {
+  --board-frame-color: var(--frame-torneo);
+}
+
+[data-board='torneo'] cg-board {
+  background-image: url('../../../assets/boards/torneo.jpg');
+}

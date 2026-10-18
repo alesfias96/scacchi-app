@@ -1,0 +1,95 @@
+/*
+ * DESIGN TOKEN COMUNI — misure, tipografia, forme e durate uguali in tutti i temi.
+ *
+ * I valori "grezzi" (colori, misure, font) esistono solo qui e nei file di
+ * src/styles/themes/. Tutto il resto dell'interfaccia usa le variabili,
+ * ad esempio `padding: var(--space-4)`.
+ *
+ * I colori e il font cambiano con il tema scelto: stanno in
+ * src/styles/themes/ (sera.css, giorno.css, studio.css).
+ */
+
+:root {
+  /* ---------- Tipografia ---------- */
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, monospace;
+
+  /* Scala tipografica a rapporto 1,25 (terza maggiore) */
+  --text-small: 0.8125rem;
+  --text-body: 1rem;
+  --text-large: 1.25rem;
+  --text-title: 1.875rem;
+  --text-figure: 1.625rem; /* numeri in evidenza nei riquadri */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --leading-tight: 1.2;
+  --leading-body: 1.5;
+  --tracking-title: -0.02em;
+
+  /* ---------- Spaziature (multipli di 4px) ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* ---------- Forme ---------- */
+  --radius-small: 6px;
+  --radius-medium: 10px;
+  --radius-large: 14px;
+  --radius-round: 999px;
+  --border-width: 1px;
+  --indicator-width: 3px; /* barretta accanto alla voce selezionata */
+  --indicator-height: 1rem;
+  --dot-size: 0.4375rem; /* pallino accanto alla voce selezionata */
+  --swatch-size: 1.5rem; /* cerchio che indica il colore di turno */
+  --focus-ring-width: 2px;
+
+  /* ---------- Scacchiera ---------- */
+  --board-frame-width: 0.875rem; /* spessore della cornice */
+  --board-frame-radius: 12px;
+  --board-inner-radius: 3px;
+  /* Colore della cornice di ogni scacchiera (usati da components/chessboard/themes/boards.css) */
+  --frame-noce: #3d2719;
+  --frame-acero: #a7774b;
+  --frame-rovere: #5a3a24;
+  --frame-marmo: #4c5a53;
+  --frame-ardesia: #3a4756;
+  --frame-torneo: #2f4a39;
+
+  /* ---------- Dimensioni del layout ---------- */
+  --sidebar-width: 14.5rem;
+  --board-max-size: 42rem;
+  --board-min-size: 20rem;
+  --panel-width: 18rem;
+  /* spazio verticale da lasciare libero intorno alla scacchiera (titolo + margini) */
+  --board-vertical-reserve: 10rem;
+  --settings-max-width: 60rem;
+  --option-min-width: 9.5rem;
+  --option-preview-size: 5.5rem;
+  --piece-preview-size: 2.25rem;
+  --preview-board-size: 16rem;
+  --move-list-max-height: 16rem; /* oltre, l'elenco delle mosse scorre */
+  --move-number-width: 2.25rem; /* colonna dei numeri di mossa */
+  --control-size: 2.5rem; /* pulsanti con sola icona */
+  --icon-size: 1.25rem;
+  --promotion-piece-size: 4.5rem; /* pezzi nella scelta della promozione */
+  --dialog-width: 32rem;
+  --import-text-rows-height: 10rem; /* area di testo per incollare FEN o PGN */
+
+  /* ---------- Movimento ---------- */
+  --duration-fast: 120ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Chi ha chiesto al sistema di ridurre le animazioni non le vede. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+  }
+}

@@ -1,0 +1,27 @@
+/*
+ * BASE — stili globali minimi validi per tutta l'app.
+ * Solo elementi di base (pagina, testo, focus); nessun componente.
+ * Usa esclusivamente le variabili di tokens.css.
+ */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Contorno ben visibile per chi naviga con la tastiera. */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+}

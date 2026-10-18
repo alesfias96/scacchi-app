@@ -1,0 +1,33 @@
+/* Annuncio di fine partita: fondo d'accento tenue, punteggio grande a destra. */
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-large);
+  background: var(--color-accent-soft);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-accent);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+}
+
+.detail {
+  color: var(--color-text-muted);
+}
+
+.score {
+  color: var(--color-accent);
+  font-size: var(--text-figure);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}

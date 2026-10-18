@@ -1,0 +1,50 @@
+/* Sezione "Gioca": titolo, poi scacchiera grande con le schede accanto (o sotto, se manca spazio). */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.title {
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+.workspace {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+/*
+ * La scacchiera cresce fino alla dimensione massima, ma non supera mai l'altezza
+ * della finestra (meno lo spazio per titolo e margini), così resta sempre visibile intera.
+ */
+.boardArea {
+  /* Riferimento per la scelta della promozione, che si sovrappone alla scacchiera. */
+  position: relative;
+  display: flex;
+  flex: 1 1 var(--board-min-size);
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: min(var(--board-max-size), calc(100vh - var(--board-vertical-reserve)));
+}
+
+.sidePanel {
+  display: flex;
+  flex: 0 1 var(--panel-width);
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.message {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-danger);
+}

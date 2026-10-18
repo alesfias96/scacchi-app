@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Classico: il set tradizionale "cburnett".
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='classico'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='classico'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/classico/wP.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/classico/wN.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/classico/wB.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/classico/wR.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/classico/wQ.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/classico/wK.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/classico/bP.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/classico/bN.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/classico/bB.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/classico/bR.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/classico/bQ.svg');
+}
+
+[data-pieces='classico'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/classico/bK.svg');
+}

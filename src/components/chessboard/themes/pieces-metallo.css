@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Metallo: argento e ottone.
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='metallo'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='metallo'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/metallo/wP.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/metallo/wN.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/metallo/wB.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/metallo/wR.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/metallo/wQ.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/metallo/wK.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/metallo/bP.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/metallo/bN.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/metallo/bB.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/metallo/bR.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/metallo/bQ.svg');
+}
+
+[data-pieces='metallo'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/metallo/bK.svg');
+}

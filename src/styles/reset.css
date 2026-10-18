@@ -1,0 +1,44 @@
+/*
+ * RESET — azzera le differenze di stile tra i motori web di Windows, macOS e Linux,
+ * così ogni componente parte da una base identica su tutti i sistemi.
+ * Non contiene scelte grafiche: quelle stanno in tokens.css e base.css.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+p,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}

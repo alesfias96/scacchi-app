@@ -1,0 +1,31 @@
+# =============================================================================
+# Crate "app-settings" — le impostazioni dell'app
+# -----------------------------------------------------------------------------
+# Descrive le scelte dell'utente (tema dell'app, stile della scacchiera,
+# stile dei pezzi) e sa salvarle e rileggerle da un file JSON.
+# Non sa nulla dell'interfaccia né di dove si trova il file: il percorso
+# glielo passa il ponte src-tauri.
+# =============================================================================
+
+[package]
+name = "app-settings"
+description = "Impostazioni dell'utente: tema, scacchiera, pezzi"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": genera i tipi TypeScript corrispondenti (ts-rs).
+# La attiva il ponte src-tauri.
+bindings = ["dep:ts-rs"]
+
+[dependencies]
+# Le impostazioni vengono sempre lette e scritte in JSON, quindi serde è
+# una dipendenza fissa (non opzionale come in chess-core).
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

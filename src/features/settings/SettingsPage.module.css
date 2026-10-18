@@ -1,0 +1,60 @@
+/* Sezione Impostazioni: gruppi di scelte a sinistra, anteprima fissa a destra. */
+
+.page {
+  display: flex;
+  max-width: var(--settings-max-width);
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.groups {
+  display: flex;
+  min-width: 0;
+  flex: 999 1 var(--board-min-size);
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* L'anteprima resta visibile mentre si scorrono le scelte. */
+.preview {
+  position: sticky;
+  top: 0;
+  display: flex;
+  width: var(--preview-board-size);
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.previewTitle {
+  color: var(--color-text-muted);
+  font-weight: var(--weight-semibold);
+}

@@ -1,0 +1,4 @@
+# Regole di formattazione del codice Rust (lette da `cargo fmt`).
+# Valgono per tutte le crate del workspace.
+edition = "2024"
+newline_style = "Unix"

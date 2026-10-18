@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Morbido: le stesse forme, con volume e ombra.
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='morbido'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='morbido'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/morbido/wP.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/morbido/wN.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/morbido/wB.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/morbido/wR.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/morbido/wQ.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/morbido/wK.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/morbido/bP.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/morbido/bN.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/morbido/bB.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/morbido/bR.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/morbido/bQ.svg');
+}
+
+[data-pieces='morbido'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/morbido/bK.svg');
+}

@@ -1,0 +1,12 @@
+/* Icona a tratto: linee arrotondate nel colore del testo, dimensione uniforme. */
+
+.icon {
+  flex-shrink: 0;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}

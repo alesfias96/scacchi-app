@@ -1,0 +1,50 @@
+/* Scheda "Situazione": turno e due numeri riassuntivi, colori dal tema attivo. */
+
+.turn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+}
+
+.swatch {
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  border-radius: var(--radius-round);
+  box-shadow: inset 0 0 0 var(--focus-ring-width) var(--color-piece-edge);
+}
+
+.swatchWhite {
+  background: var(--color-piece-white);
+}
+
+.swatchBlack {
+  background: var(--color-piece-black);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+}
+
+.figure {
+  font-size: var(--text-figure);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

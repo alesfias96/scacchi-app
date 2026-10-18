@@ -1,0 +1,42 @@
+/*
+ * TEMA "STUDIO" (predefinito) — barra laterale blu inchiostro, piano chiaro,
+ * dettagli arancioni. Font: Outfit.
+ *
+ * Si attiva su <html> (e su qualsiasi elemento, ad esempio le anteprime
+ * nelle Impostazioni) che ha l'attributo data-theme="studio".
+ * Tutti i temi definiscono le stesse variabili, con valori diversi.
+ */
+
+[data-theme='studio'] {
+  color-scheme: light;
+
+  --font-sans: 'Outfit', system-ui, sans-serif;
+
+  /* Area di lavoro */
+  --color-background: #eceef1;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3f4f6;
+  --color-border: #e6e8ec;
+  --color-text: #1a1f27;
+  --color-text-muted: #5e6573;
+  --color-accent: #b5591a;
+  --color-accent-soft: #fff4ea;
+  --color-on-accent: #ffffff; /* testo sopra il colore d'accento */
+  --color-danger: #a8241c;
+  --color-overlay: rgb(17 22 38 / 45%); /* velo dietro le finestre di dialogo */
+
+  /* Barra laterale */
+  --color-sidebar: #1f2633;
+  --color-sidebar-raised: #2d3647;
+  --color-sidebar-text: #e8ebf0;
+  --color-sidebar-text-muted: #9aa4b5;
+  --color-sidebar-accent: #f0934d;
+  --color-sidebar-border: #1f2633;
+
+  /* Pezzi indicati nel pannello (cerchio bianco / nero) */
+  --color-piece-white: #f8f4ec;
+  --color-piece-black: #2c2722;
+  --color-piece-edge: #2a2520;
+
+  --shadow-board: 0 20px 50px rgb(26 31 39 / 28%);
+}

@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Gettoni: dischi con l’iniziale italiana del pezzo.
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='gettoni'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='gettoni'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/gettoni/wP.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/gettoni/wN.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/gettoni/wB.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/gettoni/wR.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/gettoni/wQ.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/gettoni/wK.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/gettoni/bP.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/gettoni/bN.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/gettoni/bB.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/gettoni/bR.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/gettoni/bQ.svg');
+}
+
+[data-pieces='gettoni'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/gettoni/bK.svg');
+}

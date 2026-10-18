@@ -1,0 +1,23 @@
+/*
+ * Punto di ingresso degli stili globali, importato una sola volta da src/main.tsx.
+ * L'ordine conta: prima i token comuni, poi i temi, poi l'azzeramento,
+ * poi i font, infine la base.
+ */
+@import './tokens.css';
+@import './themes/studio.css';
+@import './themes/sera.css';
+@import './themes/giorno.css';
+@import './reset.css';
+@import '@fontsource/outfit/400.css';
+@import '@fontsource/outfit/500.css';
+@import '@fontsource/outfit/600.css';
+@import '@fontsource/outfit/700.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import './base.css';

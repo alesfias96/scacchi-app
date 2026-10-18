@@ -1,0 +1,36 @@
+/**
+ * Test della barra laterale: sezione attiva, Impostazioni e sezioni in arrivo.
+ */
+import { screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { renderWithRouter } from '../../test/renderWithRouter';
+import { Sidebar } from './Sidebar';
+
+describe('Sidebar', () => {
+  it('segna come pagina corrente la sezione aperta', async () => {
+    renderWithRouter(<Sidebar />, '/');
+
+    const playLink = await screen.findByRole('link', { name: 'Gioca' });
+
+    expect(playLink.getAttribute('aria-current')).toBe('page');
+  });
+
+  it('segna le Impostazioni quando sono aperte', async () => {
+    renderWithRouter(<Sidebar />, '/impostazioni');
+
+    const settingsLink = await screen.findByRole('link', { name: 'Impostazioni' });
+    const playLink = screen.getByRole('link', { name: 'Gioca' });
+
+    expect(settingsLink.getAttribute('aria-current')).toBe('page');
+    expect(playLink.getAttribute('aria-current')).toBeNull();
+  });
+
+  it('disattiva le sezioni non ancora disponibili e indica la fase', async () => {
+    renderWithRouter(<Sidebar />, '/');
+
+    const tutorButton = await screen.findByRole('button', { name: /Tutor/ });
+
+    expect(tutorButton.hasAttribute('disabled')).toBe(true);
+    expect(tutorButton.textContent).toContain('Fase 7');
+  });
+});

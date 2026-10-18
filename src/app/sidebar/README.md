@@ -1,0 +1,15 @@
+# src/app/sidebar — La barra laterale
+
+La colonna a sinistra: nome dell'app, sezioni e, in fondo, le Impostazioni.
+I colori arrivano dal tema scelto. La sezione aperta ha il fondo in rilievo e un pallino
+nel colore d'accento del tema. Le sezioni non ancora costruite sono visibili ma disattivate,
+con l'indicazione della fase in cui arriveranno.
+
+## Contenuto
+
+| File                 | Cosa fa                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `Sidebar.tsx`        | Il componente che disegna la barra laterale, con i collegamenti alle sezioni                                        |
+| `Sidebar.module.css` | I suoi stili (colori dal tema attivo)                                                                               |
+| `Sidebar.test.tsx`   | I suoi test: sezione attiva, Impostazioni, sezioni disattivate                                                      |
+| `navigation.ts`      | L'elenco delle sezioni: nome, indirizzo o fase di disponibilità. Per aggiungere una sezione si modifica questo file |

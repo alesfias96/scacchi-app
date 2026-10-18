@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permessi di base della finestra principale: solo le funzioni essenziali di Tauri, nient'altro.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

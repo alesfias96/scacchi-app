@@ -1,0 +1,54 @@
+/*
+ * PEZZI — stile Legno: bosso chiaro ed ebano.
+ *
+ * Si applica quando la cornice della scacchiera ha data-pieces='legno'.
+ * Ogni regola indica a chessground l'immagine di un pezzo (ruolo + colore).
+ */
+
+[data-pieces='legno'] .cg-wrap piece.pawn.white {
+  background-image: url('../../../assets/pieces/legno/wP.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.knight.white {
+  background-image: url('../../../assets/pieces/legno/wN.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.bishop.white {
+  background-image: url('../../../assets/pieces/legno/wB.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.rook.white {
+  background-image: url('../../../assets/pieces/legno/wR.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.queen.white {
+  background-image: url('../../../assets/pieces/legno/wQ.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.king.white {
+  background-image: url('../../../assets/pieces/legno/wK.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.pawn.black {
+  background-image: url('../../../assets/pieces/legno/bP.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.knight.black {
+  background-image: url('../../../assets/pieces/legno/bN.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.bishop.black {
+  background-image: url('../../../assets/pieces/legno/bB.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.rook.black {
+  background-image: url('../../../assets/pieces/legno/bR.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.queen.black {
+  background-image: url('../../../assets/pieces/legno/bQ.svg');
+}
+
+[data-pieces='legno'] .cg-wrap piece.king.black {
+  background-image: url('../../../assets/pieces/legno/bK.svg');
+}

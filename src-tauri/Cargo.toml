@@ -1,0 +1,36 @@
+# =============================================================================
+# Crate "src-tauri" — il ponte dell'app
+# -----------------------------------------------------------------------------
+# Contiene l'eseguibile dell'applicazione desktop. Il suo compito è aprire
+# la finestra e, nei prossimi passi, mettere in comunicazione l'interfaccia
+# (React) con il nucleo Rust (le crate in crates/). Non contiene logica di gioco.
+# =============================================================================
+
+[package]
+name = "scacchi-app"
+description = "App desktop per giocare, imparare e allenarsi a scacchi"
+# Versione, edizione e autori arrivano dal Cargo.toml della radice.
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+# Il codice dell'app sta in una libreria (src/lib.rs); l'eseguibile (src/main.rs)
+# si limita ad avviarla. Il nome della libreria è diverso da quello
+# dell'eseguibile per evitare un conflitto di nomi noto su Windows.
+[lib]
+name = "scacchi_app_lib"
+
+# Eseguito prima della compilazione: prepara configurazione, icone e permessi.
+[build-dependencies]
+tauri-build.workspace = true
+
+[dependencies]
+tauri.workspace = true
+# Le regole degli scacchi, con i tipi convertibili per l'interfaccia.
+chess-core = { workspace = true, features = ["bindings"] }
+# Le impostazioni dell'utente, con i tipi convertibili per l'interfaccia.
+app-settings = { workspace = true, features = ["bindings"] }
+
+# Eredita le regole di qualità definite nel Cargo.toml della radice.
+[lints]
+workspace = true

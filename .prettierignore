@@ -1,0 +1,11 @@
+# File e cartelle che Prettier non deve formattare:
+# sono generati automaticamente o gestiti da altri strumenti.
+dist/
+target/
+node_modules/
+src-tauri/gen/
+package-lock.json
+Cargo.lock
+
+# Tipi TypeScript generati da Rust (ts-rs): vanno lasciati esattamente come generati.
+src/bindings/*.ts
