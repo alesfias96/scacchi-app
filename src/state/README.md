@@ -9,9 +9,10 @@ serve all'interfaccia per mostrare le cose.
 
 ## Contenuto
 
-| File                    | Cosa fa                                                                                                                        |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `settingsStore.ts`      | Le impostazioni dell'utente (tema, scacchiera, pezzi, notazione): le legge all'avvio, le cambia e le salva                     |
-| `settingsStore.test.ts` | I suoi test: caricamento, modifica, annullamento se il salvataggio fallisce                                                    |
-| `gameStore.ts`          | La partita in corso, così come l'ha descritta Rust, e le azioni per cambiarla (mossa, annulla, scorri, nuova partita, incolla) |
-| `gameStore.test.ts`     | I suoi test: caricamento, mosse accettate e rifiutate, navigazione, importazione non valida                                    |
+| File                    | Cosa fa                                                                                                                                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `settingsStore.ts`      | Le impostazioni dell'utente (tema, scacchiera, pezzi, notazione, suoni, ultima partita scelta): le legge all'avvio, le cambia e le salva                                                      |
+| `settingsStore.test.ts` | I suoi test: caricamento, modifica, annullamento se il salvataggio fallisce                                                                                                                   |
+| `gameStore.ts`          | La partita in corso (con avversario e orologio), così come l'ha descritta Rust, e le azioni per cambiarla; segue anche i cambiamenti che arrivano da soli (mossa del computer, tempo scaduto) |
+| `gameStore.test.ts`     | I suoi test: caricamento, eventi, mosse accettate e rifiutate, nuova partita, navigazione, abbandono, importazione non valida                                                                 |
+| `engineStore.ts`        | Il motore: analisi accesa o spenta, ultimo giudizio ricevuto, eventuale problema da mostrare                                                                                                  |

@@ -6,12 +6,13 @@ passano la richiesta alla crate giusta in `crates/` e restituiscono la risposta.
 
 ## Contenuto
 
-| File          | Cosa fa                                                                                                                                                                                       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mod.rs`      | Elenca i file dei comandi                                                                                                                                                                     |
-| `position.rs` | Comandi sulla posizione. Per ora `initial_position`: restituisce la posizione iniziale                                                                                                        |
-| `game.rs`     | Comandi sulla partita in corso: `get_game`, `new_game`, `play_move`, `undo_move`, `go_to_ply`, `import_game_text` (incolla FEN o PGN), `export_pgn`. Ognuno restituisce la partita aggiornata |
-| `settings.rs` | Comandi sulle impostazioni: `get_settings` (le legge) e `save_settings` (le salva), nella cartella di configurazione dell'app                                                                 |
+| File          | Cosa fa                                                                                                                                                                                                                                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mod.rs`      | Elenca i file dei comandi                                                                                                                                                                                                                                                                                              |
+| `position.rs` | Comandi sulla posizione. Per ora `initial_position`: restituisce la posizione iniziale                                                                                                                                                                                                                                 |
+| `game.rs`     | Comandi sulla partita in corso: `get_game`, `new_game` (con avversario, colore, livello e tempo), `play_move`, `undo_move`, `go_to_ply`, `resign_game`, `import_game_text` (incolla FEN o PGN), `export_pgn`. Ognuno restituisce la partita aggiornata e poi avvia le reazioni (mossa del computer, orologio, analisi) |
+| `engine.rs`   | Comandi sul motore: `get_engine_levels` (i dieci livelli) e `set_analysis` (accende o spegne l'analisi in tempo reale)                                                                                                                                                                                                 |
+| `settings.rs` | Comandi sulle impostazioni: `get_settings` (le legge) e `save_settings` (le salva), nella cartella di configurazione dell'app                                                                                                                                                                                          |
 
 ## Come si aggiunge un comando
 

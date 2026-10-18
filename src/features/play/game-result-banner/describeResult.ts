@@ -14,6 +14,9 @@ const REASON_TITLES: Record<GameEndReason, string> = {
   insufficientMaterial: 'Materiale insufficiente',
   threefoldRepetition: 'Triplice ripetizione',
   fiftyMoveRule: 'Regola delle 50 mosse',
+  timeout: 'Tempo scaduto',
+  timeoutVsInsufficientMaterial: 'Tempo scaduto, ma senza materiale per vincere',
+  resignation: 'Abbandono',
 };
 
 /** Il titolo e il dettaglio da mostrare. */

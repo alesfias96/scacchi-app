@@ -1,0 +1,85 @@
+/* Striscia del giocatore: colore, nome, avviso "sta pensando" e orologio a destra. */
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-size);
+}
+
+.swatch {
+  flex-shrink: 0;
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  border-radius: var(--radius-round);
+  box-shadow: inset 0 0 0 var(--focus-ring-width) var(--color-piece-edge);
+}
+
+.swatchWhite {
+  background: var(--color-piece-white);
+}
+
+.swatchBlack {
+  background: var(--color-piece-black);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-weight: var(--weight-semibold);
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+/* Tre puntini che si accendono uno dopo l'altro. */
+.dots {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.dots span {
+  width: var(--thinking-dot-size);
+  height: var(--thinking-dot-size);
+  border-radius: var(--radius-round);
+  background: var(--color-accent);
+  animation: pulse var(--duration-pulse) var(--easing-standard) infinite;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: var(--duration-fast);
+}
+
+.dots span:nth-child(3) {
+  animation-delay: calc(var(--duration-fast) * 2);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: var(--disabled-opacity);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* L'orologio sta sempre all'estremità destra. */
+.clock {
+  margin-left: auto;
+}

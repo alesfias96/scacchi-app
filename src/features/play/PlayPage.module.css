@@ -1,4 +1,8 @@
-/* Sezione "Gioca": titolo, poi scacchiera grande con le schede accanto (o sotto, se manca spazio). */
+/*
+ * Sezione "Gioca": titolo, poi scacchiera grande (con i giocatori sopra e sotto
+ * e, se l'analisi è accesa, la barra di valutazione a sinistra) e le schede
+ * accanto (o sotto, se manca spazio).
+ */
 
 .page {
   display: flex;
@@ -25,13 +29,24 @@
  * della finestra (meno lo spazio per titolo e margini), così resta sempre visibile intera.
  */
 .boardArea {
-  /* Riferimento per la scelta della promozione, che si sovrappone alla scacchiera. */
-  position: relative;
   display: flex;
   flex: 1 1 var(--board-min-size);
   flex-direction: column;
   gap: var(--space-3);
   max-width: min(var(--board-max-size), calc(100vh - var(--board-vertical-reserve)));
+}
+
+/* La barra di valutazione accanto alla scacchiera, alta quanto lei. */
+.boardRow {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.boardWrap {
+  /* Riferimento per la scelta della promozione, che si sovrappone alla scacchiera. */
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }
 
 .sidePanel {
@@ -46,5 +61,17 @@
 }
 
 .error {
+  color: var(--color-danger);
+}
+
+.engineError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-danger);
   color: var(--color-danger);
 }

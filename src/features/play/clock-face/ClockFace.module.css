@@ -1,0 +1,30 @@
+/*
+ * Quadrante dell'orologio: cifre grandi e a larghezza fissa (non "ballano").
+ * In moto è pieno nel colore d'accento; negli ultimi secondi diventa rosso.
+ */
+
+.clock {
+  display: inline-block;
+  min-width: var(--clock-min-width);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
+}
+
+.running {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.low {
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+}

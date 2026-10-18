@@ -32,6 +32,7 @@ describe('ThemeController', () => {
         pieces: 'icona',
         notation: 'figurine',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
 
@@ -49,6 +50,7 @@ describe('ThemeController', () => {
         pieces: 'icona',
         notation: 'figurine',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
 
@@ -66,6 +68,7 @@ describe('ThemeController', () => {
         pieces: 'icona',
         notation: 'figurine',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
 

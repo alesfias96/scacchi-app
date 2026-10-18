@@ -11,6 +11,10 @@ use crate::computer_view::ComputerView;
 ///
 /// Le decisioni ("si può muovere?", "si può ritirare la mossa?") le prende
 /// Rust: l'interfaccia si limita a seguirle.
+// Clippy sconsiglia più di tre valori sì/no nella stessa struttura, perché di
+// solito indicano uno "stato" da descrivere meglio con un elenco di casi.
+// Qui invece sono risposte indipendenti a domande diverse dell'interfaccia.
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(
     feature = "bindings",
@@ -33,6 +37,8 @@ pub struct SessionView {
     pub can_move: bool,
     /// `true` se si può ritirare la mossa.
     pub can_undo: bool,
+    /// `true` se si può abbandonare (la partita non è ancora finita).
+    pub can_resign: bool,
     /// `true` se si sta aspettando la mossa del computer.
     pub computer_thinking: bool,
 }

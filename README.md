@@ -15,11 +15,12 @@ e a ragionare più mosse avanti, con un tutor che spiega ogni situazione.
 
 L'app è divisa in tre strati, come un ristorante:
 
-| Strato      | Cartella     | Paragone     | Cosa fa                                                             |
-| ----------- | ------------ | ------------ | ------------------------------------------------------------------- |
-| Interfaccia | `src/`       | la sala      | Ciò che vedi e tocchi: scacchiera, pulsanti, pannelli               |
-| Ponte       | `src-tauri/` | il cameriere | Porta le richieste dall'interfaccia al nucleo e riporta le risposte |
-| Nucleo      | `crates/`    | la cucina    | Regole degli scacchi, motore, analisi, tutor, statistiche           |
+| Strato      | Cartella                                                                            | Paragone                                                                          | Cosa fa                                                             |
+| ----------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Interfaccia | `src/`                                                                              | la sala                                                                           | Ciò che vedi e tocchi: scacchiera, pulsanti, pannelli               |
+| Ponte       | `src-tauri/`                                                                        | il cameriere                                                                      | Porta le richieste dall'interfaccia al nucleo e riporta le risposte |
+| Nucleo      | `crates/`                                                                           | Il nucleo: le librerie Rust con la logica (regole, motore, partita, impostazioni) |
+| `scripts/`  | Comandi di servizio (ad esempio lo scaricamento di Stockfish, il motore di scacchi) |
 
 ---
 
@@ -59,6 +60,7 @@ Cartelle che compaiono da sole e **non vanno modificate**: `node_modules/` (libr
 ## Requisiti
 
 - **Node.js** 22.12 o successivo (consigliata la versione LTS)
+- **Internet** solo la prima volta, per scaricare Stockfish (circa 80 MB); poi l'app funziona offline
 - **Rust** stabile (tramite `rustup`)
 - **Windows**: Microsoft C++ Build Tools e WebView2 (già presente su Windows 10/11)
 - **macOS**: Xcode Command Line Tools
@@ -68,13 +70,14 @@ Cartelle che compaiono da sole e **non vanno modificate**: `node_modules/` (libr
 
 Da eseguire nella cartella del progetto:
 
-| Comando               | Cosa fa                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------- |
-| `npm install`         | Scarica le librerie dell'interfaccia (da fare la prima volta)                                     |
-| `npm run tauri dev`   | Avvia l'app in modalità sviluppo, con ricaricamento automatico                                    |
-| `npm run tauri build` | Crea l'installatore finale per il sistema in uso                                                  |
-| `npm run build`       | Controlla e compila solo l'interfaccia                                                            |
-| `npm run check`       | **Esegue tutti i controlli di qualità e tutti i test** (deve essere verde prima di ogni consegna) |
-| `npm run format`      | Sistema automaticamente la formattazione dell'interfaccia                                         |
+| Comando               | Cosa fa                                                                                                        |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `npm install`         | Scarica le librerie dell'interfaccia (da fare la prima volta)                                                  |
+| `npm run engines`     | Scarica Stockfish per il sistema in uso (parte da solo con i comandi qui sotto; serve internet la prima volta) |
+| `npm run tauri dev`   | Avvia l'app in modalità sviluppo, con ricaricamento automatico                                                 |
+| `npm run tauri build` | Crea l'installatore finale per il sistema in uso                                                               |
+| `npm run build`       | Controlla e compila solo l'interfaccia                                                                         |
+| `npm run check`       | **Esegue tutti i controlli di qualità e tutti i test** (deve essere verde prima di ogni consegna)              |
+| `npm run format`      | Sistema automaticamente la formattazione dell'interfaccia                                                      |
 
 L'elenco completo dei controlli è in `PROGETTO.md`, sezione 7.1.

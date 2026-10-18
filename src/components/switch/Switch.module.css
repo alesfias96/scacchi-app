@@ -1,0 +1,61 @@
+/*
+ * Interruttore: la casella di spunta vera è invisibile ma presente (per
+ * tastiera e lettori di schermo); si vede la "pista" con il pomello che scorre.
+ */
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.track {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border-radius: var(--radius-round);
+  background: var(--color-border);
+  transition: background var(--duration-fast) var(--easing-standard);
+}
+
+.knob {
+  position: absolute;
+  top: var(--switch-gap);
+  left: var(--switch-gap);
+  width: var(--switch-knob);
+  height: var(--switch-knob);
+  border-radius: var(--radius-round);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-knob);
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+
+.input:checked + .track {
+  background: var(--color-accent);
+}
+
+.input:checked + .track .knob {
+  transform: translateX(var(--switch-travel));
+}
+
+.input:focus-visible + .track {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+}
+
+.input:disabled + .track,
+.input:disabled ~ .label {
+  opacity: var(--disabled-opacity);
+}
+
+.label {
+  font-weight: var(--weight-medium);
+}

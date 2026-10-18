@@ -45,7 +45,9 @@ Obiettivi, in ordine di importanza:
 | Interfaccia              | React 19 + TypeScript                                                                | ✅ deciso                                              |
 | Build interfaccia        | Vite                                                                                 | ✅ deciso                                              |
 | Regole degli scacchi     | `shakmaty` (Rust)                                                                    | ✅ deciso                                              |
-| Motore forte             | Stockfish nativo (sidecar Tauri)                                                     | ✅ deciso                                              |
+| Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`     | ✅ deciso                                              |
+| Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza  | ✅ deciso                                              |
+| Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)    | ✅ deciso                                              |
 | Motore "umano"           | Maia (via lc0), opzionale                                                            | ✅ deciso                                              |
 | Database                 | SQLite tramite `sqlx` (con migrazioni)                                               | ✅ deciso                                              |
 | Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
@@ -154,12 +156,13 @@ app-scacchi/
 ├── package.json                dipendenze dell'interfaccia
 ├── .cargo/config.toml          dove ts-rs scrive i tipi generati
 ├── .github/workflows/ci.yml    controlli automatici su Windows/macOS/Linux
+├── scripts/                    comandi di servizio in Node (es. download di Stockfish)
 │
 ├── crates/                     NUCLEO RUST — una crate per responsabilità
-│   ├── chess-core/             posizione, mosse, regole, partita, PGN/FEN (su shakmaty)
-│   ├── app-settings/           impostazioni dell'utente: valori, salvataggio, lettura
-│   ├── engine/                 dialogo con i motori (protocollo UCI)
-│   │                           interfaccia comune + Stockfish + Maia
+│   ├── chess-core/             posizione, mosse, regole, partita, PGN/FEN/SAN (su shakmaty)
+│   ├── app-settings/           impostazioni dell'utente (e ultima partita scelta): valori, salvataggio
+│   ├── engine/                 dialogo con i motori (protocollo UCI): analisi, mosse, livelli
+│   ├── game-session/           partita in corso: avversario, livello, orologio, chi può muovere
 │   ├── analysis/               rilevatori: minacce, tattiche, struttura,
 │   │                           sicurezza del re, fase di gioco
 │   ├── tutor/                  unisce analisi e conoscenza, produce spiegazioni
@@ -169,9 +172,10 @@ app-scacchi/
 │
 ├── src-tauri/                  PONTE — solo comandi ed eventi
 │   ├── src/commands/           un file per gruppo di comandi
-│   ├── src/events/             eventi inviati all'interfaccia (analisi live)
-│   ├── src/state/              stato condiviso dell'app (partita in corso; poi motori attivi)
-│   └── binaries/               eseguibili dei motori (Stockfish, lc0)
+│   ├── src/events/             eventi inviati all'interfaccia (mossa del computer, analisi live)
+│   ├── src/reactions/          ciò che succede dopo ogni cambiamento (computer, orologio, analisi)
+│   ├── src/state/              stato condiviso dell'app (partita in corso, motori attivi)
+│   └── binaries/               eseguibili dei motori (Stockfish; poi lc0), scaricati, non in git
 │
 ├── src/                        INTERFACCIA REACT
 │   ├── app/                    avvio, router, cornice comune, tema
@@ -182,7 +186,7 @@ app-scacchi/
 │   │   └── sidebar/            barra laterale e elenco delle sezioni
 │   ├── styles/                 index.css, tokens.css, themes/, reset.css, base.css
 │   ├── assets/                 immagini: scacchiere (boards/) e pezzi (pieces/)
-│   ├── state/                  stato condiviso (Zustand): impostazioni, partita in corso
+│   ├── state/                  stato condiviso (Zustand): impostazioni, partita in corso, motore
 │   ├── bindings/               tipi generati da Rust (NON modificare a mano)
 │   ├── services/               chiamate ai comandi e ascolto eventi
 │   ├── components/             componenti generici riutilizzabili
@@ -192,19 +196,22 @@ app-scacchi/
 │   │   ├── panel-card/         scheda con titolo dei pannelli
 │   │   ├── button/             pulsante (principale, secondario, icona)
 │   │   ├── icon/               icone a tratto
-│   │   └── eval-bar/           barra di valutazione
+│   │   ├── eval-bar/           barra di valutazione
+│   │   ├── switch/             interruttore acceso/spento
+│   │   └── choice-group/       gruppo di scelte a pastiglie (compatto)
 │   ├── features/               aree dell'app, ognuna autonoma
-│   │   ├── play/               partita (a due giocatori; dalla Fase 3 contro il computer)
+│   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/, promotion-picker/,
-│   │   │                       game-result-banner/, import-export/, position-panel/
+│   │   │                       game-result-banner/, import-export/, position-panel/,
+│   │   │                       player-bar/, clock-face/, new-game-dialog/, analysis-panel/
 │   │   ├── training/           esercizi di calcolo e visualizzazione
 │   │   ├── tutor/              pannello del tutor, apribile ovunque
 │   │   ├── review/             analisi delle partite giocate
 │   │   ├── progress/           statistiche e livello
-│   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione
+│   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione, suoni
 │   ├── sounds/                 suoni del gioco (mossa, presa, fine partita), creati con Web Audio
-│   ├── hooks/                  hook React condivisi (tastiera, suoni, tema di sistema)
-│   ├── lib/                    piccole utility (notazione, errori, appunti)
+│   ├── hooks/                  hook React condivisi (tastiera, suoni, tema di sistema, orologio)
+│   ├── lib/                    piccole utility (notazione, errori, appunti, tempi, valutazioni)
 │   └── test/                   impostazioni comuni dei test
 │
 ├── knowledge/                  base di conoscenza strategica (testi curati)
@@ -301,7 +308,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 1. Fondamenta                   | ✅ completata |
 | 1-bis. Temi e personalizzazione | ✅ completata |
 | 2. Regole e partita             | ✅ completata |
-| 3. Motore                       | ⚪ da fare    |
+| 3. Motore                       | 🔵 in test    |
 | 4. Database                     | ⚪ da fare    |
 | 5. Analisi                      | ⚪ da fare    |
 | 6. Allenamento calcolo          | ⚪ da fare    |
@@ -316,45 +323,57 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
 ## 10. Registro delle decisioni
 
-| Data       | Decisione                                                                                | Motivo                                                                                                                                                                      |
-| ---------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-10-18 | App desktop, tutto offline                                                               | Requisito di partenza                                                                                                                                                       |
-| 2026-10-18 | Tauri 2 + Rust                                                                           | Più robusto, leggero e moderno di Electron                                                                                                                                  |
-| 2026-10-18 | Regole degli scacchi in Rust                                                             | Una sola fonte di verità                                                                                                                                                    |
-| 2026-10-18 | React per l'interfaccia                                                                  | Ecosistema più ampio                                                                                                                                                        |
-| 2026-10-18 | Windows, macOS e Linux                                                                   | L'app deve funzionare su qualsiasi sistema                                                                                                                                  |
-| 2026-10-18 | Build automatiche con GitHub Actions                                                     | Verificare le tre piattaforme a ogni modifica                                                                                                                               |
-| 2026-10-18 | Approvate tutte le scelte dello stack                                                    | Conferma di Alessandro                                                                                                                                                      |
-| 2026-10-18 | Nomi nel codice in inglese, commenti e README in italiano                                | Conferma di Alessandro                                                                                                                                                      |
-| 2026-10-18 | Scheletro scritto a mano, senza template dimostrativo                                    | Nessun codice morto da cancellare                                                                                                                                           |
-| 2026-10-18 | Workspace Cargo con le crate aggiunte una alla volta                                     | Si aggiunge una crate solo quando serve davvero                                                                                                                             |
-| 2026-10-18 | ESLint `strictTypeChecked` + Prettier, separati                                          | ESLint controlla la correttezza, Prettier l'aspetto: nessuna sovrapposizione                                                                                                |
-| 2026-10-18 | Clippy `pedantic` con avvisi trattati come errori                                        | Massimo rigore fin dall'inizio, quando costa poco                                                                                                                           |
-| 2026-10-18 | `npm run check` come unico comando di verifica                                           | Stesso controllo sul PC e su GitHub                                                                                                                                         |
-| 2026-10-18 | Un passo di lavoro = una fase intera della roadmap                                       | Richiesta di Alessandro: procedere più velocemente                                                                                                                          |
-| 2026-10-18 | `ts-rs` al posto di `tauri-specta` per i tipi condivisi                                  | `tauri-specta` è ancora in versione pre-release (rc.25) con documentazione non compilabile; `ts-rs` è stabile (v12). Stesso risultato: tipi scritti una volta sola, in Rust |
-| 2026-10-18 | chessground dal pacchetto `@lichess-org/chessground`                                     | È il nuovo nome ufficiale del pacchetto                                                                                                                                     |
-| 2026-10-18 | Tema chiaro e scuro automatici                                                           | Segue il sistema operativo; costo minimo grazie ai token                                                                                                                    |
-| 2026-10-18 | Identità "panno da torneo + ottone", font IBM Plex Sans incluso                          | Coerente con l'icona; il font incluso funziona offline e identico ovunque                                                                                                   |
-| 2026-10-18 | Licenza: chessground e Stockfish sono GPL-3.0                                            | Uso personale libero; un'eventuale distribuzione richiede una licenza compatibile                                                                                           |
-| 2026-10-18 | Vitest 5 (da 3) e Node.js minimo 22.12                                                   | Corregge 3 vulnerabilità (1 moderata, 2 critiche) di Vitest 3 e della sua dipendenza `tinypool`; riguardano solo i test, non l'app                                          |
-| 2026-10-18 | Fase 1-bis: temi, scacchiere e pezzi selezionabili                                       | Richiesta di Alessandro; predefinito Studio + Rovere + Icona                                                                                                                |
-| 2026-10-18 | Scacchiere e pezzi disegnati per l'app (tranne il Classico "cburnett")                   | Nessun vincolo di licenza esterno; stile coerente                                                                                                                           |
-| 2026-10-18 | Le scelte di stile valgono in tutta l'app                                                | La scacchiera legge da sola le impostazioni: ogni sezione la usa senza occuparsene                                                                                          |
-| 2026-10-18 | Impostazioni salvate da Rust (crate `app-settings`)                                      | Una sola fonte di verità; file nella cartella di configurazione fornita da Tauri                                                                                            |
-| 2026-10-18 | Navigazione con TanStack Router (cronologia a hash)                                      | Ora le sezioni utilizzabili sono due; l'hash funziona uguale su ogni sistema                                                                                                |
-| 2026-10-18 | FEN tolta dal pannello di Gioca                                                          | Informazione tecnica; tornerà nella Fase 2 come copia/incolla della posizione                                                                                               |
-| 2026-10-18 | Fase 1-bis approvata                                                                     | Conferma di Alessandro: aspetto e scelte di stile approvati                                                                                                                 |
-| 2026-10-18 | Fase 2: la partita vive in Rust (`Game` in `chess-core`, custodita da `src-tauri/state`) | Una sola fonte di verità per le regole; l'interfaccia riceve sempre la partita completa (`GameView`)                                                                        |
-| 2026-10-18 | Notazione predefinita a figurine, con scelta Italiana / Internazionale                   | Richiesta di Alessandro; Rust tiene sempre la notazione internazionale, l'interfaccia la traduce                                                                            |
-| 2026-10-18 | Una mossa giocata da una posizione passata sostituisce il seguito                        | Semplice e prevedibile; le varianti arriveranno nella Fase 8                                                                                                                |
-| 2026-10-18 | Copia/incolla di FEN e PGN negli appunti; salvataggio su file nella Fase 4               | Il salvataggio su file richiede l'archivio partite                                                                                                                          |
-| 2026-10-18 | Componenti comuni `Button`, `Icon`, `PanelCard`, `PieceIcon`                             | Stesso aspetto ovunque; sostituiscono la cartella `ui/` prevista                                                                                                            |
-| 2026-10-18 | Progetto sotto git (ramo `main`), un commit per ogni passo                               | Ogni fase è reversibile e si vede esattamente cosa cambia                                                                                                                   |
-| 2026-10-18 | Suoni del gioco creati con Web Audio: mossa, presa, fine partita; impostazione "Suoni"   | Richiesta di Alessandro. Nessun file né licenza (i suoni classici di Lichess non sono liberi); suonano solo avanzando di una mossa                                          |
-| 2026-10-18 | `MoveRecord` dice se la mossa è una presa (`capture`)                                    | L'interfaccia sceglie il suono senza conoscere le regole                                                                                                                    |
-| 2026-10-18 | "Annulla" toglie l'ultima mossa della partita; "Nuova partita" senza conferma            | Comportamenti confermati da Alessandro                                                                                                                                      |
-| 2026-10-18 | Fase 2 approvata; `PASSAGGIO-CONSEGNE.md` cancellato                                     | Conferma di Alessandro; appunti per le fasi future e trappole note riportati in §11 e §12                                                                                   |
+| Data       | Decisione                                                                                                                          | Motivo                                                                                                                                                                      |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-18 | App desktop, tutto offline                                                                                                         | Requisito di partenza                                                                                                                                                       |
+| 2026-10-18 | Tauri 2 + Rust                                                                                                                     | Più robusto, leggero e moderno di Electron                                                                                                                                  |
+| 2026-10-18 | Regole degli scacchi in Rust                                                                                                       | Una sola fonte di verità                                                                                                                                                    |
+| 2026-10-18 | React per l'interfaccia                                                                                                            | Ecosistema più ampio                                                                                                                                                        |
+| 2026-10-18 | Windows, macOS e Linux                                                                                                             | L'app deve funzionare su qualsiasi sistema                                                                                                                                  |
+| 2026-10-18 | Build automatiche con GitHub Actions                                                                                               | Verificare le tre piattaforme a ogni modifica                                                                                                                               |
+| 2026-10-18 | Approvate tutte le scelte dello stack                                                                                              | Conferma di Alessandro                                                                                                                                                      |
+| 2026-10-18 | Nomi nel codice in inglese, commenti e README in italiano                                                                          | Conferma di Alessandro                                                                                                                                                      |
+| 2026-10-18 | Scheletro scritto a mano, senza template dimostrativo                                                                              | Nessun codice morto da cancellare                                                                                                                                           |
+| 2026-10-18 | Workspace Cargo con le crate aggiunte una alla volta                                                                               | Si aggiunge una crate solo quando serve davvero                                                                                                                             |
+| 2026-10-18 | ESLint `strictTypeChecked` + Prettier, separati                                                                                    | ESLint controlla la correttezza, Prettier l'aspetto: nessuna sovrapposizione                                                                                                |
+| 2026-10-18 | Clippy `pedantic` con avvisi trattati come errori                                                                                  | Massimo rigore fin dall'inizio, quando costa poco                                                                                                                           |
+| 2026-10-18 | `npm run check` come unico comando di verifica                                                                                     | Stesso controllo sul PC e su GitHub                                                                                                                                         |
+| 2026-10-18 | Un passo di lavoro = una fase intera della roadmap                                                                                 | Richiesta di Alessandro: procedere più velocemente                                                                                                                          |
+| 2026-10-18 | `ts-rs` al posto di `tauri-specta` per i tipi condivisi                                                                            | `tauri-specta` è ancora in versione pre-release (rc.25) con documentazione non compilabile; `ts-rs` è stabile (v12). Stesso risultato: tipi scritti una volta sola, in Rust |
+| 2026-10-18 | chessground dal pacchetto `@lichess-org/chessground`                                                                               | È il nuovo nome ufficiale del pacchetto                                                                                                                                     |
+| 2026-10-18 | Tema chiaro e scuro automatici                                                                                                     | Segue il sistema operativo; costo minimo grazie ai token                                                                                                                    |
+| 2026-10-18 | Identità "panno da torneo + ottone", font IBM Plex Sans incluso                                                                    | Coerente con l'icona; il font incluso funziona offline e identico ovunque                                                                                                   |
+| 2026-10-18 | Licenza: chessground e Stockfish sono GPL-3.0                                                                                      | Uso personale libero; un'eventuale distribuzione richiede una licenza compatibile                                                                                           |
+| 2026-10-18 | Vitest 5 (da 3) e Node.js minimo 22.12                                                                                             | Corregge 3 vulnerabilità (1 moderata, 2 critiche) di Vitest 3 e della sua dipendenza `tinypool`; riguardano solo i test, non l'app                                          |
+| 2026-10-18 | Fase 1-bis: temi, scacchiere e pezzi selezionabili                                                                                 | Richiesta di Alessandro; predefinito Studio + Rovere + Icona                                                                                                                |
+| 2026-10-18 | Scacchiere e pezzi disegnati per l'app (tranne il Classico "cburnett")                                                             | Nessun vincolo di licenza esterno; stile coerente                                                                                                                           |
+| 2026-10-18 | Le scelte di stile valgono in tutta l'app                                                                                          | La scacchiera legge da sola le impostazioni: ogni sezione la usa senza occuparsene                                                                                          |
+| 2026-10-18 | Impostazioni salvate da Rust (crate `app-settings`)                                                                                | Una sola fonte di verità; file nella cartella di configurazione fornita da Tauri                                                                                            |
+| 2026-10-18 | Navigazione con TanStack Router (cronologia a hash)                                                                                | Ora le sezioni utilizzabili sono due; l'hash funziona uguale su ogni sistema                                                                                                |
+| 2026-10-18 | FEN tolta dal pannello di Gioca                                                                                                    | Informazione tecnica; tornerà nella Fase 2 come copia/incolla della posizione                                                                                               |
+| 2026-10-18 | Fase 1-bis approvata                                                                                                               | Conferma di Alessandro: aspetto e scelte di stile approvati                                                                                                                 |
+| 2026-10-18 | Fase 2: la partita vive in Rust (`Game` in `chess-core`, custodita da `src-tauri/state`)                                           | Una sola fonte di verità per le regole; l'interfaccia riceve sempre la partita completa (`GameView`)                                                                        |
+| 2026-10-18 | Notazione predefinita a figurine, con scelta Italiana / Internazionale                                                             | Richiesta di Alessandro; Rust tiene sempre la notazione internazionale, l'interfaccia la traduce                                                                            |
+| 2026-10-18 | Una mossa giocata da una posizione passata sostituisce il seguito                                                                  | Semplice e prevedibile; le varianti arriveranno nella Fase 8                                                                                                                |
+| 2026-10-18 | Copia/incolla di FEN e PGN negli appunti; salvataggio su file nella Fase 4                                                         | Il salvataggio su file richiede l'archivio partite                                                                                                                          |
+| 2026-10-18 | Componenti comuni `Button`, `Icon`, `PanelCard`, `PieceIcon`                                                                       | Stesso aspetto ovunque; sostituiscono la cartella `ui/` prevista                                                                                                            |
+| 2026-10-18 | Progetto sotto git (ramo `main`), un commit per ogni passo                                                                         | Ogni fase è reversibile e si vede esattamente cosa cambia                                                                                                                   |
+| 2026-10-18 | Suoni del gioco creati con Web Audio: mossa, presa, fine partita; impostazione "Suoni"                                             | Richiesta di Alessandro. Nessun file né licenza (i suoni classici di Lichess non sono liberi); suonano solo avanzando di una mossa                                          |
+| 2026-10-18 | `MoveRecord` dice se la mossa è una presa (`capture`)                                                                              | L'interfaccia sceglie il suono senza conoscere le regole                                                                                                                    |
+| 2026-10-18 | "Annulla" toglie l'ultima mossa della partita; "Nuova partita" senza conferma                                                      | Comportamenti confermati da Alessandro                                                                                                                                      |
+| 2026-10-18 | Fase 2 approvata; `PASSAGGIO-CONSEGNE.md` cancellato                                                                               | Conferma di Alessandro; appunti per le fasi future e trappole note riportati in §11 e §12                                                                                   |
+| 2026-10-18 | Ritocchi alla scacchiera: pallini con dissolvenza, anelli sulle prese, colori ottone, pezzo sollevato con ombra, cursore a mano    | Richiesta di Alessandro: più moderna e interattiva, senza appesantire (si animano solo opacità e dimensione dell'immagine)                                                  |
+| 2026-10-18 | Stockfish 19 scaricato da `npm run engines` (Node), con impronta SHA-256 verificata; binari fuori da git                           | Scelta 1A di Alessandro: uguale sui tre sistemi, niente file pesanti in git; parte da solo con `check` e `tauri`                                                            |
+| 2026-10-18 | Stockfish avviato dalla crate `engine` con `tokio::process`, senza `tauri-plugin-shell`                                            | Il motore resta indipendente da Tauri e testabile; nessun permesso da dare all'interfaccia                                                                                  |
+| 2026-10-18 | Due Stockfish separati: uno gioca, uno analizza; avviati al primo uso                                                              | L'analisi non rallenta mai l'avversario; nessun costo se non si usano                                                                                                       |
+| 2026-10-18 | 10 livelli con nome ed Elo indicativo                                                                                              | Scelta 2A di Alessandro                                                                                                                                                     |
+| 2026-10-18 | Analisi spenta di base contro il computer, con interruttore                                                                        | Scelta 3A di Alessandro: vederla mentre si gioca toglierebbe l'esercizio di calcolo                                                                                         |
+| 2026-10-18 | Tempi: senza orologio, 1+0, 2+1, 3+0, 3+2, 5+0, 5+3, 10+0, 10+5, 15+10, 30+0, 30+20, personalizzato                                | Approvati da Alessandro                                                                                                                                                     |
+| 2026-10-18 | Nuova crate `game-session`: avversario, orologio, regole su chi può muovere e ritirare le mosse                                    | La logica di partita resta nel nucleo; il ponte esegue soltanto                                                                                                             |
+| 2026-10-18 | Orologio contato in Rust; parte dopo la prima mossa; con l'orologio le mosse non si ritirano                                       | Precisione e regole come nei siti di scacchi                                                                                                                                |
+| 2026-10-18 | Contro il computer o con l'orologio si gioca solo dall'ultima posizione; "annulla" contro il computer ritira anche la sua risposta | Comportamento prevedibile; torna sempre il turno della persona                                                                                                              |
+| 2026-10-18 | Tempo scaduto con l'avversario senza materiale per vincere = patta                                                                 | Regolamento FIDE                                                                                                                                                            |
+| 2026-10-18 | L'ultima configurazione di partita si salva in `settings.json` (`GameSetup` in `app-settings`)                                     | La finestra "Nuova partita" ripropone le scelte precedenti anche dopo il riavvio                                                                                            |
 
 ---
 
@@ -362,12 +381,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
 Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato prima di scrivere codice.
 
-- **Fase 3 — Motore.**
-  - Nuova crate `crates/engine`: un "trait" `Engine` con un'unica implementazione UCI (`uci`, `isready`, `ucinewgame`, `position fen … moves …`, `go depth|movetime|wtime/btime`, lettura di `info … score cp|mate … pv …` e `bestmove`), asincrona con tokio e cancellabile (`stop`).
-  - Stockfish come sidecar: binari in `src-tauri/binaries/` con il nome della piattaforma (`stockfish-x86_64-pc-windows-msvc.exe`, `stockfish-aarch64-apple-darwin`, `stockfish-x86_64-apple-darwin`, `stockfish-x86_64-unknown-linux-gnu`), `bundle.externalBin` in `tauri.conf.json`, `tauri-plugin-shell` con il permesso in `capabilities/default.json`. Licenza GPL-3.0 da annotare.
-  - **Da decidere:** come procurarsi i binari (script npm multipiattaforma che li scarica, oppure a mano) e la scala dei livelli (`Skill Level` 0–20, `UCI_LimitStrength` + `UCI_Elo` 1320–3190, oppure livelli con nomi).
-  - Analisi live come eventi Tauri (`emit`, nuova cartella `src-tauri/src/events/`), mai come attesa bloccante.
-  - Interfaccia: `components/eval-bar/`, frecce della mossa migliore (`drawable.autoShapes` di chessground), variante principale nella notazione scelta, scelta del colore, orologio (conteggio in Rust). La scacchiera resta bloccata durante il turno del computer; i suoni delle sue mosse partono già da soli (`useMoveSound`).
+- **Fase 3 — Motore.** Fatta (vedi registro §10). Da riprendere più avanti: più varianti nell'analisi (`MultiPV`) e il motore "umano" Maia (Fase 10).
 - **Fase 4 — Database.** Crate `crates/storage` (SQLite con `sqlx`, migrazioni, file nella `app_data_dir`). Schema prima delle schermate (§4.3). Salvataggio a ogni mossa e ripresa all'avvio; archivio partite con ricerca; file `.pgn` con `tauri-plugin-dialog`.
 - **Fase 5 — Analisi.** Crate `crates/analysis`, un rilevatore per file (pezzi indifesi, minacce, tattiche, struttura pedonale, sicurezza del re, attività, fase di gioco), ognuno con test su FEN note.
 - **Fase 6 — Allenamento.** Crate `crates/training`; puzzle di Lichess (CSV, licenza CC0) in `data/`; puzzle per profondità, visualizzazione, "cosa minaccia?", ripasso degli errori con ripetizione dilazionata.
@@ -391,4 +405,9 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Tipi in `src/bindings/`:** li genera `ts-rs` con `npm run test:rust`; non si scrivono a mano.
 - **npm audit:** mai `npm audit fix --force`.
 - **`tauri-specta`** è stato scartato perché instabile; non va riproposto. Il pacchetto chessground si chiama `@lichess-org/chessground`.
+- **ts-rs:** i numeri `u64` diventano `bigint` in TypeScript; per i dati verso l'interfaccia si usa `u32` (o `usize`).
+- **Tauri sidecar:** la compilazione (anche Clippy) fallisce se il file di Stockfish manca: `npm run engines`.
+- **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.
+- **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.
+- **Shell:** comandi molto lunghi con più `heredoc` e apostrofi possono rompersi; i file si scrivono con lo strumento di scrittura.
 - **Gusti di Alessandro:** cornici attorno alla scacchiera, pezzi puliti e minimal, tanta scelta di stili, ogni scelta valida in tutta l'app; a ogni fase chiede ritocchi estetici.

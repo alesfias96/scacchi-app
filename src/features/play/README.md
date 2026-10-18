@@ -1,35 +1,46 @@
 # src/features/play — La sezione "Gioca"
 
-La sezione dove si gioca. Dalla Fase 2 è una partita **a due giocatori sulla stessa
-scacchiera**, con tutte le regole: arrocco, presa en passant, promozione (con scelta del
-pezzo), scacco matto, stallo e patte automatiche (materiale insufficiente, triplice
-ripetizione, regola delle 50 mosse). Dalla Fase 3 si potrà giocare contro il computer.
+La sezione dove si gioca, **contro il computer** (Stockfish, a dieci livelli) oppure **a due
+giocatori sulla stessa scacchiera**, con o senza orologio. Valgono tutte le regole: arrocco,
+presa en passant, promozione (con scelta del pezzo), scacco matto, stallo, patte automatiche
+(materiale insufficiente, triplice ripetizione, regola delle 50 mosse), tempo scaduto e abbandono.
+
+Le regole stanno tutte in Rust: la pagina invia le richieste e mostra la partita aggiornata che
+riceve (stato in `src/state/gameStore.ts`). La partita può anche cambiare da sola: la mossa del
+computer e il tempo scaduto arrivano da Rust come eventi.
 
 Ogni mossa ha il suo suono (colpo di legno; doppio colpo per le prese; melodia a fine
 partita), spegnibile nelle Impostazioni: vedi `src/sounds/`.
 
-Le regole stanno tutte in Rust: la pagina invia le mosse fatte sulla scacchiera e mostra
-la partita aggiornata che riceve (stato in `src/state/gameStore.ts`).
-
 ## Come si usa
 
-- Si muove trascinando un pezzo, oppure con un clic sul pezzo e uno sulla casa d'arrivo.
-  Le case raggiungibili sono indicate da un pallino.
+- **Nuova partita** apre la finestra in cui si sceglie l'avversario, il colore, il livello del
+  computer e il tempo. La finestra ripropone le scelte dell'ultima partita.
+- Si muove trascinando un pezzo (il cursore diventa una mano sui pezzi che si possono muovere),
+  oppure con un clic sul pezzo e uno sulla casa d'arrivo. Le case raggiungibili hanno un pallino.
+- Contro il computer, mentre lui pensa la scacchiera è bloccata e la sua striscia dice "sta pensando".
 - ← → scorrono la partita mossa per mossa; Home e Fine vanno all'inizio e all'ultima mossa.
-  Un clic su una mossa dell'elenco mostra la posizione dopo quella mossa.
-- Se si gioca una mossa da una posizione passata, le mosse successive vengono sostituite
-  (le varianti arriveranno nella Fase 8).
+- **Analisi**: l'interruttore nella scheda "Analisi" accende Stockfish sulla posizione mostrata:
+  barra di valutazione accanto alla scacchiera, freccia della mossa migliore, variante principale.
+  Contro il computer parte spenta, perché sarebbe un aiuto.
+- A due giocatori senza orologio si può rigiocare da una posizione passata (le mosse successive
+  vengono sostituite; le varianti arriveranno nella Fase 8). Contro il computer o con l'orologio
+  si gioca solo dall'ultima posizione.
 
 ## Contenuto
 
-| Elemento              | Cosa fa                                                                                   |
-| --------------------- | ----------------------------------------------------------------------------------------- |
-| `PlayPage.tsx`        | La pagina: collega scacchiera, schede, tastiera, suoni e promozione alla partita in corso |
-| `PlayPage.module.css` | La disposizione della pagina (scacchiera grande, schede accanto o sotto)                  |
-| `PlayPage.test.tsx`   | I test: attesa, errore, mosse, promozione, fine partita, tastiera, scacchiera girata      |
-| `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                |
-| `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                      |
-| `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, gira la scacchiera                  |
-| `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                      |
-| `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                 |
-| `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                       |
+| Elemento              | Cosa fa                                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `PlayPage.tsx`        | La pagina: collega scacchiera, giocatori, analisi, schede, tastiera, suoni, promozione e finestra "Nuova partita" |
+| `PlayPage.module.css` | La disposizione della pagina (scacchiera grande con i giocatori sopra e sotto, schede accanto o sotto)            |
+| `PlayPage.test.tsx`   | I test: attesa, errore, mosse, promozione, fine partita, computer che pensa, nuova partita, analisi, tastiera     |
+| `player-bar/`         | La striscia di un giocatore sopra o sotto la scacchiera: nome, livello, "sta pensando", orologio                  |
+| `clock-face/`         | Il quadrante dell'orologio, con i secondi che scorrono                                                            |
+| `new-game-dialog/`    | La finestra "Nuova partita": avversario, colore, livello, tempo                                                   |
+| `analysis-panel/`     | La scheda "Analisi": interruttore, valutazione, profondità, variante                                              |
+| `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                                        |
+| `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                                              |
+| `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, abbandona, gira la scacchiera                               |
+| `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                                              |
+| `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                                         |
+| `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                               |

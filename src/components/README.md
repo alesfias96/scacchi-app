@@ -16,9 +16,6 @@ i test (`.test.tsx`) e un README.
 | `panel-card/`   | La scheda con titolo usata per tutte le informazioni accanto alla scacchiera                          |
 | `button/`       | Il pulsante dell'app, in tre aspetti: principale, secondario, solo icona                              |
 | `icon/`         | Le piccole icone a tratto (frecce, copia, incolla, …)                                                 |
-
-## Cartelle che verranno aggiunte
-
-| Cartella    | Fase | Scopo                              |
-| ----------- | ---- | ---------------------------------- |
-| `eval-bar/` | 3    | La barra di valutazione del motore |
+| `eval-bar/`     | La barra di valutazione del motore, accanto alla scacchiera                                           |
+| `switch/`       | L'interruttore acceso/spento (es. "Mostra analisi")                                                   |
+| `choice-group/` | Un gruppo di scelte a pastiglie, compatto (es. colore e livello nella finestra "Nuova partita")       |

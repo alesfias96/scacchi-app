@@ -126,6 +126,7 @@ impl GameSession {
             clock: self.clock.as_ref().map(|clock| clock.view(now)),
             can_move: self.check_can_move().is_ok(),
             can_undo: self.can_undo(),
+            can_resign: self.game.final_result().is_none(),
             computer_thinking: self.computer_to_move(),
         }
     }
@@ -560,8 +561,10 @@ mod tests {
 
         session.resign(now).expect("la partita non è finita");
 
-        let result = session.view(now).game.result.expect("partita finita");
+        let view = session.view(now);
+        let result = view.game.result.expect("partita finita");
         assert_eq!(result.winner, Some(Side::White));
+        assert!(!view.can_resign);
         assert_eq!(session.engine_request(now), None);
     }
 

@@ -43,6 +43,7 @@ describe('Chessboard', () => {
         pieces: 'icona',
         notation: 'figurine',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
   });
@@ -92,6 +93,7 @@ describe('Chessboard', () => {
         pieces: 'gettoni',
         notation: 'figurine',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
 
@@ -185,5 +187,24 @@ describe('Chessboard', () => {
     render(<Chessboard boardFen={STARTING_BOARD} turn="white" inCheck={false} />);
     expect(chessgroundMock.create.mock.calls[1]?.[1].animation?.enabled).toBe(false);
     matchMedia.mockRestore();
+  });
+
+  it('disegna la freccia indicata, e la toglie quando non serve più', () => {
+    const { rerender } = render(
+      <Chessboard
+        boardFen={STARTING_BOARD}
+        turn="white"
+        inCheck={false}
+        arrow={{ from: 'g1', to: 'f3', uci: 'g1f3' }}
+      />,
+    );
+    expect(chessgroundMock.create.mock.calls[0]?.[1].drawable?.autoShapes).toEqual([
+      expect.objectContaining({ orig: 'g1', dest: 'f3' }),
+    ]);
+
+    rerender(<Chessboard boardFen={STARTING_BOARD} turn="white" inCheck={false} />);
+    expect(chessgroundMock.set).toHaveBeenLastCalledWith(
+      expect.objectContaining({ drawable: { autoShapes: [] } }),
+    );
   });
 });

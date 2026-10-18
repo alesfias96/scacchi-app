@@ -9,6 +9,7 @@ il pezzo che si solleva con la sua ombra quando lo si trascina.
 Può essere **in sola lettura** (come l'anteprima nelle Impostazioni) oppure
 **interattiva** (come in Gioca): in quel caso il giocatore di turno può muovere solo verso
 le case permesse dalle mosse legali calcolate da Rust, e la scacchiera comunica la mossa fatta.
+Può anche disegnare una **freccia** (ad esempio la mossa migliore secondo il motore).
 
 È **l'unica scacchiera dell'app**: ogni sezione (Gioca, Allenamento, Tutor, ...) usa questo
 componente. Lo stile della scacchiera e dei pezzi non si passa come proprietà: il componente

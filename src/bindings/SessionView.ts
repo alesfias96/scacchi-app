@@ -42,6 +42,10 @@ canMove: boolean,
  */
 canUndo: boolean, 
 /**
+ * `true` se si può abbandonare (la partita non è ancora finita).
+ */
+canResign: boolean, 
+/**
  * `true` se si sta aspettando la mossa del computer.
  */
 computerThinking: boolean, };

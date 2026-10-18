@@ -14,6 +14,7 @@ vi.mock('../services/settingsService', () => ({
       pieces: 'icona',
       notation: 'figurine',
       sounds: 'on',
+      gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
     }),
   saveSettings: () => Promise.resolve(),
 }));

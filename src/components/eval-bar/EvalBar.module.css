@@ -1,0 +1,56 @@
+/*
+ * Barra di valutazione: colonna stretta alta quanto la scacchiera, con la
+ * divisione bianco/nero che scorre dolcemente e il valore scritto in piccolo.
+ */
+
+.bar {
+  position: relative;
+  flex: 0 0 var(--eval-bar-width);
+  overflow: hidden;
+  border-radius: var(--radius-small);
+  box-shadow: var(--shadow-board);
+}
+
+.drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.black {
+  fill: var(--eval-black);
+}
+
+.white {
+  fill: var(--eval-white);
+  transition:
+    y var(--duration-slow) var(--easing-standard),
+    height var(--duration-slow) var(--easing-standard);
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-size: var(--text-tiny);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.labelTop {
+  top: var(--space-1);
+}
+
+.labelBottom {
+  bottom: var(--space-1);
+}
+
+/* Il testo prende il colore opposto alla parte su cui è scritto. */
+.onWhite {
+  color: var(--eval-black);
+}
+
+.onBlack {
+  color: var(--eval-white);
+}

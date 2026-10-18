@@ -1,0 +1,37 @@
+/* Scheda "Analisi": interruttore, poi valutazione grande, profondità e variante. */
+
+.message {
+  color: var(--color-text-muted);
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+}
+
+.summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.evaluation {
+  font-size: var(--text-figure);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.depth {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.line {
+  line-height: var(--leading-body);
+}

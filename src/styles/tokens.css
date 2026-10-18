@@ -14,6 +14,7 @@
   --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, monospace;
 
   /* Scala tipografica a rapporto 1,25 (terza maggiore) */
+  --text-tiny: 0.6875rem; /* valore scritto nella barra di valutazione */
   --text-small: 0.8125rem;
   --text-body: 1rem;
   --text-large: 1.25rem;
@@ -61,6 +62,9 @@
   --frame-marmo: #4c5a53;
   --frame-ardesia: #3a4756;
   --frame-torneo: #2f4a39;
+  /* Le due parti della barra di valutazione (uguali in ogni tema: sono il bianco e il nero dei pezzi) */
+  --eval-white: #f4f1ea;
+  --eval-black: #2b2926;
   /*
    * Segni sopra le case (usati da components/chessboard/themes/highlights.css).
    * Sono semi-trasparenti: si vedono bene su ogni scacchiera, chiara o scura.
@@ -84,7 +88,7 @@
   --board-min-size: 20rem;
   --panel-width: 18rem;
   /* spazio verticale da lasciare libero intorno alla scacchiera (titolo + margini) */
-  --board-vertical-reserve: 10rem;
+  --board-vertical-reserve: 16rem;
   --settings-max-width: 60rem;
   --option-min-width: 9.5rem;
   --option-preview-size: 5.5rem;
@@ -98,10 +102,25 @@
   --promotion-piece-size: 4.5rem; /* pezzi nella scelta della promozione */
   --dialog-width: 32rem;
   --import-text-rows-height: 10rem; /* area di testo per incollare FEN o PGN */
+  --dialog-width-wide: 44rem; /* finestra "Nuova partita" */
+  --choice-min-width: 7.5rem; /* riquadri delle scelte a pastiglie */
+  --number-input-width: 7rem; /* campi numerici (minuti, secondi) */
+  --eval-bar-width: 1.5rem; /* barra di valutazione */
+  --clock-min-width: 5.5rem; /* quadrante dell'orologio */
+  --thinking-dot-size: 0.375rem; /* puntini di "sta pensando" */
+  --switch-width: 2.5rem; /* interruttore: la pista */
+  --switch-height: 1.375rem;
+  --switch-knob: 1rem; /* interruttore: il pomello */
+  --switch-gap: 0.1875rem; /* spazio tra pomello e bordo della pista */
+  --switch-travel: 1.125rem; /* quanto scorre il pomello: larghezza − pomello − 2 spazi */
+  --disabled-opacity: 40%; /* elementi spenti o non disponibili */
+  --shadow-knob: 0 1px 3px rgb(0 0 0 / 30%); /* ombra del pomello */
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;
   --duration-medium: 180ms;
+  --duration-slow: 450ms; /* barra di valutazione che scorre */
+  --duration-pulse: 1.2s; /* puntini di "sta pensando" */
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -110,5 +129,6 @@
   :root {
     --duration-fast: 0ms;
     --duration-medium: 0ms;
+    --duration-slow: 0ms;
   }
 }

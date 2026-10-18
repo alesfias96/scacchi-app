@@ -1,36 +1,48 @@
 /**
- * PlayPage — la sezione "Gioca": una partita a due giocatori sulla stessa scacchiera.
+ * PlayPage — la sezione "Gioca": una partita contro il computer o a due giocatori.
  *
  * Cosa fa: chiede a Rust la partita in corso e la mostra. Si muovono i pezzi
  * trascinandoli o con due clic; sono permesse solo le mosse legali (arrocco,
- * presa en passant e promozione compresi). Accanto alla scacchiera:
- * - l'annuncio di fine partita, quando la partita è finita;
- * - la situazione (chi muove, mosse possibili, scacco);
- * - l'elenco delle mosse con i comandi (scorri, nuova partita, annulla, gira);
- * - copia e incolla di posizioni (FEN) e partite (PGN).
+ * presa en passant e promozione compresi), e solo quando Rust dice che si può
+ * (ad esempio non mentre pensa il computer).
+ * - Sopra e sotto la scacchiera: i due giocatori, con l'orologio se c'è.
+ * - Accanto alla scacchiera, se l'analisi è accesa: la barra di valutazione;
+ *   sulla scacchiera la freccia della mossa migliore.
+ * - Nel pannello: l'annuncio di fine partita, le mosse con i comandi (scorri,
+ *   nuova partita, annulla, abbandona, gira), l'analisi, la situazione, copia
+ *   e incolla di posizioni (FEN) e partite (PGN).
  * Le frecce ←/→ e i tasti Home/Fine scorrono la partita. Ogni mossa ha il suo
  * suono (mossa, presa, fine partita), se i suoni sono attivi nelle Impostazioni.
  *
- * Tutte le regole sono applicate da Rust: questa pagina invia le mosse e
- * mostra la partita aggiornata che riceve.
+ * Tutte le regole sono applicate da Rust: questa pagina invia le richieste e
+ * mostra la partita aggiornata che riceve (anche quando cambia da sola, per
+ * una mossa del computer o il tempo scaduto).
  *
  * Riceve: niente.
  * Restituisce: la pagina della sezione.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { GameSetup } from '../../bindings/GameSetup';
 import type { LegalMove } from '../../bindings/LegalMove';
 import type { Side } from '../../bindings/Side';
+import { Button } from '../../components/button/Button';
 import { Chessboard } from '../../components/chessboard/Chessboard';
+import { EvalBar } from '../../components/eval-bar/EvalBar';
 import { PanelCard } from '../../components/panel-card/PanelCard';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
 import { exportPgn } from '../../services/gameService';
+import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
-import { useLoadedSettings } from '../../state/settingsStore';
+import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
+import { AnalysisPanel } from './analysis-panel/AnalysisPanel';
 import { GameControls } from './game-controls/GameControls';
 import { GameResultBanner } from './game-result-banner/GameResultBanner';
 import { ImportExport } from './import-export/ImportExport';
 import { MoveList } from './move-list/MoveList';
+import { NewGameDialog } from './new-game-dialog/NewGameDialog';
+import { PlayerBar } from './player-bar/PlayerBar';
+import { describePlayer } from './player-bar/describePlayer';
 import { PositionPanel } from './position-panel/PositionPanel';
 import { PromotionPicker, type PromotionPiece } from './promotion-picker/PromotionPicker';
 import styles from './PlayPage.module.css';
@@ -41,20 +53,28 @@ interface PendingPromotion {
   to: string;
 }
 
-/** Nessuna mossa possibile (a partita finita). */
+/** Nessuna mossa possibile (quando non si può muovere). */
 const NO_MOVES: readonly LegalMove[] = [];
 
 export function PlayPage() {
-  const { notation, sounds } = useLoadedSettings();
-  const game = useGameStore((state) => state.game);
+  const { notation, sounds, gameSetup } = useLoadedSettings();
+  const updateSettings = useSettingsStore((state) => state.update);
+  const session = useGameStore((state) => state.session);
   const loadError = useGameStore((state) => state.loadError);
   const actionError = useGameStore((state) => state.actionError);
   const load = useGameStore((state) => state.load);
   const play = useGameStore((state) => state.play);
   const undo = useGameStore((state) => state.undo);
   const goTo = useGameStore((state) => state.goTo);
+  const resign = useGameStore((state) => state.resign);
   const newGame = useGameStore((state) => state.newGame);
   const importText = useGameStore((state) => state.importText);
+  const analysisEnabled = useEngineStore((state) => state.analysisEnabled);
+  const latestAnalysis = useEngineStore((state) => state.latest);
+  const engineError = useEngineStore((state) => state.engineError);
+  const listenToEngine = useEngineStore((state) => state.listen);
+  const setAnalysisEnabled = useEngineStore((state) => state.setAnalysisEnabled);
+  const dismissEngineError = useEngineStore((state) => state.dismissError);
 
   /** Il colore mostrato in basso sulla scacchiera. */
   const [orientation, setOrientation] = useState<Side>('white');
@@ -62,11 +82,17 @@ export function PlayPage() {
   const [pendingPromotion, setPendingPromotion] = useState<PendingPromotion | null>(null);
   /** Cambiandolo, la scacchiera torna alla posizione ricevuta da Rust. */
   const [resyncKey, setResyncKey] = useState(0);
+  /** `true` mentre è aperta la finestra "Nuova partita". */
+  const [isNewGameOpen, setIsNewGameOpen] = useState(false);
 
-  // All'apertura della sezione legge la partita in corso.
+  // All'apertura della sezione legge la partita in corso e ascolta il motore.
   useEffect(() => {
     void load();
-  }, [load]);
+    void listenToEngine();
+  }, [load, listenToEngine]);
+
+  const game = session?.game ?? null;
+  useMoveSound(game, sounds === 'on');
 
   /** Riporta i pezzi alla posizione vera (dopo una mossa annullata o rifiutata). */
   const resyncBoard = useCallback(() => {
@@ -123,6 +149,25 @@ export function PlayPage() {
     resyncBoard();
   }, [resyncBoard]);
 
+  /**
+   * Avvia la partita scelta nella finestra "Nuova partita": ricorda le scelte,
+   * spegne l'analisi contro il computer (sarebbe un aiuto) e mette in basso
+   * il colore della persona.
+   */
+  const startGame = useCallback(
+    async (setup: GameSetup) => {
+      setIsNewGameOpen(false);
+      void updateSettings({ gameSetup: setup });
+      if (setup.opponent === 'computer' && useEngineStore.getState().analysisEnabled) {
+        void setAnalysisEnabled(false);
+      }
+      await newGame(setup);
+      const computerSide = useGameStore.getState().session?.computer?.side;
+      setOrientation(computerSide === 'white' ? 'black' : 'white');
+    },
+    [updateSettings, setAnalysisEnabled, newGame],
+  );
+
   /** Il numero di mosse della partita e quella mostrata (per la tastiera). */
   const cursor = game?.cursor ?? 0;
   const totalMoves = game?.moves.length ?? 0;
@@ -149,8 +194,7 @@ export function PlayPage() {
     }),
     [cursor, totalMoves, goTo],
   );
-  useGameKeyboard(keyboardActions, pendingPromotion === null);
-  useMoveSound(game, sounds === 'on');
+  useGameKeyboard(keyboardActions, pendingPromotion === null && !isNewGameOpen);
 
   if (loadError !== null) {
     return (
@@ -163,7 +207,7 @@ export function PlayPage() {
     );
   }
 
-  if (game === null) {
+  if (session === null || game === null) {
     return (
       <section className={styles.page}>
         <h1 className={styles.title}>Gioca</h1>
@@ -173,6 +217,10 @@ export function PlayPage() {
   }
 
   const { position, result } = game;
+  /** L'analisi mostrata: solo se riguarda la posizione sulla scacchiera. */
+  const analysis =
+    analysisEnabled && latestAnalysis?.line.fen === position.fen ? latestAnalysis : null;
+  const opponentSide: Side = orientation === 'white' ? 'black' : 'white';
 
   return (
     <section className={styles.page}>
@@ -180,35 +228,50 @@ export function PlayPage() {
 
       <div className={styles.workspace}>
         <div className={styles.boardArea}>
-          <Chessboard
-            boardFen={position.boardFen}
-            turn={position.turn}
-            inCheck={position.inCheck}
-            orientation={orientation}
-            lastMove={game.lastMove}
-            // A partita finita (anche per patta) non si muove più.
-            legalMoves={result === null ? position.legalMoves : NO_MOVES}
-            onMove={handleMove}
-            resyncKey={resyncKey}
-          />
-          {pendingPromotion !== null && (
-            <PromotionPicker
-              side={position.turn}
-              onChoose={choosePromotion}
-              onCancel={cancelPromotion}
-            />
-          )}
+          <PlayerBar {...describePlayer(session, opponentSide)} />
+          <div className={styles.boardRow}>
+            {analysisEnabled && (
+              <EvalBar evaluation={analysis?.evaluation ?? null} orientation={orientation} />
+            )}
+            <div className={styles.boardWrap}>
+              <Chessboard
+                boardFen={position.boardFen}
+                turn={position.turn}
+                inCheck={position.inCheck}
+                orientation={orientation}
+                lastMove={game.lastMove}
+                legalMoves={session.canMove ? position.legalMoves : NO_MOVES}
+                // Quando non si può muovere (tocca al computer, partita finita…)
+                // la scacchiera è in sola lettura.
+                onMove={session.canMove ? handleMove : undefined}
+                arrow={analysis?.line.firstMove ?? null}
+                resyncKey={resyncKey}
+              />
+              {pendingPromotion !== null && (
+                <PromotionPicker
+                  side={position.turn}
+                  onChoose={choosePromotion}
+                  onCancel={cancelPromotion}
+                />
+              )}
+            </div>
+          </div>
+          <PlayerBar {...describePlayer(session, orientation)} />
           {actionError !== null && (
             <p className={styles.error} role="alert">
               {actionError}
             </p>
           )}
+          {engineError !== null && (
+            <div className={styles.engineError} role="alert">
+              <span>Stockfish: {engineError}</span>
+              <Button onClick={dismissEngineError}>Chiudi</Button>
+            </div>
+          )}
         </div>
 
         <div className={styles.sidePanel}>
           {result !== null && <GameResultBanner result={result} />}
-
-          <PositionPanel position={position} />
 
           <PanelCard title="Mosse">
             <MoveList
@@ -222,14 +285,19 @@ export function PlayPage() {
             <GameControls
               cursor={game.cursor}
               totalMoves={game.moves.length}
+              canUndo={session.canUndo}
+              canResign={session.canResign}
               onGoTo={(ply) => {
                 void goTo(ply);
               }}
               onNewGame={() => {
-                void newGame();
+                setIsNewGameOpen(true);
               }}
               onUndo={() => {
                 void undo();
+              }}
+              onResign={() => {
+                void resign();
               }}
               onFlip={() => {
                 setOrientation((side) => (side === 'white' ? 'black' : 'white'));
@@ -237,11 +305,35 @@ export function PlayPage() {
             />
           </PanelCard>
 
+          <AnalysisPanel
+            enabled={analysisEnabled}
+            onToggle={(enabled) => {
+              void setAnalysisEnabled(enabled);
+            }}
+            update={analysis}
+            isGameOver={result !== null}
+            notation={notation}
+          />
+
+          <PositionPanel position={position} />
+
           <PanelCard title="Copia e incolla">
             <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
           </PanelCard>
         </div>
       </div>
+
+      {isNewGameOpen && (
+        <NewGameDialog
+          initialSetup={gameSetup}
+          onStart={(setup) => {
+            void startGame(setup);
+          }}
+          onClose={() => {
+            setIsNewGameOpen(false);
+          }}
+        />
+      )}
     </section>
   );
 }

@@ -2,7 +2,8 @@
  * Test dello stato della partita. Il servizio verso Rust è simulato.
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { GameView } from '../bindings/GameView';
+import type { GameSetup } from '../bindings/GameSetup';
+import type { SessionView } from '../bindings/SessionView';
 import { useGameStore } from './gameStore';
 
 const serviceMock = vi.hoisted(() => ({
@@ -11,32 +12,63 @@ const serviceMock = vi.hoisted(() => ({
   playMove: vi.fn(),
   undoMove: vi.fn(),
   goToPly: vi.fn(),
+  resignGame: vi.fn(),
   importGame: vi.fn(),
   exportPgn: vi.fn(),
+  listenToGameUpdates: vi.fn(),
 }));
 
 vi.mock('../services/gameService', () => serviceMock);
 
-/** Una partita appena cominciata. */
-const NEW_GAME: GameView = {
-  position: {
-    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    boardFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
-    turn: 'white',
-    inCheck: false,
-    legalMoves: [],
+/** Una partita appena cominciata, a due giocatori. */
+const NEW_GAME: SessionView = {
+  game: {
+    position: {
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      boardFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+      turn: 'white',
+      inCheck: false,
+      legalMoves: [],
+    },
+    moves: [],
+    cursor: 0,
+    lastMove: null,
+    result: null,
+    startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   },
-  moves: [],
-  cursor: 0,
-  lastMove: null,
-  result: null,
-  startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  opponent: 'twoPlayers',
+  computer: null,
+  timeControl: null,
+  clock: null,
+  canMove: true,
+  canUndo: false,
+  canResign: true,
+  computerThinking: false,
 };
+
+/** La stessa partita dopo una mossa. */
+const AFTER_E4: SessionView = { ...NEW_GAME, game: { ...NEW_GAME.game, cursor: 1 } };
 
 describe('gameStore', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    useGameStore.setState({ game: null, loadError: null, actionError: null });
+    serviceMock.listenToGameUpdates.mockResolvedValue(() => undefined);
+    useGameStore.setState({ session: null, loadError: null, actionError: null });
+  });
+
+  // Va per primo: l'ascolto degli eventi si attiva una volta sola, al primo caricamento.
+  it('segue i cambiamenti annunciati da Rust (es. la mossa del computer)', async () => {
+    let announce: ((view: SessionView) => void) | undefined;
+    serviceMock.listenToGameUpdates.mockImplementation((onUpdate: (view: SessionView) => void) => {
+      announce = onUpdate;
+      return Promise.resolve(() => undefined);
+    });
+    serviceMock.fetchGame.mockResolvedValue(NEW_GAME);
+    await useGameStore.getState().load();
+
+    announce?.(AFTER_E4);
+
+    expect(useGameStore.getState().session).toEqual(AFTER_E4);
   });
 
   it('legge la partita da Rust', async () => {
@@ -44,7 +76,7 @@ describe('gameStore', () => {
 
     await useGameStore.getState().load();
 
-    expect(useGameStore.getState().game).toEqual(NEW_GAME);
+    expect(useGameStore.getState().session).toEqual(NEW_GAME);
   });
 
   it('annota il motivo se la partita non si può leggere', async () => {
@@ -56,36 +88,47 @@ describe('gameStore', () => {
   });
 
   it('gioca una mossa e salva la partita aggiornata', async () => {
-    const afterE4 = { ...NEW_GAME, cursor: 1 };
-    serviceMock.playMove.mockResolvedValue(afterE4);
+    serviceMock.playMove.mockResolvedValue(AFTER_E4);
 
     await useGameStore.getState().play('e2e4');
 
     expect(serviceMock.playMove).toHaveBeenCalledWith('e2e4');
-    expect(useGameStore.getState().game).toEqual(afterE4);
+    expect(useGameStore.getState().session).toEqual(AFTER_E4);
   });
 
   it('se una mossa viene rifiutata tiene la partita e spiega il motivo', async () => {
-    useGameStore.setState({ game: NEW_GAME });
-    serviceMock.playMove.mockRejectedValue('Mossa non legale: e2e5');
+    useGameStore.setState({ session: NEW_GAME });
+    serviceMock.playMove.mockRejectedValue('tocca al computer: aspetta la sua mossa');
 
-    await useGameStore.getState().play('e2e5');
+    await useGameStore.getState().play('e2e4');
 
-    expect(useGameStore.getState().game).toEqual(NEW_GAME);
-    expect(useGameStore.getState().actionError).toBe('Mossa non legale: e2e5');
+    expect(useGameStore.getState().session).toEqual(NEW_GAME);
+    expect(useGameStore.getState().actionError).toBe('tocca al computer: aspetta la sua mossa');
   });
 
-  it('va alla mossa richiesta', async () => {
+  it('comincia la partita scelta', async () => {
+    const setup: GameSetup = { opponent: 'computer', color: 'black', level: 7, timeControl: null };
+    serviceMock.startNewGame.mockResolvedValue(NEW_GAME);
+
+    await useGameStore.getState().newGame(setup);
+
+    expect(serviceMock.startNewGame).toHaveBeenCalledWith(setup);
+  });
+
+  it('va alla mossa richiesta e abbandona', async () => {
     serviceMock.goToPly.mockResolvedValue(NEW_GAME);
+    serviceMock.resignGame.mockResolvedValue(NEW_GAME);
 
-    await useGameStore.getState().goTo(3);
+    await useGameStore.getState().goTo(0);
+    await useGameStore.getState().resign();
 
-    expect(serviceMock.goToPly).toHaveBeenCalledWith(3);
+    expect(serviceMock.goToPly).toHaveBeenCalledWith(0);
+    expect(serviceMock.resignGame).toHaveBeenCalled();
   });
 
-  it("rilancia l'errore di un'importazione non valida", async () => {
-    serviceMock.importGame.mockRejectedValue('Testo vuoto');
+  it('rilancia l’errore di un testo da incollare non valido', async () => {
+    serviceMock.importGame.mockRejectedValue('PGN non valido');
 
-    await expect(useGameStore.getState().importText('')).rejects.toBe('Testo vuoto');
+    await expect(useGameStore.getState().importText('ciao')).rejects.toBe('PGN non valido');
   });
 });

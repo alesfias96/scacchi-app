@@ -17,3 +17,7 @@ quelle stanno tutte in Rust.
 | `formatSan.test.ts`       | I suoi test                                                                                            |
 | `copyToClipboard.ts`      | Copia un testo negli appunti del sistema                                                               |
 | `copyToClipboard.test.ts` | I suoi test                                                                                            |
+| `formatEvaluation.ts`     | Scrive una valutazione del motore come nei siti di scacchi (`+0.4`, `−1.2`, `M3`)                      |
+| `formatClock.ts`          | Scrive il tempo dell'orologio (`4:07`, `1:05:09`, e i decimi negli ultimi 10 secondi: `9.4`)           |
+| `describeTimeControl.ts`  | Scrive un tempo di riflessione come "minuti + secondi" (`5+3`)                                         |
+| `*.test.ts`               | I test delle tre funzioni qui sopra                                                                    |

@@ -10,9 +10,12 @@ function renderControls(overrides: Partial<GameControlsProps> = {}) {
   const props: GameControlsProps = {
     cursor: 2,
     totalMoves: 4,
+    canUndo: true,
+    canResign: true,
     onGoTo: vi.fn(),
     onNewGame: vi.fn(),
     onUndo: vi.fn(),
+    onResign: vi.fn(),
     onFlip: vi.fn(),
     ...overrides,
   };
@@ -36,7 +39,7 @@ describe('GameControls', () => {
   });
 
   it('disattiva i comandi che non avrebbero effetto', () => {
-    renderControls({ cursor: 0, totalMoves: 0 });
+    renderControls({ cursor: 0, totalMoves: 0, canUndo: false, canResign: false });
 
     expect(
       screen.getByRole<HTMLButtonElement>('button', { name: /Posizione iniziale/ }).disabled,
@@ -45,6 +48,9 @@ describe('GameControls', () => {
       true,
     );
     expect(screen.getByRole<HTMLButtonElement>('button', { name: /Annulla/ }).disabled).toBe(true);
+    expect(screen.getByRole<HTMLButtonElement>('button', { name: 'Abbandona' }).disabled).toBe(
+      true,
+    );
   });
 
   it('nuova partita, annulla e gira scacchiera chiamano le rispettive azioni', () => {
@@ -57,5 +63,18 @@ describe('GameControls', () => {
     expect(onNewGame).toHaveBeenCalled();
     expect(onUndo).toHaveBeenCalled();
     expect(onFlip).toHaveBeenCalled();
+  });
+
+  it('abbandona solo dopo la conferma', () => {
+    const { onResign } = renderControls();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Abbandona' }));
+    expect(onResign).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'No' }));
+    expect(screen.getByRole('button', { name: 'Abbandona' })).toBeDefined();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Abbandona' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sì, abbandono' }));
+    expect(onResign).toHaveBeenCalledOnce();
   });
 });

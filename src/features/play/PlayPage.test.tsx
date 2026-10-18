@@ -1,16 +1,19 @@
 /**
  * Test della sezione "Gioca".
  *
- * Il servizio verso Rust e chessground sono simulati: si verifica che la
+ * I servizi verso Rust e chessground sono simulati: si verifica che la
  * pagina mostri la partita ricevuta, invii a Rust le mosse fatte sulla
- * scacchiera (promozione compresa), annunci la fine della partita e
- * risponda a tastiera e comandi.
+ * scacchiera (promozione compresa), blocchi la scacchiera quando non si può
+ * muovere, annunci la fine della partita, apra la finestra "Nuova partita",
+ * accenda l'analisi e risponda a tastiera e comandi.
  */
 import type { Config } from '@lichess-org/chessground/config';
 import type { Key } from '@lichess-org/chessground/types';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { GameView } from '../../bindings/GameView';
+import type { SessionView } from '../../bindings/SessionView';
+import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
 import { useSettingsStore } from '../../state/settingsStore';
 import { PlayPage } from './PlayPage';
@@ -21,11 +24,29 @@ const serviceMock = vi.hoisted(() => ({
   playMove: vi.fn(),
   undoMove: vi.fn(),
   goToPly: vi.fn(),
+  resignGame: vi.fn(),
   importGame: vi.fn(),
   exportPgn: vi.fn(),
+  listenToGameUpdates: vi.fn(),
 }));
 
 vi.mock('../../services/gameService', () => serviceMock);
+
+const engineServiceMock = vi.hoisted(() => ({
+  fetchEngineLevels: vi.fn(),
+  setAnalysis: vi.fn(),
+  listenToAnalysis: vi.fn(),
+  listenToEngineErrors: vi.fn(),
+}));
+
+vi.mock('../../services/engineService', () => engineServiceMock);
+
+const settingsServiceMock = vi.hoisted(() => ({
+  fetchSettings: vi.fn(),
+  saveSettings: vi.fn(),
+}));
+
+vi.mock('../../services/settingsService', () => settingsServiceMock);
 
 /** chessground simulato: ricorda l'ultima configurazione ricevuta (vedi beforeEach). */
 const chessgroundMock = vi.hoisted(() => ({
@@ -41,7 +62,7 @@ function dragPiece(from: Key, to: Key) {
 }
 
 /** Partita dopo 1.e4: muove il nero. */
-const AFTER_E4: GameView = {
+const AFTER_E4_GAME: GameView = {
   position: {
     fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
     boardFen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
@@ -67,9 +88,26 @@ const AFTER_E4: GameView = {
   startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
 };
 
+/** Una partita a due giocatori, senza orologio. */
+function twoPlayers(game: GameView): SessionView {
+  return {
+    game,
+    opponent: 'twoPlayers',
+    computer: null,
+    timeControl: null,
+    clock: null,
+    canMove: game.result === null,
+    canUndo: game.moves.length > 0,
+    canResign: game.result === null,
+    computerThinking: false,
+  };
+}
+
+const AFTER_E4 = twoPlayers(AFTER_E4_GAME);
+
 /** Un pedone bianco in e7 pronto a promuovere. */
-const PROMOTION: GameView = {
-  ...AFTER_E4,
+const PROMOTION = twoPlayers({
+  ...AFTER_E4_GAME,
   position: {
     fen: '8/4P3/8/7k/8/8/8/4K3 w - - 0 1',
     boardFen: '8/4P3/8/7k/8/8/8/4K3',
@@ -81,11 +119,36 @@ const PROMOTION: GameView = {
       uci: `e7e8${piece}`,
     })),
   },
+});
+
+/** Contro il computer (con il nero), mentre il computer pensa. */
+const COMPUTER_THINKING: SessionView = {
+  ...AFTER_E4,
+  opponent: 'computer',
+  computer: { side: 'black', level: { level: 4, name: 'Circolo', elo: 1400 } },
+  timeControl: { initialSeconds: 300, incrementSeconds: 0 },
+  clock: { whiteMs: 300_000, blackMs: 299_000, running: 'black' },
+  canMove: false,
+  canUndo: true,
+  computerThinking: true,
 };
+
+/** Aspetta che la pagina abbia ricevuto la partita. */
+async function pageReady() {
+  await screen.findByRole('region', { name: 'Situazione' });
+}
 
 describe('PlayPage', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    serviceMock.listenToGameUpdates.mockResolvedValue(() => undefined);
+    engineServiceMock.listenToAnalysis.mockResolvedValue(() => undefined);
+    engineServiceMock.listenToEngineErrors.mockResolvedValue(() => undefined);
+    engineServiceMock.setAnalysis.mockResolvedValue(undefined);
+    engineServiceMock.fetchEngineLevels.mockResolvedValue([
+      { level: 4, name: 'Circolo', elo: 1400 },
+    ]);
+    settingsServiceMock.saveSettings.mockResolvedValue(undefined);
     chessgroundMock.create.mockImplementation((_element: HTMLElement, config: Config) => {
       chessgroundMock.state.config = config;
       return {
@@ -96,7 +159,8 @@ describe('PlayPage', () => {
       };
     });
     chessgroundMock.state.config = undefined;
-    useGameStore.setState({ game: null, loadError: null, actionError: null });
+    useGameStore.setState({ session: null, loadError: null, actionError: null });
+    useEngineStore.setState({ analysisEnabled: false, latest: null, engineError: null });
     useSettingsStore.setState({
       settings: {
         theme: 'studio',
@@ -104,6 +168,7 @@ describe('PlayPage', () => {
         pieces: 'icona',
         notation: 'italiana',
         sounds: 'on',
+        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
       },
     });
   });
@@ -121,8 +186,9 @@ describe('PlayPage', () => {
 
     render(<PlayPage />);
 
-    expect(await screen.findByRole('region', { name: 'Situazione' })).toBeDefined();
+    await pageReady();
     expect(screen.getByRole('button', { name: 'e4' })).toBeDefined();
+    expect(screen.getByText('Bianco')).toBeDefined();
     expect(chessgroundMock.state.config?.lastMove).toEqual(['e2', 'e4']);
   });
 
@@ -138,7 +204,7 @@ describe('PlayPage', () => {
     serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
     serviceMock.playMove.mockResolvedValue(AFTER_E4);
     render(<PlayPage />);
-    await screen.findByRole('region', { name: 'Situazione' });
+    await pageReady();
 
     dragPiece('e7', 'e5');
 
@@ -149,7 +215,7 @@ describe('PlayPage', () => {
     serviceMock.fetchGame.mockResolvedValue(PROMOTION);
     serviceMock.playMove.mockResolvedValue(PROMOTION);
     render(<PlayPage />);
-    await screen.findByRole('region', { name: 'Situazione' });
+    await pageReady();
 
     dragPiece('e7', 'e8');
     fireEvent.click(await screen.findByRole('button', { name: 'Cavallo' }));
@@ -159,22 +225,37 @@ describe('PlayPage', () => {
   });
 
   it('annuncia la fine della partita e blocca la scacchiera', async () => {
-    serviceMock.fetchGame.mockResolvedValue({
-      ...AFTER_E4,
-      result: { winner: 'black', reason: 'checkmate', score: '0-1' },
-    });
+    serviceMock.fetchGame.mockResolvedValue(
+      twoPlayers({
+        ...AFTER_E4_GAME,
+        result: { winner: 'black', reason: 'checkmate', score: '0-1' },
+      }),
+    );
 
     render(<PlayPage />);
 
     expect(await screen.findByText('Scacco matto')).toBeDefined();
-    expect(chessgroundMock.state.config?.movable?.dests?.size).toBe(0);
+    expect(chessgroundMock.state.config?.viewOnly).toBe(true);
+  });
+
+  it('mentre pensa il computer blocca la scacchiera e lo dice', async () => {
+    serviceMock.fetchGame.mockResolvedValue(COMPUTER_THINKING);
+
+    render(<PlayPage />);
+    await pageReady();
+
+    expect(chessgroundMock.state.config?.viewOnly).toBe(true);
+    expect(screen.getByText('Stockfish')).toBeDefined();
+    expect(screen.getByText('Tu')).toBeDefined();
+    expect(screen.getByText('sta pensando')).toBeDefined();
+    expect(screen.getByLabelText('Tempo del Bianco').textContent).toBe('5:00');
   });
 
   it('la freccia sinistra torna indietro di una mossa', async () => {
     serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
     serviceMock.goToPly.mockResolvedValue(AFTER_E4);
     render(<PlayPage />);
-    await screen.findByRole('region', { name: 'Situazione' });
+    await pageReady();
 
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
 
@@ -190,5 +271,64 @@ describe('PlayPage', () => {
     await waitFor(() => {
       expect(chessgroundMock.state.config?.orientation).toBe('black');
     });
+  });
+
+  it('"Nuova partita" apre la finestra e avvia la partita scelta, con il proprio colore in basso', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    serviceMock.startNewGame.mockResolvedValue({
+      ...COMPUTER_THINKING,
+      computer: { side: 'white', level: { level: 4, name: 'Circolo', elo: 1400 } },
+    });
+    render(<PlayPage />);
+    await pageReady();
+
+    fireEvent.click(screen.getByRole('button', { name: /Nuova partita/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /Nero/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Inizia la partita' }));
+
+    await waitFor(() => {
+      expect(chessgroundMock.state.config?.orientation).toBe('black');
+    });
+    expect(serviceMock.startNewGame).toHaveBeenCalledWith(
+      expect.objectContaining({ opponent: 'computer', color: 'black' }),
+    );
+    expect(useSettingsStore.getState().settings?.gameSetup.color).toBe('black');
+  });
+
+  it('accende l’analisi e mostra la barra di valutazione', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    render(<PlayPage />);
+    await pageReady();
+
+    fireEvent.click(screen.getByRole('switch', { name: 'Mostra analisi di Stockfish' }));
+
+    expect(engineServiceMock.setAnalysis).toHaveBeenCalledWith(true);
+    expect(await screen.findByRole('meter', { name: 'Valutazione della posizione' })).toBeDefined();
+  });
+
+  it('mostra la freccia della mossa migliore della posizione sulla scacchiera', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    useEngineStore.setState({
+      analysisEnabled: true,
+      latest: {
+        depth: 10,
+        evaluation: { kind: 'centipawns', value: 20 },
+        line: {
+          fen: AFTER_E4_GAME.position.fen,
+          turn: 'black',
+          moveNumber: 1,
+          san: ['e5'],
+          firstMove: { from: 'e7', to: 'e5', uci: 'e7e5' },
+        },
+      },
+    });
+
+    render(<PlayPage />);
+    await pageReady();
+
+    expect(chessgroundMock.state.config?.drawable?.autoShapes).toEqual([
+      expect.objectContaining({ orig: 'e7', dest: 'e5' }),
+    ]);
+    expect(screen.getByText('profondità 10')).toBeDefined();
   });
 });

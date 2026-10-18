@@ -24,6 +24,8 @@
  *   viene chiamato `onMove` con casa di partenza e di arrivo. I pezzi che si
  *   possono muovere mostrano la "mano" al passaggio del cursore. Senza `onMove`
  *   la scacchiera è in sola lettura;
+ * - `arrow`: facoltativa, una mossa da indicare con una freccia (ad esempio
+ *   la mossa migliore secondo il motore);
  * - `resyncKey`: facoltativo. Cambiarlo riporta i pezzi alla posizione
  *   ricevuta, ad esempio dopo una promozione annullata (quando il pedone è
  *   già stato spostato sulla scacchiera ma la mossa non è stata giocata).
@@ -67,6 +69,8 @@ export interface ChessboardProps {
   legalMoves?: readonly LegalMove[];
   /** Chiamata quando l'utente sposta un pezzo; se assente la scacchiera è in sola lettura. */
   onMove?: (from: string, to: string) => void;
+  /** Una mossa da indicare con una freccia; `null` o assente se nessuna. */
+  arrow?: LegalMove | null;
   /** Cambiarlo riporta i pezzi alla posizione ricevuta (vedi descrizione sopra). */
   resyncKey?: number;
 }
@@ -76,6 +80,9 @@ export interface ChessboardProps {
  * da seguire il movimento con l'occhio, abbastanza breve da non far aspettare.
  */
 const MOVE_ANIMATION_MS = 220;
+
+/** Il "pennello" della freccia: uno di quelli già pronti in chessground (verde tenue). */
+const ARROW_BRUSH = 'paleGreen';
 
 /** Nessuna mossa possibile: valore usato quando `legalMoves` non viene passato. */
 const NO_MOVES: readonly LegalMove[] = [];
@@ -88,6 +95,7 @@ export function Chessboard({
   lastMove = null,
   legalMoves = NO_MOVES,
   onMove,
+  arrow = null,
   resyncKey = 0,
 }: ChessboardProps) {
   /** Lo stile di scacchiera e pezzi scelto nelle Impostazioni. */
@@ -111,6 +119,9 @@ export function Chessboard({
   /** Le due case dell'ultima mossa (testi semplici, per confrontarle facilmente). */
   const lastFrom = lastMove?.from;
   const lastTo = lastMove?.to;
+  /** Le due case della freccia. */
+  const arrowFrom = arrow?.from;
+  const arrowTo = arrow?.to;
 
   // Crea la scacchiera al primo disegno e la aggiorna quando cambiano le proprietà.
   // `resyncKey` è tra le dipendenze apposta: cambiandolo si riapplica la posizione.
@@ -120,6 +131,15 @@ export function Chessboard({
       lastFrom !== undefined && lastTo !== undefined && isSquareKey(lastFrom) && isSquareKey(lastTo)
         ? [lastFrom, lastTo]
         : undefined;
+
+    /** La freccia, solo se entrambe le case sono valide. */
+    const autoShapes =
+      arrowFrom !== undefined &&
+      arrowTo !== undefined &&
+      isSquareKey(arrowFrom) &&
+      isSquareKey(arrowTo)
+        ? [{ orig: arrowFrom, dest: arrowTo, brush: ARROW_BRUSH }]
+        : [];
 
     const config: Config = {
       fen: boardFen,
@@ -134,6 +154,8 @@ export function Chessboard({
       // `lastMove` va sempre indicato, anche vuoto: così chessground toglie
       // l'evidenziazione quando si torna alla posizione di partenza.
       lastMove: lastMoveKeys,
+      // La freccia va sempre indicata, anche vuota, per toglierla quando non serve più.
+      drawable: { autoShapes },
       movable: {
         // Si muovono solo i pezzi di chi è di turno, solo verso case legali.
         free: false,
@@ -162,6 +184,8 @@ export function Chessboard({
     legalMoves,
     lastFrom,
     lastTo,
+    arrowFrom,
+    arrowTo,
     resyncKey,
   ]);
 

@@ -13,3 +13,6 @@ Qui stanno quelli usati da più parti dell'app.
 | `useMoveSound.ts`             | Fa sentire i suoni della partita (mossa, presa, fine partita) quando la scacchiera avanza di una mossa, se i suoni sono attivi           |
 | `useGameKeyboard.test.tsx`    | I test della tastiera                                                                                                                    |
 | `useMoveSound.test.tsx`       | I test dei suoni della partita                                                                                                           |
+| `useCountdown.ts`             | Fa scorrere i secondi dell'orologio sullo schermo tra un aggiornamento di Rust e l'altro                                                 |
+| `useCountdown.test.tsx`       | I suoi test                                                                                                                              |
+| `useEngineLevels.ts`          | Chiede a Rust i dieci livelli del computer (una volta sola) per la finestra "Nuova partita"                                              |

@@ -1,0 +1,72 @@
+/*
+ * Gruppo di scelte a pastiglie: una griglia che si adatta alla larghezza;
+ * la scelta attiva ha il bordo e il fondo nel colore d'accento.
+ */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-weight: var(--weight-semibold);
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--choice-min-width), 1fr));
+  gap: var(--space-2);
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--control-size);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-border);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-fast) var(--easing-standard);
+}
+
+.choice:hover {
+  background: var(--color-accent-soft);
+}
+
+.selected {
+  background: var(--color-accent-soft);
+  box-shadow: inset 0 0 0 var(--focus-ring-width) var(--color-accent);
+}
+
+/* Il pulsante di scelta vero è invisibile ma presente (tastiera e lettori di schermo). */
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice:focus-within {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+}
+
+.label {
+  font-weight: var(--weight-semibold);
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
