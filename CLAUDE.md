@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — Fase 8-bis (Varianti) implementata, in attesa dei test di Alessandro.**
+> **Ultimo aggiornamento: 2026-10-19 — Fase 8-bis completata; proposto il piano della Fase 9 (Statistiche), in attesa di risposta.**
 
 ---
 
@@ -62,36 +62,27 @@ App desktop **offline** per giocare, imparare e allenarsi a scacchi (Windows, ma
 
 ## 5. Stato: cosa è fatto
 
-| Fase            | Cosa ha portato                                                                                                                                                                                           |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, 1-bis        | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
-| 2               | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
-| 3               | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
-| 4               | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
-| 5               | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
-| 6               | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
-| 7               | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
-| 8               | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
-| 8-bis (in test) | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
+| Fase     | Cosa ha portato                                                                                                                                                                                           |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, 1-bis | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
+| 2        | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
+| 3        | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
+| 4        | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
+| 5        | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
+| 6        | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
+| 7        | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
+| 8        | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
+| 8-bis    | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
 
 Disposizione attuale delle sezioni con scacchiera: scacchiera a sinistra, colonna a destra **alta
 quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul bordo sinistro (tasto M).
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Fase 8-bis (Varianti) implementata e in test** (🔵 in `PROGETTO.md`): commit fatto, ad
-Alessandro è stato dato l'elenco dei test da fare a mano. Si aspetta il suo esito:
-
-- se va tutto bene: segnare la 8-bis ✅ (procedura del §4, punto 6), aggiornare questo file e
-  proporre il **piano della Fase 9 (Statistiche)**, con analisi e strade possibili;
-- se chiede ritocchi: analisi e piano dei ritocchi, poi autorizzazione.
-
-Cosa fa la 8-bis: la partita è un **albero di mosse** (`Game` in `crates/chess-core`: la prima
-continuazione è la linea principale); una mossa da una posizione passata crea una variante (a due
-giocatori senza orologio e in ogni partita finita); lista mosse come Lichess con «Promuovi a linea
-principale» (solo a due giocatori senza orologio, partita in corso) ed «Elimina da qui»; PGN con
-varianti; nel database la tabella `moves` è la linea principale e l'albero sta nel PGN della
-partita. «Copia FEN»/«Copia PGN» ora passano da Rust (`tauri-plugin-clipboard-manager`).
+**Proposto il piano della Fase 9 (Statistiche), in attesa della risposta di Alessandro.** Il piano
+completo (punti 1–6 con le opzioni A consigliate) è l'ultimo messaggio della conversazione; in breve:
+sezione «Progressi»; crate `stats`; grafici disegnati da noi in SVG; livello stimato dai risultati
+contro i livelli del computer; analisi in coda delle partite non ancora analizzate; filtri per periodo.
 
 ## 7. Cosa resta da fare
 

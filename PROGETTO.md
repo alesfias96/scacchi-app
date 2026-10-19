@@ -341,7 +341,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 6. Allenamento calcolo          | ✅ completata |
 | 7. Tutor                        | ✅ completata |
 | 8. Analisi partite              | ✅ completata |
-| 8-bis. Varianti                 | 🔵 in test    |
+| 8-bis. Varianti                 | ✅ completata |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
 | 11. Appunti personali           | ⚪ da fare    |
@@ -466,6 +466,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Nel database la tabella `moves` resta la linea principale; l'albero completo sta nel PGN della partita e si ricostruisce all'apertura (se la sua linea principale coincide con le mosse salvate) | Statistiche invariate; nessuna tabella nuova                                                                                                                                                                                                  |
 | 2026-10-19 | «Promuovi a linea principale» solo a due giocatori senza orologio e a partita in corso; «Elimina da qui» sempre (non sulla linea principale)                                                     | Nelle partite finite o contro il computer la linea principale è la partita giocata davvero                                                                                                                                                    |
 | 2026-10-19 | «Copia FEN» e «Copia PGN» passano da Rust con `tauri-plugin-clipboard-manager` (comando `copy_text`)                                                                                             | Dal motore web dell'app la scrittura negli appunti non funzionava                                                                                                                                                                             |
+| 2026-10-19 | Fase 8-bis approvata                                                                                                                                                                             | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
