@@ -1,0 +1,22 @@
+title = "La deviazione"
+when = [
+  "tactic:deflection",
+]
+summary = "Un pezzo avversario difende una casa o un pezzo importante: lo si costringe a spostarsi, e ciò che difendeva cade."
+ideas = [
+  "Si usa una mossa forte (scacco, cattura, minaccia) che il difensore deve rispondere.",
+  "Spesso il difensore deviato è la donna o una torre che tiene l'ultima traversa.",
+]
+mistakes = [
+  "Attaccare il pezzo difeso invece di chi lo difende.",
+]
+use_when = [
+  "Il difensore è uno solo e non può essere sostituito.",
+]
+avoid_when = [
+  "Dopo la deviazione un altro pezzo prende il posto del difensore.",
+]
+signs = [
+  "Un pezzo avversario ha un compito preciso: difendere una casa di matto o un pezzo.",
+]
+puzzle_theme = "deflection"

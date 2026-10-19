@@ -16,7 +16,7 @@ describe('StrategySection', () => {
     expect(screen.getByText('Il piano consigliato')).toBeDefined();
     expect(screen.getByRole('article', { name: "L'attacco di minoranza" })).toBeDefined();
     expect(screen.getByText('Per il Bianco')).toBeDefined();
-    expect(screen.getByText('Il piano dell’avversario')).toBeDefined();
+    expect(screen.getByText('Una strada possibile dell’avversario')).toBeDefined();
     expect(screen.getByText('Quando no')).toBeDefined();
     expect(screen.getByText('Il tuo re è sotto attacco.')).toBeDefined();
     expect(screen.queryByText('✓ Stockfish conferma')).toBeNull();
@@ -37,6 +37,6 @@ describe('StrategySection', () => {
     );
 
     expect(screen.getByText(/la posizione è in equilibrio/)).toBeDefined();
-    expect(screen.queryByText('Il piano dell’avversario')).toBeNull();
+    expect(screen.queryByText('Una strada possibile dell’avversario')).toBeNull();
   });
 });

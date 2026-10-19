@@ -52,6 +52,7 @@ pub fn card_view(card: &KnowledgeCard, context: String, owner: Option<Color>) ->
         use_when: written.use_when.clone(),
         avoid_when: written.avoid_when.clone(),
         signs: written.signs.clone(),
+        puzzle_theme: written.puzzle_theme.clone(),
     }
 }
 

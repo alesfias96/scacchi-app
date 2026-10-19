@@ -49,4 +49,8 @@ avoidWhen: Array<string>,
 /**
  * I segnali che funziona.
  */
-signs: Array<string>, };
+signs: Array<string>, 
+/**
+ * Il tema dei puzzle per allenarsi su questa scheda, se c'è (es. `"fork"`).
+ */
+puzzleTheme: string | null, };

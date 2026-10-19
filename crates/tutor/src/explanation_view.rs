@@ -83,6 +83,40 @@ pub struct CardView {
     pub avoid_when: Vec<String>,
     /// I segnali che funziona.
     pub signs: Vec<String>,
+    /// Il tema dei puzzle per allenarsi su questa scheda, se c'è (es. `"fork"`).
+    pub puzzle_theme: Option<String>,
+}
+
+/// Un passo del metodo «Prima di muovere».
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct ThinkingStep {
+    /// Il nome del passo (es. "I tuoi scacchi").
+    pub title: String,
+    /// Cosa dice il passo in questa posizione.
+    pub text: String,
+    /// Le mosse del passo (in notazione internazionale), se ce ne sono.
+    pub moves: Vec<String>,
+}
+
+/// Il metodo «Prima di muovere», riempito con la posizione.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct ThinkingView {
+    /// I passi, in ordine.
+    pub steps: Vec<ThinkingStep>,
+    /// La scheda del metodo, da aprire.
+    pub card: Option<CardView>,
 }
 
 /// La spiegazione completa di una posizione.
@@ -106,4 +140,6 @@ pub struct TutorExplanation {
     pub cards: Vec<CardView>,
     /// La strategia: com'è il centro, chi ha cosa, i piani consigliati.
     pub strategy: StrategyView,
+    /// Il metodo «Prima di muovere» per questa posizione.
+    pub thinking: ThinkingView,
 }

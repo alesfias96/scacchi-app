@@ -25,13 +25,15 @@ stanno in Rust (crate `crates/training`).
 
 ## Contenuto
 
-| Elemento                   | Cosa fa                                                                         |
-| -------------------------- | ------------------------------------------------------------------------------- |
-| `TrainingPage.tsx`         | La pagina: scacchiera (con promozione e pezzi nascosti) e colonna con le schede |
-| `TrainingPage.module.css`  | La disposizione, uguale a "Gioca"                                               |
-| `TrainingPage.test.tsx`    | I test: livello, nuovo puzzle, mossa e soluzione, aiuto, errore                 |
-| `usePiecesHidden.ts`       | Nella visualizzazione, dice quando nascondere i pezzi (dopo i secondi scelti)   |
-| `usePiecesHidden.test.tsx` | I suoi test                                                                     |
-| `training-setup/`          | La scheda "Allenamento": modalità, mosse da trovare, tema, difficoltà, secondi  |
-| `puzzle-status/`           | La scheda "Puzzle": messaggio, avanzamento, mosse giocate, pulsanti             |
-| `puzzle-reveal/`           | La scheda "Soluzione": rating, difficoltà, temi, soluzione, perché funziona     |
+| Elemento                   | Cosa fa                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `TrainingPage.tsx`         | La pagina: scacchiera (con promozione e pezzi nascosti) e colonna con le schede                       |
+| `TrainingPage.module.css`  | La disposizione, uguale a "Gioca"                                                                     |
+| `TrainingPage.test.tsx`    | I test: livello, nuovo puzzle, mossa e soluzione, aiuto, errore                                       |
+| `usePiecesHidden.ts`       | Nella visualizzazione, dice quando nascondere i pezzi (dopo i secondi scelti)                         |
+| `usePiecesHidden.test.tsx` | I suoi test                                                                                           |
+| `useTrainTheme.ts`         | «Allenati su questo tema»: sceglie il tema, comincia un puzzle e apre la sezione                      |
+| `train-theme-button/`      | Il pulsante «Allenati: …» usato dal tutor, dall'Analisi partite e dalle schede                        |
+| `training-setup/`          | La scheda "Allenamento": modalità, mosse da trovare, tema, difficoltà, secondi                        |
+| `puzzle-status/`           | La scheda "Puzzle": messaggio, avanzamento, mosse giocate, aiuto a gradini, pulsanti                  |
+| `puzzle-reveal/`           | La scheda "Soluzione": rating, difficoltà, temi, soluzione, perché funziona, la combinazione spiegata |

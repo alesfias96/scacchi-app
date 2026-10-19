@@ -224,6 +224,7 @@ pub fn explain(
         sections,
         cards: cards(opening.as_ref(), &recognized),
         strategy: describe_strategy(&position, report.phase, &recognized),
+        thinking: crate::thinking::thinking(&position, &report.facts),
     })
 }
 

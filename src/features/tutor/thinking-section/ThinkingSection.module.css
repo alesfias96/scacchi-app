@@ -1,0 +1,44 @@
+/* «Prima di muovere»: i quattro passi numerati, con le loro mosse. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  line-height: var(--leading-body);
+}
+
+.name {
+  font-weight: var(--weight-semibold);
+}
+
+.text {
+  font-size: var(--text-small);
+}
+
+.moves {
+  color: var(--color-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+}

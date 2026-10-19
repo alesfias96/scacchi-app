@@ -3,4 +3,4 @@
 /**
  * L'argomento di una scheda (è anche la sua cartella in `knowledge/`).
  */
-export type Topic = "opening" | "structure" | "middlegame" | "endgame" | "principle";
+export type Topic = "opening" | "structure" | "middlegame" | "endgame" | "principle" | "tactic";

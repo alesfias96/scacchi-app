@@ -12,7 +12,8 @@
  * - `idea`: l'idea (da Rust);
  * - `title`: il titoletto (es. "Idea 1", "L'idea della tua mossa");
  * - `notation`: la notazione scelta nelle Impostazioni.
- * Sotto i momenti, le schede della base di conoscenza che l'idea cita, da aprire.
+ * Sotto i momenti, i motivi tattici della variante (con «Allenati» per i
+ * puzzle dello stesso tema) e le schede che l'idea cita, da aprire.
  * Restituisce: la scheda dell'idea.
  */
 import { useState } from 'react';
@@ -24,6 +25,8 @@ import { KnowledgeCards } from '../../../components/knowledge-cards/KnowledgeCar
 import { formatEvaluation } from '../../../lib/formatEvaluation';
 import { formatLine } from '../../../lib/formatLine';
 import { useIdeaReplayStore } from '../../../state/ideaReplayStore';
+import { TrainThemeButton } from '../../training/train-theme-button/TrainThemeButton';
+import { useTrainTheme } from '../../training/useTrainTheme';
 import { ideaMoveLabel } from '../ideaMoves';
 import styles from './IdeaCard.module.css';
 
@@ -38,6 +41,7 @@ const MAX_LINE_PLIES = 20;
 
 export function IdeaCard({ idea, title, notation }: IdeaCardProps) {
   const replay = useIdeaReplayStore();
+  const trainTheme = useTrainTheme();
   /** La scheda della base di conoscenza aperta. */
   const [openCardId, setOpenCardId] = useState<string | null>(null);
   const isShown = replay.idea === idea;
@@ -78,8 +82,28 @@ export function IdeaCard({ idea, title, notation }: IdeaCardProps) {
         </ol>
       )}
 
+      {idea.motifs.length > 0 && (
+        <div className={styles.motifs}>
+          <p className={styles.meta}>
+            Motivi: {idea.motifs.map((motif) => motif.name).join(' · ')}
+          </p>
+          <div className={styles.motifActions}>
+            {idea.motifs.map((motif) =>
+              motif.puzzleTheme === null ? null : (
+                <TrainThemeButton key={motif.key} theme={motif.puzzleTheme} name={motif.name} />
+              ),
+            )}
+          </div>
+        </div>
+      )}
+
       {idea.cards.length > 0 && (
-        <KnowledgeCards cards={idea.cards} openCardId={openCardId} onToggle={setOpenCardId} />
+        <KnowledgeCards
+          cards={idea.cards}
+          openCardId={openCardId}
+          onToggle={setOpenCardId}
+          onTrainTheme={trainTheme}
+        />
       )}
 
       <p className={styles.line}>

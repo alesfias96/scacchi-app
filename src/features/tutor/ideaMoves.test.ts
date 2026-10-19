@@ -17,6 +17,7 @@ const IDEA: IdeaView = {
   moments: [],
   frames: [],
   cards: [],
+  motifs: [],
 };
 
 describe('ideaMoveLabel', () => {

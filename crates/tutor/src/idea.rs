@@ -23,6 +23,8 @@ use crate::idea_events::{
 use crate::idea_view::{IdeaFrame, IdeaMoment, IdeaView, MoveIdea, PositionIdeas};
 use crate::library::all_cards;
 use crate::line_walk::{LineStep, walk};
+use crate::motifs::{Motif, motif_events, motif_view};
+use crate::move_lesson::lesson;
 use crate::recognition::recognize;
 use crate::strategy::describe_strategy;
 use crate::strategy_plans::confirming_kinds;
@@ -42,48 +44,151 @@ const NEARLY_EQUAL: i32 = 30;
 const BETTER_BY: i32 = 50;
 /// Da quale punteggio la valutazione è un matto (vedi `score_for`).
 const MATE_THRESHOLD: i32 = 50_000;
+/// Quanti motivi raccontare al massimo in una combinazione.
+const MAX_STORY: usize = 3;
 
-/// Gli eventi della variante, dal più importante.
+/// Come si racconta un'idea.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Voice {
+    /// L'idea di chi gioca la variante: «L'idea: … — si vede tra 3 mosse».
+    Idea,
+    /// Una strada possibile (dell'avversario): «Una strada possibile: … — si vedrebbe tra 3 mosse».
+    Possibility,
+}
+
+/// Toglie da `tactics` i motivi che si vedono fino alla mezza mossa `until`
+/// (al massimo [`MAX_STORY`], i più vicini): sono i passi di una combinazione.
+fn take_story(tactics: &mut Vec<IdeaEvent>, until: usize) -> Vec<IdeaEvent> {
+    let (story, rest): (Vec<IdeaEvent>, Vec<IdeaEvent>) =
+        tactics.drain(..).partition(|event| event.ply <= until);
+    *tactics = rest;
+    let skip = story.len().saturating_sub(MAX_STORY);
+    story.into_iter().skip(skip).collect()
+}
+
+/// "1 mossa", "3 mosse".
+fn mate_moves(moves: usize) -> String {
+    if moves == 1 {
+        "1 mossa".to_owned()
+    } else {
+        format!("{moves} mosse")
+    }
+}
+
+/// I passi di una combinazione in una frase: «prima …, poi …».
+fn story_text(story: &[IdeaEvent]) -> String {
+    match story {
+        [] => String::new(),
+        [only] => only.text.clone(),
+        [first, rest @ ..] => std::iter::once(format!("prima {}", first.text))
+            .chain(rest.iter().map(|event| format!("poi {}", event.text)))
+            .collect::<Vec<_>>()
+            .join(", "),
+    }
+}
+
+/// Gli eventi della variante, dal più importante, e i motivi tattici in ordine di mossa.
+///
+/// - `assume_good`: la variante è buona per `side` anche senza valutazione
+///   (le soluzioni dei puzzle): il materiale dato è un sacrificio;
+/// - `previous`: la mossa giocata subito prima della variante, se si conosce
+///   (vedi `motifs::motif_events`).
 fn events(
     start: &Chess,
     steps: &[LineStep],
     side: Color,
     evaluation: Option<Evaluation>,
-) -> Vec<IdeaEvent> {
+    assume_good: bool,
+    previous: Option<&LineStep>,
+) -> (Vec<IdeaEvent>, Vec<Motif>) {
     let score = evaluation.map(|evaluation| score_for(evaluation, side));
+    // I motivi: quelli "fermi" dei rilevatori e quelli che si vedono mossa dopo mossa.
+    let mut tactics = tactic_events(start, steps, side, TACTIC_PLIES);
+    for event in motif_events(start, steps, side, TACTIC_PLIES, previous) {
+        if !tactics
+            .iter()
+            .any(|known| known.card_id.is_some() && known.card_id == event.card_id)
+        {
+            tactics.push(event);
+        }
+    }
+    tactics.sort_by_key(|event| event.ply);
+    // Dopo il matto, le tattiche "ferme" della posizione finale (forchette,
+    // inchiodature…) non contano più: la partita è finita.
+    if let Some(last) = steps.len().checked_sub(1)
+        && steps[last].mover == side
+        && steps[last].after.is_checkmate()
+    {
+        tactics.retain(|event| {
+            event.ply < last
+                || !matches!(
+                    event.card_id.as_deref().and_then(Motif::from_card_id),
+                    Some(Motif::Fork | Motif::Pin | Motif::Skewer | Motif::Overload)
+                )
+        });
+    }
+    let mut motifs: Vec<Motif> = Vec::new();
+    for motif in tactics
+        .iter()
+        .filter_map(|event| event.card_id.as_deref().and_then(Motif::from_card_id))
+    {
+        if !motifs.contains(&motif) {
+            motifs.push(motif);
+        }
+    }
     let mut found = Vec::new();
-    if score.is_some_and(|score| score >= MATE_THRESHOLD) && !steps.is_empty() {
+    let mates = steps
+        .last()
+        .is_some_and(|step| step.mover == side && step.after.is_checkmate());
+    if let Some(last) = steps.len().checked_sub(1)
+        && (mates || score.is_some_and(|score| score >= MATE_THRESHOLD))
+    {
         let moves = match evaluation {
-            Some(Evaluation::Mate(moves)) => moves.abs(),
-            _ => 0,
+            Some(Evaluation::Mate(moves)) => moves.unsigned_abs() as usize,
+            _ => steps.iter().filter(|step| step.mover == side).count(),
+        };
+        let story = take_story(&mut tactics, last);
+        let text = if story.is_empty() {
+            format!("la variante porta al matto in {}", mate_moves(moves))
+        } else {
+            format!(
+                "la variante porta al matto in {}: {}",
+                mate_moves(moves),
+                story_text(&story)
+            )
         };
         found.push(IdeaEvent {
             kind: IdeaKind::Mate,
-            ply: steps.len() - 1,
-            text: format!("la variante porta al matto in {moves} mosse"),
-            squares: Vec::new(),
+            ply: last,
+            text,
+            squares: story
+                .last()
+                .map(|event| event.squares.clone())
+                .unwrap_or_default(),
             arrows: Vec::new(),
-            card_id: None,
+            card_id: story.first().and_then(|event| event.card_id.clone()),
         });
     }
-    let good = score.is_some_and(|score| score >= GOOD_SCORE);
-    let mut tactics = tactic_events(start, steps, side, TACTIC_PLIES);
+    let good = assume_good || score.is_some_and(|score| score >= GOOD_SCORE);
     if let Some(material) = material_event(start, steps, side, good) {
-        // Un motivo tattico che porta a guadagnare materiale è una combinazione:
-        // diventa un solo evento (il motivo più vicino al guadagno, e ciò che si vince).
-        let key = tactics
-            .iter()
-            .rposition(|tactic| tactic.ply <= material.ply)
-            .filter(|_| material.kind == IdeaKind::WinsMaterial);
-        match key {
-            Some(index) => {
-                let tactic = tactics.remove(index);
-                found.push(IdeaEvent {
-                    kind: IdeaKind::Combination,
-                    text: format!("una combinazione: {}, e {}", tactic.text, material.text),
-                    ..tactic
-                });
-            }
+        // Dei motivi tattici che portano a guadagnare materiale sono una
+        // combinazione: diventano un solo evento, raccontato passo per passo.
+        let story = if material.kind == IdeaKind::WinsMaterial {
+            take_story(&mut tactics, material.ply)
+        } else {
+            Vec::new()
+        };
+        match story.last() {
+            Some(key) => found.push(IdeaEvent {
+                kind: IdeaKind::Combination,
+                text: format!(
+                    "una combinazione: {}, e {}",
+                    story_text(&story),
+                    material.text
+                ),
+                card_id: story.first().and_then(|event| event.card_id.clone()),
+                ..key.clone()
+            }),
             None => found.push(material),
         }
     }
@@ -96,7 +201,7 @@ fn events(
     found.extend(quiet_plan_event(steps, side));
     // A parità di peso conta prima ciò che si vede prima.
     found.sort_by_key(|event| (std::cmp::Reverse(event.kind.weight()), event.ply));
-    found
+    (found, motifs)
 }
 
 /// La frase con la prima lettera minuscola.
@@ -115,28 +220,39 @@ fn uppercase_first(text: &str) -> String {
     })
 }
 
-/// Quando si vede un evento: "subito", "tra 2 mosse", …
-fn when(ply: usize) -> String {
+/// Quando si vede un evento: "subito", "tra 2 mosse", … (al condizionale per le strade possibili).
+fn when(ply: usize, voice: Voice) -> String {
     let moves = ply / 2 + 1;
+    let verb = match voice {
+        Voice::Idea => "si vede",
+        Voice::Possibility => "si vedrebbe",
+    };
     if moves <= 1 {
-        "si vede subito".to_owned()
+        format!("{verb} subito")
     } else {
-        format!("si vede tra {moves} mosse")
+        format!("{verb} tra {moves} mosse")
     }
 }
 
 /// La frase principale.
-fn headline(top: Option<&IdeaEvent>) -> String {
+fn headline(top: Option<&IdeaEvent>, voice: Voice) -> String {
+    let (open, calm) = match voice {
+        Voice::Idea => (
+            "L'idea",
+            "L'idea: migliorare la posizione con calma, senza concedere nulla all'avversario",
+        ),
+        Voice::Possibility => (
+            "Una strada possibile",
+            "Una strada tranquilla: migliorare i pezzi con calma, senza un obiettivo immediato",
+        ),
+    };
     top.map_or_else(
-        || {
-            "L'idea: migliorare la posizione con calma, senza concedere nulla all'avversario"
-                .to_owned()
-        },
+        || calm.to_owned(),
         |event| {
             format!(
-                "L'idea: {} — {}",
+                "{open}: {} — {}",
                 lowercase_first(&event.text),
-                when(event.ply)
+                when(event.ply, voice)
             )
         },
     )
@@ -210,9 +326,55 @@ pub fn describe_idea(
     side: Color,
     evaluation: Option<Evaluation>,
 ) -> IdeaView {
+    describe_idea_as(start, line, side, evaluation, Voice::Idea)
+}
+
+/// Come [`describe_idea`], raccontata con la voce `voice`.
+#[must_use]
+pub(crate) fn describe_idea_as(
+    start: &Chess,
+    line: &[String],
+    side: Color,
+    evaluation: Option<Evaluation>,
+    voice: Voice,
+) -> IdeaView {
+    build_idea(start, line, side, evaluation, voice, false, None)
+}
+
+/// L'idea della soluzione di un puzzle: `puzzle_fen` è la posizione del puzzle,
+/// `moves` le sue mosse in UCI (la prima è dell'avversario, poi la soluzione).
+/// Restituisce `None` se i dati del puzzle non sono validi.
+#[must_use]
+pub fn solution_idea(puzzle_fen: &str, moves: &[String]) -> Option<IdeaView> {
+    let (first, solution) = moves.split_first()?;
+    let puzzle = chess_position(puzzle_fen).ok()?;
+    let opening = walk(&puzzle, std::slice::from_ref(first));
+    let start = opening.first()?.after.clone();
+    let side = start.turn();
+    Some(build_idea(
+        &start,
+        solution,
+        side,
+        None,
+        Voice::Idea,
+        true,
+        opening.first(),
+    ))
+}
+
+/// L'idea di una variante (vedi [`describe_idea`]); `assume_good` e `previous` come in [`events`].
+fn build_idea(
+    start: &Chess,
+    line: &[String],
+    side: Color,
+    evaluation: Option<Evaluation>,
+    voice: Voice,
+    assume_good: bool,
+    previous: Option<&LineStep>,
+) -> IdeaView {
     let limit = line.len().min(LOOK_AHEAD_PLIES);
     let steps = walk(start, &line[..limit]);
-    let found = events(start, &steps, side, evaluation);
+    let (found, motifs) = events(start, &steps, side, evaluation, assume_good, previous);
     let mut chosen: Vec<&IdeaEvent> = found.iter().take(MAX_MOMENTS).collect();
     chosen.sort_by_key(|event| event.ply);
     let chosen_cards: Vec<(&str, &str)> = chosen
@@ -221,7 +383,7 @@ pub fn describe_idea(
         .collect();
     IdeaView {
         side: Side::from(side),
-        headline: headline(found.first()),
+        headline: headline(found.first(), voice),
         key_ply: found
             .first()
             .map(|event| u32::try_from(event.ply).unwrap_or(u32::MAX)),
@@ -232,6 +394,7 @@ pub fn describe_idea(
         moments: chosen.into_iter().map(moment).collect(),
         cards: cards(&chosen_cards, side),
         frames: frames(start, &steps),
+        motifs: motifs.into_iter().map(motif_view).collect(),
     }
 }
 
@@ -280,7 +443,7 @@ fn confirmed_plans(position: &Chess, best: Option<&(Vec<String>, Evaluation)>) -
     let side = position.turn();
     let limit = line.len().min(LOOK_AHEAD_PLIES);
     let steps = walk(position, &line[..limit]);
-    let found = events(position, &steps, side, Some(*evaluation));
+    let (found, _) = events(position, &steps, side, Some(*evaluation), false, None);
     let phase = analysis::game_phase::game_phase(position);
     let strategy = describe_strategy(position, phase, &recognize(position, phase));
     strategy
@@ -355,15 +518,17 @@ pub fn describe_move_idea(
             number_for(*best_evaluation, mover)
         )
     });
+    let lesson = better.map(|(best_line, _)| lesson(before, played, after_moves, best_line));
     MoveIdea {
         played: played_idea,
         better: better_idea,
         comparison,
+        lesson,
     }
 }
 
 /// La posizione raggiunta dalla partita (partenza e mosse in UCI).
-fn reached(start_fen: &str, moves: &[String]) -> Result<Chess, TutorError> {
+pub(crate) fn reached(start_fen: &str, moves: &[String]) -> Result<Chess, TutorError> {
     let game = replay(start_fen, moves)?;
     chess_position(&game.fen())
 }

@@ -1,0 +1,22 @@
+title = "Lo scacco doppio"
+when = [
+  "tactic:double-check",
+]
+summary = "Due pezzi danno scacco insieme (di solito con uno scacco di scoperta): il re non può parare né catturare, può solo muoversi."
+ideas = [
+  "È la mossa più forzante degli scacchi: il re deve spostarsi per forza.",
+  "Spesso porta al matto, anche con pochi pezzi.",
+]
+mistakes = [
+  "Non vedere uno scacco doppio perché si guarda solo il pezzo che si muove.",
+]
+use_when = [
+  "Il re avversario ha poche case libere.",
+]
+avoid_when = [
+  "Il re ha una casa sicura e il tuo pezzo che si sposta resta in presa.",
+]
+signs = [
+  "Un tuo pezzo che può dare scacco sta davanti a un altro tuo pezzo che punta al re avversario.",
+]
+puzzle_theme = "doubleCheck"

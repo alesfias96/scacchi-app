@@ -88,3 +88,15 @@
   color: var(--color-accent);
   line-height: var(--leading-body);
 }
+
+.motifs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.motifActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

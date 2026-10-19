@@ -1,0 +1,11 @@
+/* Le strade dell'avversario: l'introduzione e una scheda per strada. */
+
+.paths {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.intro {
+  line-height: var(--leading-body);
+}

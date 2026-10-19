@@ -1,0 +1,22 @@
+title = "L'infilata"
+when = [
+  "tactic:skewer",
+]
+summary = "Come un'inchiodatura al contrario: si attacca un pezzo prezioso, che deve spostarsi, e si prende quello che stava dietro."
+ideas = [
+  "L'infilata più comune: scacco al re, il re si sposta e si prende la donna o la torre dietro.",
+  "Funziona con alfieri, torri e donna, lungo una linea aperta.",
+]
+mistakes = [
+  "Lasciare re e donna sulla stessa diagonale o colonna aperta.",
+]
+use_when = [
+  "Il pezzo davanti vale più di quello dietro (o è il re).",
+]
+avoid_when = [
+  "Il pezzo dietro è difeso e vale meno del pezzo che attacca.",
+]
+signs = [
+  "Il re o la donna avversari sono sulla stessa linea di un altro pezzo, con niente in mezzo.",
+]
+puzzle_theme = "skewer"

@@ -1,0 +1,22 @@
+title = "Il matto sull'ultima traversa"
+when = [
+  "tactic:back-rank",
+]
+summary = "Il re arroccato è chiuso dai suoi stessi pedoni: una torre o la donna sull'ultima traversa dà matto."
+ideas = [
+  "Contro questo matto si fa «luft»: si spinge un pedone davanti al re per dargli una casa.",
+  "Chi difende l'ultima traversa con un solo pezzo può essere deviato.",
+]
+mistakes = [
+  "Dimenticare la debolezza della propria ultima traversa mentre si attacca.",
+]
+use_when = [
+  "Puoi arrivare sull'ultima traversa con una torre o la donna, magari deviando il difensore.",
+]
+avoid_when = [
+  "Il re ha già una casa di fuga.",
+]
+signs = [
+  "Il re avversario non ha case di fuga e la sua ultima traversa è difesa da un solo pezzo.",
+]
+puzzle_theme = "backRankMate"

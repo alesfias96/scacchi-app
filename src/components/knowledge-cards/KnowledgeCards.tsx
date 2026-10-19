@@ -10,17 +10,21 @@
  * Riceve:
  * - `cards`: le schede;
  * - `openCardId`: la scheda da tenere aperta (es. dopo «Approfondisci»), o `null`;
- * - `onToggle`: chiamata con il nome della scheda aperta, o `null` se chiusa.
+ * - `onToggle`: chiamata con il nome della scheda aperta, o `null` se chiusa;
+ * - `onTrainTheme` (facoltativo): se c'è, le schede con un tema dei puzzle
+ *   hanno il pulsante «Allenati su questo tema», che la chiama con il tema.
  * Restituisce: l'elenco delle schede.
  */
 import type { CardView } from '../../bindings/CardView';
 import type { Topic } from '../../bindings/Topic';
+import { Button } from '../button/Button';
 import styles from './KnowledgeCards.module.css';
 
 export interface KnowledgeCardsProps {
   cards: readonly CardView[];
   openCardId: string | null;
   onToggle: (cardId: string | null) => void;
+  onTrainTheme?: (theme: string) => void;
 }
 
 /** Un elenco con il suo titolo (niente, se l'elenco è vuoto). */
@@ -47,9 +51,10 @@ const TOPIC_NAMES: Record<Topic, string> = {
   middlegame: 'Mediogioco',
   endgame: 'Finale',
   principle: 'Principio',
+  tactic: 'Tattica',
 };
 
-export function KnowledgeCards({ cards, openCardId, onToggle }: KnowledgeCardsProps) {
+export function KnowledgeCards({ cards, openCardId, onToggle, onTrainTheme }: KnowledgeCardsProps) {
   return (
     <div className={styles.cards}>
       {cards.map((card) => (
@@ -92,6 +97,19 @@ export function KnowledgeCards({ cards, openCardId, onToggle }: KnowledgeCardsPr
             <CardList title="Quando no" items={card.avoidWhen} />
             <CardList title="Segnali che funziona" items={card.signs} />
             <CardList title="Errori da evitare" items={card.mistakes} />
+            {card.puzzleTheme !== null && onTrainTheme !== undefined && (
+              <div>
+                <Button
+                  onClick={() => {
+                    if (card.puzzleTheme !== null) {
+                      onTrainTheme(card.puzzleTheme);
+                    }
+                  }}
+                >
+                  Allenati su questo tema
+                </Button>
+              </div>
+            )}
           </div>
         </details>
       ))}

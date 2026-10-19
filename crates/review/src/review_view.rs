@@ -86,6 +86,9 @@ pub struct CriticalMoment {
     pub conceded: Vec<Fact>,
     /// Cosa otteneva la mossa migliore (dai rilevatori).
     pub best_gains: Vec<Fact>,
+    /// Il motivo tattico del momento (quello sfuggito o concesso), per allenarsi
+    /// con i puzzle dello stesso tema.
+    pub motif: Option<tutor::MotifView>,
 }
 
 /// La revisione completa di una partita.

@@ -1,4 +1,5 @@
-//! Comandi dello "sguardo lungo" del tutor: le idee della posizione e della mossa giocata.
+//! Comandi dello "sguardo lungo" del tutor: le idee della posizione, della
+//! mossa giocata e le strade possibili dell'avversario.
 //!
 //! Il motore del tutor pensa più a lungo del solito (qualche secondo) e
 //! calcola più varianti insieme; il tutor le rigioca e ne spiega l'idea.
@@ -14,7 +15,7 @@ use std::time::Duration;
 
 use engine::{AnalysisUpdate, EngineError, Evaluation, SearchPosition};
 use tauri::{AppHandle, Manager};
-use tutor::{MoveIdea, PositionIdeas};
+use tutor::{MoveIdea, OpponentPaths, PositionIdeas};
 
 use crate::state::engines_state::EnginesState;
 
@@ -145,4 +146,34 @@ pub async fn move_idea(
         best_before.first(),
     )
     .map_err(|error| error.to_string())
+}
+
+/// Le strade dell'avversario: cosa potrebbe fare se toccasse a lui.
+///
+/// Si passa la mano all'avversario (stessa posizione, muove lui), il motore
+/// del tutor calcola le sue varianti migliori e il tutor le spiega al
+/// condizionale. Se chi muove è sotto scacco non si può passare la mano: il
+/// tutor dice di parare prima lo scacco.
+///
+/// - Nome per l'interfaccia: `opponent_paths`.
+/// - Riceve: la posizione di partenza, le mosse fino alla posizione (UCI) e
+///   quanto può pensare il motore (millesimi di secondo).
+#[tauri::command]
+pub async fn opponent_paths(
+    app: AppHandle,
+    start_fen: String,
+    moves: Vec<String>,
+    think_ms: u32,
+) -> Result<OpponentPaths, String> {
+    let flipped = tutor::flipped_fen(&start_fen, &moves).map_err(|error| error.to_string())?;
+    let Some(flipped) = flipped else {
+        return tutor::paths_when_in_check(&start_fen, &moves).map_err(|error| error.to_string());
+    };
+    // Senza mosse per l'avversario (stallo dopo aver passato la mano) non ci sono strade.
+    let lines = match lines_of(&app, &flipped, &[], think_time(think_ms), POSITION_LINES).await {
+        Ok(lines) => lines,
+        Err(LinesError::Engine(EngineError::NoMove)) => Vec::new(),
+        Err(error) => return Err(error.message()),
+    };
+    tutor::opponent_paths(&flipped, &lines).map_err(|error| error.to_string())
 }

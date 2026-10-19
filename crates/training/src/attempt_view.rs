@@ -26,6 +26,8 @@ pub enum Feedback {
 }
 
 /// Cosa si scopre a puzzle finito: la difficoltà, i temi e il perché della soluzione.
+///
+/// `idea` è la soluzione raccontata dal tutor come una combinazione (i motivi uno dopo l'altro).
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(
     feature = "bindings",
@@ -43,6 +45,8 @@ pub struct Reveal {
     /// I fatti tattici della posizione a favore di chi risolve (dai rilevatori):
     /// spiegano perché la soluzione funziona.
     pub facts: Vec<Fact>,
+    /// La soluzione spiegata come un'idea (con i motivi tattici e le loro schede).
+    pub idea: Option<tutor::IdeaView>,
 }
 
 /// Un puzzle in corso, come lo mostra la pagina "Allenamento".
@@ -74,8 +78,12 @@ pub struct AttemptView {
     pub found: u32,
     /// Com'è andata l'ultima azione.
     pub feedback: Feedback,
-    /// La casa del pezzo da muovere, se è stato chiesto un aiuto.
+    /// Il primo aiuto: il tema del puzzle detto a parole, se è stato chiesto.
+    pub hint_text: Option<String>,
+    /// La casa del pezzo da muovere, se è stato chiesto il secondo aiuto.
     pub hint_square: Option<String>,
+    /// `true` se si può chiedere un altro aiuto.
+    pub can_hint: bool,
     /// `true` quando il puzzle è finito (risolto o soluzione mostrata).
     pub finished: bool,
     /// `true` se il puzzle è stato risolto senza errori e senza aiuti.

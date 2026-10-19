@@ -1,0 +1,23 @@
+title = "L'inchiodatura"
+when = [
+  "tactic:pin",
+]
+summary = "Un pezzo non può muoversi (o non conviene) perché dietro di lui, sulla stessa linea, c'è un pezzo più prezioso o il re."
+ideas = [
+  "Con il re dietro l'inchiodatura è assoluta: il pezzo non può proprio muoversi.",
+  "Un pezzo inchiodato non difende davvero: si può attaccarlo con un pedone o con più pezzi.",
+  "Alfieri, torri e donna inchiodano lungo le loro linee.",
+]
+mistakes = [
+  "Credere che un pezzo inchiodato difenda le case che sembra difendere.",
+]
+use_when = [
+  "Il pezzo inchiodato si può attaccare ancora (soprattutto con un pedone).",
+]
+avoid_when = [
+  "L'avversario può rompere l'inchiodatura con uno scacco o attaccando il pezzo che inchioda.",
+]
+signs = [
+  "Un pezzo avversario sta tra un tuo alfiere, torre o donna e il suo re o la sua donna.",
+]
+puzzle_theme = "pin"

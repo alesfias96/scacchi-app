@@ -42,7 +42,9 @@ export const READY_ATTEMPT: AttemptView = {
   depth: 1,
   found: 0,
   feedback: 'ready',
+  hintText: null,
   hintSquare: null,
+  canHint: true,
   finished: false,
   clean: false,
   isReview: false,
@@ -71,5 +73,6 @@ export const SOLVED_ATTEMPT: AttemptView = {
       firstMove: { from: 'f3', to: 'f7', uci: 'f3f7' },
     },
     facts: [],
+    idea: null,
   },
 };

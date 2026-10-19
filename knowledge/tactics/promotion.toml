@@ -1,0 +1,22 @@
+title = "La promozione"
+when = [
+  "tactic:promotion",
+]
+summary = "Un pedone che arriva in fondo diventa un pezzo (quasi sempre una donna): spesso la tattica serve solo ad aprirgli la strada."
+ideas = [
+  "Si devia o si elimina il pezzo che blocca o controlla la casa di promozione.",
+  "A volte conviene promuovere a cavallo, per uno scacco o una forchetta (sottopromozione).",
+]
+mistakes = [
+  "Promuovere in automatico a donna quando un cavallo darebbe scacco e forchetta.",
+]
+use_when = [
+  "Puoi togliere di mezzo il pezzo che controlla la casa di promozione.",
+]
+avoid_when = [
+  "La casa di promozione è controllata da più pezzi avversari.",
+]
+signs = [
+  "Un tuo pedone è vicino alla promozione e un solo pezzo avversario lo ferma.",
+]
+puzzle_theme = "promotion"

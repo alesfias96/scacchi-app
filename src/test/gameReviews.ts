@@ -105,6 +105,7 @@ export const SAMPLE_REVIEW: GameReview = {
         },
       ],
       bestGains: [],
+      motif: null,
     },
   ],
 };

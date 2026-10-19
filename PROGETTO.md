@@ -179,7 +179,8 @@ app-scacchi/
 │   │                           sicurezza del re, attività, materiale, fase di gioco
 │   ├── tutor/                  spiegazioni: riconosce strutture, finali, temi e principi, unisce
 │   │                           fatti e schede di knowledge/; scenari "e se…"; idee delle
-│   │                           varianti; strategia (squilibri e piani)
+│   │                           varianti; strategia (squilibri e piani); motivi tattici,
+│   │                           strade dell'avversario, metodo «Prima di muovere»
 │   ├── training/               puzzle: scelta, verifica delle mosse, rating Elo, ripasso (scatole)
 │   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
 │   │                           critici, dati per le statistiche, puzzle dagli errori gravi
@@ -256,7 +257,8 @@ app-scacchi/
 │   ├── structures/             strutture pedonali e piani tipici
 │   ├── openings/               idee delle aperture, col bianco e col nero
 │   ├── middlegame/             concetti di mediogioco
-│   └── endgames/               finali
+│   ├── endgames/               finali
+│   └── tactics/                motivi tattici e metodo «Prima di muovere»
 │
 └── data/                       dati inclusi nell'app: openings/ e puzzles/ (di Lichess, CC0),
                                 maia/ (le reti di Maia, GPL-3.0)
@@ -360,7 +362,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 9. Statistiche                    | ✅ completata                                             |
 | 10. Estensioni                    | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
 | 11. Appunti personali             | ✅ completata                                             |
-| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B ✅; 12-C da fare                         |
+| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B ✅; 12-C in test                         |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -531,6 +533,11 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | «Stockfish conferma»: un piano è confermato se nella variante migliore (dopo «Guarda avanti») c'è un evento dello stesso genere (es. rottura di pedone per la rottura centrale)                                                                                     | Collegare i piani generali allo sguardo lungo della 12-A                                                                                                                                                                                      |
 | 2026-10-19 | Modalità Tutor: scheda «Il piano» nella colonna di destra con l'etichetta «Piano nuovo» solo quando i piani cambiano; mentre il tutor prepara la posizione nuova resta il piano di prima                                                                            | Non ripetere a ogni mossa lo stesso consiglio                                                                                                                                                                                                 |
 | 2026-10-20 | Fase 12-B approvata                                                                                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-20 | 12-C: i motivi tattici si riconoscono lungo la variante con regole verificabili (crate `tutor`, `motifs.rs`); una combinazione si racconta passo per passo («prima …, poi …»); dopo il matto le tattiche ferme della posizione finale non contano                   | Scelte 1A–5A approvate; i casi dubbi non si dicono                                                                                                                                                                                            |
+| 2026-10-20 | Le strade dell'avversario: si passa la mano (stessa posizione, muove lui), Stockfish calcola 3 varianti e il tutor le spiega al condizionale; sotto scacco non si può e lo si dice                                                                                  | Richiesta di Alessandro: non «vuole fare questo, punto», ma le strade che potrebbe percorrere                                                                                                                                                 |
+| 2026-10-20 | Argomento nuovo `tactic` (cartella `knowledge/tactics/`, 15 schede) e campo facoltativo `puzzle_theme` delle schede; «Allenati su questo tema» sceglie il tema, comincia un puzzle e apre l'Allenamento                                                             | Collegare spiegazioni, errori e puzzle                                                                                                                                                                                                        |
+| 2026-10-20 | Puzzle: aiuto a gradini (prima il tema a parole, poi il pezzo); a fine puzzle la soluzione spiegata dal tutor (la crate `training` usa `tutor::solution_idea`)                                                                                                      | Imparare a riconoscere il motivo prima di vedere la mossa                                                                                                                                                                                     |
+| 2026-10-20 | «Prima di muovere» nel pannello del tutor (scacchi, catture, minacce, controllo finale); dopo un errore in modalità Tutor, il passo del metodo che l'avrebbe evitato                                                                                                | Un metodo di pensiero da ripetere a ogni mossa                                                                                                                                                                                                |
 
 ---
 
@@ -547,7 +554,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
-- **Fase 12 — Tutor che spiega il perché.** 12-A e 12-B fatte e approvate. Da valutare: evidenziare sulla scacchiera le case di un piano (i dati `squares` ci sono già), altre regole di piano man mano che Alessandro segnala posizioni dove il consiglio non torna. 12-C: tattica avanzata e metodo di pensiero.
+- **Fase 12 — Tutor che spiega il perché.** 12-A e 12-B fatte e approvate; 12-C in test. Da valutare per la 12-C: altri motivi (raggi X, interferenza, pezzo intrappolato), la mossa intermedia anche dopo una mossa della partita, mostrare sulla scacchiera le case delle strade dell'avversario senza aprire la variante. Da valutare: evidenziare sulla scacchiera le case di un piano (i dati `squares` ci sono già), altre regole di piano man mano che Alessandro segnala posizioni dove il consiglio non torna. 12-C: tattica avanzata e metodo di pensiero.
 - **Fase 11 — Appunti personali.** Fatta (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 

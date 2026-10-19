@@ -1,0 +1,21 @@
+title = "Il sovraccarico"
+when = [
+  "tactic:overload",
+]
+summary = "Un pezzo che difende due cose insieme è sovraccarico: se ne attacchi una, non può più difendere l'altra."
+ideas = [
+  "Si cattura (o si attacca) una delle due cose: il difensore riprende e lascia scoperta l'altra.",
+  "Il sovraccarico e la deviazione vanno spesso insieme.",
+]
+mistakes = [
+  "Contare i difensori senza chiedersi se difendono anche altro.",
+]
+use_when = [
+  "Puoi attaccare una delle due cose difese con una mossa forte.",
+]
+avoid_when = [
+  "L'avversario ha un secondo difensore pronto.",
+]
+signs = [
+  "Un solo pezzo avversario difende due pezzi o una casa importante e un pezzo.",
+]

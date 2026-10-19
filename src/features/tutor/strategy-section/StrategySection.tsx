@@ -4,7 +4,8 @@
  * Cosa fa: dice com'è il centro e per chi sono i piani, poi mostra il
  * bilancio «Chi ha cosa» (le voci del Bianco e quelle del Nero: materiale,
  * pedoni, spazio, alfieri, re…), i piani consigliati a chi muove (vedi
- * `StrategyPlan`) e il piano dell'avversario, da tenere d'occhio.
+ * `StrategyPlan`) e una strada possibile dell'avversario, da tenere d'occhio
+ * (le altre strade, calcolate da Stockfish, sono in «Guarda avanti»).
  *
  * Riceve:
  * - `strategy`: la strategia della posizione (la prepara Rust);
@@ -80,8 +81,12 @@ export function StrategySection({ strategy, confirmedPlans }: StrategySectionPro
 
       {opponentPlan !== null && (
         <>
-          <h4 className={styles.subtitle}>Cosa vuole fare l’avversario</h4>
-          <StrategyPlan plan={opponentPlan} confirmed={false} label="Il piano dell’avversario" />
+          <h4 className={styles.subtitle}>Cosa potrebbe fare l’avversario</h4>
+          <StrategyPlan
+            plan={opponentPlan}
+            confirmed={false}
+            label="Una strada possibile dell’avversario"
+          />
         </>
       )}
     </section>

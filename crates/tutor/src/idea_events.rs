@@ -29,6 +29,7 @@ use shakmaty::{Bitboard, Board, Chess, Color, EnPassantMode, File, Piece, Positi
 
 use crate::board_query::is_outpost;
 use crate::line_walk::LineStep;
+use crate::motifs::fact_motif;
 use crate::recognition::recognize;
 use crate::topic::Topic;
 
@@ -531,7 +532,11 @@ pub fn tactic_events(
             let real = is_real_tactic(&fact, step.after.board(), side);
             if real && fact.side == side_view && known.insert(fact.text.clone()) {
                 let text = lowercase_first(&fact.text);
-                events.push(fact_event(IdeaKind::Tactic, ply, text, &fact));
+                let card_id = fact_motif(&fact.text).map(crate::motifs::Motif::card_id);
+                events.push(IdeaEvent {
+                    card_id,
+                    ..fact_event(IdeaKind::Tactic, ply, text, &fact)
+                });
             }
         }
     }

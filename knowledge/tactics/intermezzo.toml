@@ -1,0 +1,22 @@
+title = "La mossa intermedia"
+when = [
+  "tactic:intermezzo",
+]
+summary = "Durante uno scambio, invece di riprendere subito, si gioca prima una mossa più forte (uno scacco, una minaccia), e poi si riprende."
+ideas = [
+  "Si chiama anche «zwischenzug» (in tedesco, mossa in mezzo).",
+  "Prima di riprendere, chiediti sempre: c'è uno scacco o una minaccia più forte?",
+]
+mistakes = [
+  "Riprendere in automatico senza guardare le mosse forti.",
+]
+use_when = [
+  "La ripresa resta possibile anche dopo la mossa intermedia.",
+]
+avoid_when = [
+  "Dopo la mossa intermedia il pezzo avversario scappa e la ripresa non c'è più.",
+]
+signs = [
+  "L'avversario ha appena catturato e il tuo pezzo che dovrebbe riprendere ha anche uno scacco a disposizione.",
+]
+puzzle_theme = "intermezzo"

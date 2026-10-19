@@ -3,6 +3,7 @@
  */
 import type { IdeaView } from '../bindings/IdeaView';
 import type { MoveIdea } from '../bindings/MoveIdea';
+import type { OpponentPaths } from '../bindings/OpponentPaths';
 import type { PositionIdeas } from '../bindings/PositionIdeas';
 
 /** Un'idea del Bianco in due mosse: il cavallo va in f3 e poi in g5. */
@@ -45,6 +46,7 @@ export const KNIGHT_IDEA: IdeaView = {
     },
   ],
   cards: [],
+  motifs: [{ key: 'fork', name: 'Forchetta', puzzleTheme: 'fork', cardId: 'tactics/fork' }],
 };
 
 /** Le idee di una posizione: due varianti. */
@@ -61,4 +63,12 @@ export const MOVE_IDEA_WITH_BETTER: MoveIdea = {
   better: KNIGHT_IDEA,
   comparison:
     "Stockfish preferiva un'altra mossa: dopo la tua la posizione vale +0.1 per il Bianco, con la sua +0.4.",
+  lesson: 'La mossa migliore era tranquilla: confronta due o tre mosse candidate.',
+};
+
+/** Le strade dell'avversario: una sola, tranquilla. */
+export const OPPONENT_PATHS: OpponentPaths = {
+  side: 'black',
+  intro: 'Se toccasse al Nero, queste sono le strade che potrebbe prendere.',
+  paths: [{ ...KNIGHT_IDEA, side: 'black', headline: 'Una strada possibile: il cavallo va b8–c6' }],
 };

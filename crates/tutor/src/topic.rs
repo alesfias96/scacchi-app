@@ -19,16 +19,19 @@ pub enum Topic {
     Endgame,
     /// I principi generali (cartella `principles/`).
     Principle,
+    /// I motivi tattici e il metodo di pensiero (cartella `tactics/`).
+    Tactic,
 }
 
 impl Topic {
     /// Tutti gli argomenti, nell'ordine in cui il tutor li mostra.
-    pub const ALL: [Self; 5] = [
+    pub const ALL: [Self; 6] = [
         Self::Opening,
         Self::Structure,
         Self::Middlegame,
         Self::Endgame,
         Self::Principle,
+        Self::Tactic,
     ];
 
     /// La parola con cui l'argomento si scrive nelle schede (`"structure:…"`).
@@ -40,6 +43,7 @@ impl Topic {
             Self::Middlegame => "middlegame",
             Self::Endgame => "endgame",
             Self::Principle => "principle",
+            Self::Tactic => "tactic",
         }
     }
 
@@ -52,6 +56,7 @@ impl Topic {
             Self::Middlegame => "middlegame",
             Self::Endgame => "endgames",
             Self::Principle => "principles",
+            Self::Tactic => "tactics",
         }
     }
 }

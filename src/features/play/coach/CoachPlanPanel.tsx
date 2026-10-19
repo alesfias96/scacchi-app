@@ -64,7 +64,7 @@ export function CoachPlanPanel({ strategy, confirmedPlans }: CoachPlanPanelProps
         <StrategyPlan
           plan={current.opponentPlan}
           confirmed={false}
-          label="Il piano dell’avversario"
+          label="Una strada possibile dell’avversario"
         />
       )}
     </PanelCard>

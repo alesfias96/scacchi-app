@@ -1,0 +1,22 @@
+title = "L'attacco (e lo scacco) di scoperta"
+when = [
+  "tactic:discovered-attack",
+]
+summary = "Un pezzo si sposta e scopre la linea di un altro pezzo che attacca: in una mossa si fanno due minacce."
+ideas = [
+  "Il pezzo che si sposta può fare quello che vuole: catturare, minacciare, dare scacco.",
+  "Lo scacco di scoperta è il più forte: l'avversario deve parare lo scacco e perde l'altra cosa.",
+]
+mistakes = [
+  "Spostare il pezzo davanti senza minacciare niente: si spreca la scoperta.",
+]
+use_when = [
+  "Il pezzo che si sposta ha una casa con una minaccia sua.",
+]
+avoid_when = [
+  "L'avversario può parare tutte e due le minacce con una sola mossa.",
+]
+signs = [
+  "Un tuo pezzo sta tra un tuo alfiere, torre o donna e un pezzo avversario prezioso.",
+]
+puzzle_theme = "discoveredAttack"

@@ -4,7 +4,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { MoveRecord } from '../../../bindings/MoveRecord';
-import { MOVE_IDEA_WITH_BETTER, POSITION_IDEAS } from '../../../test/ideas';
+import { MOVE_IDEA_WITH_BETTER, OPPONENT_PATHS, POSITION_IDEAS } from '../../../test/ideas';
 import { CoachIdeasPanel } from './CoachIdeasPanel';
 
 const RECORD: MoveRecord = {
@@ -25,6 +25,7 @@ describe('CoachIdeasPanel', () => {
         ideas={{
           move: { record: RECORD, idea: MOVE_IDEA_WITH_BETTER },
           position: POSITION_IDEAS,
+          paths: OPPONENT_PATHS,
           isThinking: false,
         }}
         notation="internazionale"
@@ -36,12 +37,18 @@ describe('CoachIdeasPanel', () => {
     expect(screen.getByText('La mossa migliore: Nf3')).toBeDefined();
     expect(screen.getByRole('region', { name: 'Le idee per continuare' })).toBeDefined();
     expect(screen.getByText('Idea 1 · la preferita da Stockfish')).toBeDefined();
+    expect(screen.getByText(/confronta due o tre mosse candidate/)).toBeDefined();
+    expect(screen.getByRole('region', { name: 'Le strade dell’avversario' })).toBeDefined();
+    expect(screen.getByText('Strada 1')).toBeDefined();
+    expect(screen.getAllByRole('button', { name: 'Allenati: Forchetta' }).length).toBeGreaterThan(
+      0,
+    );
   });
 
   it('dice quando sta ancora guardando avanti', () => {
     render(
       <CoachIdeasPanel
-        ideas={{ move: null, position: null, isThinking: true }}
+        ideas={{ move: null, position: null, paths: null, isThinking: true }}
         notation="internazionale"
       />,
     );

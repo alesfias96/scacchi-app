@@ -1,0 +1,24 @@
+title = "La forchetta"
+when = [
+  "tactic:fork",
+]
+summary = "Un pezzo attacca due (o più) bersagli nello stesso momento: l'avversario può salvarne uno solo."
+ideas = [
+  "Il cavallo è il re delle forchette: salta e attacca pezzi che non si difendono a vicenda.",
+  "Anche pedoni, donna e re possono fare forchette.",
+  "Le forchette più forti attaccano il re (scacco) e un altro pezzo: lo scacco va parato per forza.",
+]
+mistakes = [
+  "Guardare solo i pezzi attaccati, dimenticando se la casa della forchetta è sicura.",
+]
+use_when = [
+  "Ci sono pezzi avversari indifesi o più preziosi del pezzo che attacca.",
+]
+avoid_when = [
+  "La casa della forchetta è controllata: il pezzo che attacca verrebbe preso.",
+]
+signs = [
+  "Due pezzi avversari non difesi o di valore alto stanno a un salto di cavallo l'uno dall'altro.",
+  "Il re e la donna avversari sono su case dello stesso colore, a distanza di cavallo.",
+]
+puzzle_theme = "fork"

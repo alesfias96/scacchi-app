@@ -6,6 +6,8 @@
  * migliore e il perché: cosa concedeva la mossa giocata e cosa otteneva quella
  * migliore, secondo i rilevatori. «Mostra sulla scacchiera» porta alla
  * posizione prima della mossa, con le frecce della mossa giocata e di quella migliore.
+ * Se il momento ha un motivo tattico (es. una forchetta sfuggita), «Allenati:
+ * Forchetta» apre l'Allenamento con i puzzle di quel tema.
  *
  * Riceve:
  * - `moments`: i momenti critici;
@@ -23,6 +25,7 @@ import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { classNames } from '../../../lib/classNames';
 import { formatFact } from '../../../lib/formatFact';
 import { formatSan } from '../../../lib/formatSan';
+import { TrainThemeButton } from '../../training/train-theme-button/TrainThemeButton';
 import { qualitySeverity, qualitySymbol } from '../describeQuality';
 import styles from './CriticalMoments.module.css';
 
@@ -90,13 +93,18 @@ export function CriticalMoments({
                     </ul>
                   </>
                 )}
-                <Button
-                  onClick={() => {
-                    onShow(moment.ply);
-                  }}
-                >
-                  Mostra sulla scacchiera
-                </Button>
+                <div className={styles.actions}>
+                  <Button
+                    onClick={() => {
+                      onShow(moment.ply);
+                    }}
+                  >
+                    Mostra sulla scacchiera
+                  </Button>
+                  {moment.motif?.puzzleTheme != null && (
+                    <TrainThemeButton theme={moment.motif.puzzleTheme} name={moment.motif.name} />
+                  )}
+                </div>
               </li>
             );
           })}

@@ -102,6 +102,7 @@ pub fn run() {
             commands::stats::analyze_missing_games,
             commands::ideas::position_ideas,
             commands::ideas::move_idea,
+            commands::ideas::opponent_paths,
             commands::notes::list_notes,
             commands::notes::note_tags,
             commands::notes::save_note,

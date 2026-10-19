@@ -48,6 +48,18 @@ Ogni piano dice il **perché** concreto in questa posizione e, dalla sua scheda,
 migliore di Stockfish va nella stessa direzione (es. una rottura di pedone per il piano «rottura
 centrale»), il piano è **confermato** (`confirmed_plans` delle idee della posizione).
 
+## La tattica e il metodo di pensiero (Fase 12-C)
+
+- Lungo le varianti il tutor riconosce i **motivi tattici** (`motifs.rs`) e racconta una
+  combinazione passo per passo: «una combinazione: prima una deviazione…, poi una forchetta…, e alla
+  fine il Bianco vince una torre». Ogni motivo ha la sua scheda in `knowledge/tactics/` e, se c'è,
+  il tema dei puzzle per allenarsi.
+- **Le strade dell'avversario** (`opponent_paths.rs`): non «l'avversario vuole fare questo», ma le
+  strade possibili se toccasse a lui, ognuna spiegata al condizionale («si vedrebbe tra 3 mosse»).
+- **Prima di muovere** (`thinking.rs`): il metodo di pensiero con le mosse della posizione; dopo un
+  errore, `move_lesson.rs` dice quale passo l'avrebbe evitato.
+- `solution_idea` spiega la soluzione di un puzzle come una combinazione (la usa la crate `training`).
+
 ## Contenuto
 
 | Elemento     | Cosa contiene                                                                           |

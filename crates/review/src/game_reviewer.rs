@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use analysis::{Fact, GamePhase, analyze};
 use chess_core::{LegalMove, Side, describe_line};
 use tutor::what_if::{CONCEDED_TITLE, CREATED_TITLE};
+use tutor::{MotifView, fact_motif, motif_view};
 
 use crate::move_quality::MoveQuality;
 use crate::replay::{Replayed, replay};
@@ -12,6 +13,16 @@ use crate::review_error::ReviewError;
 use crate::review_input::ReviewInput;
 use crate::review_view::{CriticalMoment, GameReview, MoveReview, PlayerSummary};
 use crate::win_chance::{chance_for, move_accuracy, white_win_chance};
+
+/// Il motivo tattico di un momento critico: prima quello che otteneva la mossa
+/// migliore (l'occasione persa), poi quello che la mossa giocata concedeva.
+fn moment_motif(best_gains: &[Fact], conceded: &[Fact]) -> Option<MotifView> {
+    best_gains
+        .iter()
+        .chain(conceded)
+        .find_map(|fact| fact_motif(&fact.text))
+        .map(motif_view)
+}
 
 /// Quanti momenti critici mostrare al massimo.
 const MAX_CRITICAL: usize = 5;
@@ -150,6 +161,12 @@ fn critical_moments(
             let quality = review.quality?;
             let before = chance_for(chances[index]?, review.side);
             let after = chance_for(chances[index + 1]?, review.side);
+            let conceded = scenario_facts(input, index, &review.played.uci, CONCEDED_TITLE);
+            let best_gains = review
+                .best
+                .as_ref()
+                .map(|best| scenario_facts(input, index, &best.uci, CREATED_TITLE))
+                .unwrap_or_default();
             Some(CriticalMoment {
                 ply: review.ply,
                 quality,
@@ -160,12 +177,9 @@ fn critical_moments(
                 ),
                 played_san: review.san.clone(),
                 best_san: review.best_san.clone(),
-                conceded: scenario_facts(input, index, &review.played.uci, CONCEDED_TITLE),
-                best_gains: review
-                    .best
-                    .as_ref()
-                    .map(|best| scenario_facts(input, index, &best.uci, CREATED_TITLE))
-                    .unwrap_or_default(),
+                motif: moment_motif(&best_gains, &conceded),
+                conceded,
+                best_gains,
             })
         })
         .collect()

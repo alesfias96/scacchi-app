@@ -98,6 +98,116 @@ const THEME_NAMES: [(&str, &str); 64] = [
     (OWN_GAME_THEME, "Dalle tue partite"),
 ];
 
+/// Il primo aiuto di un puzzle: il tema detto a parole, senza svelare la mossa.
+/// I temi più precisi vengono prima: un puzzle con "deflection" e "mateIn2"
+/// riceve l'aiuto della deviazione.
+const HINTS: &[(&str, &str)] = &[
+    (
+        "smotheredMate",
+        "Il re avversario è chiuso dai suoi pezzi: un cavallo può dargli matto.",
+    ),
+    (
+        "backRankMate",
+        "Guarda l'ultima traversa: il re avversario non ha case di fuga.",
+    ),
+    (
+        "doubleCheck",
+        "C'è uno scacco doppio: due pezzi possono dare scacco insieme.",
+    ),
+    (
+        "discoveredCheck",
+        "Spostando un tuo pezzo puoi scoprire uno scacco di un altro.",
+    ),
+    (
+        "discoveredAttack",
+        "Spostando un tuo pezzo puoi scoprire l'attacco di un altro.",
+    ),
+    (
+        "attraction",
+        "Un sacrificio può attirare il re o la donna su una casa sfortunata.",
+    ),
+    (
+        "deflection",
+        "Un pezzo avversario difende qualcosa di importante: costringilo a spostarsi.",
+    ),
+    (
+        "capturingDefender",
+        "Cattura il pezzo che difende, poi prendi ciò che difendeva.",
+    ),
+    (
+        "intermezzo",
+        "Prima di riprendere, cerca una mossa più forte: uno scacco o una minaccia.",
+    ),
+    (
+        "clearance",
+        "Un tuo pezzo occupa una casa o una linea che serve a un altro: liberala.",
+    ),
+    (
+        "interference",
+        "Metti un pezzo in mezzo a una linea con cui l'avversario si difende.",
+    ),
+    (
+        "xRayAttack",
+        "Guarda attraverso i pezzi: una linea continua anche dietro un pezzo.",
+    ),
+    (
+        "skewer",
+        "Il re o la donna avversari sono sulla stessa linea di un altro pezzo.",
+    ),
+    ("pin", "Un pezzo avversario è inchiodato: attaccalo ancora."),
+    ("fork", "Cerca una mossa che attacchi due pezzi insieme."),
+    (
+        "trappedPiece",
+        "Un pezzo avversario non ha case dove scappare.",
+    ),
+    ("hangingPiece", "C'è un pezzo avversario senza difesa."),
+    (
+        "underPromotion",
+        "Il pedone promuove, ma forse non a donna.",
+    ),
+    (
+        "promotion",
+        "Un pedone può arrivare a promozione: aprigli la strada.",
+    ),
+    ("sacrifice", "La soluzione comincia con un sacrificio."),
+    ("mateIn1", "C'è un matto in una mossa."),
+    (
+        "mateIn2",
+        "C'è un matto in due mosse: comincia con una mossa forzante.",
+    ),
+    (
+        "mate",
+        "C'è un matto: cerca le mosse forzanti, prima di tutto gli scacchi.",
+    ),
+    (
+        "quietMove",
+        "La mossa giusta è tranquilla: non è uno scacco né una cattura.",
+    ),
+    (
+        "defensiveMove",
+        "Prima difenditi: c'è una minaccia avversaria da fermare.",
+    ),
+    (
+        "zugzwang",
+        "L'avversario è in zugzwang: qualunque mossa faccia, peggiora.",
+    ),
+    ("exposedKing", "Il re avversario è scoperto: attaccalo."),
+    ("advancedPawn", "Un pedone avanzato è la chiave."),
+];
+
+/// Il primo aiuto per un puzzle con questi temi, se c'è (vedi [`HINTS`]).
+#[must_use]
+pub fn theme_hint(themes: &[String]) -> Option<&'static str> {
+    HINTS
+        .iter()
+        .find(|(key, _)| {
+            themes
+                .iter()
+                .any(|theme| theme == key || (*key == "mate" && theme.starts_with("mateIn")))
+        })
+        .map(|(_, hint)| *hint)
+}
+
 /// Il nome italiano di un tema, se è un tema riconosciuto.
 #[must_use]
 pub fn theme_name(key: &str) -> Option<&'static str> {

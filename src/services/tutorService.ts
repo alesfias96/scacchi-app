@@ -7,6 +7,7 @@
  */
 import { invoke } from '@tauri-apps/api/core';
 import type { MoveIdea } from '../bindings/MoveIdea';
+import type { OpponentPaths } from '../bindings/OpponentPaths';
 import type { PositionIdeas } from '../bindings/PositionIdeas';
 import type { TutorExplanation } from '../bindings/TutorExplanation';
 import type { WhatIfView } from '../bindings/WhatIfView';
@@ -97,4 +98,22 @@ export function fetchMoveIdea(
   thinkMs: number,
 ): Promise<MoveIdea> {
   return invoke<MoveIdea>('move_idea', { startFen, movesBefore, played, thinkMs });
+}
+
+/**
+ * Chiede a Rust le strade dell'avversario: cosa potrebbe fare se toccasse a
+ * lui (Stockfish calcola le sue varianti migliori con la mano passata).
+ *
+ * @param startFen - la posizione di partenza della partita (FEN).
+ * @param moves - le mosse fino alla posizione (UCI).
+ * @param thinkMs - quanto può pensare il motore, in millesimi di secondo.
+ * @returns le strade, dalla più forte.
+ * @throws come `fetchPositionIdeas`.
+ */
+export function fetchOpponentPaths(
+  startFen: string,
+  moves: readonly string[],
+  thinkMs: number,
+): Promise<OpponentPaths> {
+  return invoke<OpponentPaths>('opponent_paths', { startFen, moves, thinkMs });
 }

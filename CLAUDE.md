@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-20 — 12-B approvata; proposto il piano della 12-C (tattica avanzata e metodo di pensiero), in attesa di risposta.**
+> **Ultimo aggiornamento: 2026-10-20 — 12-C (tattica avanzata e metodo di pensiero) fatta, in test: si aspettano i test a mano di Alessandro.**
 
 ---
 
@@ -62,23 +62,24 @@ App desktop **offline** per giocare, imparare e allenarsi a scacchi (Windows, ma
 
 ## 5. Stato: cosa è fatto
 
-| Fase     | Cosa ha portato                                                                                                                                                                                                                        |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, 1-bis | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                                                 |
-| 2        | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                                                  |
-| 3        | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                                                 |
-| 4        | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                                              |
-| 5        | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                                                            |
-| 6        | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                                                          |
-| 7        | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera)                              |
-| 8        | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                                                     |
-| 8-bis    | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                                                       |
-| 9        | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                                                  |
-| 10-A     | Maia, il computer "umano": crate `maia` (reti calcolate in Rust), avversario «Umano» con 9 livelli (1100–1900)                                                                                                                         |
-| 10-B     | CSP restrittiva, `npm run set-version`, flusso `release.yml` (installatori firmati), aggiornamenti dalle Impostazioni; repository GitHub                                                                                               |
-| 11       | Appunti: crate `notes`, migrazione 0005, sezione «Appunti» (ricerca, etichette, salvataggio automatico), «Aggiungi un appunto» in Gioca e Analisi partite                                                                              |
-| 12-B     | Strategia: `imbalances`, `strategy_plans`, `strategy` nella crate `tutor`; 28 schede nuove con «Quando usarlo/Quando no/Segnali»; «La strategia» nel pannello del tutor, «Il piano» in modalità Tutor, «✓ Stockfish conferma»          |
-| 12-A     | Lo sguardo lungo: `evaluate_lines` (MultiPV), `crates/tutor` (`line_walk`, `idea_events`, `idea`), comandi `position_ideas`/`move_idea`, idee nella modalità Tutor e «Guarda avanti» nel pannello del tutor, variante sulla scacchiera |
+| Fase           | Cosa ha portato                                                                                                                                                                                                                        |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, 1-bis       | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                                                 |
+| 2              | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                                                  |
+| 3              | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                                                 |
+| 4              | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                                              |
+| 5              | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                                                            |
+| 6              | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                                                          |
+| 7              | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera)                              |
+| 8              | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                                                     |
+| 8-bis          | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                                                       |
+| 9              | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                                                  |
+| 10-A           | Maia, il computer "umano": crate `maia` (reti calcolate in Rust), avversario «Umano» con 9 livelli (1100–1900)                                                                                                                         |
+| 10-B           | CSP restrittiva, `npm run set-version`, flusso `release.yml` (installatori firmati), aggiornamenti dalle Impostazioni; repository GitHub                                                                                               |
+| 11             | Appunti: crate `notes`, migrazione 0005, sezione «Appunti» (ricerca, etichette, salvataggio automatico), «Aggiungi un appunto» in Gioca e Analisi partite                                                                              |
+| 12-C (in test) | Tattica: `motifs`, `opponent_paths` (strade dell'avversario), `thinking` («Prima di muovere»), `move_lesson`; 15 schede in `knowledge/tactics/`; aiuto a gradini e combinazione spiegata nei puzzle; «Allenati su questo tema»         |
+| 12-B           | Strategia: `imbalances`, `strategy_plans`, `strategy` nella crate `tutor`; 28 schede nuove con «Quando usarlo/Quando no/Segnali»; «La strategia» nel pannello del tutor, «Il piano» in modalità Tutor, «✓ Stockfish conferma»          |
+| 12-A           | Lo sguardo lungo: `evaluate_lines` (MultiPV), `crates/tutor` (`line_walk`, `idea_events`, `idea`), comandi `position_ideas`/`move_idea`, idee nella modalità Tutor e «Guarda avanti» nel pannello del tutor, variante sulla scacchiera |
 
 Disposizione attuale delle sezioni con scacchiera: scacchiera a sinistra, colonna a destra **alta
 quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul bordo sinistro (tasto M).
@@ -88,23 +89,14 @@ quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul b
 **Roadmap 1–11 finita.** Versione 0.11.0: etichetta `v0.11.0` sul commit `8706b1d` (la bozza
 sbagliata del primo tentativo è stata cancellata e l'etichetta giusta caricata). Da provare: l'aggiornamento automatico dalla 0.10.0 installata.
 
-**Fase 12 in corso. 12-A e 12-B approvate. Proposto il piano della 12-C, in attesa di risposta.**
+**Fase 12 in corso. 12-A e 12-B approvate; 12-C fatta e in test.** Quando Alessandro approva: riga
+«Fase 12-C approvata» nel registro, Fase 12 ✅ in `PROGETTO.md` §9, commit, aggiornare questo file e
+chiedere cosa fare dopo (10-C rinviata, ritocchi, nuova versione da pubblicare).
 
-Piano 12-C — tattica avanzata e metodo di pensiero (A = consigliata):
-
-1. Motivi nelle combinazioni — **A**: lungo la variante di Stockfish (12-A) si riconoscono i motivi
-   (deviazione, attrazione, eliminazione del difensore, sovraccarico, mossa intermedia, raggi X,
-   ultima traversa, interferenza, liberazione, pezzo intrappolato, scacco doppio e di scoperta) e la
-   combinazione si racconta come sequenza («prima attira il re in h7, poi la forchetta»). B: solo la posizione attuale.
-2. Schede di tattica — **A**: ~15 schede nuove in `knowledge/tactics/` (argomento nuovo `tactic`):
-   come riconoscerla, quando funziona, quando no, errori; legate ai momenti delle idee e ai temi dei puzzle. B: niente schede.
-3. Indizi a gradini nei puzzle — **A**: 1° il tema in parole, 2° il pezzo da muovere (come oggi), 3° la
-   soluzione; a fine puzzle la combinazione spiegata con i suoi motivi e la scheda. B: indizio di oggi.
-4. Metodo di pensiero — **A**: «Prima di muovere» (scacchi, catture, minacce sue e tue, cosa vuole
-   l'avversario, controllo finale) nel pannello del tutor; in modalità Tutor, dopo un errore, quale
-   passo del metodo l'avrebbe evitato. B: solo una scheda.
-5. Puzzle dello stesso tema — **A**: dopo un errore tattico (modalità Tutor e Analisi partite) e dalle
-   schede, «Allenati su questo tema» apre l'Allenamento con quel tema. B: niente collegamento.
+Cose da sapere sulla 12-C: i motivi si riconoscono in `crates/tutor/src/motifs.rs` (regole sulla
+variante; i casi dubbi non si dicono); per l'avversario non si dice «vuole fare questo» ma si mostrano
+le **strade possibili** (`opponent_paths.rs`, mano passata, frasi al condizionale), come ha chiesto
+Alessandro; le schede di tattica sono in `knowledge/tactics/` con il campo `puzzle_theme`.
 
 Cose da sapere sulla 12-B: i piani nascono dalle regole di `crates/tutor/src/strategy_plans.rs`
 (ogni regola ha un punteggio; si mostrano al massimo due piani a chi muove più quello dell'avversario);

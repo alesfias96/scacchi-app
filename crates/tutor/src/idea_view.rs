@@ -46,6 +46,25 @@ pub struct IdeaFrame {
     pub last_move: Option<LegalMove>,
 }
 
+/// Un motivo tattico della variante (es. "Deviazione"), con la sua scheda e il tema dei puzzle.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct MotifView {
+    /// La chiave del motivo (es. `"deflection"`).
+    pub key: String,
+    /// Il nome in italiano.
+    pub name: String,
+    /// Il tema dei puzzle di Lichess con questo motivo, se c'è (es. `"deflection"`).
+    pub puzzle_theme: Option<String>,
+    /// La scheda del motivo (es. `"tactics/deflection"`).
+    pub card_id: String,
+}
+
 /// L'idea di una variante: cosa vuole ottenere chi la gioca, guardando lontano.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(
@@ -76,6 +95,8 @@ pub struct IdeaView {
     pub frames: Vec<IdeaFrame>,
     /// Le schede della base di conoscenza citate dai momenti chiave, pronte da aprire.
     pub cards: Vec<CardView>,
+    /// I motivi tattici della variante, nell'ordine in cui compaiono.
+    pub motifs: Vec<MotifView>,
 }
 
 /// Le idee della posizione: le migliori varianti di Stockfish, ognuna spiegata.
@@ -114,4 +135,23 @@ pub struct MoveIdea {
     /// Il confronto tra le due, se c'è la migliore (la mossa migliore è la
     /// prima di `better`: l'interfaccia la scrive nella sua notazione).
     pub comparison: Option<String>,
+    /// Se c'è la migliore: quale passo del metodo «Prima di muovere» l'avrebbe trovata.
+    pub lesson: Option<String>,
+}
+
+/// Le strade dell'avversario: cosa potrebbe fare se toccasse a lui.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct OpponentPaths {
+    /// Di chi sono le strade (l'avversario di chi muove).
+    pub side: Side,
+    /// La frase d'introduzione: quanto sono pericolose.
+    pub intro: String,
+    /// Le strade, dalla più forte secondo Stockfish (frasi al condizionale).
+    pub paths: Vec<IdeaView>,
 }

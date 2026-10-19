@@ -43,9 +43,17 @@ found: number,
  */
 feedback: Feedback, 
 /**
- * La casa del pezzo da muovere, se è stato chiesto un aiuto.
+ * Il primo aiuto: il tema del puzzle detto a parole, se è stato chiesto.
+ */
+hintText: string | null, 
+/**
+ * La casa del pezzo da muovere, se è stato chiesto il secondo aiuto.
  */
 hintSquare: string | null, 
+/**
+ * `true` se si può chiedere un altro aiuto.
+ */
+canHint: boolean, 
 /**
  * `true` quando il puzzle è finito (risolto o soluzione mostrata).
  */

@@ -3,6 +3,7 @@ import type { CardView } from "./CardView";
 import type { Evaluation } from "./Evaluation";
 import type { IdeaFrame } from "./IdeaFrame";
 import type { IdeaMoment } from "./IdeaMoment";
+import type { MotifView } from "./MotifView";
 import type { Side } from "./Side";
 
 /**
@@ -49,4 +50,8 @@ frames: Array<IdeaFrame>,
 /**
  * Le schede della base di conoscenza citate dai momenti chiave, pronte da aprire.
  */
-cards: Array<CardView>, };
+cards: Array<CardView>, 
+/**
+ * I motivi tattici della variante, nell'ordine in cui compaiono.
+ */
+motifs: Array<MotifView>, };

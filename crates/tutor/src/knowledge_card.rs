@@ -61,6 +61,9 @@ pub struct CardContent {
     /// I segnali che il piano sta funzionando.
     #[serde(default)]
     pub signs: Vec<String>,
+    /// Il tema dei puzzle di Lichess per allenarsi su questa scheda (es. `"fork"`).
+    #[serde(default)]
+    pub puzzle_theme: Option<String>,
 }
 
 /// Una scheda pronta da usare.

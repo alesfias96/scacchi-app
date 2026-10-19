@@ -1,0 +1,22 @@
+title = "La liberazione di casa o di linea"
+when = [
+  "tactic:clearance",
+]
+summary = "Un pezzo si sposta (spesso con una minaccia) solo per lasciare la sua casa o la sua linea a un altro pezzo, che la usa subito."
+ideas = [
+  "Il pezzo che si sposta a volte si sacrifica: conta la casa che lascia libera.",
+  "Si libera una diagonale, una colonna o una casa da cui un altro pezzo dà matto o fa una forchetta.",
+]
+mistakes = [
+  "Pensare solo a dove va il pezzo, e non alla casa che lascia.",
+]
+use_when = [
+  "Il pezzo che si sposta lo fa con tempo (scacco o minaccia).",
+]
+avoid_when = [
+  "L'avversario ha tempo di chiudere la linea liberata.",
+]
+signs = [
+  "Un tuo pezzo occupa proprio la casa (o la linea) che servirebbe a un altro per un colpo decisivo.",
+]
+puzzle_theme = "clearance"

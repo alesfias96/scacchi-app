@@ -68,6 +68,7 @@ mod tests {
 
     use super::{KNOWLEDGE_FILES, all_cards, belongs_to, card_for, opening_card};
     use crate::knowledge_card::KnowledgeCard;
+    use crate::motifs::TACTIC_KEYS;
     use crate::recognition::KNOWN_KEYS;
     use crate::strategy_plans::STRATEGY_KEYS;
     use crate::topic::Topic;
@@ -126,7 +127,9 @@ mod tests {
                 } else {
                     let key = (trigger.topic, trigger.key.as_str());
                     assert!(
-                        KNOWN_KEYS.contains(&key) || STRATEGY_KEYS.contains(&key),
+                        KNOWN_KEYS.contains(&key)
+                            || STRATEGY_KEYS.contains(&key)
+                            || TACTIC_KEYS.contains(&key),
                         "{}: il tutor non riconosce «{}»",
                         card.id,
                         trigger.key
@@ -141,6 +144,7 @@ mod tests {
         let missing: HashSet<_> = KNOWN_KEYS
             .iter()
             .chain(STRATEGY_KEYS)
+            .chain(TACTIC_KEYS.iter())
             .filter(|(topic, key)| card_for(*topic, key).is_none())
             .collect();
 

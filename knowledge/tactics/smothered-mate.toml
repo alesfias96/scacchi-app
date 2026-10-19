@@ -1,0 +1,22 @@
+title = "Il matto affogato"
+when = [
+  "tactic:smothered-mate",
+]
+summary = "Il re è circondato dai suoi pezzi e un cavallo gli dà matto: non può scappare né essere difeso."
+ideas = [
+  "Lo schema classico: scacco di cavallo in f7, il re va in h8, sacrificio di donna in g8 e matto di cavallo in f7.",
+  "Il cavallo è l'unico pezzo che salta: per questo i pezzi intorno al re non servono a difendere.",
+]
+mistakes = [
+  "Non provare il sacrificio di donna che chiude l'ultima casa del re.",
+]
+use_when = [
+  "Le case intorno al re sono tutte occupate dai suoi pezzi.",
+]
+avoid_when = [
+  "Un pezzo avversario può catturare il cavallo.",
+]
+signs = [
+  "Il re avversario è nell'angolo con i suoi pezzi intorno e il tuo cavallo è vicino.",
+]
+puzzle_theme = "smotheredMate"

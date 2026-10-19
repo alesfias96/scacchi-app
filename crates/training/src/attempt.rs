@@ -7,7 +7,7 @@ use chess_core::{Game, GameEndReason, Side, describe_line};
 use crate::attempt_view::{AttemptView, Feedback, Reveal};
 use crate::puzzle::Puzzle;
 use crate::rating::updated_rating;
-use crate::theme::theme_names;
+use crate::theme::{theme_hint, theme_names};
 use crate::training_error::TrainingError;
 
 /// Il risultato di un puzzle, deciso al primo errore (o aiuto) oppure alla fine.
@@ -35,6 +35,8 @@ pub struct PuzzleAttempt {
     /// Il rating prima del puzzle.
     rating_before: i32,
     feedback: Feedback,
+    /// Il primo aiuto (il tema a parole), una volta chiesto.
+    hint_text: Option<&'static str>,
     hint_square: Option<String>,
     /// Il risultato, una volta deciso.
     outcome: Option<Outcome>,
@@ -61,6 +63,7 @@ impl PuzzleAttempt {
             next: 1,
             rating_before: rating,
             feedback: Feedback::Ready,
+            hint_text: None,
             hint_square: None,
             outcome: None,
             outcome_taken: false,
@@ -137,7 +140,10 @@ impl PuzzleAttempt {
         Ok(())
     }
 
-    /// Un aiuto: indica il pezzo da muovere. Il puzzle conta come sbagliato.
+    /// Un aiuto, a gradini: il primo dice il tema a parole (es. «Cerca una mossa
+    /// che attacchi due pezzi insieme»), il secondo indica il pezzo da muovere.
+    /// Se il puzzle non ha un tema con un aiuto, si passa subito al pezzo.
+    /// Il puzzle conta come sbagliato.
     ///
     /// # Errors
     ///
@@ -146,8 +152,14 @@ impl PuzzleAttempt {
         if self.is_finished() {
             return Err(TrainingError::Finished);
         }
-        let expected = &self.puzzle.moves[self.next];
-        self.hint_square = expected.get(0..2).map(str::to_owned);
+        if self.hint_text.is_none()
+            && let Some(text) = theme_hint(&self.puzzle.themes)
+        {
+            self.hint_text = Some(text);
+        } else {
+            let expected = &self.puzzle.moves[self.next];
+            self.hint_square = expected.get(0..2).map(str::to_owned);
+        }
         self.decide(false);
         Ok(())
     }
@@ -237,6 +249,7 @@ impl PuzzleAttempt {
             themes: theme_names(&self.puzzle.themes),
             solution,
             facts,
+            idea: tutor::solution_idea(&self.puzzle.fen, &self.puzzle.moves[..self.end()]),
         })
     }
 
@@ -259,7 +272,9 @@ impl PuzzleAttempt {
             depth: to_count(self.end()),
             found: to_count(self.next),
             feedback: self.feedback,
+            hint_text: self.hint_text.map(str::to_owned),
             hint_square: self.hint_square.clone(),
+            can_hint: !finished && self.hint_square.is_none(),
             finished,
             clean: finished && self.outcome.is_some_and(|outcome| outcome.solved),
             is_review: self.mode == TrainingMode::Review,
@@ -379,7 +394,17 @@ mod tests {
             PuzzleAttempt::start(fork_in_two(), TrainingMode::Depth, 1500).expect("valido");
 
         attempt.hint().expect("in corso");
+        let first = attempt.view();
+        assert_eq!(
+            first.hint_text.as_deref(),
+            Some("Cerca una mossa che attacchi due pezzi insieme.")
+        );
+        assert_eq!(first.hint_square, None);
+        assert!(first.can_hint && !first.clean);
+
+        attempt.hint().expect("in corso");
         assert_eq!(attempt.view().hint_square.as_deref(), Some("b1"));
+        assert!(!attempt.view().can_hint);
 
         attempt.show_solution().expect("in corso");
         let view = attempt.view();

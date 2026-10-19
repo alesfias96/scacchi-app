@@ -14,9 +14,11 @@
  * - «Prova una mossa»: sulla piccola scacchiera si giocano mosse per conto
  *   proprio (anche per l'avversario) e per ognuna il tutor dice cosa cambia.
  *   La partita vera non cambia; «Torna alla posizione» chiude la prova;
+ * - «Prima di muovere»: il metodo di pensiero con la posizione (vedi
+ *   `thinking-section/`);
  * - «Guarda avanti» (3 secondi) e «Pensa più a lungo» (15 secondi): Stockfish
  *   calcola le sue varianti migliori e il tutor ne spiega l'idea, guardando
- *   lontano; «Guarda sulla scacchiera» fa vedere la variante sulla piccola
+ *   lontano; poi le strade dell'avversario (cosa potrebbe fare se toccasse a lui); «Guarda sulla scacchiera» fa vedere la variante sulla piccola
  *   scacchiera (e su quella della sezione).
  * Durante una partita contro il computer il tutor è spento (sarebbe un
  * aiuto), ma si può accendere comunque; durante un puzzle si accende solo a
@@ -37,7 +39,10 @@ import { useLoadedSettings } from '../../state/settingsStore';
 import { isTutorLocked, useTutorStore } from '../../state/tutorStore';
 import { KnowledgeCards } from '../../components/knowledge-cards/KnowledgeCards';
 import { PositionIdeasView } from './position-ideas/PositionIdeasView';
+import { useTrainTheme } from '../training/useTrainTheme';
+import { OpponentPathsView } from './opponent-paths/OpponentPathsView';
 import { StrategySection } from './strategy-section/StrategySection';
+import { ThinkingSection } from './thinking-section/ThinkingSection';
 import { TutorSections } from './tutor-sections/TutorSections';
 import styles from './TutorPanel.module.css';
 import { usePositionIdeas } from './usePositionIdeas';
@@ -70,6 +75,7 @@ export function TutorPanel() {
   const replayFrame = useIdeaReplayStore((state) => state.frame);
   const closeReplay = useIdeaReplayStore((state) => state.close);
   const lookAhead = usePositionIdeas(target?.startFen ?? null, target?.moves ?? NO_MOVE_LIST);
+  const trainTheme = useTrainTheme();
 
   // Se la posizione spiegata cambia, la variante di un'idea non vale più: si torna alla posizione.
   const targetKey = target === null ? null : `${target.startFen}|${target.moves.join(' ')}`;
@@ -224,6 +230,10 @@ export function TutorPanel() {
         />
       )}
 
+      {explanation !== null && !isTrying && (
+        <ThinkingSection thinking={explanation.thinking} notation={notation} />
+      )}
+
       {!isTrying && (
         <section className={styles.block} aria-label="Guarda avanti">
           <h3 className={styles.blockTitle}>Guarda avanti</h3>
@@ -260,6 +270,15 @@ export function TutorPanel() {
           {lookAhead.ideas !== null && (
             <PositionIdeasView ideas={lookAhead.ideas} notation={notation} />
           )}
+          {lookAhead.isLookingAtPaths && (
+            <p className={styles.message}>Ora guardo le strade dell’avversario…</p>
+          )}
+          {lookAhead.paths !== null && (
+            <>
+              <h3 className={styles.blockTitle}>Le strade dell’avversario</h3>
+              <OpponentPathsView paths={lookAhead.paths} notation={notation} />
+            </>
+          )}
         </section>
       )}
 
@@ -274,7 +293,12 @@ export function TutorPanel() {
           {cards.length > 0 && (
             <section className={styles.block} aria-label="Approfondimenti">
               <h3 className={styles.blockTitle}>Approfondimenti</h3>
-              <KnowledgeCards cards={cards} openCardId={openCardId} onToggle={setOpenCardId} />
+              <KnowledgeCards
+                cards={cards}
+                openCardId={openCardId}
+                onToggle={setOpenCardId}
+                onTrainTheme={trainTheme}
+              />
             </section>
           )}
         </>

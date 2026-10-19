@@ -1,0 +1,22 @@
+title = "L'attrazione (adescamento)"
+when = [
+  "tactic:attraction",
+]
+summary = "Con un sacrificio si costringe il re o la donna a venire su una casa dove poi vengono colpiti (spesso da una forchetta o da un matto)."
+ideas = [
+  "Il sacrificio non vale niente da solo: vale per quello che succede dopo, sulla casa d'arrivo.",
+  "Si attira il re verso i propri pezzi, o la donna su una casa da forchetta.",
+]
+mistakes = [
+  "Sacrificare senza aver calcolato cosa succede se l'avversario rifiuta.",
+]
+use_when = [
+  "Dopo la presa il colpo che segue è forzato (scacco o cattura).",
+]
+avoid_when = [
+  "L'avversario può non prendere il pezzo sacrificato.",
+]
+signs = [
+  "C'è una casa dove re o donna avversari sarebbero sotto forchetta o matto, e un sacrificio può portarli lì.",
+]
+puzzle_theme = "attraction"

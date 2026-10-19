@@ -2,7 +2,9 @@
  * usePositionIdeas — le idee della posizione, chieste a richiesta («Guarda avanti»).
  *
  * Cosa fa: con `look(thinkMs)` chiede a Rust le migliori varianti di Stockfish
- * spiegate, lasciando pensare il motore per `thinkMs` millesimi di secondo.
+ * spiegate, lasciando pensare il motore per `thinkMs` millesimi di secondo, e
+ * subito dopo le strade dell'avversario (cosa potrebbe fare se toccasse a lui).
+ * Le due richieste vanno una dopo l'altra: il motore del tutor ne segue una sola.
  * Le idee valgono solo per la posizione per cui sono state chieste: se la
  * posizione cambia, spariscono. Un calcolo annullato (perché nel frattempo è
  * partita un'altra richiesta al motore del tutor) non è un errore da mostrare.
@@ -11,14 +13,15 @@
  * Restituisce: lo stato (pronto, in corso, errore), le idee e `look`.
  */
 import { useCallback, useState } from 'react';
+import type { OpponentPaths } from '../../bindings/OpponentPaths';
 import type { PositionIdeas } from '../../bindings/PositionIdeas';
 import { describeError } from '../../lib/describeError';
-import { fetchPositionIdeas, isCancelled } from '../../services/tutorService';
+import { fetchOpponentPaths, fetchPositionIdeas, isCancelled } from '../../services/tutorService';
 
 /** A che punto è la richiesta, per una certa posizione. */
 type IdeasState =
   | { kind: 'thinking'; key: string }
-  | { kind: 'ready'; key: string; ideas: PositionIdeas }
+  | { kind: 'ready'; key: string; ideas: PositionIdeas; paths: OpponentPaths | null }
   | { kind: 'failed'; key: string; message: string };
 
 /** Ciò che restituisce l'hook. */
@@ -27,6 +30,10 @@ export interface PositionIdeasRequest {
   isThinking: boolean;
   /** Le idee della posizione attuale, oppure `null`. */
   ideas: PositionIdeas | null;
+  /** Le strade dell'avversario, oppure `null` (anche mentre si calcolano). */
+  paths: OpponentPaths | null;
+  /** `true` mentre si calcolano le strade dell'avversario. */
+  isLookingAtPaths: boolean;
   /** Il motivo dell'ultimo errore, oppure `null`. */
   error: string | null;
   /** Chiede le idee, lasciando pensare il motore per `thinkMs` millesimi di secondo. */
@@ -47,12 +54,22 @@ export function usePositionIdeas(
       }
       setState({ kind: 'thinking', key });
       fetchPositionIdeas(startFen, moves, thinkMs)
-        .then((ideas) => {
-          setState((current) => (current?.key === key ? { kind: 'ready', key, ideas } : current));
+        .then(async (ideas) => {
+          setState((current) =>
+            current?.key === key ? { kind: 'ready', key, ideas, paths: null } : current,
+          );
+          const paths = await fetchOpponentPaths(startFen, moves, thinkMs);
+          setState((current) =>
+            current?.key === key && current.kind === 'ready' ? { ...current, paths } : current,
+          );
         })
         .catch((error: unknown) => {
           setState((current) => {
             if (current?.key !== key) {
+              return current;
+            }
+            // Le idee sono arrivate, le strade no: si tengono le idee.
+            if (current.kind === 'ready') {
               return current;
             }
             return isCancelled(error)
@@ -68,6 +85,8 @@ export function usePositionIdeas(
   return {
     isThinking: current?.kind === 'thinking',
     ideas: current?.kind === 'ready' ? current.ideas : null,
+    paths: current?.kind === 'ready' ? current.paths : null,
+    isLookingAtPaths: current?.kind === 'ready' && current.paths === null,
     error: current?.kind === 'failed' ? current.message : null,
     look,
   };

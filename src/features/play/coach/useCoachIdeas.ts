@@ -5,7 +5,8 @@
  * `useCoachMessages`), chiede a Rust, una dopo l'altra:
  * 1. l'**idea della tua ultima mossa** e, se Stockfish preferiva un'altra
  *    mossa, l'idea di quella (con il confronto);
- * 2. le **idee per continuare**: le migliori varianti della posizione attuale.
+ * 2. le **idee per continuare**: le migliori varianti della posizione attuale;
+ * 3. le **strade dell'avversario**: cosa potrebbe fare se toccasse a lui.
  * Il motore del tutor pensa in sottofondo qualche secondo per ciascuna; se
  * nel frattempo si gioca un'altra mossa, il calcolo vecchio viene annullato e
  * si ricomincia sulla posizione nuova. Le richieste partono solo dopo i
@@ -23,14 +24,21 @@ import { useEffect, useState } from 'react';
 import type { GameView } from '../../../bindings/GameView';
 import type { MoveIdea } from '../../../bindings/MoveIdea';
 import type { MoveRecord } from '../../../bindings/MoveRecord';
+import type { OpponentPaths } from '../../../bindings/OpponentPaths';
 import type { PositionIdeas } from '../../../bindings/PositionIdeas';
 import type { Side } from '../../../bindings/Side';
-import { fetchMoveIdea, fetchPositionIdeas } from '../../../services/tutorService';
+import {
+  fetchMoveIdea,
+  fetchOpponentPaths,
+  fetchPositionIdeas,
+} from '../../../services/tutorService';
 
 /** Quanto pensa il motore per l'idea della mossa (per ciascuna delle due posizioni). */
 const MOVE_IDEA_MS = 1500;
 /** Quanto pensa il motore per le idee per continuare. */
 const POSITION_IDEAS_MS = 3000;
+/** Quanto pensa il motore per le strade dell'avversario. */
+const OPPONENT_PATHS_MS = 2000;
 
 /** Le idee pronte per una posizione. */
 export interface CoachIdeas {
@@ -38,6 +46,8 @@ export interface CoachIdeas {
   move: { record: MoveRecord; idea: MoveIdea } | null;
   /** Le idee per continuare, se la partita non è finita. */
   position: PositionIdeas | null;
+  /** Le strade dell'avversario, se la partita non è finita. */
+  paths: OpponentPaths | null;
   /** `true` mentre il tutor sta ancora guardando avanti. */
   isThinking: boolean;
 }
@@ -47,6 +57,7 @@ interface IdeasResult {
   key: string;
   move: CoachIdeas['move'];
   position: PositionIdeas | null;
+  paths: OpponentPaths | null;
   done: boolean;
 }
 
@@ -84,6 +95,7 @@ export function useCoachIdeas(
       return;
     }
     let isCurrent = true;
+    const stillCurrent = () => isCurrent;
     const shown = game.moves.slice(0, game.cursor).map((move) => move.uci);
     const ply = lastHumanPly(game, humanSide);
     const record = ply === null ? undefined : game.moves[ply - 1];
@@ -101,14 +113,20 @@ export function useCoachIdeas(
         if (!isCurrent) {
           return;
         }
-        setResult({ key, move, position: null, done: isOver });
+        setResult({ key, move, position: null, paths: null, done: isOver });
       }
       if (isOver) {
         return;
       }
       const position = await fetchPositionIdeas(game.startingFen, shown, POSITION_IDEAS_MS);
-      if (isCurrent) {
-        setResult({ key, move, position, done: true });
+      if (!isCurrent) {
+        return;
+      }
+      setResult({ key, move, position, paths: null, done: false });
+      const paths = await fetchOpponentPaths(game.startingFen, shown, OPPONENT_PATHS_MS);
+      // Dopo un'attesa la posizione può essere cambiata (vedi la pulizia dell'effetto).
+      if (stillCurrent()) {
+        setResult({ key, move, position, paths, done: true });
       }
     };
     run().catch(() => {
@@ -117,7 +135,7 @@ export function useCoachIdeas(
         setResult((current) =>
           current?.key === key
             ? { ...current, done: true }
-            : { key, move: null, position: null, done: true },
+            : { key, move: null, position: null, paths: null, done: true },
         );
       }
     });
@@ -132,6 +150,7 @@ export function useCoachIdeas(
   return {
     move: current?.move ?? null,
     position: current?.position ?? null,
+    paths: current?.paths ?? null,
     isThinking: enabled && ready && current?.done !== true,
   };
 }

@@ -1,0 +1,22 @@
+title = "L'eliminazione del difensore"
+when = [
+  "tactic:removing-defender",
+]
+summary = "Si cattura (anche sacrificando) il pezzo che difende, e poi si prende ciò che difendeva."
+ideas = [
+  "Spesso si cambia un pezzo che sembra pari (un alfiere per un cavallo) solo per togliere un difensore.",
+  "Funziona bene contro i difensori del re, come il cavallo in f6.",
+]
+mistakes = [
+  "Catturare in ordine sbagliato: prima il bersaglio, quando il difensore riprende.",
+]
+use_when = [
+  "Dopo la cattura il bersaglio resta davvero senza difesa.",
+]
+avoid_when = [
+  "Catturare il difensore costa più di quello che si vince dopo.",
+]
+signs = [
+  "Un pezzo avversario è l'unico che difende un pezzo o una casa importante, e puoi catturarlo.",
+]
+puzzle_theme = "capturingDefender"

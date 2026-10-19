@@ -17,4 +17,8 @@ better: IdeaView | null,
  * Il confronto tra le due, se c'è la migliore (la mossa migliore è la
  * prima di `better`: l'interfaccia la scrive nella sua notazione).
  */
-comparison: string | null, };
+comparison: string | null, 
+/**
+ * Se c'è la migliore: quale passo del metodo «Prima di muovere» l'avrebbe trovata.
+ */
+lesson: string | null, };

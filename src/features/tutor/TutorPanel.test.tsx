@@ -7,13 +7,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSettingsStore } from '../../state/settingsStore';
 import { useTutorStore, type TutorTarget } from '../../state/tutorStore';
 import { AFTER_E4_SCENARIO, START_EXPLANATION } from '../../test/tutorExplanations';
-import { POSITION_IDEAS } from '../../test/ideas';
+import { OPPONENT_PATHS, POSITION_IDEAS } from '../../test/ideas';
 import { TutorPanel } from './TutorPanel';
 
 const serviceMock = vi.hoisted(() => ({
   explainPosition: vi.fn(),
   tryWhatIf: vi.fn(),
   fetchPositionIdeas: vi.fn(),
+  fetchOpponentPaths: vi.fn(),
   isCancelled: () => false,
 }));
 
@@ -104,6 +105,7 @@ describe('TutorPanel', () => {
 
   it('«Guarda avanti» chiede a Stockfish le idee e le spiega', async () => {
     serviceMock.fetchPositionIdeas.mockResolvedValue(POSITION_IDEAS);
+    serviceMock.fetchOpponentPaths.mockResolvedValue(OPPONENT_PATHS);
     useTutorStore.getState().setTarget(TARGET);
     render(<TutorPanel />);
     await screen.findByText('Tocca al Bianco');
@@ -113,6 +115,18 @@ describe('TutorPanel', () => {
     expect(await screen.findByText('Idea 1 · la preferita da Stockfish')).toBeDefined();
     expect(serviceMock.fetchPositionIdeas).toHaveBeenCalledWith(TARGET.startFen, [], 3000);
     expect(screen.getByText(/Stockfish preferisce la prima idea/)).toBeDefined();
+    expect(await screen.findByText('Le strade dell’avversario')).toBeDefined();
+    expect(screen.getByText(/Una strada possibile: il cavallo va b8–c6/)).toBeDefined();
+    expect(serviceMock.fetchOpponentPaths).toHaveBeenCalledWith(TARGET.startFen, [], 3000);
+  });
+
+  it('mostra «Prima di muovere» con i passi del metodo', async () => {
+    useTutorStore.getState().setTarget(TARGET);
+    render(<TutorPanel />);
+    await screen.findByText('Tocca al Bianco');
+
+    expect(screen.getByRole('region', { name: 'Prima di muovere' })).toBeDefined();
+    expect(screen.getByText('Dxf7+')).toBeDefined();
   });
 
   it('durante un puzzle resta spento', () => {

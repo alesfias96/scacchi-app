@@ -14,6 +14,7 @@ Italiana").
 | Cartella      | Cosa contiene                                                                                      |
 | ------------- | -------------------------------------------------------------------------------------------------- |
 | `principles/` | I principi generali (sviluppo, re al sicuro, centro, torri, …)                                     |
+| `tactics/`    | I motivi tattici (forchetta, deviazione, mossa intermedia, …) e il metodo «Prima di muovere»       |
 | `structures/` | Le strutture pedonali (isolano, Carlsbad, catene, …)                                               |
 | `openings/`   | Le aperture più giocate, con le idee per il Bianco e per il Nero                                   |
 | `middlegame/` | I temi e i piani del mediogioco (arrocchi opposti, avamposti, attacco di minoranza, profilassi, …) |
@@ -30,6 +31,7 @@ mistakes = ["Un errore tipico da evitare."]
 use_when = ["Quando conviene."]                # facoltativo: «Quando usarlo»
 avoid_when = ["Quando no."]                    # facoltativo: «Quando no»
 signs = ["Un segnale che sta funzionando."]    # facoltativo: «Segnali che funziona»
+puzzle_theme = "fork"                          # facoltativo: il tema dei puzzle di Lichess («Allenati su questo tema»)
 
 [[plans]]                                    # un piano (se ne possono scrivere più di uno)
 for = "owner"                                # per chi: white, black, owner, opponent, both

@@ -154,6 +154,22 @@ describe('TrainingPage', () => {
     });
   });
 
+  it('il primo aiuto dice il tema a parole, poi si può chiedere il pezzo', async () => {
+    trainingMock.startPuzzle.mockResolvedValue(READY_ATTEMPT);
+    trainingMock.requestPuzzleHint.mockResolvedValue({
+      ...READY_ATTEMPT,
+      hintText: 'C’è un matto in una mossa.',
+    });
+    render(<TrainingPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Nuovo puzzle' }));
+    await screen.findByText(/Muove il Bianco/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Aiuto' }));
+
+    expect(await screen.findByText('Aiuto: C’è un matto in una mossa.')).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Altro aiuto' })).toBeDefined();
+  });
+
   it('spiega perché non trova un puzzle', async () => {
     trainingMock.startPuzzle.mockRejectedValue('nessun puzzle con queste scelte');
     render(<TrainingPage />);

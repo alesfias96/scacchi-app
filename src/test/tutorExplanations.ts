@@ -5,6 +5,7 @@
  */
 import type { Fact } from '../bindings/Fact';
 import type { StrategyView } from '../bindings/StrategyView';
+import type { ThinkingView } from '../bindings/ThinkingView';
 import type { TutorExplanation } from '../bindings/TutorExplanation';
 import type { WhatIfView } from '../bindings/WhatIfView';
 
@@ -49,6 +50,17 @@ export const STRATEGY: StrategyView = {
   cards: [],
 };
 
+/** Il metodo «Prima di muovere» di prova. */
+export const THINKING: ThinkingView = {
+  steps: [
+    { title: 'I tuoi scacchi', text: 'Una mossa: guardale tutte.', moves: ['Qxf7+'] },
+    { title: 'Le tue catture', text: 'Nessuna cattura possibile.', moves: [] },
+    { title: 'Cosa minaccia l’avversario', text: 'Nessuna minaccia immediata.', moves: [] },
+    { title: 'Il controllo finale', text: 'Guarda la casa dove va il pezzo.', moves: [] },
+  ],
+  card: null,
+};
+
 export const START_EXPLANATION: TutorExplanation = {
   fen: START_FEN,
   position: {
@@ -81,9 +93,11 @@ export const START_EXPLANATION: TutorExplanation = {
       useWhen: ['Sempre, in apertura.'],
       avoidWhen: [],
       signs: [],
+      puzzleTheme: null,
     },
   ],
   strategy: STRATEGY,
+  thinking: THINKING,
 };
 
 /** Lo scenario dopo 1.e4, con il giudizio di Stockfish. */

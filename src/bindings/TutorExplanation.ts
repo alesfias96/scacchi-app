@@ -3,6 +3,7 @@ import type { CardView } from "./CardView";
 import type { PositionView } from "./PositionView";
 import type { Side } from "./Side";
 import type { StrategyView } from "./StrategyView";
+import type { ThinkingView } from "./ThinkingView";
 import type { TutorSection } from "./TutorSection";
 
 /**
@@ -32,4 +33,8 @@ cards: Array<CardView>,
 /**
  * La strategia: com'è il centro, chi ha cosa, i piani consigliati.
  */
-strategy: StrategyView, };
+strategy: StrategyView, 
+/**
+ * Il metodo «Prima di muovere» per questa posizione.
+ */
+thinking: ThinkingView, };

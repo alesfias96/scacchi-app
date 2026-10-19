@@ -22,7 +22,7 @@ describe('CoachPlanPanel', () => {
 
     expect(screen.getByRole('region', { name: 'Il piano' })).toBeDefined();
     expect(screen.getByText("L'attacco di minoranza")).toBeDefined();
-    expect(screen.getByText('Il piano dell’avversario')).toBeDefined();
+    expect(screen.getByText('Una strada possibile dell’avversario')).toBeDefined();
     expect(screen.queryByText('Piano nuovo')).toBeNull();
   });
 

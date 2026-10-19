@@ -24,6 +24,7 @@ bindings = [
     "chess-core/bindings",
     "analysis/bindings",
     "app-settings/bindings",
+    "tutor/bindings",
 ]
 
 [dependencies]
@@ -33,6 +34,8 @@ chess-core.workspace = true
 analysis.workspace = true
 # Le scelte dell'allenamento (modalità, difficoltà) sono impostazioni dell'utente.
 app-settings.workspace = true
+# Il tutor: spiega la soluzione come una combinazione (i motivi, uno dopo l'altro).
+tutor.workspace = true
 thiserror.workspace = true
 serde = { workspace = true, optional = true }
 ts-rs = { workspace = true, optional = true }

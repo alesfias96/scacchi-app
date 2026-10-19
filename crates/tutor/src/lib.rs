@@ -39,20 +39,30 @@ pub mod knowledge_card;
 pub mod library;
 pub mod line_walk;
 pub mod middlegame_themes;
+pub mod motifs;
+pub mod move_lesson;
+pub mod opponent_paths;
 pub mod principles;
 pub mod recognition;
 pub mod strategy;
 pub mod strategy_plans;
 pub mod strategy_view;
 pub mod structures;
+pub mod thinking;
 pub mod topic;
 pub mod tutor_error;
 pub mod what_if;
 
 pub use explanation::explain;
-pub use explanation_view::{CardView, PlanView, TutorExplanation, TutorItem, TutorSection};
-pub use idea::{move_idea, position_ideas};
-pub use idea_view::{IdeaFrame, IdeaMoment, IdeaView, MoveIdea, PositionIdeas};
+pub use explanation_view::{
+    CardView, PlanView, ThinkingStep, ThinkingView, TutorExplanation, TutorItem, TutorSection,
+};
+pub use idea::{move_idea, position_ideas, solution_idea};
+pub use idea_view::{
+    IdeaFrame, IdeaMoment, IdeaView, MotifView, MoveIdea, OpponentPaths, PositionIdeas,
+};
+pub use motifs::{Motif, fact_motif, motif_view};
+pub use opponent_paths::{flipped_fen, opponent_paths, paths_when_in_check};
 pub use strategy_view::{ImbalanceItem, StrategyPlanView, StrategyView};
 pub use topic::Topic;
 pub use tutor_error::TutorError;

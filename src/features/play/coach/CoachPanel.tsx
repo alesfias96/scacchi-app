@@ -14,6 +14,7 @@ import type { CardView } from '../../../bindings/CardView';
 import { KnowledgeCards } from '../../../components/knowledge-cards/KnowledgeCards';
 import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { Switch } from '../../../components/switch/Switch';
+import { useTrainTheme } from '../../training/useTrainTheme';
 import styles from './CoachPanel.module.css';
 
 export interface CoachPanelProps {
@@ -24,6 +25,7 @@ export interface CoachPanelProps {
 }
 
 export function CoachPanel({ withEngine, onWithEngineChange, card, onCloseCard }: CoachPanelProps) {
+  const trainTheme = useTrainTheme();
   return (
     <PanelCard title="Tutor">
       <p className={styles.message}>
@@ -40,6 +42,7 @@ export function CoachPanel({ withEngine, onWithEngineChange, card, onCloseCard }
               onCloseCard();
             }
           }}
+          onTrainTheme={trainTheme}
         />
       )}
     </PanelCard>

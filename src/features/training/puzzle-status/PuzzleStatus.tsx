@@ -4,7 +4,8 @@
  * Cosa fa: mostra il messaggio (consegna, mossa giusta o sbagliata, risolto),
  * quante mosse sono state trovate, le mosse giocate dall'inizio del puzzle
  * (nella visualizzazione sono l'unico modo di seguire la partita) e i
- * pulsanti: "Aiuto" (indica il pezzo da muovere), "Mostra soluzione" e,
+ * pulsanti: "Aiuto" (prima il tema a parole, poi con "Altro aiuto" il pezzo
+ * da muovere), "Mostra soluzione" e,
  * a puzzle finito, "Prossimo puzzle".
  *
  * Riceve:
@@ -74,6 +75,11 @@ export function PuzzleStatus({
       <p className={styles.moves} aria-label="Mosse giocate">
         {moves}
       </p>
+      {attempt.hintText !== null && !attempt.finished && (
+        <p className={styles.hint} role="note">
+          Aiuto: {attempt.hintText}
+        </p>
+      )}
       <div className={styles.actions}>
         {attempt.finished ? (
           <Button variant="primary" onClick={onNext}>
@@ -81,8 +87,8 @@ export function PuzzleStatus({
           </Button>
         ) : (
           <>
-            <Button onClick={onHint} disabled={attempt.hintSquare !== null}>
-              Aiuto
+            <Button onClick={onHint} disabled={!attempt.canHint}>
+              {attempt.hintText === null ? 'Aiuto' : 'Altro aiuto'}
             </Button>
             <Button onClick={onShowSolution}>Mostra soluzione</Button>
           </>

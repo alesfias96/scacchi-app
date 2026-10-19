@@ -85,3 +85,9 @@
   background: var(--color-accent-soft);
   outline: none;
 }
+
+.motifs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

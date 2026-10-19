@@ -10,3 +10,6 @@ mostra le case coinvolte.
 | ------------------------- | ------------- |
 | `PuzzleReveal.tsx`        | Il componente |
 | `PuzzleReveal.module.css` | I suoi stili  |
+
+Sotto, «La combinazione»: la soluzione raccontata dal tutor con i suoi motivi uno dopo l'altro, le
+schede dei motivi e i pulsanti «Allenati» per altri puzzle dello stesso tema.

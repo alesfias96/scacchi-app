@@ -1,0 +1,25 @@
+title = "Il metodo «Prima di muovere»"
+when = [
+  "tactic:thinking-method",
+]
+summary = "Quattro domande, sempre nello stesso ordine, prima di ogni mossa: servono a non lasciare pezzi e a non perdere le occasioni."
+ideas = [
+  "I tuoi scacchi: guarda tutte le mosse che danno scacco, anche quelle che sembrano impossibili.",
+  "Le tue catture: per ogni cattura chiediti cosa risponde l'avversario.",
+  "Cosa minaccia l'avversario: se toccasse a lui, cosa farebbe? Quali strade potrebbe prendere?",
+  "Il controllo finale: scelta la mossa, guarda la casa d'arrivo e i pezzi che lasci.",
+]
+mistakes = [
+  "Guardare solo la propria idea e non quella dell'avversario.",
+  "Saltare il controllo finale quando si è contenti della mossa.",
+]
+use_when = [
+  "Sempre, a ogni mossa: nelle posizioni tranquille basta un attimo.",
+]
+avoid_when = [
+  "Mai saltarlo: anche con poco tempo, almeno scacchi, catture e minacce.",
+]
+signs = [
+  "Smetti di lasciare pezzi in presa.",
+  "Trovi più spesso le combinazioni nelle tue partite.",
+]

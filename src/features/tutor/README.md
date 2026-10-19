@@ -40,6 +40,8 @@ tre varianti migliori e il tutor spiega l'idea di ciascuna, guardando lontano (v
 | `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                                                                |
 | `idea-card/`            | Un'idea: frase principale, momenti chiave con la loro mossa, schede, variante e i comandi per guardarla sulla scacchiera |
 | `strategy-section/`     | «La strategia» in cima alla spiegazione: centro, «Chi ha cosa», piani con perché, come, quando sì e quando no            |
+| `thinking-section/`     | «Prima di muovere»: il metodo di pensiero con le mosse della posizione                                                   |
+| `opponent-paths/`       | Le strade dell'avversario: cosa potrebbe fare se toccasse a lui, al condizionale                                         |
 | `position-ideas/`       | Le idee della posizione, dalla preferita da Stockfish, con il confronto                                                  |
 | `usePositionIdeas.ts`   | Chiede le idee della posizione a richiesta («Guarda avanti», «Pensa più a lungo»)                                        |
 | `ideaMoves.ts`          | La mossa di un momento chiave scritta come nei libri ("12. ♞c6+"), nella notazione scelta                                |

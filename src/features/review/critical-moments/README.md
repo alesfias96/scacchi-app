@@ -9,3 +9,6 @@ dell'errore, con le frecce delle due mosse.
 | ---------------------------- | ------------- |
 | `CriticalMoments.tsx`        | Il componente |
 | `CriticalMoments.module.css` | I suoi stili  |
+
+Se un momento ha un motivo tattico (es. una forchetta sfuggita), compare «Allenati: Forchetta», che
+apre l'Allenamento con i puzzle di quel tema.

@@ -4,7 +4,10 @@
  * Cosa fa: dopo ogni mossa mostra due schede:
  * - «L'idea della tua mossa»: cosa ottiene la tua ultima mossa guardando
  *   avanti e, se Stockfish preferiva un'altra mossa, perché (con la sua idea);
- * - «Le idee per continuare»: le migliori varianti della posizione, spiegate.
+ * - «Le idee per continuare»: le migliori varianti della posizione, spiegate;
+ * - «Le strade dell'avversario»: cosa potrebbe fare se toccasse a lui.
+ * Dopo un errore, sotto il confronto, quale passo del metodo «Prima di
+ * muovere» avrebbe trovato la mossa migliore.
  * Ogni idea si può guardare sulla scacchiera. Mentre il tutor calcola, lo dice.
  *
  * Riceve:
@@ -16,6 +19,7 @@ import type { Notation } from '../../../bindings/Notation';
 import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { formatSan } from '../../../lib/formatSan';
 import { IdeaCard } from '../../tutor/idea-card/IdeaCard';
+import { OpponentPathsView } from '../../tutor/opponent-paths/OpponentPathsView';
 import { PositionIdeasView } from '../../tutor/position-ideas/PositionIdeasView';
 import styles from './CoachIdeasPanel.module.css';
 import type { CoachIdeas } from './useCoachIdeas';
@@ -26,7 +30,7 @@ export interface CoachIdeasPanelProps {
 }
 
 export function CoachIdeasPanel({ ideas, notation }: CoachIdeasPanelProps) {
-  const { move, position, isThinking } = ideas;
+  const { move, position, paths, isThinking } = ideas;
   const better = move?.idea.better ?? null;
   const betterMove = better?.moves[0];
 
@@ -44,6 +48,7 @@ export function CoachIdeasPanel({ ideas, notation }: CoachIdeasPanelProps) {
               {move.idea.comparison !== null && (
                 <p className={styles.comparison}>{move.idea.comparison}</p>
               )}
+              {move.idea.lesson !== null && <p className={styles.lesson}>{move.idea.lesson}</p>}
               <IdeaCard
                 idea={better}
                 title={`La mossa migliore${betterMove === undefined ? '' : `: ${formatSan(betterMove, notation)}`}`}
@@ -62,6 +67,12 @@ export function CoachIdeasPanel({ ideas, notation }: CoachIdeasPanelProps) {
               Il tutor sta guardando avanti…
             </p>
           )}
+        </PanelCard>
+      )}
+
+      {paths !== null && (
+        <PanelCard title="Le strade dell’avversario">
+          <OpponentPathsView paths={paths} notation={notation} />
         </PanelCard>
       )}
     </>

@@ -5,7 +5,9 @@
  * del puzzle, i suoi temi, la soluzione completa e il perché funziona: i fatti
  * tattici trovati dai rilevatori nella posizione del puzzle (forchette,
  * inchiodature, pezzi in presa…). Passando il mouse su un fatto, la scacchiera
- * mostra le case coinvolte.
+ * mostra le case coinvolte. Sotto, «La combinazione»: la soluzione raccontata
+ * dal tutor con i suoi motivi uno dopo l'altro, le schede dei motivi e
+ * «Allenati» per altri puzzle dello stesso tema.
  *
  * Riceve:
  * - `reveal`: ciò che si scopre a puzzle finito;
@@ -18,10 +20,14 @@
 import type { Fact } from '../../../bindings/Fact';
 import type { Notation } from '../../../bindings/Notation';
 import type { Reveal } from '../../../bindings/Reveal';
+import { useState } from 'react';
+import { KnowledgeCards } from '../../../components/knowledge-cards/KnowledgeCards';
 import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { classNames } from '../../../lib/classNames';
 import { formatFact } from '../../../lib/formatFact';
 import { formatLine } from '../../../lib/formatLine';
+import { TrainThemeButton } from '../train-theme-button/TrainThemeButton';
+import { useTrainTheme } from '../useTrainTheme';
 import styles from './PuzzleReveal.module.css';
 
 export interface PuzzleRevealProps {
@@ -50,6 +56,11 @@ export function PuzzleReveal({
   notation,
   onHighlight,
 }: PuzzleRevealProps) {
+  const trainTheme = useTrainTheme();
+  /** La scheda di un motivo aperta. */
+  const [openCardId, setOpenCardId] = useState<string | null>(null);
+  const { idea } = reveal;
+
   return (
     <PanelCard title="Soluzione">
       <dl className={styles.details}>
@@ -115,6 +126,30 @@ export function PuzzleReveal({
           </ul>
         )}
       </section>
+
+      {idea !== null && (
+        <section className={styles.why} aria-label="La combinazione">
+          <h3 className={styles.whyTitle}>La combinazione</h3>
+          <p>{idea.headline}</p>
+          {idea.motifs.length > 0 && (
+            <div className={styles.motifs}>
+              {idea.motifs.map((motif) =>
+                motif.puzzleTheme === null ? null : (
+                  <TrainThemeButton key={motif.key} theme={motif.puzzleTheme} name={motif.name} />
+                ),
+              )}
+            </div>
+          )}
+          {idea.cards.length > 0 && (
+            <KnowledgeCards
+              cards={idea.cards}
+              openCardId={openCardId}
+              onToggle={setOpenCardId}
+              onTrainTheme={trainTheme}
+            />
+          )}
+        </section>
+      )}
     </PanelCard>
   );
 }
