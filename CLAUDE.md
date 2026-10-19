@@ -95,8 +95,9 @@ sbagliata del primo tentativo è stata cancellata e l'etichetta giusta caricata)
 Cose da sapere sulla 12-B: i piani nascono dalle regole di `crates/tutor/src/strategy_plans.rs`
 (ogni regola ha un punteggio; si mostrano al massimo due piani a chi muove più quello dell'avversario);
 le 28 schede nuove stanno in `knowledge/middlegame/` e `knowledge/endgames/` (elenco nei README).
-Alessandro ha chiesto di lavorare **tutto in un colpo**: analisi completa, poi si scrive tutto
-insieme e si fanno i controlli una volta sola, con pochi messaggi.
+Solo per la 12-B e la 12-C Alessandro ha chiesto di lavorare **tutto in un colpo** (analisi
+completa, poi tutto insieme, controlli una volta sola, pochi messaggi) per risparmiare token. Dalla
+fase successiva si torna al modo di lavorare di sempre.
 
 Richiesta di Alessandro: strategie e tattiche **molto avanzate**; il tutor deve capire la strategia
 di una mossa **guardando molto avanti** nella partita, senza soffermarsi sulla mossa in sé.
