@@ -331,7 +331,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 4. Database                     | ✅ completata |
 | 5. Analisi                      | ✅ completata |
 | 6. Allenamento calcolo          | ✅ completata |
-| 7. Tutor                        | 🔵 in test    |
+| 7. Tutor                        | ✅ completata |
 | 8. Analisi partite              | ⚪ da fare    |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
@@ -441,6 +441,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Cambio: i messaggi della modalità Tutor stanno in una fascia sotto la scacchiera (non sopra); la scacchiera è un po' più piccola                                                                 | Richiesta di Alessandro: vedere sempre tutta la scacchiera                                                                                                                                                                                    |
 | 2026-10-19 | La colonna di destra è alta quanto l'area della scacchiera, con scorrimento interno (`contain: size`); la pagina non scorre                                                                      | Lo scroll della pagina era eccessivo                                                                                                                                                                                                          |
 | 2026-10-19 | Cambio: niente più barra a comparsa del tutor; in cima alla colonna di destra un selettore «Partita \| Tutor» («Allenamento \| Tutor»), tasto T                                                  | Prima la barra si sovrapponeva alla colonna                                                                                                                                                                                                   |
+| 2026-10-19 | Fase 7 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
