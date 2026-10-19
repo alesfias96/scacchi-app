@@ -27,6 +27,7 @@ export function renderWithRouter(element: ReactElement, path = '/') {
     '/tutor',
     '/analisi',
     '/progressi',
+    '/appunti',
     '/impostazioni',
   ].map((pagePath) =>
     createRoute({ getParentRoute: () => rootRoute, path: pagePath, component: () => null }),

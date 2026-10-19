@@ -23,6 +23,7 @@ passano la richiesta alla crate giusta in `crates/` e restituiscono la risposta.
 | `clipboard.rs`  | `copy_text`: copia un testo negli appunti del sistema (Copia FEN, Copia PGN), con il plugin ufficiale di Tauri                                                                                                                                                                                                         |
 | `stats.rs`      | Comandi delle statistiche: `get_stats` (legge i dati grezzi e li passa alla crate `stats`) e `analyze_missing_games` (mette in coda le partite finite non analizzate)                                                                                                                                                  |
 | `updates.rs`    | Aggiornamenti: `app_version` (la versione installata), `check_update` (c'è una versione nuova?), `install_update` (scarica, controlla la firma, installa e riavvia)                                                                                                                                                    |
+| `notes.rs`      | Appunti: `list_notes` (con la ricerca), `note_tags` (le etichette), `save_note`, `delete_note`                                                                                                                                                                                                                         |
 
 ## Come si aggiunge un comando
 

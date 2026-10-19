@@ -33,6 +33,14 @@ describe('Sidebar', () => {
     expect(link.getAttribute('aria-current')).toBe('page');
   });
 
+  it('porta agli appunti', async () => {
+    renderWithRouter(<Sidebar />, '/appunti');
+
+    const link = await screen.findByRole('link', { name: 'Appunti' });
+
+    expect(link.getAttribute('aria-current')).toBe('page');
+  });
+
   it('porta alla modalità Tutor', async () => {
     renderWithRouter(<Sidebar />, '/');
 

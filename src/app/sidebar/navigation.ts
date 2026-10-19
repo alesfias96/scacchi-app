@@ -13,7 +13,15 @@ export interface NavigationItem {
   /** Il nome mostrato all'utente. */
   label: string;
   /** L'indirizzo della pagina, come definito in src/app/router.ts. */
-  to: '/' | '/archivio' | '/allenamento' | '/tutor' | '/analisi' | '/progressi' | '/impostazioni';
+  to:
+    | '/'
+    | '/archivio'
+    | '/allenamento'
+    | '/tutor'
+    | '/analisi'
+    | '/progressi'
+    | '/appunti'
+    | '/impostazioni';
 }
 
 /** Le sezioni principali, nell'ordine in cui compaiono. */
@@ -24,6 +32,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   { id: 'tutor', label: 'Tutor', to: '/tutor' },
   { id: 'review', label: 'Analisi partite', to: '/analisi' },
   { id: 'progress', label: 'Progressi', to: '/progressi' },
+  { id: 'notes', label: 'Appunti', to: '/appunti' },
 ];
 
 /** La voce delle impostazioni, mostrata in fondo alla barra laterale. */

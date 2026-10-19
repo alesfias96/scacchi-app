@@ -8,6 +8,7 @@
  * - "/tutor"         → Tutor (la partita di «Gioca» con i commenti dopo ogni mossa)
  * - "/analisi"       → Analisi partite (con `?partita=<nome>`: la revisione di una partita)
  * - "/progressi"     → Progressi (le statistiche)
+ * - "/appunti"       → Appunti (con `?appunto=<nome>`: l'appunto aperto)
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -21,6 +22,7 @@ import {
 } from '@tanstack/react-router';
 import { ArchivePage } from '../features/archive/ArchivePage';
 import { CoachedPlayPage, PlayPage } from '../features/play/PlayPage';
+import { NotesPage } from '../features/notes/NotesPage';
 import { ProgressPage } from '../features/progress/ProgressPage';
 import { ReviewPage } from '../features/review/ReviewPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
@@ -71,6 +73,15 @@ const progressRoute = createRoute({
   component: ProgressPage,
 });
 
+const notesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/appunti',
+  component: NotesPage,
+  // L'appunto aperto sta nell'indirizzo: così si può aprire subito quello appena creato.
+  validateSearch: (search: Record<string, unknown>): { appunto?: string } =>
+    typeof search.appunto === 'string' ? { appunto: search.appunto } : {},
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
@@ -84,6 +95,7 @@ const routeTree = rootRoute.addChildren([
   tutorRoute,
   reviewRoute,
   progressRoute,
+  notesRoute,
   settingsRoute,
 ]);
 

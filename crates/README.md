@@ -22,6 +22,7 @@ Le crate vengono aggiunte una alla volta, solo quando servono.
 | `review/`       | L'analisi delle partite giocate: giudizio delle mosse, precisione, momenti critici, puzzle dagli errori            |
 | `stats/`        | Le statistiche della sezione «Progressi»: livello stimato, risultati, errori per fase, aperture, calcolo e tattica |
 | `maia/`         | Il computer "umano": le reti Maia, calcolate in Rust, che giocano come una persona da 1100 a 1900 Elo              |
+| `notes/`        | Gli appunti personali: preparazione da salvare, etichette, ricerca senza badare a maiuscole e accenti              |
 
 Come si usano tra loro: `game-session` usa `chess-core` (le regole), `engine` (i livelli e le
 richieste), `app-settings` (la configurazione scelta) e `openings` (l'apertura giocata);

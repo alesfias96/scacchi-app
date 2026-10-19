@@ -33,6 +33,7 @@ pub mod game_summary;
 pub mod list_games;
 pub mod load_game;
 pub mod move_analysis;
+pub mod notes_data;
 pub mod own_puzzles;
 pub mod puzzle_attempts;
 pub mod puzzle_reviews;

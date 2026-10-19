@@ -1,0 +1,90 @@
+/*
+ * L'appunto aperto: titolo grande, testo che occupa lo spazio, etichette,
+ * stato del salvataggio, posizione collegata e, in fondo, «Elimina».
+ */
+
+.editor {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-large);
+  background: var(--color-surface);
+}
+
+/* I campi hanno lo stesso aspetto dei filtri dell'archivio. */
+.title,
+.body,
+.tags {
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-background);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.title:focus-visible,
+.body:focus-visible,
+.tags:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.title {
+  font-size: var(--text-large);
+  font-weight: var(--weight-semibold);
+}
+
+.body {
+  min-height: var(--note-body-min-height);
+  resize: vertical;
+  line-height: var(--leading-body);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fieldLabel,
+.status {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: var(--text-small);
+}
+
+/* La posizione collegata: scacchiera piccola a sinistra, pulsanti a destra. */
+.link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.board {
+  width: var(--note-board-size);
+}
+
+.linkActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+}
+
+.confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}

@@ -66,6 +66,8 @@ import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { AnalysisPanel } from './analysis-panel/AnalysisPanel';
 import { GameControls } from './game-controls/GameControls';
 import { GameResultBanner } from './game-result-banner/GameResultBanner';
+import { AddNoteButton } from '../notes/add-note-button/AddNoteButton';
+import { playLink } from '../notes/noteLinks';
 import { ImportExport } from './import-export/ImportExport';
 import { MoveList } from './move-list/MoveList';
 import { NewGameDialog } from './new-game-dialog/NewGameDialog';
@@ -545,6 +547,10 @@ export function PlayPage({ coached = false }: PlayPageProps) {
 
                 <PanelCard title="File PGN">
                   <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
+                </PanelCard>
+
+                <PanelCard title="Appunti">
+                  <AddNoteButton link={playLink(session)} />
                 </PanelCard>
               </>
             )}

@@ -183,6 +183,7 @@ app-scacchi/
 │   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
 │   │                           critici, dati per le statistiche, puzzle dagli errori gravi
 │   ├── maia/                   il computer "umano": reti Maia calcolate in Rust, 9 livelli
+│   ├── notes/                  appunti personali: preparazione, etichette, ricerca senza accenti
 │   ├── stats/                  statistiche di «Progressi»: Elo stimato, risultati, errori per fase
 │   │                           e con poco tempo, aperture, puzzle per profondità e per tema
 │   └── storage/                database SQLite: partite, archivio, tentativi dei puzzle, ripasso
@@ -241,6 +242,8 @@ app-scacchi/
 │   │   ├── progress/           «Progressi»: filtri, «Analizza le partite mancanti», 4 schede
 │   │   │                       progress-filters/, analysis-queue/, stat-figure/, level-tab/,
 │   │   │                       games-tab/, openings-tab/, tactics-tab/
+│   │   ├── notes/              «Appunti»: elenco, ricerca, etichette, appunto con salvataggio automatico
+│   │   │                       note-list/, note-editor/, add-note-button/
 │   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione, suoni
 │   ├── sounds/                 suoni del gioco (mossa, presa, fine partita), creati con Web Audio
 │   ├── hooks/                  hook React condivisi (tastiera, suoni, tema di sistema, orologio)
@@ -354,7 +357,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 8-bis. Varianti                 | ✅ completata                                             |
 | 9. Statistiche                  | ✅ completata                                             |
 | 10. Estensioni                  | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
-| 11. Appunti personali           | ⚪ da fare                                                |
+| 11. Appunti personali           | 🔵 in test                                                |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -504,6 +507,13 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | I file firmati per gli aggiornamenti si creano solo nel flusso di pubblicazione (`tauri.release.conf.json`)                                                                                      | Così `npm run tauri build` e la CI funzionano anche senza la chiave privata                                                                                                                                                                   |
 | 2026-10-19 | Fase 10-B approvata; prima versione pubblicata: v0.10.0                                                                                                                                          | CI e Release verdi sui tre sistemi; la prova di un aggiornamento vero si farà con la prossima versione                                                                                                                                        |
 | 2026-10-19 | 10-C (AI locale con Ollama) rinviata; si passa alla Fase 11                                                                                                                                      | Alessandro vuole valutarla con calma; il piano proposto resta negli appunti §11                                                                                                                                                               |
+| 2026-10-19 | Fase 11: sezione «Appunti» (elenco, ricerca, etichette, appunto aperto) e «Aggiungi un appunto» in Gioca e in Analisi partite                                                                    | Scelte 1A–6A approvate                                                                                                                                                                                                                        |
+| 2026-10-19 | Crate `notes` pura; migrazione 0005 (tabella `notes`, etichette una per riga); comandi `list_notes`, `note_tags`, `save_note`, `delete_note`                                                     | Regole testabili senza database; lo schema resta semplice                                                                                                                                                                                     |
+| 2026-10-19 | Ricerca in Rust: ogni parola nel titolo, nel testo o nelle etichette, senza maiuscole e accenti                                                                                                  | La ricerca di SQLite distingue "perche" da "perché"; per qualche centinaio di appunti basta                                                                                                                                                   |
+| 2026-10-19 | Il collegamento alla partita non è una chiave del database: eliminando la partita si svuota (`delete_game.rs`) e l'appunto resta con la posizione                                                | L'appunto può nascere prima che la partita sia salvata; le idee non vanno perse                                                                                                                                                               |
+| 2026-10-19 | In Gioca la partita si collega solo se è già nell'archivio e la posizione è sulla linea principale                                                                                               | Le varianti non si salvano mossa per mossa, quindi non si potrebbero riaprire                                                                                                                                                                 |
+| 2026-10-19 | Salvataggio automatico dopo 700 ms senza scrivere, e subito chiudendo l'appunto                                                                                                                  | Come le partite: nulla va perso                                                                                                                                                                                                               |
+| 2026-10-19 | Le migrazioni si applicano con `set_ignore_missing(true)`: una versione più vecchia apre anche un database aggiornato da una più nuova                                                           | Provando la versione di sviluppo si aggiorna lo stesso database dell'app installata; la 0.10.0 (già pubblicata) non ce l'ha, quindi va aggiornata alla 0.11.0                                                                                 |
 
 ---
 
@@ -520,7 +530,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
-- **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
+- **Fase 11 — Appunti personali.** Fatta, in test (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
 ---
@@ -541,6 +551,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Librerie nuove:** aggiungere una dipendenza esterna (es. `flate2`) viene bloccato dai permessi; prima si cerca una strada senza (per le reti di Maia: file già decompressi).
 - **Reti di Lc0:** l'arrocco è "re sulla casa della torre" (e1h1) e la promozione a cavallo è la mossa senza lettera; il Nero si vede con la scacchiera ribaltata (vedi `crates/maia`).
 - **Configurazione dei plugin di Tauri:** con una sezione `plugins` in `tauri.conf.json`, `src-tauri` deve avere `serde_json` tra le sue dipendenze (lo usa `generate_context!`).
+- **Database condiviso:** l'app di sviluppo e quella installata usano lo stesso database (stesso identificativo); una migrazione nuova provata in sviluppo arriva anche lì. Le migrazioni devono solo aggiungere (tabelle, colonne con valore predefinito), mai togliere o rinominare.
 - **Updater:** senza `plugins.updater.pubkey` l'app non parte; la chiave privata non va mai nel progetto.
 - **Tauri sidecar:** la compilazione (anche Clippy) fallisce se il file di Stockfish manca: `npm run engines`.
 - **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.

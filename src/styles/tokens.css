@@ -135,6 +135,9 @@
   --bar-height: 0.75rem; /* barre orizzontali dei grafici */
   --bar-label-min-width: 6rem; /* colonna dei nomi accanto alle barre */
   --update-notice-width: 22rem; /* avviso di una versione nuova, in basso a destra */
+  --notes-list-width: 20rem; /* colonna dell'elenco degli appunti */
+  --note-body-min-height: 16rem; /* testo di un appunto */
+  --note-board-size: 14rem; /* scacchiera piccola della posizione collegata */
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;

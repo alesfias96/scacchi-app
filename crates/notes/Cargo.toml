@@ -1,0 +1,27 @@
+# =============================================================================
+# Crate "notes" — gli appunti personali
+# -----------------------------------------------------------------------------
+# Le regole degli appunti: come si prepara un appunto da salvare (titolo,
+# testo, etichette ripulite, collegamento a una posizione o a una partita) e
+# come si cerca tra gli appunti senza badare a maiuscole e accenti.
+# Non legge il database (lo fa storage) e non sa nulla dell'interfaccia.
+# =============================================================================
+
+[package]
+name = "notes"
+description = "Appunti personali: preparazione, etichette e ricerca"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = ["dep:serde", "dep:ts-rs"]
+
+[dependencies]
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

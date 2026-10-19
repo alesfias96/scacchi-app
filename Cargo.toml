@@ -27,6 +27,7 @@ resolver = "3"
 # - crates/review: l'analisi delle partite giocate (giudizio delle mosse, momenti critici).
 # - crates/stats: le statistiche dei progressi (livello, precisione, aperture, calcolo).
 # - crates/maia: l'avversario "umano" (le reti Maia, calcolate in Rust).
+# - crates/notes: gli appunti personali (preparazione, etichette, ricerca).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -42,6 +43,7 @@ members = [
     "crates/review",
     "crates/stats",
     "crates/maia",
+    "crates/notes",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -86,6 +88,7 @@ tutor = { path = "crates/tutor" }
 review = { path = "crates/review" }
 stats = { path = "crates/stats" }
 maia = { path = "crates/maia" }
+notes = { path = "crates/notes" }
 
 # Desktop.
 tauri = { version = "2", features = [] }

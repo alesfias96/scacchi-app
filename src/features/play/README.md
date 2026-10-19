@@ -24,6 +24,9 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
   Il menu principale delle sezioni è a comparsa sul bordo sinistro (tasto **M**). A fine partita
   l'annuncio compare sopra la scacchiera.
 
+- **Aggiungi un appunto** (scheda «Appunti» in fondo alla colonna) crea un appunto collegato alla
+  posizione mostrata e, se la partita è già nell'archivio e la posizione è sulla linea principale,
+  alla partita e alla mossa (sezione «Appunti»).
 - **Nuova partita** apre la finestra in cui si sceglie l'avversario, il colore, il livello del
   computer e il tempo. La finestra ripropone le scelte dell'ultima partita.
 - Si muove trascinando un pezzo (il cursore diventa una mano sui pezzi che si possono muovere),

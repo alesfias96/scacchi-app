@@ -57,8 +57,18 @@ impl Database {
     }
 
     /// Applica le migrazioni della cartella `migrations/` (incluse nell'app).
+    ///
+    /// Se il database è già stato aggiornato da una versione **più nuova**
+    /// dell'app (ha migrazioni che questa non conosce), lo si apre lo stesso
+    /// invece di rifiutarlo: le migrazioni aggiungono solo tabelle e colonne
+    /// con un valore predefinito, quindi una versione più vecchia può
+    /// continuare a usarlo. Serve, ad esempio, provando una versione nuova e
+    /// poi riaprendo quella installata.
     async fn migrate(pool: SqlitePool) -> Result<Self, StorageError> {
-        sqlx::migrate!("./migrations").run(&pool).await?;
+        sqlx::migrate!("./migrations")
+            .set_ignore_missing(true)
+            .run(&pool)
+            .await?;
         Ok(Self { pool })
     }
 }
@@ -79,6 +89,24 @@ mod tests {
         .expect("lettura dello schema");
 
         assert_eq!(tables, 2);
+    }
+
+    #[tokio::test]
+    async fn opens_a_database_updated_by_a_newer_version() {
+        let database = Database::open_in_memory().await.expect("database aperto");
+        // Una migrazione che questa versione non conosce, come se l'avesse applicata una più nuova.
+        sqlx::query(
+            "INSERT INTO _sqlx_migrations
+                 (version, description, success, checksum, execution_time)
+             VALUES (9999, 'futura', TRUE, X'00', 0)",
+        )
+        .execute(&database.pool)
+        .await
+        .expect("migrazione futura");
+
+        Database::migrate(database.pool.clone())
+            .await
+            .expect("il database si apre lo stesso");
     }
 
     #[tokio::test]

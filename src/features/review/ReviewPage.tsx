@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { GameReview } from '../../bindings/GameReview';
 import type { Side } from '../../bindings/Side';
 import { Button } from '../../components/button/Button';
+import { AddNoteButton } from '../notes/add-note-button/AddNoteButton';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { EvalGraph, type GraphMark } from '../../components/eval-graph/EvalGraph';
 import { Icon } from '../../components/icon/Icon';
@@ -167,6 +168,7 @@ function ReviewBoard({ gameId, review }: { gameId: string; review: GameReview })
           >
             Gira la scacchiera
           </Button>
+          <AddNoteButton link={{ fen: position.fen, gameId, ply: current.position }} />
           {focused !== undefined && (
             <span className={styles.legend}>
               Freccia verde: la mossa migliore · freccia blu: la mossa giocata

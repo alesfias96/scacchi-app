@@ -1,0 +1,91 @@
+/* Sezione «Appunti»: titolo, poi l'elenco a sinistra e l'appunto aperto a destra. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: var(--progress-max-width);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+.subtitle,
+.empty,
+.placeholder {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+/*
+ * Due colonne se c'è spazio (l'appunto aperto è tre volte più largo
+ * dell'elenco); su finestre strette l'appunto va sotto l'elenco.
+ */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.listColumn {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 var(--notes-list-width);
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.editorColumn {
+  min-width: 0;
+  flex: 3 1 var(--notes-list-width);
+}
+
+.search {
+  min-height: var(--control-size);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-background);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.search:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.tag {
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-round);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+.tagActive {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}

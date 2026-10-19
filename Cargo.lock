@@ -2416,6 +2416,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "notes"
+version = "0.10.0"
+dependencies = [
+ "serde",
+ "ts-rs",
+]
+
+[[package]]
 name = "num-conv"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3345,6 +3353,7 @@ dependencies = [
  "engine",
  "game-session",
  "maia",
+ "notes",
  "review",
  "serde_json",
  "stats",
@@ -4010,6 +4019,7 @@ dependencies = [
  "app-settings",
  "chess-core",
  "game-session",
+ "notes",
  "openings",
  "serde",
  "serde_json",

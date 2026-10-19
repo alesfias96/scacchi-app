@@ -12,5 +12,5 @@ nel colore d'accento del tema.
 | -------------------- | -------------------------------------------------------------------------------------------- |
 | `Sidebar.tsx`        | Il componente che disegna la barra laterale, con i collegamenti alle sezioni                 |
 | `Sidebar.module.css` | I suoi stili (colori dal tema attivo)                                                        |
-| `Sidebar.test.tsx`   | I suoi test: sezione attiva, Archivio, Tutor, Progressi, Impostazioni                        |
+| `Sidebar.test.tsx`   | I suoi test: sezione attiva, Archivio, Tutor, Progressi, Appunti, Impostazioni               |
 | `navigation.ts`      | L'elenco delle sezioni: nome e indirizzo. Per aggiungere una sezione si modifica questo file |

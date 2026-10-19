@@ -24,6 +24,7 @@ bindings = [
     "app-settings/bindings",
     "openings/bindings",
     "game-session/bindings",
+    "notes/bindings",
 ]
 
 [dependencies]
@@ -32,6 +33,8 @@ app-settings.workspace = true
 openings.workspace = true
 # La "fotografia" della partita da salvare (SessionSnapshot).
 game-session.workspace = true
+# Gli appunti personali (il tipo Note).
+notes.workspace = true
 sqlx.workspace = true
 # Gli elenchi (temi tattici, minacce) si salvano come testo JSON.
 serde_json.workspace = true

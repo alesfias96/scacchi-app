@@ -78,6 +78,10 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `StatsPeriod.ts`         | `crates/app-settings/src/stats_filter.rs`    | Il periodo: 30 giorni, 90 giorni, sempre                                                    |
 | `StatsOpponent.ts`       | `crates/app-settings/src/stats_filter.rs`    | Le partite: tutte, contro il computer, a due giocatori                                      |
 | `UpdateCheck.ts`         | `crates/app-settings/src/update_check.rs`    | Quando controllare gli aggiornamenti: `"manual"` o `"onStart"`                              |
+| `Note.ts`                | `crates/notes/src/note.rs`                   | Un appunto salvato: titolo, testo, etichette, collegamento, date                            |
+| `NoteInput.ts`           | `crates/notes/src/note.rs`                   | Un appunto come lo manda l'interfaccia quando lo si scrive                                  |
+| `NoteLink.ts`            | `crates/notes/src/note.rs`                   | La posizione (e la partita, la mossa) collegata a un appunto                                |
+| `NoteQuery.ts`           | `crates/notes/src/search.rs`                 | La ricerca tra gli appunti: parole ed etichetta                                             |
 | `StatsReport.ts`         | `crates/stats/src/stats_view.rs`             | Tutte le statistiche di «Progressi», con i conteggi delle partite                           |
 | `LevelStats.ts`          | `crates/stats/src/stats_view.rs`             | La scheda «Livello»: Elo stimato, rating dei puzzle, precisione                             |
 | `GameStats.ts`           | `crates/stats/src/stats_view.rs`             | La scheda «Partite»: risultati, fasi, poco tempo                                            |

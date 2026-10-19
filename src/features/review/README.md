@@ -9,7 +9,8 @@ Qui si rivedono le proprie partite per imparare dagli errori. Si apre dall'**Arc
 - **Partita analizzata**:
   - a sinistra la scacchiera; sotto, il **grafico della partita** (chiaro = Bianco, scuro =
     Nero, pallini colorati per gli errori; un clic porta a quella mossa) e i comandi per
-    scorrere, anche con ←/→, Home e Fine;
+    scorrere, anche con ←/→, Home e Fine; «Aggiungi un appunto» crea un appunto collegato alla
+    posizione mostrata e a questa mossa della partita (sezione «Appunti»);
   - a destra, alta quanto la scacchiera e con lo scorrimento interno:
     - il **Riepilogo**: precisione ed errori di ciascun giocatore, e dove ha sbagliato di più;
     - i **Momenti critici**: la mossa giocata, il giudizio, la mossa migliore e il perché (cosa
