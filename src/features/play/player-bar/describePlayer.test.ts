@@ -17,6 +17,7 @@ function session(overrides: Partial<SessionView>): SessionView {
       lastMove: null,
       result: null,
       startingFen: '',
+      tree: { nodes: [], roots: [], current: null },
     },
     opponent: 'twoPlayers',
     computer: null,
@@ -26,6 +27,7 @@ function session(overrides: Partial<SessionView>): SessionView {
     canUndo: false,
     canResign: true,
     computerThinking: false,
+    canEditVariations: false,
     ...overrides,
   };
 }
@@ -46,6 +48,7 @@ describe('describePlayer', () => {
       opponent: 'computer',
       computer: { side: 'black', level: { level: 4, name: 'Circolo', elo: 1400 } },
       computerThinking: true,
+      canEditVariations: false,
     });
 
     expect(describePlayer(playing, 'black')).toEqual(

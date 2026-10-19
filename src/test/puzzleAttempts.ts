@@ -35,6 +35,7 @@ export const READY_ATTEMPT: AttemptView = {
     lastMove: { from: 'h7', to: 'h6', uci: 'h7h6' },
     result: null,
     startingFen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3',
+    tree: { nodes: [], roots: [], current: null },
   },
   solver: 'white',
   orientation: 'white',

@@ -46,6 +46,7 @@ const NEW_GAME: SessionView = {
     lastMove: null,
     result: null,
     startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    tree: { nodes: [], roots: [], current: null },
   },
   opponent: 'twoPlayers',
   computer: null,
@@ -55,6 +56,7 @@ const NEW_GAME: SessionView = {
   canUndo: false,
   canResign: true,
   computerThinking: false,
+  canEditVariations: false,
 };
 
 /** La stessa partita dopo una mossa. */

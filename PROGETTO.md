@@ -341,7 +341,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 6. Allenamento calcolo          | ✅ completata |
 | 7. Tutor                        | ✅ completata |
 | 8. Analisi partite              | ✅ completata |
-| 8-bis. Varianti                 | ⚪ da fare    |
+| 8-bis. Varianti                 | 🔵 in test    |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
 | 11. Appunti personali           | ⚪ da fare    |
@@ -461,6 +461,11 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Le varianti nella lista mosse si fanno in una Fase 8-bis separata                                                                                                                                | Scelta 5A: cambiano il cuore della partita, il salvataggio e il PGN                                                                                                                                                                           |
 | 2026-10-19 | Fase 8 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 | 2026-10-19 | Nuovo file `CLAUDE.md` nella radice: riassunto per riprendere il lavoro in una nuova sessione (regole, stato, prossimo passo)                                                                    | Richiesta di Alessandro: aprire una sessione nuova senza rispiegare il progetto                                                                                                                                                               |
+| 2026-10-19 | Fase 8-bis: la partita diventa un albero di mosse (`Game` in chess-core); la prima continuazione è la linea principale, le altre varianti                                                        | Scelte 1A–4A approvate: si esplorano le alternative senza perdere il seguito                                                                                                                                                                  |
+| 2026-10-19 | Varianti a due giocatori senza orologio e in ogni partita finita; contro il computer o con l'orologio, a partita in corso, solo dall'ultima posizione                                            | Il computer e l'orologio seguono solo la linea principale                                                                                                                                                                                     |
+| 2026-10-19 | Nel database la tabella `moves` resta la linea principale; l'albero completo sta nel PGN della partita e si ricostruisce all'apertura (se la sua linea principale coincide con le mosse salvate) | Statistiche invariate; nessuna tabella nuova                                                                                                                                                                                                  |
+| 2026-10-19 | «Promuovi a linea principale» solo a due giocatori senza orologio e a partita in corso; «Elimina da qui» sempre (non sulla linea principale)                                                     | Nelle partite finite o contro il computer la linea principale è la partita giocata davvero                                                                                                                                                    |
+| 2026-10-19 | «Copia FEN» e «Copia PGN» passano da Rust con `tauri-plugin-clipboard-manager` (comando `copy_text`)                                                                                             | Dal motore web dell'app la scrittura negli appunti non funzionava                                                                                                                                                                             |
 
 ---
 
@@ -474,7 +479,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 6 — Allenamento.** Fatta (vedi registro §10). Da valutare più avanti: puzzle dalle proprie partite (Fase 8), statistiche per tema (Fase 9), animare la risposta dell'avversario con una piccola pausa.
 - **Fase 7 — Tutor.** Fatta (vedi registro §10). Da arricchire nel tempo: altre schede (aperture meno comuni, finali specifici), frasi più chiare man mano che Alessandro le legge.
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
-- **Fase 8-bis — Varianti.** Una mossa giocata da una posizione passata crea una variante invece di sostituire il seguito: albero di mosse in `Game` (chess-core), salvataggio delle varianti, PGN con varianti, lista mosse ad albero.
+- **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Crate `crates/stats`; libreria dei grafici da scegliere (offline, rispettosa dei temi).
 - **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
@@ -499,7 +504,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.
 - **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.
 - **Shell:** comandi molto lunghi con più `heredoc` e apostrofi possono rompersi; i file si scrivono con lo strumento di scrittura.
-- **Problema noto — appunti:** "Copia FEN" e "Copia PGN" usano `navigator.clipboard.writeText`, che dentro l'app non scrive negli appunti (probabilmente perché il motore web la blocca quando non parte nell'istante del clic). Soluzione proposta e rimandata: il plugin ufficiale `tauri-plugin-clipboard-manager`, con il solo permesso di scrittura.
+- **Appunti del sistema:** `navigator.clipboard.writeText` dentro l'app non scrive negli appunti; si copia da Rust con `tauri-plugin-clipboard-manager` (comando `copy_text`). Risolto nella Fase 8-bis.
 - **sqlx 0.9:** le query costruite con `format!` non sono accettate (protezione contro l'SQL injection): si usano testi fissi o `QueryBuilder` (senza parametro di durata, `QueryBuilder<Sqlite>`). Con SQLite in memoria serve una sola connessione (`max_connections(1)`), altrimenti ogni connessione vede un database diverso.
 - **Comandi Tauri sincroni** girano sul thread principale: le finestre di sistema "bloccanti" (`blocking_save_file`) vanno aperte in un comando `async`, dentro `spawn_blocking`.
 - **Aperture:** i nomi di Lichess sono in inglese; la ricerca nell'archivio va fatta in inglese ("Sicilian") o per codice ECO.

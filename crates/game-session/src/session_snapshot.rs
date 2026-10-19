@@ -3,7 +3,7 @@
 use std::time::Instant;
 
 use app_settings::{OpponentKind, TimeControl};
-use chess_core::{Game, GameEndReason, GameResult, MoveRecord, Side};
+use chess_core::{Game, GameEndReason, GameResult, MoveRecord, Side, from_pgn};
 use openings::Opening;
 
 use crate::clock::{Clock, to_millis};
@@ -56,13 +56,14 @@ impl GameSession {
     /// Fotografa la partita nell'istante `now`, per salvarla.
     #[must_use]
     pub fn snapshot(&self, now: Instant) -> SessionSnapshot {
+        // Si salvano le mosse della linea principale; le varianti stanno nel PGN.
         let moves = self
             .game
-            .moves()
-            .iter()
+            .mainline()
+            .into_iter()
             .enumerate()
             .map(|(index, record)| MoveSnapshot {
-                record: record.clone(),
+                record,
                 timing: self.timer.timing(index),
             })
             .collect();
@@ -103,10 +104,16 @@ impl GameSession {
     /// [`SessionError::Game`] se la posizione di partenza o una mossa non sono valide
     /// (il salvataggio è rovinato).
     pub fn restore(snapshot: &SessionSnapshot, now: Instant) -> Result<Self, SessionError> {
-        let mut game = Game::from_fen(&snapshot.starting_fen)?;
-        for saved in &snapshot.moves {
-            game.play_uci(&saved.record.uci)?;
-        }
+        let mut game = with_variations(snapshot).map_or_else(
+            || -> Result<Game, SessionError> {
+                let mut game = Game::from_fen(&snapshot.starting_fen)?;
+                for saved in &snapshot.moves {
+                    game.play_uci(&saved.record.uci)?;
+                }
+                Ok(game)
+            },
+            Ok,
+        )?;
         if let Some(result) = &snapshot.result {
             reapply_adjudication(&mut game, result)?;
         }
@@ -130,6 +137,24 @@ impl GameSession {
             token: next_token(),
         })
     }
+}
+
+/// La partita letta dal PGN salvato, con le sue varianti, se la sua linea
+/// principale è proprio quella delle mosse salvate (altrimenti `None`: si
+/// rigiocano le mosse, senza varianti).
+fn with_variations(snapshot: &SessionSnapshot) -> Option<Game> {
+    let game = from_pgn(&snapshot.pgn).ok()?;
+    let mainline: Vec<String> = game
+        .mainline()
+        .into_iter()
+        .map(|record| record.uci)
+        .collect();
+    let saved: Vec<&str> = snapshot
+        .moves
+        .iter()
+        .map(|saved| saved.record.uci.as_str())
+        .collect();
+    (game.starting_fen() == snapshot.starting_fen && mainline == saved).then_some(game)
 }
 
 /// Riapplica un risultato deciso fuori dalla scacchiera (abbandono, tempo scaduto).
@@ -222,5 +247,23 @@ mod tests {
         snapshot.moves[0].record.uci = "e2e5".to_owned();
 
         assert!(GameSession::restore(&snapshot, now).is_err());
+    }
+
+    #[test]
+    fn variations_come_back_with_the_saved_game() {
+        let now = Instant::now();
+        let mut session = GameSession::default();
+        for uci in ["e2e4", "e7e5"] {
+            session.play(uci, now).expect("mossa legale");
+        }
+        session.go_to(1);
+        session.play("c7c5", now).expect("variante");
+
+        let restored = GameSession::restore(&session.snapshot(now), now).expect("ripristino");
+
+        let view = restored.view(now);
+        assert_eq!(view.game.tree.nodes.len(), 3);
+        assert_eq!(view.game.moves.len(), 2);
+        assert_eq!(view.game.moves[1].san, "e5");
     }
 }

@@ -1,15 +1,26 @@
 //! Lettura di una partita in formato PGN.
 //!
-//! Legge le intestazioni (in particolare l'eventuale posizione di partenza) e
-//! la sequenza principale delle mosse. Ignora commenti `{...}` e `; ...`,
-//! varianti `(...)`, annotazioni `$1`, `!`, `?` e i numeri di mossa.
+//! Legge le intestazioni (in particolare l'eventuale posizione di partenza),
+//! la linea principale delle mosse e le varianti `(...)`, anche annidate.
+//! Ignora commenti `{...}` e `; ...`, annotazioni `$1`, `!`, `?` e i numeri di mossa.
 
 use shakmaty::san::SanPlus;
 
-use crate::game::Game;
+use crate::game::{Game, NodeId};
 use crate::game_error::GameError;
 
-/// Legge una partita da un testo PGN.
+/// Un pezzo del testo delle mosse.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Token {
+    /// Una mossa in notazione SAN.
+    Move(String),
+    /// `(`: comincia una variante, che sostituisce l'ultima mossa letta.
+    Open,
+    /// `)`: finisce la variante; si riprende da dove si era.
+    Close,
+}
+
+/// Legge una partita da un testo PGN, con le sue varianti.
 ///
 /// # Errors
 ///
@@ -21,18 +32,37 @@ pub fn from_pgn(text: &str) -> Result<Game, GameError> {
         Some(fen) => Game::from_fen(&fen)?,
         None => Game::new(),
     };
+    // Per ogni variante aperta: la mossa da cui riprendere quando si chiude.
+    let mut resume: Vec<Option<NodeId>> = Vec::new();
 
     for token in move_tokens(text) {
-        let san = token
-            .parse::<SanPlus>()
-            .map_err(|_| GameError::InvalidPgn(token.clone()))?;
-        let chess_move = san
-            .san
-            .to_move(game.current())
-            .map_err(|_| GameError::IllegalMove(token.clone()))?;
-        game.play_move(chess_move);
+        match token {
+            Token::Open => {
+                let last = game.current_node();
+                resume.push(last);
+                // La variante è un'alternativa all'ultima mossa: si torna a prima di lei.
+                let before = last.and_then(|id| game.parent(id));
+                game.go_to_node(before)?;
+            }
+            Token::Close => {
+                if let Some(back) = resume.pop() {
+                    game.go_to_node(back)?;
+                }
+            }
+            Token::Move(san_text) => {
+                let san = san_text
+                    .parse::<SanPlus>()
+                    .map_err(|_| GameError::InvalidPgn(san_text.clone()))?;
+                let chess_move = san
+                    .san
+                    .to_move(game.current())
+                    .map_err(|_| GameError::IllegalMove(san_text.clone()))?;
+                game.play_move(chess_move);
+            }
+        }
     }
 
+    game.go_to_mainline_end();
     Ok(game)
 }
 
@@ -49,8 +79,8 @@ fn header_value(text: &str, name: &str) -> Option<String> {
         })
 }
 
-/// Le mosse della linea principale, già ripulite da numeri, commenti e annotazioni.
-fn move_tokens(text: &str) -> Vec<String> {
+/// Le mosse e le parentesi delle varianti, già ripulite da numeri, commenti e annotazioni.
+fn move_tokens(text: &str) -> Vec<Token> {
     let movetext: String = text
         .lines()
         .filter(|line| !line.trim_start().starts_with('['))
@@ -59,17 +89,21 @@ fn move_tokens(text: &str) -> Vec<String> {
         .collect::<Vec<_>>()
         .join(" ");
 
-    remove_comments_and_variations(&movetext)
+    remove_comments(&movetext)
         .split_whitespace()
-        .filter_map(clean_token)
+        .filter_map(|raw| match raw {
+            "(" => Some(Token::Open),
+            ")" => Some(Token::Close),
+            _ => clean_token(raw).map(Token::Move),
+        })
         .collect()
 }
 
-/// Toglie i commenti `{...}` e le varianti `(...)`, anche annidate.
-fn remove_comments_and_variations(movetext: &str) -> String {
+/// Toglie i commenti `{...}` e stacca le parentesi delle varianti dalle mosse
+/// vicine (così `(1... c5` diventa `( 1... c5`).
+fn remove_comments(movetext: &str) -> String {
     let mut result = String::with_capacity(movetext.len());
     let mut in_comment = false;
-    let mut variation_depth: usize = 0;
 
     for character in movetext.chars() {
         match character {
@@ -78,12 +112,12 @@ fn remove_comments_and_variations(movetext: &str) -> String {
                 in_comment = false;
                 result.push(' ');
             }
-            '(' if !in_comment => variation_depth += 1,
-            ')' if !in_comment && variation_depth > 0 => {
-                variation_depth -= 1;
+            _ if in_comment => {}
+            '(' | ')' => {
+                result.push(' ');
+                result.push(character);
                 result.push(' ');
             }
-            _ if in_comment || variation_depth > 0 => {}
             _ => result.push(character),
         }
     }
@@ -143,13 +177,17 @@ mod tests {
     }
 
     #[test]
-    fn ignores_headers_comments_variations_and_annotations() {
+    fn reads_variations_and_ignores_comments_and_annotations() {
         let pgn = "[Event \"Prova\"]\n[White \"Bianco\"]\n\n\
                    1. e4 {buona mossa} e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3!? $1 Nc6 ; fine\n*";
 
         let game = from_pgn(pgn).expect("PGN valido");
 
         assert_eq!(sans(&game), ["e4", "e5", "Nf3", "Nc6"]);
+        // Le varianti: 1... c5 2. Nf3, e dentro di lei 2. c3.
+        let tree = game.view().tree;
+        assert_eq!(tree.nodes.len(), 7);
+        assert_eq!(tree.nodes.iter().filter(|node| !node.mainline).count(), 3);
     }
 
     #[test]
@@ -182,6 +220,24 @@ mod tests {
             read_back.final_result().expect("partita finita").reason,
             GameEndReason::Checkmate
         );
+    }
+
+    #[test]
+    fn variations_survive_export_and_import() {
+        let mut game = Game::new();
+        for uci in ["e2e4", "e7e5", "g1f3"] {
+            game.play_uci(uci).expect("mossa legale");
+        }
+        game.go_to(1);
+        game.play_uci("c7c5").expect("mossa legale");
+        game.play_uci("g1f3").expect("mossa legale");
+
+        let pgn = to_pgn(&game);
+        assert!(pgn.contains("1. e4 e5 (1... c5 2. Nf3) 2. Nf3 *"));
+
+        let read_back = from_pgn(&pgn).expect("PGN valido");
+        assert_eq!(read_back.view().tree.nodes.len(), 5);
+        assert_eq!(sans(&read_back), ["e4", "e5", "Nf3"]);
     }
 
     #[test]

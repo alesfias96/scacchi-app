@@ -105,6 +105,28 @@ const AFTER_E4_GAME: GameView = {
   lastMove: { from: 'e2', to: 'e4', uci: 'e2e4' },
   result: null,
   startingFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  tree: {
+    nodes: [
+      {
+        id: 0,
+        record: {
+          ply: 1,
+          moveNumber: 1,
+          side: 'white',
+          san: 'e4',
+          uci: 'e2e4',
+          from: 'e2',
+          to: 'e4',
+          capture: false,
+        },
+        parent: null,
+        children: [],
+        mainline: true,
+      },
+    ],
+    roots: [0],
+    current: 0,
+  },
 };
 
 /** Una partita a due giocatori, senza orologio. */
@@ -121,6 +143,7 @@ function twoPlayers(game: GameView): SessionView {
     canUndo: game.moves.length > 0,
     canResign: game.result === null,
     computerThinking: false,
+    canEditVariations: false,
   };
 }
 
@@ -153,6 +176,7 @@ const COMPUTER_THINKING: SessionView = {
   canMove: false,
   canUndo: true,
   computerThinking: true,
+  canEditVariations: false,
 };
 
 /** Aspetta che la pagina abbia ricevuto la partita. */
@@ -237,9 +261,11 @@ describe('PlayPage', () => {
 
     expect(await screen.findByText(/Ottima scelta/)).toBeDefined();
     expect(tutorMock.tryWhatIf).toHaveBeenCalledWith(AFTER_E4_GAME.startingFen, [], 'e2e4', true);
-    expect(chessgroundMock.state.config?.drawable?.autoShapes).toEqual([
-      { orig: 'e2', dest: 'e4', brush: 'blue' },
-    ]);
+    await waitFor(() => {
+      expect(chessgroundMock.state.config?.drawable?.autoShapes).toEqual([
+        { orig: 'e2', dest: 'e4', brush: 'blue' },
+      ]);
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Avanti' }));
     expect(screen.getByText('Tocca al Bianco')).toBeDefined();

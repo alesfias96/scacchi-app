@@ -57,4 +57,9 @@ canResign: boolean,
 /**
  * `true` se si sta aspettando la mossa del computer.
  */
-computerThinking: boolean, };
+computerThinking: boolean, 
+/**
+ * `true` se una variante si può promuovere a linea principale (partite a due
+ * giocatori senza orologio, non finite).
+ */
+canEditVariations: boolean, };

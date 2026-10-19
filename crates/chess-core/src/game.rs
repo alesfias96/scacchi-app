@@ -1,4 +1,5 @@
-//! La partita: sequenza di mosse, posizioni, navigazione e fine partita.
+//! La partita: l'albero delle mosse (linea principale e varianti), le
+//! posizioni, la navigazione e la fine partita.
 
 use shakmaty::fen::Fen;
 use shakmaty::san::SanPlus;
@@ -11,6 +12,7 @@ use crate::game_result::{GameEndReason, GameResult};
 use crate::game_view::GameView;
 use crate::legal_move::LegalMove;
 use crate::move_record::MoveRecord;
+use crate::move_tree::{MoveNode, MoveTree};
 use crate::position_view::PositionView;
 use crate::setup::parse_fen;
 use crate::side::Side;
@@ -22,24 +24,56 @@ const FIFTY_MOVE_RULE_HALFMOVES: u32 = 100;
 /// Quante volte deve presentarsi la stessa posizione per la patta per ripetizione.
 const REPETITIONS_FOR_DRAW: usize = 3;
 
+/// Il numero che identifica una mossa nell'albero.
+pub type NodeId = usize;
+
+/// Una mossa dell'albero, con la posizione che produce.
+#[derive(Debug, Clone)]
+struct Node {
+    /// La mossa, con la sua notazione.
+    record: MoveRecord,
+    /// La posizione dopo la mossa.
+    position: Chess,
+    /// L'impronta della posizione, per riconoscere le ripetizioni.
+    hash: Zobrist64,
+    /// La mossa precedente (`None` se parte dalla posizione iniziale).
+    parent: Option<NodeId>,
+    /// Le mosse che la seguono: prima la continuazione principale, poi le varianti.
+    children: Vec<NodeId>,
+}
+
 /// Una partita a scacchi.
 ///
-/// Tiene tutte le posizioni attraversate (così si può tornare indietro senza
-/// ricalcolare nulla) e un "cursore" che indica quale posizione è mostrata.
-/// Se si gioca una mossa mentre il cursore è indietro, il seguito della
-/// partita viene sostituito dalla nuova mossa.
+/// Le mosse formano un **albero**: da ogni posizione la prima continuazione
+/// è la linea principale, le altre sono varianti. Se si gioca una mossa da
+/// una posizione passata, il seguito non si perde: nasce una variante (se la
+/// stessa mossa c'era già, la si segue).
+///
+/// In ogni momento si guarda una **linea**: il cammino dalla partenza fino in
+/// fondo a una variante (o alla linea principale). Le posizioni e le mosse
+/// della linea sono tenute pronte (così si scorre senza ricalcolare nulla),
+/// insieme a un "cursore" che indica quale posizione è mostrata.
 #[derive(Debug, Clone)]
 pub struct Game {
-    /// `positions[0]` è la posizione di partenza; `positions[i]` quella dopo `i` mosse.
+    /// La posizione di partenza e la sua impronta.
+    start: Chess,
+    start_hash: Zobrist64,
+    /// Tutte le mosse mai giocate (quelle tolte restano qui, ma non sono più raggiungibili).
+    nodes: Vec<Node>,
+    /// Le prime mosse dalla posizione di partenza.
+    roots: Vec<NodeId>,
+    /// La linea guardata: le mosse, dalla prima all'ultima.
+    line: Vec<NodeId>,
+    /// La linea guardata: `positions[0]` è la partenza, `positions[i]` quella dopo `i` mosse.
     positions: Vec<Chess>,
-    /// Impronta di ogni posizione (stesso indice di `positions`), per riconoscere le ripetizioni.
+    /// Le impronte delle posizioni della linea (stesso indice di `positions`).
     hashes: Vec<Zobrist64>,
-    /// Le mosse giocate.
+    /// Le mosse della linea guardata.
     moves: Vec<MoveRecord>,
-    /// Quante mosse sono state giocate fino alla posizione mostrata.
+    /// Quante mosse della linea sono state giocate fino alla posizione mostrata.
     cursor: usize,
     /// Il risultato deciso fuori dalla scacchiera (tempo scaduto o abbandono),
-    /// valido alla fine della partita; `None` se non c'è.
+    /// valido alla fine della linea principale; `None` se non c'è.
     adjudication: Option<GameResult>,
 }
 
@@ -62,8 +96,13 @@ impl Game {
     pub fn from_position(start: Chess) -> Self {
         let hash = start.zobrist_hash(EnPassantMode::Legal);
         Self {
-            positions: vec![start],
+            positions: vec![start.clone()],
             hashes: vec![hash],
+            start,
+            start_hash: hash,
+            nodes: Vec::new(),
+            roots: Vec::new(),
+            line: Vec::new(),
             moves: Vec::new(),
             cursor: 0,
             adjudication: None,
@@ -79,22 +118,38 @@ impl Game {
         Ok(Self::from_position(parse_fen(fen)?))
     }
 
-    /// Le mosse giocate, dalla prima all'ultima.
+    /// Le mosse della linea guardata, dalla prima all'ultima.
     #[must_use]
     pub fn moves(&self) -> &[MoveRecord] {
         &self.moves
     }
 
-    /// Quante mosse sono state giocate fino alla posizione mostrata.
+    /// Le mosse della linea principale (la partita "vera"), dalla prima all'ultima.
+    #[must_use]
+    pub fn mainline(&self) -> Vec<MoveRecord> {
+        self.mainline_ids()
+            .into_iter()
+            .map(|id| self.nodes[id].record.clone())
+            .collect()
+    }
+
+    /// Quante mosse della linea guardata sono state giocate fino alla posizione mostrata.
     #[must_use]
     pub fn cursor(&self) -> usize {
         self.cursor
     }
 
-    /// `true` se è mostrata l'ultima posizione della partita.
+    /// `true` se è mostrata l'ultima posizione della linea guardata.
     #[must_use]
     pub fn is_at_end(&self) -> bool {
         self.cursor == self.moves.len()
+    }
+
+    /// `true` se è mostrata l'ultima posizione della linea principale.
+    #[must_use]
+    pub fn is_at_mainline_end(&self) -> bool {
+        let mainline = self.mainline_ids();
+        self.current_node() == mainline.last().copied()
     }
 
     /// Chi deve muovere nella posizione mostrata.
@@ -103,10 +158,10 @@ impl Game {
         Side::from(self.current().turn())
     }
 
-    /// Chi deve muovere nell'ultima posizione della partita.
+    /// Chi deve muovere alla fine della linea principale.
     #[must_use]
     pub fn last_turn(&self) -> Side {
-        Side::from(self.positions[self.moves.len()].turn())
+        Side::from(self.mainline_end().turn())
     }
 
     /// La posizione mostrata (quella del cursore) in notazione FEN.
@@ -118,12 +173,12 @@ impl Game {
     /// La posizione di partenza in notazione FEN.
     #[must_use]
     pub fn starting_fen(&self) -> String {
-        Fen::from_position(self.start(), EnPassantMode::Legal).to_string()
+        Fen::from_position(&self.start, EnPassantMode::Legal).to_string()
     }
 
     /// Gioca una mossa scritta in notazione UCI (es. `"e2e4"`, `"e7e8q"`)
-    /// nella posizione mostrata. Se il cursore non è sull'ultima mossa,
-    /// il seguito della partita viene sostituito.
+    /// nella posizione mostrata. Se la posizione non è l'ultima della linea,
+    /// il seguito resta: la mossa diventa una variante (o, se c'era già, la si segue).
     ///
     /// # Errors
     ///
@@ -147,44 +202,62 @@ impl Game {
     ///
     /// Usata da [`Game::play_uci`] e dalla lettura dei PGN.
     pub(crate) fn play_move(&mut self, chess_move: Move) {
-        self.truncate_after_cursor();
-
+        let parent = self.current_node();
         let before = self.current().clone();
         let mut after = before.clone();
         let capture = chess_move.is_capture();
         // Calcola la notazione SAN (con + o # finale) e intanto gioca la mossa.
         let san = SanPlus::from_move_and_play_unchecked(&mut after, chess_move).to_string();
-        let uci = UciMove::from_standard(chess_move);
-        let (from, to) = match uci {
-            UciMove::Normal { from, to, .. } => (from.to_string(), to.to_string()),
-            UciMove::Put { to, .. } => (String::new(), to.to_string()),
-            UciMove::Null => (String::new(), String::new()),
-        };
+        let uci = UciMove::from_standard(chess_move).to_string();
 
-        self.moves.push(MoveRecord {
-            ply: self.moves.len() + 1,
-            move_number: before.fullmoves().get(),
-            side: Side::from(before.turn()),
-            san,
-            uci: uci.to_string(),
-            from,
-            to,
-            capture,
+        // La stessa mossa c'è già: la si segue, senza crearne una nuova.
+        let existing = self
+            .children(parent)
+            .iter()
+            .copied()
+            .find(|id| self.nodes[*id].record.uci == uci);
+        let id = existing.unwrap_or_else(|| {
+            let (from, to) = (
+                uci.get(0..2).unwrap_or_default().to_owned(),
+                uci.get(2..4).unwrap_or_default().to_owned(),
+            );
+            let id = self.nodes.len();
+            self.nodes.push(Node {
+                record: MoveRecord {
+                    ply: self.cursor + 1,
+                    move_number: before.fullmoves().get(),
+                    side: Side::from(before.turn()),
+                    san,
+                    uci: uci.clone(),
+                    from,
+                    to,
+                    capture,
+                },
+                hash: after.zobrist_hash(EnPassantMode::Legal),
+                position: after,
+                parent,
+                children: Vec::new(),
+            });
+            // Una nuova mossa in fondo alla linea principale ne cambia la fine:
+            // un abbandono o un tempo scaduto di prima non valgono più.
+            if self.is_mainline(parent) && self.children(parent).is_empty() {
+                self.adjudication = None;
+            }
+            self.children_mut(parent).push(id);
+            id
         });
-        self.hashes.push(after.zobrist_hash(EnPassantMode::Legal));
-        self.positions.push(after);
-        self.cursor = self.moves.len();
+        self.show_node(Some(id));
     }
 
-    /// Ritira l'ultima mossa della partita e mostra la nuova ultima posizione.
-    /// Se non ci sono mosse non fa nulla.
+    /// Ritira l'ultima mossa della linea principale e mostra la nuova fine della
+    /// linea principale. Se non ci sono mosse non fa nulla.
     pub fn undo(&mut self) {
-        if self.moves.pop().is_some() {
-            self.positions.pop();
-            self.hashes.pop();
+        if let Some(last) = self.mainline_ids().last().copied() {
+            let parent = self.nodes[last].parent;
+            self.children_mut(parent).retain(|child| *child != last);
         }
-        self.cursor = self.moves.len();
         self.adjudication = None;
+        self.show_mainline_end();
     }
 
     /// Il giocatore `side` abbandona: vince l'avversario.
@@ -210,8 +283,7 @@ impl Game {
     /// [`GameError::GameOver`] se la partita è già finita.
     pub fn time_forfeit(&mut self, loser: Side) -> Result<(), GameError> {
         let winner = loser.opponent();
-        let last = &self.positions[self.moves.len()];
-        let result = if last.has_insufficient_material(winner.into()) {
+        let result = if self.mainline_end().has_insufficient_material(winner.into()) {
             GameResult::draw(GameEndReason::TimeoutVsInsufficientMaterial)
         } else {
             GameResult::decisive(winner, GameEndReason::Timeout)
@@ -220,32 +292,129 @@ impl Game {
     }
 
     /// Chiude la partita con un risultato deciso fuori dalla scacchiera e
-    /// mostra l'ultima posizione.
+    /// mostra la fine della linea principale.
     fn adjudicate(&mut self, result: GameResult) -> Result<(), GameError> {
         if self.final_result().is_some() {
             return Err(GameError::GameOver);
         }
         self.adjudication = Some(result);
-        self.cursor = self.moves.len();
+        self.show_mainline_end();
         Ok(())
     }
 
-    /// Mostra la posizione dopo `ply` mosse (0 = posizione di partenza).
-    /// Un numero oltre la fine della partita mostra l'ultima posizione.
+    /// Mostra la posizione dopo `ply` mosse della linea guardata (0 = partenza).
+    /// Un numero oltre la fine della linea mostra la sua ultima posizione.
     pub fn go_to(&mut self, ply: usize) {
         self.cursor = ply.min(self.moves.len());
+    }
+
+    /// Mostra la posizione dopo la mossa indicata dell'albero (`None` = partenza),
+    /// guardando la linea che passa da lì.
+    ///
+    /// # Errors
+    ///
+    /// [`GameError::UnknownMove`] se la mossa non è (più) nell'albero.
+    pub fn go_to_node(&mut self, node: Option<NodeId>) -> Result<(), GameError> {
+        if node.is_some_and(|id| !self.is_reachable(id)) {
+            return Err(GameError::UnknownMove);
+        }
+        self.show_node(node);
+        Ok(())
+    }
+
+    /// Mostra l'ultima posizione della linea principale.
+    pub fn go_to_mainline_end(&mut self) {
+        self.show_mainline_end();
+    }
+
+    /// Fa diventare linea principale la variante che passa dalla mossa indicata.
+    ///
+    /// # Errors
+    ///
+    /// [`GameError::UnknownMove`] se la mossa non è (più) nell'albero.
+    pub fn promote(&mut self, node: NodeId) -> Result<(), GameError> {
+        if !self.is_reachable(node) {
+            return Err(GameError::UnknownMove);
+        }
+        let mut current = Some(node);
+        while let Some(id) = current {
+            let parent = self.nodes[id].parent;
+            let children = self.children_mut(parent);
+            children.retain(|child| *child != id);
+            children.insert(0, id);
+            current = parent;
+        }
+        // La fine della linea principale è cambiata: l'abbandono di prima non vale più.
+        self.adjudication = None;
+        let shown = self.current_node();
+        self.show_node(shown);
+        Ok(())
+    }
+
+    /// Elimina una variante: la mossa indicata e tutto il suo seguito.
+    ///
+    /// # Errors
+    ///
+    /// - [`GameError::UnknownMove`] se la mossa non è (più) nell'albero;
+    /// - [`GameError::NotAVariation`] se la mossa è della linea principale.
+    pub fn delete_variation(&mut self, node: NodeId) -> Result<(), GameError> {
+        if !self.is_reachable(node) {
+            return Err(GameError::UnknownMove);
+        }
+        if self.is_mainline(Some(node)) {
+            return Err(GameError::NotAVariation);
+        }
+        let parent = self.nodes[node].parent;
+        self.children_mut(parent).retain(|child| *child != node);
+        // Se si guardava proprio quella variante, si torna alla mossa da cui partiva.
+        if self.line.contains(&node) {
+            self.show_node(parent);
+        }
+        Ok(())
+    }
+
+    /// Le mosse che seguono una mossa dell'albero (`None` = la posizione di
+    /// partenza): prima la continuazione principale, poi le varianti.
+    #[must_use]
+    pub fn children(&self, node: Option<NodeId>) -> &[NodeId] {
+        match node {
+            Some(id) => &self.nodes[id].children,
+            None => &self.roots,
+        }
+    }
+
+    /// La mossa precedente a quella indicata (`None` se parte dalla posizione di partenza).
+    #[must_use]
+    pub fn parent(&self, node: NodeId) -> Option<NodeId> {
+        self.nodes[node].parent
+    }
+
+    /// La mossa indicata dell'albero.
+    #[must_use]
+    pub fn record(&self, node: NodeId) -> &MoveRecord {
+        &self.nodes[node].record
+    }
+
+    /// La mossa che porta alla posizione mostrata (`None` = posizione di partenza).
+    #[must_use]
+    pub fn current_node(&self) -> Option<NodeId> {
+        self.cursor.checked_sub(1).map(|index| self.line[index])
     }
 
     /// Il risultato nella posizione mostrata, se la partita lì è finita.
     #[must_use]
     pub fn result(&self) -> Option<GameResult> {
-        self.result_at(self.cursor)
+        let is_mainline_end = self.is_at_mainline_end();
+        self.result_of(self.cursor, is_mainline_end)
     }
 
-    /// Il risultato alla fine della partita (ultima mossa), se è finita.
+    /// Il risultato alla fine della linea principale, se la partita è finita.
     #[must_use]
     pub fn final_result(&self) -> Option<GameResult> {
-        self.result_at(self.moves.len())
+        let mainline = self.mainline_ids();
+        let mut hashes = vec![self.start_hash];
+        hashes.extend(mainline.iter().map(|id| self.nodes[*id].hash));
+        outcome(self.mainline_end(), &hashes).or_else(|| self.adjudication.clone())
     }
 
     /// La descrizione completa della partita per l'interfaccia.
@@ -268,6 +437,7 @@ impl Game {
             last_move,
             result: self.result(),
             starting_fen: self.starting_fen(),
+            tree: self.tree(),
         }
     }
 
@@ -276,58 +446,167 @@ impl Game {
         &self.positions[self.cursor]
     }
 
-    /// La posizione di partenza.
-    fn start(&self) -> &Chess {
-        &self.positions[0]
-    }
-
-    /// Elimina le mosse dopo il cursore, prima di giocarne una nuova.
-    fn truncate_after_cursor(&mut self) {
-        // Un risultato deciso fuori dalla scacchiera valeva per la fine della
-        // partita: se il seguito viene sostituito, non vale più.
-        if self.cursor < self.moves.len() {
-            self.adjudication = None;
+    /// L'albero delle mosse per l'interfaccia, in ordine di lettura.
+    fn tree(&self) -> MoveTree {
+        let mainline: Vec<NodeId> = self.mainline_ids();
+        let mut nodes = Vec::new();
+        let mut pending: Vec<NodeId> = self.roots.iter().rev().copied().collect();
+        while let Some(id) = pending.pop() {
+            let node = &self.nodes[id];
+            pending.extend(node.children.iter().rev().copied());
+            nodes.push(MoveNode {
+                id: to_u32(id),
+                record: node.record.clone(),
+                parent: node.parent.map(to_u32),
+                children: node.children.iter().copied().map(to_u32).collect(),
+                mainline: mainline.contains(&id),
+            });
         }
-        self.moves.truncate(self.cursor);
-        self.positions.truncate(self.cursor + 1);
-        self.hashes.truncate(self.cursor + 1);
+        MoveTree {
+            nodes,
+            roots: self.roots.iter().copied().map(to_u32).collect(),
+            current: self.current_node().map(to_u32),
+        }
     }
 
-    /// Il risultato dopo `ply` mosse, se la partita lì è finita.
-    fn result_at(&self, ply: usize) -> Option<GameResult> {
+    /// Le mosse della linea principale: sempre la prima continuazione.
+    fn mainline_ids(&self) -> Vec<NodeId> {
+        let mut ids = Vec::new();
+        let mut next = self.roots.first().copied();
+        while let Some(id) = next {
+            ids.push(id);
+            next = self.nodes[id].children.first().copied();
+        }
+        ids
+    }
+
+    /// L'ultima posizione della linea principale.
+    fn mainline_end(&self) -> &Chess {
+        self.mainline_ids()
+            .last()
+            .map_or(&self.start, |id| &self.nodes[*id].position)
+    }
+
+    /// `true` se la mossa (o la partenza, con `None`) sta sulla linea principale.
+    fn is_mainline(&self, node: Option<NodeId>) -> bool {
+        node.is_none_or(|id| self.mainline_ids().contains(&id))
+    }
+
+    /// `true` se la mossa si raggiunge dalla partenza (non è stata tolta).
+    fn is_reachable(&self, node: NodeId) -> bool {
+        let Some(found) = self.nodes.get(node) else {
+            return false;
+        };
+        let mut current = (node, found.parent);
+        loop {
+            if !self.children(current.1).contains(&current.0) {
+                return false;
+            }
+            match current.1 {
+                Some(parent) => current = (parent, self.nodes[parent].parent),
+                None => return true,
+            }
+        }
+    }
+
+    /// Le mosse che seguono una mossa (o la partenza), da modificare.
+    fn children_mut(&mut self, node: Option<NodeId>) -> &mut Vec<NodeId> {
+        match node {
+            Some(id) => &mut self.nodes[id].children,
+            None => &mut self.roots,
+        }
+    }
+
+    /// Guarda la linea che passa dalla mossa indicata (fino in fondo, seguendo
+    /// le continuazioni principali) e mostra la posizione dopo quella mossa.
+    fn show_node(&mut self, node: Option<NodeId>) {
+        let mut path = Vec::new();
+        let mut current = node;
+        while let Some(id) = current {
+            path.push(id);
+            current = self.nodes[id].parent;
+        }
+        path.reverse();
+        self.cursor = path.len();
+        let mut next = self.children(node).first().copied();
+        while let Some(id) = next {
+            path.push(id);
+            next = self.nodes[id].children.first().copied();
+        }
+        self.set_line(path);
+    }
+
+    /// Guarda la linea principale e ne mostra l'ultima posizione.
+    fn show_mainline_end(&mut self) {
+        let mainline = self.mainline_ids();
+        self.cursor = mainline.len();
+        self.set_line(mainline);
+    }
+
+    /// Prepara posizioni, impronte e mosse della linea indicata.
+    fn set_line(&mut self, line: Vec<NodeId>) {
+        self.positions = std::iter::once(self.start.clone())
+            .chain(line.iter().map(|id| self.nodes[*id].position.clone()))
+            .collect();
+        self.hashes = std::iter::once(self.start_hash)
+            .chain(line.iter().map(|id| self.nodes[*id].hash))
+            .collect();
+        self.moves = line
+            .iter()
+            .map(|id| self.nodes[*id].record.clone())
+            .collect();
+        self.cursor = self.cursor.min(line.len());
+        self.line = line;
+    }
+
+    /// Il risultato dopo `ply` mosse della linea guardata, se la partita lì è finita.
+    fn result_of(&self, ply: usize, is_mainline_end: bool) -> Option<GameResult> {
         let position = self.positions.get(ply)?;
-
-        match position.outcome() {
-            Outcome::Known(KnownOutcome::Decisive { winner }) => Some(GameResult::decisive(
-                Side::from(winner),
-                GameEndReason::Checkmate,
-            )),
-            Outcome::Known(KnownOutcome::Draw) => {
-                let reason = if position.is_stalemate() {
-                    GameEndReason::Stalemate
-                } else {
-                    GameEndReason::InsufficientMaterial
-                };
-                Some(GameResult::draw(reason))
+        outcome(position, &self.hashes[..=ply]).or_else(|| {
+            if is_mainline_end {
+                self.adjudication.clone()
+            } else {
+                None
             }
-            Outcome::Unknown => {
-                let hash = self.hashes.get(ply)?;
-                let repetitions = self.hashes[..=ply]
-                    .iter()
-                    .filter(|earlier| *earlier == hash)
-                    .count();
-                if repetitions >= REPETITIONS_FOR_DRAW {
-                    Some(GameResult::draw(GameEndReason::ThreefoldRepetition))
-                } else if position.halfmoves() >= FIFTY_MOVE_RULE_HALFMOVES {
-                    Some(GameResult::draw(GameEndReason::FiftyMoveRule))
-                } else if ply == self.moves.len() {
-                    self.adjudication.clone()
-                } else {
-                    None
-                }
+        })
+    }
+}
+
+/// Il risultato di una posizione secondo le regole (matto, stallo, patte), se c'è.
+///
+/// - Riceve: la posizione e le impronte di tutte le posizioni fino a lei
+///   (l'ultima è la sua), per la patta per ripetizione.
+fn outcome(position: &Chess, hashes: &[Zobrist64]) -> Option<GameResult> {
+    match position.outcome() {
+        Outcome::Known(KnownOutcome::Decisive { winner }) => Some(GameResult::decisive(
+            Side::from(winner),
+            GameEndReason::Checkmate,
+        )),
+        Outcome::Known(KnownOutcome::Draw) => {
+            let reason = if position.is_stalemate() {
+                GameEndReason::Stalemate
+            } else {
+                GameEndReason::InsufficientMaterial
+            };
+            Some(GameResult::draw(reason))
+        }
+        Outcome::Unknown => {
+            let hash = hashes.last()?;
+            let repetitions = hashes.iter().filter(|earlier| *earlier == hash).count();
+            if repetitions >= REPETITIONS_FOR_DRAW {
+                Some(GameResult::draw(GameEndReason::ThreefoldRepetition))
+            } else if position.halfmoves() >= FIFTY_MOVE_RULE_HALFMOVES {
+                Some(GameResult::draw(GameEndReason::FiftyMoveRule))
+            } else {
+                None
             }
         }
     }
+}
+
+/// Un numero dell'albero per l'interfaccia (le partite non arrivano mai a 4 miliardi di mosse).
+fn to_u32(id: NodeId) -> u32 {
+    u32::try_from(id).unwrap_or(u32::MAX)
 }
 
 #[cfg(test)]
@@ -512,15 +791,79 @@ mod tests {
     }
 
     #[test]
-    fn a_move_from_an_earlier_position_replaces_the_rest() {
+    fn a_move_from_an_earlier_position_becomes_a_variation() {
         let mut game = Game::new();
-        play_all(&mut game, &["e2e4", "e7e5"]);
+        play_all(&mut game, &["e2e4", "e7e5", "g1f3"]);
 
         game.go_to(1);
         game.play_uci("c7c5").expect("mossa legale");
 
-        assert_eq!(game.moves().len(), 2);
         assert_eq!(last_san(&game), "c5");
+        let mainline: Vec<String> = game
+            .mainline()
+            .into_iter()
+            .map(|record| record.san)
+            .collect();
+        assert_eq!(mainline, ["e4", "e5", "Nf3"]);
+        let tree = game.view().tree;
+        assert_eq!(tree.nodes.len(), 4);
+        let c5 = tree
+            .nodes
+            .iter()
+            .find(|node| node.record.san == "c5")
+            .expect("variante");
+        assert!(!c5.mainline);
+        assert_eq!(tree.current, Some(c5.id));
+    }
+
+    #[test]
+    fn playing_an_existing_move_follows_it() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4", "e7e5"]);
+
+        game.go_to(0);
+        game.play_uci("e2e4").expect("mossa legale");
+
+        assert_eq!(game.view().tree.nodes.len(), 2);
+        assert_eq!(game.moves().len(), 2);
+        assert_eq!(game.cursor(), 1);
+    }
+
+    #[test]
+    fn a_variation_can_be_promoted_or_deleted() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4", "e7e5"]);
+        game.go_to(1);
+        game.play_uci("c7c5").expect("mossa legale");
+        let c5 = game.current_node().expect("mossa mostrata");
+
+        game.promote(c5).expect("variante");
+        let mainline: Vec<String> = game
+            .mainline()
+            .into_iter()
+            .map(|record| record.san)
+            .collect();
+        assert_eq!(mainline, ["e4", "c5"]);
+
+        let e5 = game.children(Some(0))[1];
+        assert_eq!(game.delete_variation(c5), Err(GameError::NotAVariation));
+        game.delete_variation(e5).expect("variante");
+        assert_eq!(game.view().tree.nodes.len(), 2);
+        assert_eq!(game.go_to_node(Some(e5)), Err(GameError::UnknownMove));
+    }
+
+    #[test]
+    fn the_end_of_the_mainline_decides_the_game() {
+        let mut game = Game::new();
+        play_all(&mut game, &["e2e4", "e7e5"]);
+        game.go_to(1);
+        game.play_uci("c7c5").expect("mossa legale");
+
+        assert!(!game.is_at_mainline_end());
+        assert_eq!(game.last_turn(), Side::White);
+        game.go_to_mainline_end();
+        assert!(game.is_at_mainline_end());
+        assert_eq!(game.moves()[1].san, "e5");
     }
 
     #[test]
@@ -601,7 +944,7 @@ mod tests {
     }
 
     #[test]
-    fn undo_or_a_new_continuation_cancels_the_resignation() {
+    fn a_variation_keeps_the_resignation_but_undo_cancels_it() {
         let mut game = Game::new();
         play_all(&mut game, &["e2e4", "e7e5"]);
         game.resign(Side::White).expect("la partita non è finita");
@@ -609,9 +952,9 @@ mod tests {
         game.go_to(1);
         game.play_uci("c7c5")
             .expect("mossa legale da una posizione passata");
-        assert_eq!(game.final_result(), None);
+        assert_eq!(game.result(), None);
+        assert!(game.final_result().is_some());
 
-        game.resign(Side::White).expect("la partita non è finita");
         game.undo();
         assert_eq!(game.final_result(), None);
     }

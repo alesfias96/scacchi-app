@@ -68,6 +68,38 @@ export function goToPly(ply: number): Promise<SessionView> {
 }
 
 /**
+ * Mostra la posizione dopo una mossa dell'albero, anche in una variante.
+ *
+ * @param node - il numero della mossa (`null` = posizione di partenza).
+ * @returns la partita con la posizione richiesta.
+ */
+export function goToNode(node: number | null): Promise<SessionView> {
+  return invoke<SessionView>('go_to_node', { node });
+}
+
+/**
+ * Fa diventare linea principale la variante che passa dalla mossa indicata.
+ *
+ * @param node - il numero della mossa.
+ * @returns la partita aggiornata.
+ * @throws se la partita non lo permette (finita, contro il computer, con l'orologio).
+ */
+export function promoteVariation(node: number): Promise<SessionView> {
+  return invoke<SessionView>('promote_variation', { node });
+}
+
+/**
+ * Elimina una variante: la mossa indicata e il suo seguito.
+ *
+ * @param node - il numero della mossa.
+ * @returns la partita aggiornata.
+ * @throws se la mossa è della linea principale.
+ */
+export function deleteVariation(node: number): Promise<SessionView> {
+  return invoke<SessionView>('delete_variation', { node });
+}
+
+/**
  * Abbandona la partita.
  *
  * @returns la partita finita.

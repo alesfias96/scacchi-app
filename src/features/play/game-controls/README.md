@@ -13,9 +13,11 @@ I pulsanti sotto l'elenco delle mosse:
 | ⚑ Abbandona              |       | Chiude la partita dandola vinta all'avversario, dopo una conferma                       |
 | ⇅ Gira la scacchiera     |       | Mostra la scacchiera dal punto di vista dell'altro colore                               |
 
-Tornare indietro non cancella niente. A due giocatori senza orologio, se si gioca una mossa da
-una posizione passata le mosse successive vengono sostituite dalla nuova; contro il computer o
-con l'orologio si gioca solo dall'ultima posizione. Quali pulsanti sono attivi lo decide Rust.
+Tornare indietro non cancella niente. Le frecce scorrono la linea che si sta guardando (la linea
+principale o una variante). A due giocatori senza orologio, e in qualsiasi partita già finita, una
+mossa giocata da una posizione passata crea una **variante** (il seguito resta); contro il computer
+o con l'orologio, a partita in corso, si gioca solo dall'ultima posizione. Quali pulsanti sono attivi
+lo decide Rust.
 
 | File                      | Cosa fa       |
 | ------------------------- | ------------- |

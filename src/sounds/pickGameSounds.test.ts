@@ -34,6 +34,7 @@ function game(
     lastMove: null,
     result,
     startingFen: '',
+    tree: { nodes: [], roots: [], current: null },
   };
 }
 

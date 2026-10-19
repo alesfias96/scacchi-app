@@ -19,6 +19,12 @@ pub enum GameError {
     /// Il PGN da importare contiene qualcosa che non è una mossa valida.
     #[error("PGN non valido vicino a «{0}»")]
     InvalidPgn(String),
+    /// La mossa indicata non è (più) nell'albero delle mosse.
+    #[error("questa mossa non c'è più nella partita")]
+    UnknownMove,
+    /// Si è chiesto di eliminare una mossa della linea principale.
+    #[error("si possono eliminare solo le varianti, non la linea principale")]
+    NotAVariation,
     /// Il testo da importare è vuoto.
     #[error("il testo da importare è vuoto")]
     EmptyImport,

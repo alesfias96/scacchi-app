@@ -1,7 +1,15 @@
 /*
- * Elenco delle mosse: tre colonne (numero, bianco, nero), altezza massima
- * con scorrimento, mossa mostrata evidenziata con il colore d'accento del tema.
+ * Elenco delle mosse: tre colonne (numero, bianco, nero) per la linea
+ * principale; sotto, rientrate e più piccole, le varianti scritte in fila.
+ * Altezza massima con scorrimento; la mossa mostrata è evidenziata con il
+ * colore d'accento del tema.
  */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
 
 .list {
   display: flex;
@@ -13,17 +21,17 @@
   list-style: none;
 }
 
+.item:nth-child(even) .row {
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+}
+
 .row {
   display: grid;
   grid-template-columns: var(--move-number-width) 1fr 1fr;
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-1) 0;
-}
-
-.row:nth-child(even) {
-  border-radius: var(--radius-small);
-  background: var(--color-surface-muted);
 }
 
 .number {
@@ -63,6 +71,42 @@
 .placeholder {
   padding: var(--space-1) var(--space-2);
   color: var(--color-text-muted);
+}
+
+/* Le varianti sotto la riga: rientrate, più piccole, con una linea a sinistra. */
+.variations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 var(--space-1) var(--move-number-width);
+  padding-left: var(--space-2);
+  border-left: var(--border-width) solid var(--color-border);
+}
+
+.variation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-size: var(--text-small);
+}
+
+.variationMove {
+  padding: 0 var(--space-1);
+  font-weight: var(--weight-regular);
+}
+
+.inlineNumber {
+  color: var(--color-text-muted);
+}
+
+.paren {
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
 .empty {

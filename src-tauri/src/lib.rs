@@ -36,6 +36,8 @@ pub fn run() {
     tauri::Builder::default()
         // Le finestre di sistema per salvare e aprire i file .pgn.
         .plugin(tauri_plugin_dialog::init())
+        // Gli appunti del sistema (Copia FEN, Copia PGN).
+        .plugin(tauri_plugin_clipboard_manager::init())
         // La partita in corso, i motori e il puzzle in corso: Tauri li custodisce e li passa ai
         // comandi che li chiedono.
         .manage(state::session_state::SessionState::default())
@@ -65,6 +67,10 @@ pub fn run() {
             commands::game::play_move,
             commands::game::undo_move,
             commands::game::go_to_ply,
+            commands::variations::go_to_node,
+            commands::variations::promote_variation,
+            commands::variations::delete_variation,
+            commands::clipboard::copy_text,
             commands::game::import_game_text,
             commands::game::export_pgn,
             commands::game::resign_game,

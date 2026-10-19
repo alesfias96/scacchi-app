@@ -39,6 +39,7 @@ function game(moves: MoveRecord[], result: GameResult | null = null): GameView {
     lastMove: null,
     result,
     startingFen: '',
+    tree: { nodes: [], roots: [], current: null },
   };
 }
 

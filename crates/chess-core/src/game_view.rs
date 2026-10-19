@@ -3,6 +3,7 @@
 use crate::game_result::GameResult;
 use crate::legal_move::LegalMove;
 use crate::move_record::MoveRecord;
+use crate::move_tree::MoveTree;
 use crate::position_view::PositionView;
 
 /// Tutto ciò che l'interfaccia deve sapere sulla partita in corso.
@@ -19,9 +20,9 @@ use crate::position_view::PositionView;
 pub struct GameView {
     /// La posizione mostrata (quella del cursore).
     pub position: PositionView,
-    /// Tutte le mosse della partita, dalla prima all'ultima.
+    /// Le mosse della linea guardata (la linea principale o una variante), dalla prima all'ultima.
     pub moves: Vec<MoveRecord>,
-    /// Quante mosse sono state giocate fino alla posizione mostrata (0 = posizione di partenza).
+    /// Quante mosse della linea sono state giocate fino alla posizione mostrata (0 = posizione di partenza).
     pub cursor: usize,
     /// La mossa che ha portato alla posizione mostrata, per evidenziarla sulla scacchiera.
     pub last_move: Option<LegalMove>,
@@ -29,4 +30,6 @@ pub struct GameView {
     pub result: Option<GameResult>,
     /// La posizione di partenza in notazione FEN.
     pub starting_fen: String,
+    /// L'albero delle mosse: la linea principale e le varianti.
+    pub tree: MoveTree,
 }

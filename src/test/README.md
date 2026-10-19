@@ -13,3 +13,4 @@ Qui c'è solo ciò che vale per tutti i test.
 | `puzzleAttempts.ts`    | Due puzzle di prova (appena cominciato e risolto) per i test della sezione "Allenamento"                                                                                   |
 | `tutorExplanations.ts` | Una spiegazione e una mossa provata di prova, per i test del tutor                                                                                                         |
 | `gameReviews.ts`       | Una revisione di prova, per i test della sezione «Analisi partite»                                                                                                         |
+| `moveTrees.ts`         | Un albero di mosse con varianti, per i test della lista mosse                                                                                                              |

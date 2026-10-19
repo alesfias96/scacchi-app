@@ -19,6 +19,9 @@ pub enum SessionError {
     /// Con l'orologio le mosse non si possono ritirare.
     #[error("con l'orologio le mosse non si possono ritirare")]
     UndoNotAllowed,
+    /// Le varianti si promuovono solo nelle partite a due giocatori senza orologio, non finite.
+    #[error("in questa partita la linea principale è quella giocata: non si può cambiare")]
+    VariationsLocked,
     /// La mossa del computer è arrivata quando la partita era già cambiata:
     /// viene scartata (non è un problema per l'utente).
     #[error("la mossa del computer non vale più per questa posizione")]

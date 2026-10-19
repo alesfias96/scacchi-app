@@ -20,7 +20,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '../../../components/button/Button';
 import { Icon } from '../../../components/icon/Icon';
-import { copyToClipboard } from '../../../lib/copyToClipboard';
+import { copyText } from '../../../services/clipboardService';
 import { describeError } from '../../../lib/describeError';
 import { ImportDialog } from './ImportDialog';
 import styles from './ImportExport.module.css';
@@ -64,7 +64,7 @@ export function ImportExport({ fen, onRequestPgn, onImport }: ImportExportProps)
    */
   const copy = async (getText: () => Promise<string>, confirmation: string) => {
     try {
-      await copyToClipboard(await getText());
+      await copyText(await getText());
       setFeedback(confirmation);
     } catch (error) {
       setFeedback(`Copia non riuscita: ${describeError(error)}`);

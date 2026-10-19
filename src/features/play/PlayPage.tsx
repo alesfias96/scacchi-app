@@ -15,7 +15,7 @@
  *   sulla scacchiera la freccia della mossa migliore.
  * - A fine partita: l'annuncio (motivo e punteggio) sopra la scacchiera, con
  *   «Analizza la partita» (apre la sezione «Analisi partite»).
- * - Nella colonna "Partita": le mosse con i comandi (scorri,
+ * - Nella colonna "Partita": le mosse, con le varianti, e i comandi (scorri,
  *   nuova partita, annulla, abbandona, gira) con il nome dell'apertura,
  *   l'analisi, le osservazioni dei rilevatori (passando il mouse su una, la
  *   scacchiera mostra le case coinvolte), la situazione, copia e incolla di posizioni (FEN) e partite
@@ -121,6 +121,9 @@ export function PlayPage({ coached = false }: PlayPageProps) {
   const play = useGameStore((state) => state.play);
   const undo = useGameStore((state) => state.undo);
   const goTo = useGameStore((state) => state.goTo);
+  const goToNode = useGameStore((state) => state.goToNode);
+  const promoteVariation = useGameStore((state) => state.promoteVariation);
+  const deleteVariation = useGameStore((state) => state.deleteVariation);
   const resign = useGameStore((state) => state.resign);
   const newGame = useGameStore((state) => state.newGame);
   const importText = useGameStore((state) => state.importText);
@@ -480,11 +483,17 @@ export function PlayPage({ coached = false }: PlayPageProps) {
                 <PanelCard title="Mosse">
                   <OpeningLabel opening={session.opening} />
                   <MoveList
-                    moves={game.moves}
-                    cursor={game.cursor}
+                    tree={game.tree}
                     notation={notation}
-                    onSelect={(ply) => {
-                      void goTo(ply);
+                    canPromote={session.canEditVariations}
+                    onSelect={(node) => {
+                      void goToNode(node);
+                    }}
+                    onPromote={(node) => {
+                      void promoteVariation(node);
+                    }}
+                    onDelete={(node) => {
+                      void deleteVariation(node);
                     }}
                   />
                   <GameControls

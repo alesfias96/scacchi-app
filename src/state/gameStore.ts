@@ -17,12 +17,15 @@ import type { SessionView } from '../bindings/SessionView';
 import { describeError } from '../lib/describeError';
 import { listenToStorageErrors, openSavedGame } from '../services/archiveService';
 import {
+  deleteVariation,
   fetchGame,
+  goToNode,
   goToPly,
   importGame,
   listenToGameUpdates,
   openPgnFile,
   playMove,
+  promoteVariation,
   resignGame,
   startNewGame,
   undoMove,
@@ -46,8 +49,14 @@ export interface GameState {
   play: (uci: string) => Promise<void>;
   /** Ritira l'ultima mossa (contro il computer anche la sua risposta). */
   undo: () => Promise<void>;
-  /** Mostra la posizione dopo `ply` mosse (0 = partenza). */
+  /** Mostra la posizione dopo `ply` mosse della linea guardata (0 = partenza). */
   goTo: (ply: number) => Promise<void>;
+  /** Mostra la posizione dopo una mossa dell'albero (`null` = partenza), anche in una variante. */
+  goToNode: (node: number | null) => Promise<void>;
+  /** Promuove a linea principale la variante della mossa indicata. */
+  promoteVariation: (node: number) => Promise<void>;
+  /** Elimina la mossa indicata e il suo seguito (solo nelle varianti). */
+  deleteVariation: (node: number) => Promise<void>;
   /** Abbandona la partita. */
   resign: () => Promise<void>;
   /**
@@ -118,6 +127,9 @@ export const useGameStore = create<GameState>()((set) => {
     play: (uci) => run(() => playMove(uci)),
     undo: () => run(undoMove),
     goTo: (ply) => run(() => goToPly(ply)),
+    goToNode: (node) => run(() => goToNode(node)),
+    promoteVariation: (node) => run(() => promoteVariation(node)),
+    deleteVariation: (node) => run(() => deleteVariation(node)),
     resign: () => run(resignGame),
 
     openSaved: async (id) => {

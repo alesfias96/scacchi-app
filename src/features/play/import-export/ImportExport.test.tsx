@@ -5,15 +5,19 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportExport } from './ImportExport';
 
+/** Gli appunti simulati (la copia vera la fa Rust). */
+const clipboardMock = vi.hoisted(() => ({ copyText: vi.fn<(text: string) => Promise<void>>() }));
+
+vi.mock('../../../services/clipboardService', () => clipboardMock);
+
 const FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 
 describe('ImportExport', () => {
-  /** Gli appunti simulati. */
-  const writeText = vi.fn(() => Promise.resolve());
+  const writeText = clipboardMock.copyText;
 
   beforeEach(() => {
-    writeText.mockClear();
-    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    writeText.mockReset();
+    writeText.mockResolvedValue(undefined);
   });
 
   it('copia la FEN della posizione mostrata e lo conferma', async () => {

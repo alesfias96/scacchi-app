@@ -2,6 +2,7 @@
 import type { GameResult } from "./GameResult";
 import type { LegalMove } from "./LegalMove";
 import type { MoveRecord } from "./MoveRecord";
+import type { MoveTree } from "./MoveTree";
 import type { PositionView } from "./PositionView";
 
 /**
@@ -16,11 +17,11 @@ export type GameView = {
  */
 position: PositionView, 
 /**
- * Tutte le mosse della partita, dalla prima all'ultima.
+ * Le mosse della linea guardata (la linea principale o una variante), dalla prima all'ultima.
  */
 moves: Array<MoveRecord>, 
 /**
- * Quante mosse sono state giocate fino alla posizione mostrata (0 = posizione di partenza).
+ * Quante mosse della linea sono state giocate fino alla posizione mostrata (0 = posizione di partenza).
  */
 cursor: number, 
 /**
@@ -34,4 +35,8 @@ result: GameResult | null,
 /**
  * La posizione di partenza in notazione FEN.
  */
-startingFen: string, };
+startingFen: string, 
+/**
+ * L'albero delle mosse: la linea principale e le varianti.
+ */
+tree: MoveTree, };

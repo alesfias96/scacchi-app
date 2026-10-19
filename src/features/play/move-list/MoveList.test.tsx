@@ -1,75 +1,82 @@
 /**
- * Test dell'elenco delle mosse.
+ * Test della lista delle mosse, con le varianti.
  */
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { MoveRecord } from '../../../bindings/MoveRecord';
+import { sampleTree } from '../../../test/moveTrees';
 import { MoveList } from './MoveList';
 
-/** 1. e4 e5 2. Nf3 */
-const MOVES: MoveRecord[] = [
-  {
-    ply: 1,
-    moveNumber: 1,
-    side: 'white',
-    san: 'e4',
-    uci: 'e2e4',
-    from: 'e2',
-    to: 'e4',
-    capture: false,
-  },
-  {
-    ply: 2,
-    moveNumber: 1,
-    side: 'black',
-    san: 'e5',
-    uci: 'e7e5',
-    from: 'e7',
-    to: 'e5',
-    capture: false,
-  },
-  {
-    ply: 3,
-    moveNumber: 2,
-    side: 'white',
-    san: 'Nf3',
-    uci: 'g1f3',
-    from: 'g1',
-    to: 'f3',
-    capture: false,
-  },
-];
+/** Disegna la lista con funzioni simulate. */
+function renderList(current: number | null, canPromote = true) {
+  const onSelect = vi.fn<(node: number) => void>();
+  const onPromote = vi.fn<(node: number) => void>();
+  const onDelete = vi.fn<(node: number) => void>();
+  render(
+    <MoveList
+      tree={sampleTree(current)}
+      notation="italiana"
+      canPromote={canPromote}
+      onSelect={onSelect}
+      onPromote={onPromote}
+      onDelete={onDelete}
+    />,
+  );
+  return { onSelect, onPromote, onDelete };
+}
 
 describe('MoveList', () => {
-  it('invita a muovere se non ci sono mosse', () => {
-    render(<MoveList moves={[]} cursor={0} notation="figurine" onSelect={vi.fn()} />);
-
-    expect(screen.getByText(/muovi un pezzo per cominciare/)).toBeDefined();
-  });
-
-  it('scrive le mosse nella notazione scelta', () => {
-    const { rerender } = render(
-      <MoveList moves={MOVES} cursor={3} notation="italiana" onSelect={vi.fn()} />,
+  it('senza mosse invita a cominciare', () => {
+    render(
+      <MoveList
+        tree={{ nodes: [], roots: [], current: null }}
+        notation="figurine"
+        canPromote={false}
+        onSelect={vi.fn()}
+        onPromote={vi.fn()}
+        onDelete={vi.fn()}
+      />,
     );
-    expect(screen.getByRole('button', { name: 'Cf3' })).toBeDefined();
 
-    rerender(<MoveList moves={MOVES} cursor={3} notation="figurine" onSelect={vi.fn()} />);
-    expect(screen.getByRole('button', { name: '♞f3' })).toBeDefined();
+    expect(screen.getByText(/Nessuna mossa/)).toBeDefined();
   });
 
-  it('evidenzia la mossa della posizione mostrata', () => {
-    render(<MoveList moves={MOVES} cursor={2} notation="internazionale" onSelect={vi.fn()} />);
+  it('mostra la linea principale e le varianti, nella notazione scelta', () => {
+    renderList(2);
 
-    expect(screen.getByRole('button', { name: 'e5' }).getAttribute('aria-current')).toBe('step');
-    expect(screen.getByRole('button', { name: 'e4' }).getAttribute('aria-current')).toBeNull();
+    expect(screen.getByRole('button', { name: 'e5' })).toBeDefined();
+    expect(screen.getByRole('button', { name: '1… c5' })).toBeDefined();
+    expect(screen.getByRole('button', { name: '2. c3' })).toBeDefined();
+    expect(screen.getAllByRole('button', { name: /Cf3/ })).toHaveLength(2);
   });
 
-  it('un clic su una mossa chiede di mostrare quella posizione', () => {
-    const onSelect = vi.fn();
-    render(<MoveList moves={MOVES} cursor={3} notation="internazionale" onSelect={onSelect} />);
+  it('un clic su una mossa della variante la mostra', () => {
+    const { onSelect } = renderList(2);
 
-    fireEvent.click(screen.getByRole('button', { name: 'e4' }));
+    fireEvent.click(screen.getByRole('button', { name: '1… c5' }));
 
-    expect(onSelect).toHaveBeenCalledWith(1);
+    expect(onSelect).toHaveBeenCalledWith(3);
+  });
+
+  it('in una variante si può promuovere o eliminare da lì', () => {
+    const { onPromote, onDelete } = renderList(3);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Promuovi a linea principale' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Elimina da qui' }));
+
+    expect(onPromote).toHaveBeenCalledWith(3);
+    expect(onDelete).toHaveBeenCalledWith(3);
+  });
+
+  it('sulla linea principale i comandi delle varianti non ci sono', () => {
+    renderList(1);
+
+    expect(screen.queryByRole('button', { name: 'Elimina da qui' })).toBeNull();
+  });
+
+  it('se la partita non lo permette, la variante non si promuove', () => {
+    renderList(3, false);
+
+    expect(screen.queryByRole('button', { name: 'Promuovi a linea principale' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Elimina da qui' })).toBeDefined();
   });
 });

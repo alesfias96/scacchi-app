@@ -4,7 +4,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 use app_settings::{ColorChoice, GameSetup, OpponentKind};
-use chess_core::{Game, Side, to_pgn};
+use chess_core::{Game, NodeId, Side, to_pgn};
 use engine::{SearchLimits, SearchPosition, levels, strength};
 use openings::Opening;
 
@@ -117,7 +117,7 @@ impl GameSession {
     /// vale la pena salvarla nell'archivio).
     #[must_use]
     pub fn has_moves(&self) -> bool {
-        !self.game.moves().is_empty()
+        !self.game.mainline().is_empty()
     }
 
     /// Comincia una partita nuova, come scelto nella finestra "Nuova partita".
@@ -168,6 +168,7 @@ impl GameSession {
             can_move: self.check_can_move().is_ok(),
             can_undo: self.can_undo(),
             can_resign: self.game.final_result().is_none(),
+            can_edit_variations: self.can_edit_variations(),
             computer_thinking: self.computer_to_move(),
         }
     }
@@ -184,9 +185,60 @@ impl GameSession {
     pub fn play(&mut self, uci: &str, now: Instant) -> Result<(), SessionError> {
         self.check_time(now);
         self.check_can_move()?;
+        // Solo una mossa in fondo alla linea principale fa andare avanti la
+        // partita (orologio, tempi); le altre diventano varianti.
+        let extends_mainline = self.game.is_at_mainline_end();
         let mover = self.game.turn();
         self.game.play_uci(uci)?;
-        self.after_move(mover, now);
+        if extends_mainline {
+            self.after_move(mover, now);
+        } else {
+            self.token = next_token();
+        }
+        Ok(())
+    }
+
+    /// Mostra la posizione dopo una mossa dell'albero (`None` = partenza), anche in una variante.
+    ///
+    /// # Errors
+    ///
+    /// [`SessionError::Game`] se la mossa non è (più) nella partita.
+    pub fn go_to_node(&mut self, node: Option<NodeId>) -> Result<(), SessionError> {
+        Ok(self.game.go_to_node(node)?)
+    }
+
+    /// Fa diventare linea principale la variante che passa dalla mossa indicata.
+    ///
+    /// # Errors
+    ///
+    /// - [`SessionError::VariationsLocked`] se la partita non lo permette (finita,
+    ///   contro il computer o con l'orologio: la linea principale è la partita giocata);
+    /// - [`SessionError::Game`] se la mossa non è (più) nella partita.
+    pub fn promote_variation(&mut self, node: NodeId, now: Instant) -> Result<(), SessionError> {
+        if !self.can_edit_variations() {
+            return Err(SessionError::VariationsLocked);
+        }
+        let before = self.mainline_uci();
+        self.game.promote(node)?;
+        // I tempi valgono solo per le mosse che restano uguali all'inizio della linea principale.
+        let kept = before
+            .iter()
+            .zip(self.mainline_uci())
+            .take_while(|(old, new)| **old == *new)
+            .count();
+        self.timer.truncate(kept, now);
+        self.token = next_token();
+        Ok(())
+    }
+
+    /// Elimina una variante (la mossa indicata e il suo seguito).
+    ///
+    /// # Errors
+    ///
+    /// [`SessionError::Game`] se la mossa non è (più) nella partita o è della linea principale.
+    pub fn delete_variation(&mut self, node: NodeId) -> Result<(), SessionError> {
+        self.game.delete_variation(node)?;
+        self.token = next_token();
         Ok(())
     }
 
@@ -229,7 +281,7 @@ impl GameSession {
             token: self.token,
             position: SearchPosition {
                 start_fen: self.game.starting_fen(),
-                moves: self.uci_moves(self.game.moves().len()),
+                moves: self.mainline_uci(),
             },
             limits,
             options: level.options,
@@ -250,7 +302,7 @@ impl GameSession {
         self.check_time(now);
         // L'utente potrebbe star guardando una posizione passata: la mossa del
         // computer va comunque in fondo alla partita.
-        self.game.go_to(self.game.moves().len());
+        self.game.go_to_mainline_end();
         let mover = self.game.turn();
         self.game.play_uci(uci)?;
         self.after_move(mover, now);
@@ -273,7 +325,7 @@ impl GameSession {
                     return Ok(());
                 }
                 // Toglie mosse finché non ha tolto l'ultima della persona.
-                while let Some(last) = self.game.moves().last().map(|record| record.side) {
+                while let Some(last) = self.game.mainline().last().map(|record| record.side) {
                     self.game.undo();
                     if last != computer.side {
                         break;
@@ -282,7 +334,7 @@ impl GameSession {
             }
             None => self.game.undo(),
         }
-        self.timer.truncate(self.game.moves().len(), now);
+        self.timer.truncate(self.game.mainline().len(), now);
         self.token = next_token();
         Ok(())
     }
@@ -371,10 +423,7 @@ impl GameSession {
     /// L'apertura giocata (la più precisa riconosciuta), se c'è.
     #[must_use]
     pub fn opening(&self) -> Option<Opening> {
-        openings::identify(
-            &self.game.starting_fen(),
-            &self.uci_moves(self.game.moves().len()),
-        )
+        openings::identify(&self.game.starting_fen(), &self.mainline_uci())
     }
 
     /// Dopo una mossa: aggiorna l'orologio (e lo ferma se la partita è finita)
@@ -389,7 +438,7 @@ impl GameSession {
             clock_after_ms = Some(to_millis(clock.remaining(mover, now)));
         }
         self.timer
-            .record(self.game.moves().len(), now, clock_after_ms);
+            .record(self.game.mainline().len(), now, clock_after_ms);
         self.token = next_token();
     }
 
@@ -398,8 +447,12 @@ impl GameSession {
         if self.game.result().is_some() {
             return Err(chess_core::GameError::GameOver.into());
         }
+        // A partita finita si può giocare dappertutto: le mosse diventano varianti.
+        if self.game.final_result().is_some() {
+            return Ok(());
+        }
         let strict = self.computer.is_some() || self.clock.is_some();
-        if strict && !self.game.is_at_end() {
+        if strict && !self.game.is_at_mainline_end() {
             return Err(SessionError::NotAtEnd);
         }
         match self.computer {
@@ -422,19 +475,35 @@ impl GameSession {
         }
         match self.computer {
             Some(computer) => self.has_human_move(computer),
-            None => !self.game.moves().is_empty(),
+            None => !self.game.mainline().is_empty(),
         }
+    }
+
+    /// `true` se le varianti si possono promuovere: solo nelle partite a due
+    /// giocatori senza orologio e non finite (altrimenti la linea principale è
+    /// la partita giocata davvero, e non si cambia).
+    fn can_edit_variations(&self) -> bool {
+        self.computer.is_none() && self.clock.is_none() && self.game.final_result().is_none()
     }
 
     /// `true` se la persona ha già giocato almeno una mossa contro il computer.
     fn has_human_move(&self, computer: Computer) -> bool {
         self.game
-            .moves()
+            .mainline()
             .iter()
             .any(|record| record.side != computer.side)
     }
 
-    /// Le prime `count` mosse della partita, in notazione UCI.
+    /// Le mosse della linea principale, in notazione UCI.
+    pub(crate) fn mainline_uci(&self) -> Vec<String> {
+        self.game
+            .mainline()
+            .into_iter()
+            .map(|record| record.uci)
+            .collect()
+    }
+
+    /// Le prime `count` mosse della linea guardata, in notazione UCI.
     pub(crate) fn uci_moves(&self, count: usize) -> Vec<String> {
         self.game.moves()[..count]
             .iter()
@@ -663,5 +732,71 @@ mod tests {
             .expect("posizione da analizzare");
 
         assert_eq!(position.moves, ["e2e4"]);
+    }
+
+    #[test]
+    fn in_a_two_player_game_a_move_from_the_past_becomes_a_variation() {
+        let now = Instant::now();
+        let mut session = GameSession::default();
+        for uci in ["e2e4", "e7e5", "g1f3"] {
+            session.play(uci, now).expect("mossa legale");
+        }
+        let revision = session.revision();
+
+        session.go_to(1);
+        session.play("c7c5", now).expect("variante");
+
+        let view = session.view(now);
+        assert_ne!(session.revision(), revision);
+        assert!(view.can_edit_variations);
+        assert_eq!(view.game.tree.nodes.len(), 4);
+        // La partita salvata resta quella della linea principale.
+        assert_eq!(session.snapshot(now).moves.len(), 3);
+    }
+
+    #[test]
+    fn a_variation_can_become_the_mainline_in_a_two_player_game() {
+        let now = Instant::now();
+        let mut session = GameSession::default();
+        for uci in ["e2e4", "e7e5"] {
+            session.play(uci, now).expect("mossa legale");
+        }
+        session.go_to(1);
+        session.play("c7c5", now).expect("variante");
+        let c5 = session.view(now).game.tree.current.expect("mossa mostrata");
+
+        session
+            .promote_variation(usize::try_from(c5).expect("numero"), now)
+            .expect("promozione");
+
+        let snapshot = session.snapshot(now);
+        assert_eq!(snapshot.moves[1].record.san, "c5");
+        assert!(snapshot.pgn.contains("1. e4 c5 (1... e5)"));
+    }
+
+    #[test]
+    fn after_a_finished_game_against_the_computer_variations_are_free() {
+        let now = Instant::now();
+        let mut session = GameSession::start(
+            &against_computer(ColorChoice::White, None),
+            Side::White,
+            now,
+        );
+        session.play("e2e4", now).expect("mossa legale");
+        session.resign(now).expect("abbandono");
+
+        session.go_to(0);
+        // A partita finita si provano altre mosse, e il computer non risponde.
+        session.play("d2d4", now).expect("variante dopo la fine");
+
+        let view = session.view(now);
+        assert!(!view.computer_thinking);
+        assert!(!view.can_edit_variations);
+        let node = usize::try_from(view.game.tree.current.expect("mossa")).expect("numero");
+        assert_eq!(
+            session.promote_variation(node, now),
+            Err(SessionError::VariationsLocked)
+        );
+        assert_eq!(session.snapshot(now).moves.len(), 1);
     }
 }

@@ -6,6 +6,7 @@
 
 pub mod analysis;
 pub mod archive;
+pub mod clipboard;
 pub mod engine;
 pub mod game;
 pub mod pgn_file;
@@ -14,3 +15,4 @@ pub mod review;
 pub mod settings;
 pub mod training;
 pub mod tutor;
+pub mod variations;

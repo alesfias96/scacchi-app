@@ -46,6 +46,8 @@ tutor = { workspace = true, features = ["bindings"] }
 review = { workspace = true, features = ["bindings"] }
 # Le finestre di sistema per salvare e aprire i file .pgn.
 tauri-plugin-dialog.workspace = true
+# Gli appunti del sistema: Copia FEN e Copia PGN.
+tauri-plugin-clipboard-manager.workspace = true
 # Per aspettare senza bloccare (ad esempio l'istante in cui scade il tempo).
 tokio.workspace = true
 

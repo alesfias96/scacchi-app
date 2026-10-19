@@ -72,3 +72,5 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `CriticalMoment.ts`   | `crates/review/src/review_view.rs`          | Un momento critico spiegato                                                                 |
 | `ReviewProgress.ts`   | `crates/review/src/review_progress.rs`      | L'avanzamento dell'analisi in corso                                                         |
 | `ReviewFinished.ts`   | `crates/review/src/review_progress.rs`      | La fine dell'analisi (riuscita, fermata o fallita)                                          |
+| `MoveTree.ts`         | `crates/chess-core/src/move_tree.rs`        | L'albero delle mosse: linea principale e varianti, e la mossa mostrata                      |
+| `MoveNode.ts`         | `crates/chess-core/src/move_tree.rs`        | Una mossa dell'albero, con il suo seguito                                                   |

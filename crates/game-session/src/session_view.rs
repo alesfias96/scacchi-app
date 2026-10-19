@@ -46,4 +46,7 @@ pub struct SessionView {
     pub can_resign: bool,
     /// `true` se si sta aspettando la mossa del computer.
     pub computer_thinking: bool,
+    /// `true` se una variante si può promuovere a linea principale (partite a due
+    /// giocatori senza orologio, non finite).
+    pub can_edit_variations: bool,
 }

@@ -36,8 +36,9 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 - **Osservazioni**: l'interruttore nella scheda "Osservazioni" accende i rilevatori, che elencano
   minacce, tattiche, pedoni, re e pezzi; passando il mouse su un fatto, la scacchiera lo mostra.
   Anche questa contro il computer parte spenta.
-- A due giocatori senza orologio si può rigiocare da una posizione passata (le mosse successive
-  vengono sostituite; le varianti arriveranno nella Fase 8). Contro il computer o con l'orologio
+- **Varianti** (Fase 8-bis): a due giocatori senza orologio, e in ogni partita già finita, una mossa
+  giocata da una posizione passata crea una variante: il seguito resta e la variante compare nella
+  lista mosse, sotto la mossa da cui parte. Contro il computer o con l'orologio, a partita in corso,
   si gioca solo dall'ultima posizione.
 
 ## Contenuto

@@ -4,7 +4,7 @@ use shakmaty::Chess;
 use shakmaty::EnPassantMode;
 use shakmaty::fen::Fen;
 
-use crate::game::Game;
+use crate::game::{Game, NodeId};
 use crate::side::Side;
 
 /// Lunghezza massima delle righe delle mosse, come raccomandato dallo standard PGN.
@@ -14,8 +14,8 @@ const MAX_LINE_LENGTH: usize = 80;
 ///
 /// - Riceve: la partita.
 /// - Restituisce: il testo PGN, con le intestazioni (giocatori, risultato,
-///   eventuale posizione di partenza) e tutte le mosse, anche quelle dopo
-///   la posizione mostrata.
+///   eventuale posizione di partenza) e tutte le mosse: la linea principale
+///   e le varianti tra parentesi.
 #[must_use]
 pub fn to_pgn(game: &Game) -> String {
     let score = game
@@ -46,34 +46,54 @@ fn tag(name: &str, value: &str) -> String {
     format!("[{name} \"{value}\"]")
 }
 
-/// Le mosse numerate (`1. e4 e5 2. Nf3 ...`) seguite dal risultato,
-/// divise in righe di al massimo 80 caratteri.
+/// Una mossa scritta nel PGN: con il numero davanti per il Bianco (`12. Nf3`)
+/// e, per il Nero, solo quando serve (`12... e5`: all'inizio della partita, di
+/// una variante o dopo una variante).
+fn move_token(record: &crate::move_record::MoveRecord, with_number: bool) -> String {
+    match record.side {
+        Side::White => format!("{}. {}", record.move_number, record.san),
+        Side::Black if with_number => format!("{}... {}", record.move_number, record.san),
+        Side::Black => record.san.clone(),
+    }
+}
+
+/// Scrive le mosse che seguono `parent` (`None` = la partenza): la linea
+/// principale e, dopo ogni sua mossa, le varianti tra parentesi.
+fn write_line(game: &Game, parent: Option<NodeId>, with_number: bool, tokens: &mut Vec<String>) {
+    let mut current = parent;
+    let mut with_number = with_number;
+    while let Some((&main, variations)) = game.children(current).split_first() {
+        tokens.push(move_token(game.record(main), with_number));
+        with_number = false;
+        for &variation in variations {
+            let mut inner = vec![move_token(game.record(variation), true)];
+            write_line(game, Some(variation), false, &mut inner);
+            tokens.push(format!("({})", inner.join(" ")));
+            // Dopo una variante, anche la mossa del Nero riprende con il numero.
+            with_number = true;
+        }
+        current = Some(main);
+    }
+}
+
+/// Le mosse numerate (`1. e4 e5 2. Nf3 ...`), con le varianti tra parentesi,
+/// seguite dal risultato e divise in righe di al massimo 80 caratteri.
 fn movetext(game: &Game, score: &str) -> String {
     let mut tokens = Vec::new();
-    for (index, record) in game.moves().iter().enumerate() {
-        match record.side {
-            Side::White => tokens.push(format!("{}. {}", record.move_number, record.san)),
-            // Il numero davanti a una mossa del nero serve solo se la partita
-            // comincia con il nero (es. "1... e5").
-            Side::Black if index == 0 => {
-                tokens.push(format!("{}... {}", record.move_number, record.san));
-            }
-            Side::Black => tokens.push(record.san.clone()),
-        }
-    }
+    write_line(game, None, true, &mut tokens);
     tokens.push(score.to_owned());
 
     let mut lines: Vec<String> = Vec::new();
-    for token in tokens {
+    for token in tokens.iter().flat_map(|token| token.split(' ')) {
         let fits_on_last_line = lines
             .last()
             .is_some_and(|line| line.len() + 1 + token.len() <= MAX_LINE_LENGTH);
         match lines.last_mut() {
             Some(line) if fits_on_last_line => {
                 line.push(' ');
-                line.push_str(&token);
+                line.push_str(token);
             }
-            _ => lines.push(token),
+            _ => lines.push(token.to_owned()),
         }
     }
     lines.join("\n")
