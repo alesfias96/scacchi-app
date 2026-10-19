@@ -1,0 +1,77 @@
+/*
+ * Le schede della base di conoscenza: chiuse mostrano argomento, titolo e
+ * perché valgono qui; aperte, il testo con idee, piani ed errori.
+ */
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card {
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  background: var(--color-accent-soft);
+}
+
+.summary:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.topic {
+  color: var(--color-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.title {
+  font-weight: var(--weight-semibold);
+}
+
+.context {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.heading {
+  margin-top: var(--space-2);
+  font-weight: var(--weight-bold);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+}

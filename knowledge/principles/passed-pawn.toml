@@ -1,0 +1,33 @@
+title = "I pedoni passati"
+when = [
+  "principle:passed-pawn",
+]
+summary = "Un pedone passato non ha più pedoni avversari davanti a sé, né sulle colonne vicine: può arrivare a promozione e costringe l'avversario a usare pezzi per fermarlo."
+ideas = [
+  "«I pedoni passati vanno spinti» (Nimzowitsch): ogni casa in avanti li rende più pericolosi.",
+  "Il pezzo migliore per bloccare un pedone passato è il cavallo, piazzato proprio davanti a lui.",
+  "Le torri stanno bene dietro i pedoni passati: dietro i propri per spingerli, dietro quelli avversari per fermarli.",
+  "Un pedone passato protetto da un altro pedone è un vantaggio che dura.",
+]
+mistakes = [
+  "Spingere il pedone passato senza appoggio, dove viene catturato.",
+  "Aspettare troppo a bloccare un pedone passato avversario.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha il pedone passato"
+steps = [
+  "Spingilo quando le case davanti sono sicure.",
+  "Mettigli dietro una torre e, nel finale, accompagnalo con il re.",
+  "Usalo per distrarre i pezzi avversari e vincere sull'altra ala.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi deve fermarlo"
+steps = [
+  "Blocca la casa davanti al pedone con un pezzo (meglio un cavallo).",
+  "Porta il re davanti al pedone.",
+  "Attacca il pedone da dietro con la torre.",
+]

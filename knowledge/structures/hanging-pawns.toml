@@ -1,0 +1,32 @@
+title = "I pedoni sospesi"
+when = [
+  "structure:hanging-pawns",
+]
+summary = "Due pedoni affiancati sulle colonne c e d, senza pedoni amici sulle colonne b ed e. Controllano case centrali importanti, ma nessun altro pedone può difenderli."
+ideas = [
+  "Finché restano affiancati sono forti: controllano le case davanti a sé.",
+  "Se uno avanza, l'altro resta indietro e diventa debole; la casa davanti al pedone avanzato diventa un avamposto per l'avversario.",
+  "La spinta di uno dei due al momento giusto può aprire il gioco verso il re.",
+]
+mistakes = [
+  "Con i pedoni sospesi: spingerne uno senza motivo.",
+  "Contro i pedoni sospesi: attaccarli prima di aver completato lo sviluppo.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha i pedoni sospesi"
+steps = [
+  "Difendili con i pezzi e tienili affiancati.",
+  "Usa lo spazio per un attacco con i pezzi.",
+  "Spingi uno dei due solo quando apre linee decisive.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi gioca contro"
+steps = [
+  "Attacca i pedoni con le torri sulle colonne c e d e con le spinte di pedone laterali.",
+  "Costringi uno dei due ad avanzare, poi blocca il pedone avanzato.",
+  "Attacca il pedone rimasto indietro.",
+]

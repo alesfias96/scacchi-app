@@ -12,3 +12,4 @@ pub mod pgn_file;
 pub mod position;
 pub mod settings;
 pub mod training;
+pub mod tutor;

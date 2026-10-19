@@ -90,7 +90,8 @@
   --board-min-size: 20rem;
   --panel-width: 18rem;
   --play-panel-width: 24rem; /* colonna "Partita" in Gioca */
-  --drawer-width: 26rem; /* barra laterale a comparsa (es. le schede di "Gioca") */
+  --drawer-width: 26rem; /* barra laterale a comparsa (menu principale, tutor) */
+  --tutor-board-max-size: 22rem; /* la piccola scacchiera del tutor */
   --drawer-edge-width: 0.75rem; /* striscia sul bordo destro che la fa comparire */
   /* spazio verticale da lasciare libero intorno alla scacchiera (titolo + margini) */
   --board-vertical-reserve: 11rem;

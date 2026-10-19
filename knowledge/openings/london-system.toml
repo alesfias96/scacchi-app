@@ -1,0 +1,30 @@
+title = "Sistema di Londra"
+when = [
+  "opening:London System",
+]
+summary = "1.d4 con Af4, e3, Cf3 e c3: uno schema solido e quasi sempre uguale. Il Bianco costruisce una piramide di pedoni e sviluppa l'alfiere fuori dalla catena."
+ideas = [
+  "L'alfiere esce in f4 prima di e3, così non resta chiuso.",
+  "Un'idea frequente è il cavallo in e5, sostenuto dai pedoni, con attacco sull'ala di re.",
+  "Il Nero lotta con …c5 e …Db6 contro il pedone b2.",
+]
+mistakes = [
+  "Per il Bianco: giocare lo schema senza guardare cosa fa il Nero.",
+  "Per il Nero: lasciare al Bianco il cavallo in e5 senza contrasto.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Costruisci lo schema: d4, Af4, e3, Cf3, c3, Ad3, Cbd2.",
+  "Metti il cavallo in e5 e cerca l'attacco sull'ala di re.",
+  "Difendi b2 dalla pressione …Db6.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Attacca il centro con …c5 e metti pressione su b2 (…Db6).",
+  "Cerca di cambiare l'alfiere in f4 (…Ad6 o …Ch5).",
+  "Sviluppa e arrocca: all'inizio lo schema bianco non è aggressivo.",
+]

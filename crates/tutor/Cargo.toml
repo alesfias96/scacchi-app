@@ -1,0 +1,49 @@
+# =============================================================================
+# Crate "tutor" — le spiegazioni delle posizioni
+# -----------------------------------------------------------------------------
+# Unisce i fatti verificati (rilevatori della crate analysis e, se c'è, la
+# valutazione di Stockfish) con la base di conoscenza della cartella
+# knowledge/ (principi, strutture pedonali, aperture, mediogioco, finali) e
+# compone spiegazioni in italiano. Confronta anche il prima e il dopo di una
+# mossa provata ("e se…").
+# Non decide nulla da sola: racconta solo ciò che i rilevatori e il motore
+# hanno verificato. Non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "tutor"
+description = "Spiegazioni delle posizioni: fatti verificati + base di conoscenza"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "analysis/bindings",
+    "engine/bindings",
+    "openings/bindings",
+]
+
+[dependencies]
+# Le regole: la posizione da spiegare e le mosse provate.
+chess-core.workspace = true
+# I rilevatori: i fatti verificati (minacce, tattiche, pedoni, re...).
+analysis.workspace = true
+# Il riconoscimento dell'apertura giocata.
+openings.workspace = true
+# Solo i tipi della valutazione del motore (il motore lo fa partire il ponte).
+engine.workspace = true
+# Per riconoscere strutture pedonali, tipi di finale e principi.
+shakmaty.workspace = true
+# La lettura delle schede (file TOML) della base di conoscenza.
+serde.workspace = true
+toml.workspace = true
+thiserror.workspace = true
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

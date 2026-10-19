@@ -1,0 +1,31 @@
+title = "Partita Italiana"
+when = [
+  "opening:Italian Game",
+]
+summary = "1.e4 e5 2.Cf3 Cc6 3.Ac4: l'alfiere punta subito sul punto debole f7. È una delle aperture più antiche e naturali."
+ideas = [
+  "Il Bianco sviluppa in fretta e prepara d4, spesso con c3 (Giuoco Piano).",
+  "Il punto f7, difeso solo dal re, è il bersaglio dell'alfiere in c4.",
+  "Nella versione lenta (Giuoco Pianissimo, con d3) si manovra: il cavallo va da b1 a d2, f1 e g3, poi si attacca sull'ala di re.",
+  "Con 3…Cf6 (Difesa dei due cavalli) il Nero contrattacca subito il pedone e4.",
+]
+mistakes = [
+  "Per il Nero: dimenticare la debolezza di f7 (gli attacchi con Cg5 e Axf7).",
+  "Per il Bianco: uscire con la donna troppo presto sperando nel «matto del barbiere»: un avversario attento la scaccia guadagnando tempo.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Arrocca e prepara c3 e d4 per prendere il centro.",
+  "Oppure gioca d3, porta il cavallo b1 verso g3 e attacca sull'ala di re.",
+  "Tieni d'occhio f7: Cg5 è un'idea frequente.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Sviluppa con …Ac5 o …Ae7 e …Cf6.",
+  "Contrasta il centro con …d6 o …d5 al momento giusto.",
+  "Difendi f7 e arrocca presto.",
+]

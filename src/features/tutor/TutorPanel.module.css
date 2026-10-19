@@ -1,0 +1,53 @@
+/*
+ * Il pannello del tutor: interruttore, piccola scacchiera, pulsanti, poi la
+ * spiegazione e le schede, una sotto l'altra.
+ */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.board {
+  /* La scacchiera del tutor: grande quanto la barra, ma mai troppo. */
+  width: 100%;
+  max-width: var(--tutor-board-max-size);
+  align-self: center;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.locked {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.blockTitle {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.message {
+  color: var(--color-text-muted);
+  line-height: var(--leading-body);
+}
+
+.error {
+  color: var(--color-danger);
+}

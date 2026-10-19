@@ -1,0 +1,30 @@
+title = "Apertura Catalana"
+when = [
+  "opening:Catalan Opening",
+]
+summary = "1.d4 Cf6 2.c4 e6 3.g3: il Bianco unisce il Gambetto di Donna al fianchetto dell'alfiere in g2, che preme sulla grande diagonale."
+ideas = [
+  "L'alfiere in g2 punta su b7 e sull'ala di donna nera.",
+  "Se il Nero prende in c4, il Bianco recupera spesso il pedone con pressione (Da4, Dc2).",
+  "Il gioco è posizionale e la pressione dura a lungo.",
+]
+mistakes = [
+  "Per il Nero: lasciare chiuso l'alfiere in c8.",
+  "Per il Bianco: dimenticare il pedone c4 dopo che il Nero lo ha preso.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Fianchetta l'alfiere e arrocca.",
+  "Recupera il pedone c4 se il Nero lo prende.",
+  "Premi sulla grande diagonale e sull'ala di donna.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Sviluppa e libera l'alfiere in c8 (con …b6 e …Ab7, oppure con …dxc4 e …b5).",
+  "Contrasta la grande diagonale.",
+  "Cerca la spinta liberatoria …c5.",
+]

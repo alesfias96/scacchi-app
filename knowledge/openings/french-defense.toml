@@ -1,0 +1,30 @@
+title = "Difesa Francese"
+when = [
+  "opening:French Defense",
+]
+summary = "1.e4 e6 2.d4 d5: il Nero sfida subito il centro, accettando un alfiere delle case chiare un po' chiuso. Struttura solida, con piani chiari."
+ideas = [
+  "Dopo e5 del Bianco nasce la catena d4–e5 contro e6–d5: il Nero attacca la base con …c5 e …f6.",
+  "L'alfiere nero in c8 è il «pezzo problema»: va attivato (ad esempio con …b6 e …Aa6) o cambiato.",
+  "Il Bianco ha spazio sull'ala di re e attacca lì.",
+]
+mistakes = [
+  "Per il Nero: dimenticare …c5 e restare senza controgioco.",
+  "Per il Bianco: perdere il pedone d4.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Scegli: e5 (spazio), exd5 (struttura simmetrica) oppure Cc3 o Cd2 (tensione al centro).",
+  "Dopo e5 sostieni la catena con c3 e attacca sull'ala di re.",
+  "Difendi d4, la base della catena.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Attacca il centro con …c5 e, più tardi, …f6.",
+  "Metti pressione su d4 con …Cc6 e …Db6.",
+  "Trova una buona casa per l'alfiere delle case chiare.",
+]

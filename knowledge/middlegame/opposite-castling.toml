@@ -1,0 +1,23 @@
+title = "Gli arrocchi opposti"
+when = [
+  "middlegame:opposite-castling",
+]
+summary = "Con i re su lati opposti ognuno può lanciare i pedoni contro il re avversario senza indebolire il proprio: è una corsa all'attacco."
+ideas = [
+  "Conta la velocità: vince chi apre per primo le linee verso il re avversario.",
+  "I pedoni avanzano verso il re nemico (ad esempio g4–g5 e h4–h5).",
+  "Anche un sacrificio di pedone vale, se apre una colonna verso il re.",
+  "Ogni mossa di difesa è un tempo tolto all'attacco: si difende solo quando è necessario.",
+]
+mistakes = [
+  "Difendersi passivamente invece di contrattaccare.",
+  "Spingere i pedoni davanti al proprio re.",
+]
+
+[[plans]]
+for = "both"
+steps = [
+  "Spingi i pedoni contro il re avversario.",
+  "Apri colonne con cambi o sacrifici e porta le torri su di esse.",
+  "Tieni un pezzo vicino al tuo re per i momenti critici.",
+]

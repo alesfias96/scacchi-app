@@ -1,0 +1,24 @@
+title = "Il matto di re e torre"
+when = [
+  "endgame:mate-with-rook",
+]
+summary = "Re e torre danno sempre matto al re solo: la torre chiude il re avversario in una parte della scacchiera, il proprio re lo spinge verso il bordo."
+ideas = [
+  "La torre crea una «gabbia» (un rettangolo) che si restringe passo dopo passo.",
+  "Il proprio re si mette di fronte al re avversario (opposizione): allora uno scacco di torre lo spinge indietro.",
+  "Se il re avversario attacca la torre, allontanala lungo la stessa linea.",
+  "Attenzione allo stallo nelle ultime mosse.",
+]
+mistakes = [
+  "Lasciare la torre senza difesa vicino al re avversario.",
+  "Usare solo la torre, senza l'aiuto del re.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi dà matto"
+steps = [
+  "Taglia il re avversario con la torre.",
+  "Porta il tuo re di fronte al suo e dai scacco per spingerlo indietro.",
+  "Ripeti fino al bordo, poi dai matto.",
+]

@@ -1,0 +1,31 @@
+title = "Partita dei quattro cavalli"
+when = [
+  "opening:Four Knights Game",
+  "opening:Three Knights Opening",
+]
+summary = "1.e4 e5 2.Cf3 Cc6 3.Cc3 Cf6: i cavalli escono subito. È un'apertura solida e simmetrica."
+ideas = [
+  "Lo sviluppo è naturale e il centro resta in equilibrio.",
+  "Il Bianco può continuare con Ab5 (variante Spagnola) o con d4 (variante Scozzese).",
+  "Con il trucco di Rubinstein (4.Ab5 Cd4) il Nero ottiene un gioco attivo.",
+]
+mistakes = [
+  "Copiare le mosse del Bianco troppo a lungo: nelle posizioni simmetriche chi muove per primo attacca per primo.",
+  "Lasciare un cavallo inchiodato senza difesa.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Gioca Ab5 o d4, poi arrocca.",
+  "Sfrutta il vantaggio di muovere per primo aprendo con d4.",
+  "Sviluppa l'alfiere c1 e tieni il centro.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Sviluppa con …Ab4 o …Ac5.",
+  "Contrasta il centro con …d6 o …d5.",
+  "Arrocca e collega le torri.",
+]

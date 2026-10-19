@@ -1,0 +1,33 @@
+title = "Il centro chiuso della Est-Indiana"
+when = [
+  "structure:kings-indian-chain",
+]
+summary = "Pedoni in d5 ed e4 contro pedoni in d6 ed e5: il centro è chiuso e ognuno gioca sull'ala verso cui punta la sua catena."
+ideas = [
+  "Chi ha il pedone in d5 gioca sull'ala di donna: la spinta c4–c5 apre la colonna c contro il punto debole d6.",
+  "L'altro gioca sull'ala di re: f5, f4, g5–g4 contro il re avversario.",
+  "È una corsa: conta chi arriva per primo.",
+  "Con il centro chiuso i cavalli sono preziosi.",
+]
+mistakes = [
+  "Giocare sull'ala sbagliata (dove la propria catena non punta).",
+  "Aprire il centro quando l'avversario è più pronto.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi gioca sull'ala di donna"
+steps = [
+  "Prepara c4–c5 (con b4 e i cavalli), poi apri la colonna c.",
+  "Porta una torre sulla colonna c ed entra in c7.",
+  "Difendi l'ala di re con il minimo indispensabile.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi gioca sull'ala di re"
+steps = [
+  "Prepara la spinta f5 (spostando prima il cavallo), poi f4.",
+  "Avanza g5–g4 e porta i pezzi verso il re avversario.",
+  "Non aprire il centro: l'attacco viene dai pedoni dell'ala di re.",
+]

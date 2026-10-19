@@ -47,6 +47,15 @@ enum Purpose {
     Analysis(SearchPosition),
     /// La mossa da giocare: va consegnata a chi l'ha chiesta.
     Move(oneshot::Sender<Result<String, EngineError>>),
+    /// Una valutazione breve: si tiene l'ultimo giudizio e lo si consegna alla fine.
+    Evaluate {
+        /// La posizione valutata (serve a scrivere la variante).
+        position: SearchPosition,
+        /// L'ultimo giudizio completo ricevuto.
+        latest: Option<AnalysisUpdate>,
+        /// Dove consegnarlo.
+        reply: oneshot::Sender<Result<AnalysisUpdate, EngineError>>,
+    },
 }
 
 impl<R, W> EngineWorker<R, W>
@@ -92,9 +101,15 @@ where
                                 self.engine.send(&UciCommand::Stop).await?;
                                 search.stopping = true;
                             }
-                            // Una richiesta di mossa scavalcata da una più recente non avrà risposta.
-                            if let Some(EngineJob::FindMove(old)) = pending.take() {
-                                let _ = old.reply.send(Err(EngineError::Cancelled));
+                            // Una richiesta scavalcata da una più recente non avrà risposta.
+                            match pending.take() {
+                                Some(EngineJob::FindMove(old)) => {
+                                    let _ = old.reply.send(Err(EngineError::Cancelled));
+                                }
+                                Some(EngineJob::Evaluate(old)) => {
+                                    let _ = old.reply.send(Err(EngineError::Cancelled));
+                                }
+                                _ => {}
                             }
                             pending = match job {
                                 EngineJob::Stop => None,
@@ -105,7 +120,7 @@ where
                 }
                 message = self.engine.next_message(), if current.is_some() => {
                     match message? {
-                        EngineMessage::Info(info) => self.forward_analysis(current.as_ref(), &info),
+                        EngineMessage::Info(info) => self.forward_analysis(current.as_mut(), &info),
                         EngineMessage::BestMove(best) => {
                             if let Some(search) = current.take() {
                                 Self::finish(search, best);
@@ -144,6 +159,14 @@ where
                     Purpose::Move(request.reply),
                 )
             }
+            EngineJob::Evaluate(request) => {
+                let purpose = Purpose::Evaluate {
+                    position: request.position.clone(),
+                    latest: None,
+                    reply: request.reply,
+                };
+                (request.position, request.limits, purpose)
+            }
         };
         self.engine.send(&UciCommand::Position(position)).await?;
         self.engine.send(&UciCommand::Go(limits)).await?;
@@ -153,27 +176,52 @@ where
         }))
     }
 
-    /// Manda all'interfaccia un aggiornamento dell'analisi, se la riga ne contiene uno.
-    fn forward_analysis(&self, current: Option<&Search>, info: &EngineInfo) {
-        if let Some(Search {
-            purpose: Purpose::Analysis(position),
-            stopping: false,
-        }) = current
-            && let Some(update) = AnalysisUpdate::from_info(position, info)
-        {
-            let _ = self.updates.send(update);
+    /// Usa una riga di analisi del motore: la manda all'interfaccia (analisi
+    /// in tempo reale) oppure la ricorda (valutazione breve).
+    fn forward_analysis(&self, current: Option<&mut Search>, info: &EngineInfo) {
+        let Some(search) = current else {
+            return;
+        };
+        if search.stopping {
+            return;
+        }
+        match &mut search.purpose {
+            Purpose::Analysis(position) => {
+                if let Some(update) = AnalysisUpdate::from_info(position, info) {
+                    let _ = self.updates.send(update);
+                }
+            }
+            Purpose::Evaluate {
+                position, latest, ..
+            } => {
+                if let Some(update) = AnalysisUpdate::from_info(position, info) {
+                    *latest = Some(update);
+                }
+            }
+            Purpose::Move(_) => {}
         }
     }
 
-    /// Chiude una ricerca finita: consegna la mossa a chi l'aveva chiesta.
+    /// Chiude una ricerca finita: consegna la mossa o il giudizio a chi l'aveva chiesto.
     fn finish(search: Search, best: Option<String>) {
-        if let Purpose::Move(reply) = search.purpose {
-            let result = if search.stopping {
-                Err(EngineError::Cancelled)
-            } else {
-                best.ok_or(EngineError::NoMove)
-            };
-            let _ = reply.send(result);
+        match search.purpose {
+            Purpose::Move(reply) => {
+                let result = if search.stopping {
+                    Err(EngineError::Cancelled)
+                } else {
+                    best.ok_or(EngineError::NoMove)
+                };
+                let _ = reply.send(result);
+            }
+            Purpose::Evaluate { latest, reply, .. } => {
+                let result = if search.stopping {
+                    Err(EngineError::Cancelled)
+                } else {
+                    latest.ok_or(EngineError::NoMove)
+                };
+                let _ = reply.send(result);
+            }
+            Purpose::Analysis(_) => {}
         }
     }
 }
@@ -290,6 +338,20 @@ mod tests {
             .rposition(|line| line == "go")
             .expect("nuova ricerca");
         assert!(stop < go);
+    }
+
+    #[tokio::test]
+    async fn evaluates_a_position_for_a_short_time() {
+        let (handle, _updates, log) = running_engine().await;
+
+        let update = handle
+            .evaluate(start_position(), Duration::from_millis(300))
+            .await
+            .expect("valutazione riuscita");
+
+        assert_eq!(update.evaluation, crate::Evaluation::Centipawns(10));
+        assert_eq!(update.line.san, ["Nf3"]);
+        assert!(received(&log).contains(&"go movetime 300".to_owned()));
     }
 
     #[tokio::test]

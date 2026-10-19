@@ -1,0 +1,30 @@
+title = "Difesa Scandinava"
+when = [
+  "opening:Scandinavian Defense",
+]
+summary = "1.e4 d5: il Nero attacca subito e4. Dopo 2.exd5 Dxd5 la donna esce presto, ma la posizione è semplice e solida."
+ideas = [
+  "La donna nera viene attaccata da Cc3 e si ritira (in a5, d6 o d8): il Bianco guadagna un tempo.",
+  "Il Nero sviluppa con …Cf6, …Af5 o …Ag4, …e6 e …c6: una struttura simile alla Caro-Kann.",
+  "Nella variante 2…Cf6 il Nero riprende il pedone con il cavallo.",
+]
+mistakes = [
+  "Per il Nero: muovere ancora la donna invece di sviluppare.",
+  "Per il Bianco: sopravvalutare il tempo guadagnato: la posizione nera è solida.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Attacca la donna sviluppando i pezzi (Cc3, Cf3).",
+  "Prendi il centro con d4.",
+  "Sfrutta il vantaggio di sviluppo.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Ritira la donna in una casa sicura (a5 o d6).",
+  "Sviluppa rapidamente gli alfieri e arrocca.",
+  "Costruisci una struttura solida con …c6 ed …e6.",
+]

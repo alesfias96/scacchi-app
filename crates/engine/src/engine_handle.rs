@@ -5,8 +5,9 @@ use std::time::Duration;
 use tokio::sync::{mpsc, oneshot};
 use tokio::time::{Instant, sleep_until};
 
+use crate::analysis_update::AnalysisUpdate;
 use crate::engine_error::EngineError;
-use crate::engine_job::{EngineJob, MoveRequest};
+use crate::engine_job::{EngineJob, EvaluateRequest, MoveRequest};
 use crate::search_limits::SearchLimits;
 use crate::search_position::SearchPosition;
 
@@ -73,5 +74,36 @@ impl EngineHandle {
         let found = answer.await.map_err(|_| EngineError::Closed)??;
         sleep_until(earliest).await;
         Ok(found)
+    }
+
+    /// Valuta una posizione per il tempo indicato e restituisce il giudizio finale.
+    ///
+    /// - Riceve: la posizione e per quanto tempo pensare.
+    /// - Restituisce: la valutazione e la variante migliore all'ultima
+    ///   profondità completata.
+    ///
+    /// # Errors
+    ///
+    /// - [`EngineError::Cancelled`] se nel frattempo è arrivata un'altra richiesta;
+    /// - [`EngineError::NoMove`] se la posizione è già finita (matto o stallo);
+    /// - [`EngineError::Closed`] se il motore si è chiuso.
+    pub async fn evaluate(
+        &self,
+        position: SearchPosition,
+        think_for: Duration,
+    ) -> Result<AnalysisUpdate, EngineError> {
+        let (reply, answer) = oneshot::channel();
+        let limits = SearchLimits {
+            move_time_ms: Some(u64::try_from(think_for.as_millis()).unwrap_or(u64::MAX)),
+            ..SearchLimits::default()
+        };
+        self.jobs
+            .send(EngineJob::Evaluate(EvaluateRequest {
+                position,
+                limits,
+                reply,
+            }))
+            .map_err(|_| EngineError::Closed)?;
+        answer.await.map_err(|_| EngineError::Closed)?
     }
 }

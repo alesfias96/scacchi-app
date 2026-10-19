@@ -1,0 +1,31 @@
+title = "Difesa Ovest-Indiana e Bogo-Indiana"
+when = [
+  "opening:Queen's Indian Defense",
+  "opening:Bogo-Indian Defense",
+]
+summary = "1.d4 Cf6 2.c4 e6 3.Cf3 b6 (Ovest-Indiana) o 3…Ab4+ (Bogo-Indiana): difese solide, costruite sul controllo della casa e4."
+ideas = [
+  "Nell'Ovest-Indiana l'alfiere in b7 controlla la grande diagonale e la casa e4.",
+  "Nella Bogo-Indiana il Nero cambia spesso l'alfiere per avere un gioco semplice.",
+  "Il Bianco cerca di prendere il centro con e4, oppure lotta per la grande diagonale con g3 e Ag2.",
+]
+mistakes = [
+  "Per il Nero: lasciare al Bianco la spinta e4 senza contrasto.",
+  "Per il Bianco: lasciare la grande diagonale all'alfiere nero senza opposizione.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Fianchetta l'alfiere (g3, Ag2) contro quello in b7.",
+  "Prepara e4 per prendere il centro.",
+  "Sviluppa e arrocca.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Controlla e4 con l'alfiere in b7 e con il cavallo.",
+  "Sviluppa con …Ae7 e l'arrocco.",
+  "Libera il gioco con …d5 o …c5.",
+]

@@ -1,0 +1,31 @@
+title = "Difesa Benoni e Gambetto Benko"
+when = [
+  "opening:Benoni Defense",
+  "opening:Benko Gambit",
+]
+summary = "1.d4 Cf6 2.c4 c5 3.d5: il Nero accetta meno spazio in cambio di un gioco attivo sull'ala di donna e sulla grande diagonale. Nel Gambetto Benko (3…b5) offre un pedone."
+ideas = [
+  "Nella Benoni moderna il Bianco ha la maggioranza al centro (e4–e5), il Nero quella sull'ala di donna (…b5).",
+  "L'alfiere in g7 è molto forte.",
+  "Nel Benko il Nero sacrifica un pedone per avere le colonne a e b aperte e una pressione duratura.",
+]
+mistakes = [
+  "Per il Nero: permettere e4–e5 in buone condizioni per il Bianco.",
+  "Per il Bianco: lasciare al Nero la pressione sull'ala di donna senza contrasto.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Prepara e4–e5 per aprire il centro.",
+  "Frena l'ala di donna nera con a4.",
+  "Nel Benko tieni il pedone in più e consolida.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Prepara …b5 (oppure gioca il Gambetto Benko).",
+  "Usa l'alfiere in g7 e la casa e5.",
+  "Cerca controgioco attivo: qui la passività perde.",
+]

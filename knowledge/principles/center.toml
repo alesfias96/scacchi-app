@@ -1,0 +1,33 @@
+title = "Il controllo del centro"
+when = [
+  "principle:center",
+]
+summary = "Le case d4, e4, d5 ed e5 sono le più importanti: da lì i pezzi raggiungono entrambe le ali, e i pedoni centrali danno spazio."
+ideas = [
+  "I pedoni al centro tolgono case ai pezzi avversari e ne danno ai propri.",
+  "Il centro si può controllare anche a distanza, con i pezzi (come nelle aperture «ipermoderne»), per poi attaccarlo con le spinte di pedone.",
+  "Un centro di pedoni forte ma non sostenuto dai pezzi può diventare un bersaglio.",
+  "Chi controlla il centro sposta i pezzi da un'ala all'altra più velocemente.",
+]
+mistakes = [
+  "Lasciare il centro all'avversario senza contrastarlo, né con i pedoni né con i pezzi.",
+  "Avanzare i pedoni centrali troppo presto, lasciando dietro di sé case deboli.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni al centro"
+steps = [
+  "Sostieni i pedoni centrali con i pezzi.",
+  "Usa lo spazio in più per manovrare i pezzi e preparare un attacco.",
+  "Spingi un pedone centrale solo quando apre linee per i tuoi pezzi.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi ne ha meno"
+steps = [
+  "Attacca il centro avversario con le spinte di pedone laterali (c5, f5 o e5 per il Nero; c4, f4 o d4 per il Bianco).",
+  "Metti pressione sui pedoni centrali con i pezzi.",
+  "Cerca di cambiare un pedone centrale per aprire linee.",
+]

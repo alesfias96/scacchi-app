@@ -1,0 +1,33 @@
+title = "Il finale di cavalli"
+when = [
+  "endgame:knight-endgame",
+]
+summary = "Resta un cavallo a testa: questo finale assomiglia molto a un finale di pedoni, e un pedone in più è spesso sufficiente per vincere."
+ideas = [
+  "Il cavallo è lento: un pedone passato lontano è difficile da fermare.",
+  "Il cavallo fatica contro i pedoni sulle colonne a e h.",
+  "Come nei finali di pedoni, contano il re attivo e lo zugzwang.",
+  "Un cavallo davanti a un pedone passato lo blocca molto bene.",
+]
+mistakes = [
+  "Lasciare il cavallo lontano dai pedoni.",
+  "Sottovalutare le forchette di cavallo contro re e pedoni.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni"
+steps = [
+  "Crea un pedone passato lontano.",
+  "Attiva il re.",
+  "Semplifica verso un finale di pedoni vinto.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Blocca i pedoni passati con il cavallo o con il re.",
+  "Tieni il cavallo vicino ai pedoni.",
+  "Cerca di cambiare gli ultimi pedoni.",
+]

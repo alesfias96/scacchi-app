@@ -1,0 +1,100 @@
+//! La spiegazione di una posizione, pronta per l'interfaccia.
+
+use analysis::Fact;
+use chess_core::{PositionView, Side};
+
+use crate::topic::Topic;
+
+/// Una frase della spiegazione, con le case da evidenziare (dentro `fact`)
+/// e, se c'è, la scheda della base di conoscenza che la approfondisce.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct TutorItem {
+    /// La frase, con le case, le frecce e le mosse citate.
+    pub fact: Fact,
+    /// Il nome della scheda che approfondisce la frase (es. `"structures/carlsbad"`).
+    pub card_id: Option<String>,
+}
+
+/// Una parte della spiegazione, con il suo titolo (es. "Cosa succede adesso").
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct TutorSection {
+    /// Il titolo.
+    pub title: String,
+    /// Le frasi.
+    pub items: Vec<TutorItem>,
+}
+
+/// Un piano di una scheda, con chi deve seguirlo già deciso.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct PlanView {
+    /// Per chi è (es. "Chi ha l'isolano (il Bianco)").
+    pub label: String,
+    /// I passi.
+    pub steps: Vec<String>,
+}
+
+/// Una scheda della base di conoscenza che riguarda la posizione.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct CardView {
+    /// Il nome della scheda (es. `"structures/carlsbad"`).
+    pub id: String,
+    /// L'argomento.
+    pub topic: Topic,
+    /// Il titolo.
+    pub title: String,
+    /// Perché la scheda vale qui (es. "Il Bianco ha un pedone isolato di donna in d4").
+    pub context: String,
+    /// Di cosa si tratta.
+    pub summary: String,
+    /// Le idee principali.
+    pub ideas: Vec<String>,
+    /// I piani.
+    pub plans: Vec<PlanView>,
+    /// Gli errori tipici.
+    pub mistakes: Vec<String>,
+}
+
+/// La spiegazione completa di una posizione.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct TutorExplanation {
+    /// La posizione spiegata, in notazione FEN.
+    pub fen: String,
+    /// La posizione con le mosse legali (serve per provare le mosse "e se…").
+    pub position: PositionView,
+    /// Chi deve muovere.
+    pub turn: Side,
+    /// Le parti della spiegazione (solo quelle che hanno qualcosa da dire).
+    pub sections: Vec<TutorSection>,
+    /// Le schede che riguardano la posizione: apertura, struttura, temi, finale, principi.
+    pub cards: Vec<CardView>,
+}

@@ -1,0 +1,23 @@
+title = "Gli alfieri dello stesso colore"
+when = [
+  "endgame:same-color-bishops",
+]
+summary = "I due alfieri corrono su case dello stesso colore e possono affrontarsi. Conta molto dove stanno i pedoni: l'alfiere «buono» ha i propri pedoni sull'altro colore."
+ideas = [
+  "Un alfiere è «cattivo» quando i propri pedoni stanno sulle case del suo colore e lo chiudono.",
+  "Chi ha l'alfiere buono attacca i pedoni avversari fissati sul colore del suo alfiere.",
+  "Il re attivo e l'invasione del campo avversario sono spesso decisivi.",
+  "Lo zugzwang (essere costretti a muovere peggiorando la posizione) è frequente.",
+]
+mistakes = [
+  "Mettere i propri pedoni sul colore del proprio alfiere.",
+  "Permettere il cambio degli alfieri quando porta a un finale di pedoni perso.",
+]
+
+[[plans]]
+for = "both"
+steps = [
+  "Metti i pedoni su case del colore opposto a quello del tuo alfiere.",
+  "Attiva il re.",
+  "Attacca i pedoni avversari fissati sul colore del tuo alfiere.",
+]

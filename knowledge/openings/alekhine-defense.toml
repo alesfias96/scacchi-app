@@ -1,0 +1,30 @@
+title = "Difesa Alekhine"
+when = [
+  "opening:Alekhine Defense",
+]
+summary = "1.e4 Cf6: il Nero invita i pedoni bianchi ad avanzare per poi attaccarli. È una difesa provocatoria e ipermoderna."
+ideas = [
+  "Dopo 2.e5 Cd5 il Bianco può inseguire il cavallo con c4 e d4, costruendo un grande centro.",
+  "Il Nero attacca quel centro con …d6, …Cc6, …Ag4 e …e6 o …g6.",
+  "Un centro avanzato è forte, ma diventa debole se non è sostenuto.",
+]
+mistakes = [
+  "Per il Nero: muovere solo il cavallo e restare indietro nello sviluppo.",
+  "Per il Bianco: spingere i pedoni senza sostegno, creando debolezze.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Guadagna spazio (e5, d4, c4) ma sostieni il centro con i pezzi.",
+  "Non esagerare con le spinte di pedone.",
+  "Sviluppa e mantieni il vantaggio di spazio.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Attacca il centro con …d6.",
+  "Sviluppa i pezzi contro i pedoni avanzati.",
+  "Cerca di cambiare un pedone centrale per aprire il gioco.",
+]

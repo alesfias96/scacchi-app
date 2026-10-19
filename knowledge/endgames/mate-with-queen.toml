@@ -1,0 +1,23 @@
+title = "Il matto di re e donna"
+when = [
+  "endgame:mate-with-queen",
+]
+summary = "Re e donna danno sempre matto al re solo, in al massimo 10 mosse: si spinge il re avversario sul bordo e lo si finisce con l'aiuto del proprio re."
+ideas = [
+  "La donna si mette a un salto di cavallo dal re avversario e lo segue, togliendogli case una traversa alla volta.",
+  "Quando il re avversario è sul bordo si avvicina il proprio re.",
+  "Attenzione allo stallo: lascia sempre almeno una casa al re avversario finché non dai matto.",
+]
+mistakes = [
+  "Dare scacchi a caso senza togliere case al re.",
+  "Lo stallo: togliere tutte le case al re senza dargli scacco.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi dà matto"
+steps = [
+  "Restringi il re avversario con la donna, a un salto di cavallo da lui.",
+  "Spingilo sul bordo della scacchiera.",
+  "Avvicina il tuo re e dai matto con la donna protetta dal re.",
+]

@@ -7,7 +7,7 @@ si può fissare aperto, Esc la chiude. Si sovrappone alla pagina senza spostarla
 
 ## Contenuto
 
-| File                   | Cosa fa                                                                      |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| `AppLayout.tsx`        | Il componente: riceve il menu principale e il contenuto della sezione aperta |
-| `AppLayout.module.css` | L'area di lavoro a tutta finestra                                            |
+| File                   | Cosa fa                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| `AppLayout.tsx`        | Il componente: riceve il menu principale, il tutor e il contenuto della sezione aperta |
+| `AppLayout.module.css` | L'area di lavoro a tutta finestra                                                      |

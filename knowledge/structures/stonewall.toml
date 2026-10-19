@@ -1,0 +1,33 @@
+title = "Lo Stonewall"
+when = [
+  "structure:stonewall",
+]
+summary = "Pedoni in d4, e3 e f4 (o in d5, e6 e f5 per il Nero): un «muro di pietra» che controlla e5 (e4 per il Nero) e prepara un attacco sull'ala di re."
+ideas = [
+  "La casa e5 (e4 per il Nero) è un avamposto ideale per un cavallo.",
+  "La casa davanti al pedone e (e4 per il Bianco, e5 per il Nero) resta debole: l'avversario la usa per i suoi pezzi.",
+  "L'alfiere delle case scure è chiuso dai propri pedoni: va attivato fuori dalla catena o cambiato.",
+  "L'attacco tipico è con la torre in terza traversa e le spinte g4–g5.",
+]
+mistakes = [
+  "Cambiare il cavallo che occupa l'avamposto senza ottenere nulla.",
+  "Dimenticare la casa debole davanti al pedone e.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha lo Stonewall"
+steps = [
+  "Metti un cavallo nell'avamposto in e5 (e4 per il Nero), sostenuto dai pedoni.",
+  "Attacca sull'ala di re: torre in terza traversa e spinte g4–g5.",
+  "Cerca di attivare o cambiare l'alfiere chiuso dalla catena.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi gioca contro"
+steps = [
+  "Occupa con un cavallo la casa debole davanti al pedone e.",
+  "Cambia l'alfiere buono dell'avversario.",
+  "Apri il gioco sull'ala di donna con la spinta del pedone c.",
+]

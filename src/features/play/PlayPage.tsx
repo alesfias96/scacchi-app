@@ -22,6 +22,8 @@
  * partita (dall'archivio o all'avvio) il proprio colore va in basso.
  * Le frecce ←/→ e i tasti Home/Fine scorrono la partita. Ogni mossa ha il suo
  * suono (mossa, presa, fine partita), se i suoni sono attivi nelle Impostazioni.
+ * Il tutor (tasto T) spiega la posizione mostrata; contro il computer, a
+ * partita in corso, resta spento finché non lo si accende comunque.
  *
  * Tutte le regole sono applicate da Rust: questa pagina invia le richieste e
  * mostra la partita aggiornata che riceve (anche quando cambia da sola, per
@@ -42,10 +44,12 @@ import { PanelCard } from '../../components/panel-card/PanelCard';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
 import { usePositionReport } from '../../hooks/usePositionReport';
+import { useTutorTarget } from '../../hooks/useTutorTarget';
 import { exportPgn, savePgnFile } from '../../services/gameService';
 import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
 import { useObservationsStore } from '../../state/observationsStore';
+import type { TutorTarget } from '../../state/tutorStore';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { AnalysisPanel } from './analysis-panel/AnalysisPanel';
 import { GameControls } from './game-controls/GameControls';
@@ -215,6 +219,29 @@ export function PlayPage() {
     },
     [updateSettings, setAnalysisEnabled, setObservationsEnabled, newGame],
   );
+
+  // Il tutor spiega la posizione mostrata. Contro il computer, a partita in
+  // corso, resta spento (sarebbe un aiuto) finché non lo si accende comunque.
+  const startingFen = game?.startingFen;
+  const shownMoves = useMemo(
+    () => (game === null ? [] : game.moves.slice(0, game.cursor).map((move) => move.uci)),
+    [game],
+  );
+  const isComputerGameRunning = computerSide !== undefined && game?.result === null;
+  const tutorTarget = useMemo<TutorTarget | null>(
+    () =>
+      sessionId === undefined || startingFen === undefined
+        ? null
+        : {
+            startFen: startingFen,
+            moves: shownMoves,
+            orientation,
+            lock: isComputerGameRunning ? 'computerGame' : null,
+            lockKey: sessionId,
+          },
+    [sessionId, startingFen, shownMoves, orientation, isComputerGameRunning],
+  );
+  useTutorTarget(tutorTarget);
 
   /** Il numero di mosse della partita e quella mostrata (per la tastiera). */
   const cursor = game?.cursor ?? 0;

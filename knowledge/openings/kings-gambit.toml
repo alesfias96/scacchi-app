@@ -1,0 +1,30 @@
+title = "Gambetto di Re"
+when = [
+  "opening:King's Gambit",
+]
+summary = "1.e4 e5 2.f4: il Bianco offre un pedone per aprire la colonna f e prendere il centro. È l'apertura romantica per eccellenza."
+ideas = [
+  "Se il Nero accetta (2…exf4), il Bianco vuole d4 e l'attacco su f7 lungo la colonna f.",
+  "Il re bianco resta un po' esposto: la diagonale e1–h4 è pericolosa (…Dh4+).",
+  "Il Nero può restituire il pedone con …d5 per avere un gioco attivo.",
+]
+mistakes = [
+  "Per il Bianco: lasciare …Dh4+ senza averlo previsto.",
+  "Per il Nero: aggrapparsi al pedone in più dimenticando lo sviluppo.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Sviluppa con Cf3 (impedisce …Dh4+), Ac4 e d4.",
+  "Arrocca e apri la colonna f.",
+  "Riprendi il pedone in f4 quando è possibile.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Accetta con 2…exf4 e difendi il pedone con …g5, oppure contrattacca subito con …d5.",
+  "Sfrutta il re bianco esposto.",
+  "Sviluppa in fretta: il Bianco attacca.",
+]

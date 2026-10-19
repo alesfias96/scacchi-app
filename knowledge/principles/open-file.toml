@@ -1,0 +1,23 @@
+title = "Le torri sulle colonne aperte"
+when = [
+  "principle:open-file",
+]
+summary = "Una colonna senza pedoni è un'autostrada per le torri: chi la occupa per primo può entrare nel campo avversario."
+ideas = [
+  "Le torri sono forti sulle colonne aperte (senza pedoni) e semiaperte (senza i propri pedoni).",
+  "Raddoppiare le torri sulla stessa colonna ne moltiplica la forza.",
+  "L'obiettivo è entrare in settima traversa, dove si attaccano i pedoni e si chiude il re.",
+  "Se l'avversario contesta la colonna, conviene cambiare le torri solo se poi resti padrone della colonna.",
+]
+mistakes = [
+  "Lasciare le torri dietro i propri pedoni, dove non fanno nulla.",
+  "Occupare la colonna quando tutte le case d'entrata sono controllate dall'avversario.",
+]
+
+[[plans]]
+for = "both"
+steps = [
+  "Porta una torre sulla colonna aperta.",
+  "Raddoppia le torri (o torre e donna) sulla stessa colonna.",
+  "Cerca una casa d'entrata nel campo avversario, verso la settima traversa.",
+]

@@ -1,0 +1,23 @@
+title = "Il centro aperto"
+when = [
+  "structure:open-center",
+]
+summary = "Senza pedoni sulle colonne d ed e il gioco è aperto: contano lo sviluppo, l'attività dei pezzi e la sicurezza dei re."
+ideas = [
+  "Con il centro aperto ogni tempo conta: chi è più sviluppato attacca.",
+  "Le colonne centrali sono aperte: le torri vanno sulle colonne d ed e.",
+  "Gli alfieri, e soprattutto la coppia degli alfieri, valgono di più.",
+  "Il re rimasto al centro è in pericolo: arroccare è urgente.",
+]
+mistakes = [
+  "Lasciare il re al centro.",
+  "Giocare mosse lente di pedone sulle ali invece di sviluppare.",
+]
+
+[[plans]]
+for = "both"
+steps = [
+  "Completa lo sviluppo e arrocca.",
+  "Occupa le colonne centrali con le torri.",
+  "Cerca linee e diagonali aperte verso il re avversario.",
+]

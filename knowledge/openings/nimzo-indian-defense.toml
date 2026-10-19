@@ -1,0 +1,30 @@
+title = "Difesa Nimzo-Indiana"
+when = [
+  "opening:Nimzo-Indian Defense",
+]
+summary = "1.d4 Cf6 2.c4 e6 3.Cc3 Ab4: l'alfiere inchioda il cavallo e controlla e4. È una delle difese più rispettate."
+ideas = [
+  "Il Nero controlla la casa e4 e può dare al Bianco pedoni doppiati con …Axc3.",
+  "In cambio il Bianco ottiene la coppia degli alfieri.",
+  "La lotta è tra la struttura migliore del Nero e gli alfieri del Bianco.",
+]
+mistakes = [
+  "Per il Nero: cambiare in c3 senza motivo e lasciare al Bianco due alfieri forti in una posizione aperta.",
+  "Per il Bianco: lasciare deboli i pedoni doppiati senza ottenere nulla.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Evita i pedoni doppiati (Dc2) oppure accettali in cambio della coppia degli alfieri.",
+  "Apri la posizione per gli alfieri.",
+  "Prepara e4 per prendere il centro.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Controlla e4 (con …b6 e …Ab7, oppure con …Ce4).",
+  "Cambia in c3 quando i pedoni doppiati sono un vero problema per il Bianco.",
+  "Tieni la posizione chiusa contro la coppia degli alfieri.",
+]

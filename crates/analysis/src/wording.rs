@@ -34,7 +34,8 @@ fn article(role: Role) -> &'static str {
 }
 
 /// Il colore come aggettivo, accordato al pezzo: "bianco", "bianca", "nero", "nera".
-fn color_adjective(color: Color, role: Role) -> &'static str {
+#[must_use]
+pub fn color_adjective(color: Color, role: Role) -> &'static str {
     match (color, is_feminine(role)) {
         (Color::White, false) => "bianco",
         (Color::White, true) => "bianca",

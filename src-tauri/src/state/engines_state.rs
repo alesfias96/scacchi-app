@@ -1,4 +1,4 @@
-//! I due motori Stockfish dell'app: uno che gioca e uno che analizza.
+//! I motori Stockfish dell'app: uno che gioca, uno che analizza e uno per il tutor.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::available_parallelism;
@@ -13,22 +13,27 @@ use crate::state::engine_path::engine_path;
 
 /// Memoria per i calcoli del motore che analizza, in megabyte.
 const ANALYZER_HASH_MB: &str = "64";
+/// Memoria per i calcoli del motore del tutor, in megabyte.
+const TUTOR_HASH_MB: &str = "32";
 /// Quanti processori al massimo usa il motore che analizza.
 const ANALYZER_MAX_THREADS: usize = 4;
 
-/// Quale dei due motori.
+/// Quale dei motori.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Role {
     /// Gioca le mosse del computer.
     Player,
     /// Analizza la posizione mostrata.
     Analyzer,
+    /// Dà al tutor valutazioni brevi a richiesta.
+    Tutor,
 }
 
 /// I motori in funzione.
 ///
-/// Sono due programmi Stockfish separati, così l'analisi non rallenta mai il
-/// computer avversario (e viceversa). Ognuno viene avviato la prima volta che
+/// Sono programmi Stockfish separati, così l'analisi non rallenta mai il
+/// computer avversario (e viceversa), e le domande del tutor non
+/// interrompono l'analisi in tempo reale. Ognuno viene avviato la prima volta che
 /// serve e riavviato da solo se si chiude per un errore.
 #[derive(Debug, Default)]
 pub struct EnginesState {
@@ -36,6 +41,8 @@ pub struct EnginesState {
     player: Mutex<Option<EngineHandle>>,
     /// Il motore che analizza, se è già stato avviato.
     analyzer: Mutex<Option<EngineHandle>>,
+    /// Il motore del tutor, se è già stato avviato.
+    tutor: Mutex<Option<EngineHandle>>,
     /// Se l'utente ha acceso l'analisi.
     analysis_enabled: AtomicBool,
 }
@@ -57,6 +64,15 @@ impl EnginesState {
     /// Un messaggio leggibile se Stockfish non si avvia.
     pub async fn analyzer(&self, app: &AppHandle) -> Result<EngineHandle, String> {
         self.get_or_launch(app, Role::Analyzer).await
+    }
+
+    /// Il motore del tutor, avviandolo se serve.
+    ///
+    /// # Errors
+    ///
+    /// Un messaggio leggibile se Stockfish non si avvia.
+    pub async fn tutor(&self, app: &AppHandle) -> Result<EngineHandle, String> {
+        self.get_or_launch(app, Role::Tutor).await
     }
 
     /// Il motore che gioca, solo se è già in funzione e libero in questo
@@ -86,6 +102,7 @@ impl EnginesState {
         match role {
             Role::Player => &self.player,
             Role::Analyzer => &self.analyzer,
+            Role::Tutor => &self.tutor,
         }
     }
 
@@ -100,6 +117,8 @@ impl EnginesState {
         let settings = match role {
             // Il motore che gioca usa le impostazioni normali: per giocare bastano.
             Role::Player => Vec::new(),
+            // Il tutor pensa mezzo secondo per volta: bastano poche risorse.
+            Role::Tutor => vec![("Hash".to_owned(), TUTOR_HASH_MB.to_owned())],
             Role::Analyzer => {
                 let threads = available_parallelism()
                     .map_or(1, |count| count.get() / 2)

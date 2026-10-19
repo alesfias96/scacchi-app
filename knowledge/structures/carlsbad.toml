@@ -1,0 +1,32 @@
+title = "La struttura Carlsbad"
+when = [
+  "structure:carlsbad",
+]
+summary = "Nasce dal Gambetto di Donna Rifiutato dopo il cambio cxd5 exd5: il Bianco ha pedoni in d4 ed e3, il Nero in c6 e d5. È una delle strutture più studiate."
+ideas = [
+  "Il piano classico di chi ha d4 ed e3 è l'attacco di minoranza: spingere il pedone b (b4–b5) contro i pedoni a e c avversari, per lasciare un pedone debole in c6.",
+  "L'altro giocatore cerca il gioco sull'ala di re: pezzi verso il re, la casa e4 per un cavallo, a volte la spinta f5–f4.",
+  "Un piano alternativo è la spinta centrale e3–e4, preparata con f3.",
+]
+mistakes = [
+  "Lanciare l'attacco di minoranza dimenticando la difesa del re.",
+  "Restare passivi mentre arriva la spinta b4–b5.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi fa l'attacco di minoranza"
+steps = [
+  "Torri in b1 e c1, poi b2–b4–b5.",
+  "Dopo il cambio in c6 attacca il pedone debole rimasto in c6 con torri e cavallo.",
+  "Il cavallo cerca le case c5 o e5.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi gioca sull'ala di re"
+steps = [
+  "Porta i pezzi verso l'ala di re: cavallo in e4, alfiere in d6, una torre in sesta traversa.",
+  "Cerca l'attacco con la spinta f5 o con il cavallo in e4.",
+  "Contro b5 tieni ben difese le case c6 e d5.",
+]

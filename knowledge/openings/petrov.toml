@@ -1,0 +1,30 @@
+title = "Difesa Russa (Petrov)"
+when = [
+  "opening:Petrov's Defense",
+]
+summary = "1.e4 e5 2.Cf3 Cf6: invece di difendere e5, il Nero contrattacca e4. È una difesa solidissima."
+ideas = [
+  "Dopo 3.Cxe5 il Nero non deve riprendere subito in e4: prima …d6, poi …Cxe4.",
+  "La struttura resta simmetrica e sicura per il Nero.",
+  "Il Bianco cerca un piccolo vantaggio di sviluppo e di spazio.",
+]
+mistakes = [
+  "Copiare il Bianco con 3.Cxe5 Cxe4?: dopo 4.De2 il cavallo in e4 è inchiodato e il Nero perde materiale.",
+  "Per il Bianco: aspettarsi un attacco facile: la Petrov è molto solida.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Sviluppa rapidamente e arrocca.",
+  "Metti pressione sulla colonna e (Te1).",
+  "In alcune varianti guadagna spazio con c4.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Dopo 3.Cxe5 gioca …d6 prima di riprendere il pedone.",
+  "Sviluppa con …Ae7, l'arrocco e …d5.",
+  "Cerca un gioco solido e simmetrico.",
+]

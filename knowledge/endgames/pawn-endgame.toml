@@ -1,0 +1,33 @@
+title = "Il finale di pedoni"
+when = [
+  "endgame:pawn-endgame",
+]
+summary = "Restano solo re e pedoni: ogni tempo conta, e un pedone in più è spesso decisivo."
+ideas = [
+  "L'opposizione: quando i re sono uno di fronte all'altro con una casa in mezzo, chi NON deve muovere ha l'opposizione e spesso vince la lotta tra i re.",
+  "La regola del quadrato: il re ferma un pedone passato se riesce a entrare nel quadrato che va dal pedone alla sua casa di promozione.",
+  "Un pedone passato lontano dagli altri distrae il re avversario, mentre il proprio re vince i pedoni sull'altra ala.",
+  "Il re attivo, al centro e davanti ai pedoni, è la chiave.",
+]
+mistakes = [
+  "Muovere i pedoni senza calcolare: in questi finali una mossa sbagliata non si rimedia.",
+  "Dimenticare lo stallo quando l'avversario ha solo il re.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni"
+steps = [
+  "Attiva il re e portalo verso il centro.",
+  "Crea un pedone passato con la maggioranza.",
+  "Usa il passato per distrarre il re avversario, poi vinci i pedoni sull'altra ala.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Porta il re davanti ai pedoni avversari.",
+  "Cerca l'opposizione.",
+  "Con re e pedone contro re: stai davanti al pedone; se il pedone è sulla colonna a o h basta raggiungere l'angolo.",
+]

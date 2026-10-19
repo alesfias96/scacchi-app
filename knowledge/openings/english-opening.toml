@@ -1,0 +1,30 @@
+title = "Apertura Inglese"
+when = [
+  "opening:English Opening",
+]
+summary = "1.c4: il Bianco controlla d5 dal lato. È un'apertura flessibile, che può trasformarsi in molte altre."
+ideas = [
+  "Il Bianco fianchetta spesso l'alfiere in g2, per controllare la grande diagonale e le case chiare del centro.",
+  "Dopo 1…e5 si ottiene una specie di Siciliana a colori invertiti, con un tempo in più per il Bianco.",
+  "Il gioco è spesso posizionale, con spazio sull'ala di donna (b4, b5).",
+]
+mistakes = [
+  "Per il Nero: dimenticare la forza dell'alfiere bianco in g2.",
+  "Per il Bianco: giocare troppo lentamente, lasciando al Nero il centro.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Fianchetta l'alfiere in g2 e controlla d5.",
+  "Gioca sull'ala di donna (Tb1, b4–b5).",
+  "Scegli il momento giusto per d4.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Prendi spazio al centro con …e5 o …d5.",
+  "Sviluppa e arrocca: le strutture sono simili a quelle delle difese indiane.",
+  "Contrasta la pressione sull'ala di donna.",
+]

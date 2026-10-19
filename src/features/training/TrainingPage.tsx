@@ -14,6 +14,8 @@
  * in "Gioca" (anche la promozione). Una mossa sbagliata torna indietro e si
  * può riprovare; una giusta riceve subito la risposta dell'avversario.
  * Nella visualizzazione, dopo i secondi scelti, i pezzi spariscono.
+ * Il tutor (tasto T) spiega la posizione solo a puzzle finito: prima
+ * rivelerebbe la soluzione.
  *
  * Tutte le regole (mossa giusta o sbagliata, rating, ripasso) sono in Rust.
  *
@@ -32,8 +34,10 @@ import {
 } from '../../components/promotion-picker/PromotionPicker';
 import { useInitialPosition } from '../../hooks/useInitialPosition';
 import { useMoveSound } from '../../hooks/useMoveSound';
+import { useTutorTarget } from '../../hooks/useTutorTarget';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { useTrainingStore } from '../../state/trainingStore';
+import type { TutorTarget } from '../../state/tutorStore';
 import { PuzzleReveal } from './puzzle-reveal/PuzzleReveal';
 import { PuzzleStatus } from './puzzle-status/PuzzleStatus';
 import { TrainingSetupPanel } from './training-setup/TrainingSetupPanel';
@@ -92,6 +96,22 @@ export function TrainingPage() {
     }
     return hintSquare === null ? null : { arrows: [], circles: [hintSquare] };
   }, [highlighted, hintSquare]);
+
+  // Il tutor vede il puzzle, ma si accende solo quando è finito.
+  const tutorTarget = useMemo<TutorTarget | null>(
+    () =>
+      attempt === null
+        ? null
+        : {
+            startFen: attempt.game.startingFen,
+            moves: attempt.game.moves.map((move) => move.uci),
+            orientation: attempt.orientation,
+            lock: attempt.finished ? null : 'puzzle',
+            lockKey: attempt.puzzleId,
+          },
+    [attempt],
+  );
+  useTutorTarget(tutorTarget);
 
   /** Cambia le scelte e le ricorda. */
   const changeSetup = useCallback(

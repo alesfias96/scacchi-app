@@ -81,6 +81,8 @@ pub fn run() {
             commands::training::play_puzzle_move,
             commands::training::puzzle_hint,
             commands::training::show_puzzle_solution,
+            commands::tutor::explain_position,
+            commands::tutor::try_what_if,
         ])
         // `generate_context!` legge tauri.conf.json durante la compilazione
         // e incorpora nell'eseguibile configurazione, icone e interfaccia.

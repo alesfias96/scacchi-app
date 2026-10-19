@@ -1,0 +1,32 @@
+title = "In vantaggio, semplifica"
+when = [
+  "principle:trade-when-ahead",
+]
+summary = "Chi è avanti di materiale si avvicina alla vittoria cambiando i pezzi: con meno pezzi il vantaggio pesa di più e l'avversario ha meno occasioni di contrattacco."
+ideas = [
+  "Cambia pezzi, non pedoni: nel finale i pedoni servono per promuovere.",
+  "Con un pezzo in più, ogni cambio rende quel pezzo ancora più decisivo.",
+  "Chi è in svantaggio cerca invece complicazioni, attacchi e cambi di pedoni (verso la patta).",
+]
+mistakes = [
+  "In vantaggio, cercare complicazioni inutili.",
+  "In svantaggio, cambiare i pezzi e arrivare a un finale perso.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi è in vantaggio"
+steps = [
+  "Proponi cambi di pezzi, soprattutto dei pezzi più attivi dell'avversario.",
+  "Metti al sicuro il re e i pezzi, togliendo all'avversario il controgioco.",
+  "Arrivato al finale, crea un pedone passato.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi è in svantaggio"
+steps = [
+  "Evita i cambi e tieni i pezzi attivi.",
+  "Cerca attacchi e complicazioni: l'avversario può sbagliare.",
+  "Cambia pedoni: con pochi pedoni il finale è più facile da pattare.",
+]

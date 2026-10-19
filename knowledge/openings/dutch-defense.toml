@@ -1,0 +1,30 @@
+title = "Difesa Olandese"
+when = [
+  "opening:Dutch Defense",
+]
+summary = "1.d4 f5: il Nero controlla e4 e prepara il gioco sull'ala di re. È sbilanciata e combattiva."
+ideas = [
+  "Il Nero controlla la casa e4 con il pedone f5.",
+  "Le varianti principali: Stonewall (…d5, …e6), Leningrado (…g6, …Ag7) e classica (…e6, …Ae7).",
+  "Il re nero è un po' più esposto: la diagonale e8–h5 si indebolisce.",
+]
+mistakes = [
+  "Per il Nero: lasciare al Bianco la casa e4.",
+  "Per il Bianco: permettere un attacco nero sul re senza reagire.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Fianchetta l'alfiere in g2 per controllare e4.",
+  "Prepara e4 per aprire il gioco.",
+  "Sfrutta le case deboli del Nero (e6, g6).",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Controlla e4 e attacca sull'ala di re.",
+  "Scegli uno schema (Stonewall, Leningrado o classico) e segui i suoi piani.",
+  "Attenzione al re: arrocca presto.",
+]

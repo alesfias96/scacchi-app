@@ -1,0 +1,33 @@
+title = "Il pedone isolato di donna (isolano)"
+when = [
+  "structure:isolated-queen-pawn",
+]
+summary = "Un pedone in d4 (o in d5) senza pedoni amici sulle colonne c ed e. Dà spazio e case attive ai pezzi, ma nessun pedone può difenderlo."
+ideas = [
+  "La casa davanti all'isolano (d5 se l'isolano è in d4) è un avamposto ideale per l'avversario: nessun pedone può cacciare un pezzo da lì.",
+  "Con molti pezzi l'isolano è una forza (attacco, spinta d4–d5); con pochi pezzi diventa una debolezza.",
+  "Chi ha l'isolano evita i cambi; chi gioca contro li cerca.",
+  "La spinta d4–d5 al momento giusto apre il gioco e attiva tutti i pezzi.",
+]
+mistakes = [
+  "Con l'isolano: cambiare i pezzi e arrivare a un finale passivo.",
+  "Contro l'isolano: lasciare libera la casa davanti al pedone.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha l'isolano"
+steps = [
+  "Metti i pezzi in modo attivo: cavalli in e5 e c3, alfieri sulle diagonali verso il re.",
+  "Prepara l'attacco sull'ala di re (spesso con donna e alfiere sulla diagonale b1–h7).",
+  "Al momento giusto spingi d4–d5 per aprire il centro.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi gioca contro l'isolano"
+steps = [
+  "Blocca l'isolano con un pezzo nella casa davanti (meglio un cavallo).",
+  "Cambia i pezzi, soprattutto quelli attivi dell'avversario.",
+  "Nel finale attacca l'isolano con torri e re.",
+]

@@ -1,0 +1,30 @@
+title = "Difesa Philidor"
+when = [
+  "opening:Philidor Defense",
+]
+summary = "1.e4 e5 2.Cf3 d6: il Nero difende e5 con un pedone. È solida ma un po' passiva."
+ideas = [
+  "Il Nero tiene il punto e5 ma chiude il suo alfiere in f8.",
+  "Il Bianco guadagna spazio con d4 e uno sviluppo rapido.",
+  "Nella versione moderna il Nero gioca …Cf6, …Cbd7, …Ae7 e …c6.",
+]
+mistakes = [
+  "Per il Nero: lasciare f7 senza difesa contro Ac4 e Cg5.",
+  "Per il Bianco: cambiare in e5 troppo presto, liberando il gioco del Nero.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Gioca d4 e sviluppa rapidamente (Cc3, Ac4).",
+  "Arrocca e cerca pressione su f7.",
+  "Usa lo spazio in più per attaccare.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Tieni e5 con …Cbd7 e …c6.",
+  "Arrocca e prepara …b5 o …exd4 al momento giusto.",
+  "Evita di chiudere tutti i tuoi pezzi.",
+]

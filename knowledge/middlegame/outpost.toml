@@ -1,0 +1,33 @@
+title = "L'avamposto"
+when = [
+  "middlegame:outpost",
+]
+summary = "Un avamposto è una casa nella metà campo avversaria, difesa da un proprio pedone, da cui nessun pedone nemico può cacciare un pezzo. È la casa ideale per un cavallo."
+ideas = [
+  "Un cavallo su un avamposto in quinta o sesta traversa vale spesso quanto una torre.",
+  "Gli avamposti nascono dalle case deboli, quelle che i pedoni avversari non possono più controllare.",
+  "Chi subisce un avamposto deve cambiare il pezzo che lo occupa (spesso con un alfiere).",
+  "Un avamposto conta di più se è vicino al re avversario o al centro.",
+]
+mistakes = [
+  "Lasciare che l'avversario cambi il cavallo dell'avamposto con un suo pezzo meno buono.",
+  "Spingere i propri pedoni creando case deboli per i pezzi avversari.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha l'avamposto"
+steps = [
+  "Tieni il cavallo sull'avamposto e difendilo bene.",
+  "Usalo per attaccare i punti deboli vicini.",
+  "Se viene cambiato, rioccupa la casa con un altro pezzo.",
+]
+
+[[plans]]
+for = "opponent"
+label = "L'avversario"
+steps = [
+  "Cambia il pezzo che occupa l'avamposto.",
+  "Prepara una spinta di pedone che tolga il sostegno all'avamposto.",
+  "Non creare altre case deboli.",
+]

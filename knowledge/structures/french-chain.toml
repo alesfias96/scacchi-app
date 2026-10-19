@@ -1,0 +1,32 @@
+title = "La catena della Francese"
+when = [
+  "structure:french-chain",
+]
+summary = "Pedoni in d4 ed e5 contro pedoni in d5 ed e6: il centro è bloccato. Chi ha il pedone in e5 ha spazio sull'ala di re; l'altro attacca la base della catena."
+ideas = [
+  "La regola delle catene di pedoni: si attacca la base della catena avversaria, cioè il pedone più arretrato (d4).",
+  "Chi ha il pedone in e5 attacca sull'ala di re, dove ha più spazio (spinte f4–f5, pezzi verso il re).",
+  "Chi difende ha un alfiere delle case chiare chiuso dai suoi pedoni: è il suo problema principale.",
+]
+mistakes = [
+  "Per chi difende: dimenticare le spinte c5 e f6 e restare senza controgioco.",
+  "Per chi ha lo spazio: perdere il pedone d4, la base della catena.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha il pedone in e5"
+steps = [
+  "Sostieni d4 con c3 e con i pezzi.",
+  "Attacca sull'ala di re: f4–f5, cavallo e alfiere verso il re.",
+  "Se arriva …f6, valuta il cambio in f6 oppure il sostegno con f4.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi attacca la catena"
+steps = [
+  "Spingi …c5 per attaccare d4, con la donna in b6 e il cavallo in c6.",
+  "Prepara …f6 per attaccare e5.",
+  "Attiva o cambia l'alfiere chiuso delle case chiare (ad esempio con …b6 e …Aa6).",
+]

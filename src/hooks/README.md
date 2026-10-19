@@ -10,6 +10,7 @@ Qui stanno quelli usati da più parti dell'app.
 | `useColorSchemePreference.ts` | Dice se Windows/macOS/Linux è in modalità scura, e si aggiorna se l'utente la cambia. Serve al tema "Automatico"                         |
 | `useInitialPosition.ts`       | Chiede a Rust la posizione iniziale e tiene traccia della richiesta (in attesa, pronta, errore). Usato dall'anteprima nelle Impostazioni |
 | `useGameKeyboard.ts`          | Scorre la partita con la tastiera: ← → per le mosse, Home e Fine per inizio e fine. Ignora i tasti mentre si scrive in un campo          |
+| `useTutorTarget.ts`           | Una sezione dice al tutor quale posizione sta mostrando (e quando il tutor deve restare spento)                                          |
 | `useMoveSound.ts`             | Fa sentire i suoni della partita (mossa, presa, fine partita) quando la scacchiera avanza di una mossa, se i suoni sono attivi           |
 | `useGameKeyboard.test.tsx`    | I test della tastiera                                                                                                                    |
 | `useMoveSound.test.tsx`       | I test dei suoni della partita                                                                                                           |

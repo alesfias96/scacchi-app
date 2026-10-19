@@ -23,6 +23,7 @@ resolver = "3"
 # - crates/storage: il database delle partite (SQLite).
 # - crates/analysis: i rilevatori (minacce, tattiche, pedoni, re, attività dei pezzi).
 # - crates/training: l'allenamento con i puzzle (scelta, verifica, rating, ripasso).
+# - crates/tutor: le spiegazioni delle posizioni (fatti + base di conoscenza in knowledge/).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -34,6 +35,7 @@ members = [
     "crates/storage",
     "crates/analysis",
     "crates/training",
+    "crates/tutor",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -74,6 +76,7 @@ openings = { path = "crates/openings" }
 storage = { path = "crates/storage" }
 analysis = { path = "crates/analysis" }
 training = { path = "crates/training" }
+tutor = { path = "crates/tutor" }
 
 # Desktop.
 tauri = { version = "2", features = [] }
@@ -87,6 +90,8 @@ thiserror = "2"
 serde = { version = "1", features = ["derive"] }
 # Lettura e scrittura di file JSON (usato per il file delle impostazioni).
 serde_json = "1"
+# Lettura dei file TOML (le schede della base di conoscenza, in knowledge/).
+toml = "0.9"
 # Generazione automatica dei tipi TypeScript a partire dai tipi Rust.
 ts-rs = "12"
 # Esecuzione "asincrona": dialogare con i motori senza mai bloccare l'app.

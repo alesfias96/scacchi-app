@@ -1,0 +1,30 @@
+title = "Gambetto di Donna Accettato"
+when = [
+  "opening:Queen's Gambit Accepted",
+]
+summary = "1.d4 d5 2.c4 dxc4: il Nero prende il pedone, non per tenerlo ma per sviluppare liberamente i pezzi e attaccare il centro."
+ideas = [
+  "Il Bianco riprende quasi sempre il pedone (spesso con e3 e Axc4).",
+  "Il Nero attacca il centro con …c5 ed …e6, e sviluppa liberamente l'alfiere in c8.",
+  "Spesso nasce un pedone isolato in d4 per il Bianco.",
+]
+mistakes = [
+  "Per il Nero: difendere il pedone c4 con …b5, creando debolezze.",
+  "Per il Bianco: affrettarsi a riprendere il pedone trascurando lo sviluppo.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Riprendi il pedone in c4 con l'alfiere.",
+  "Prendi il centro con e4, oppure con e3 e d4.",
+  "Se nasce l'isolano, gioca in modo attivo.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Non cercare di tenere il pedone in più (…b5 indebolisce l'ala di donna).",
+  "Attacca il centro con …c5.",
+  "Sviluppa rapidamente e arrocca.",
+]

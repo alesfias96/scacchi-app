@@ -1,0 +1,31 @@
+title = "Gambetto di Donna Rifiutato"
+when = [
+  "opening:Queen's Gambit Declined",
+]
+summary = "1.d4 d5 2.c4 e6: il Nero non prende il pedone e difende d5 con un altro pedone. È classico e molto solido."
+ideas = [
+  "Il Nero ha un centro forte, ma l'alfiere delle case chiare (in c8) è chiuso: liberarlo è il suo problema principale.",
+  "Il Bianco ha spesso un leggero vantaggio di spazio e pressione sulla colonna c.",
+  "Il cambio cxd5 exd5 porta alla struttura Carlsbad, con l'attacco di minoranza.",
+  "Le spinte liberatorie del Nero sono …c5 ed …e5.",
+]
+mistakes = [
+  "Per il Nero: lasciare l'alfiere in c8 chiuso per tutta la partita.",
+  "Per il Bianco: cambiare in d5 senza un piano.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Sviluppa (Cc3, Ag5 o Af4, e3, Cf3) e metti pressione su d5.",
+  "Valuta il cambio in d5 e l'attacco di minoranza (b4–b5).",
+  "Cerca il controllo della colonna c.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Difendi d5 e sviluppa (…Cf6, …Ae7, l'arrocco, …Cbd7).",
+  "Libera il gioco con …c5 o …e5, oppure con il cambio …dxc4.",
+  "Trova un ruolo all'alfiere in c8 (ad esempio con …b6 e …Ab7).",
+]

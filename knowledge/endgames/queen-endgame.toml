@@ -1,0 +1,33 @@
+title = "Il finale di donne"
+when = [
+  "endgame:queen-endgame",
+]
+summary = "Resta una donna a testa: la donna è così mobile che lo scacco perpetuo è il pericolo principale."
+ideas = [
+  "Chi difende cerca lo scacco perpetuo: scacchi continui da cui il re non può scappare.",
+  "Chi attacca mette il re al riparo dagli scacchi prima di spingere i pedoni.",
+  "Un pedone passato avanzato vale moltissimo: la donna da sola può scortarlo.",
+  "La donna al centro è la più forte.",
+]
+mistakes = [
+  "Spingere il pedone lasciando il re esposto agli scacchi.",
+  "Per chi difende: allontanare la donna dal re avversario.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni"
+steps = [
+  "Centralizza la donna.",
+  "Metti il re al riparo dagli scacchi.",
+  "Spingi il pedone passato una casa alla volta.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Cerca scacchi continui.",
+  "Tieni la donna attiva e vicina al re avversario.",
+  "Blocca il pedone passato con la donna.",
+]

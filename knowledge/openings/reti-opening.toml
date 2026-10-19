@@ -1,0 +1,32 @@
+title = "Apertura Réti"
+when = [
+  "opening:Réti Opening",
+  "opening:Zukertort Opening",
+  "opening:King's Indian Attack",
+]
+summary = "1.Cf3 seguito da c4 e g3: il Bianco controlla il centro con i pezzi, senza fissare subito i pedoni."
+ideas = [
+  "Il cavallo in f3 e l'alfiere in g2 controllano e5 e d5.",
+  "La spinta c4 attacca il centro nero dal lato.",
+  "Nell'Attacco Est-Indiano (Cf3, g3, Ag2, d3, e4) il Bianco usa lo schema della Est-Indiana con un tempo in più.",
+]
+mistakes = [
+  "Per il Nero: occupare il centro senza sostenerlo, offrendo bersagli.",
+  "Per il Bianco: restare passivo dietro i pedoni.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Fianchetta l'alfiere in g2 e arrocca.",
+  "Attacca il centro con c4 o con e4.",
+  "Gioca in modo flessibile e adatta il piano alla struttura del Nero.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Occupa il centro con i pedoni (…d5, e …e5 quando possibile).",
+  "Sviluppa l'alfiere delle case chiare prima di …e6.",
+  "Tieni d5 ben difeso.",
+]

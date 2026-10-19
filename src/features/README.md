@@ -6,17 +6,17 @@ I componenti usati da più sezioni stanno invece in `src/components/`.
 
 ## Contenuto
 
-| Cartella    | Sezione      | Disponibile                                                                       |
-| ----------- | ------------ | --------------------------------------------------------------------------------- |
-| `play/`     | Gioca        | Dalla Fase 1 (posizione), dalla Fase 2 (mosse), dalla Fase 3 (contro il computer) |
-| `archive/`  | Archivio     | Dalla Fase 4: tutte le partite salvate, con filtri; rivedi, continua, elimina     |
-| `training/` | Allenamento  | Dalla Fase 6: puzzle di calcolo, visualizzazione, "cosa minaccia?", ripasso       |
-| `settings/` | Impostazioni | Tema dell'app, scacchiera, pezzi, notazione, suoni                                |
+| Cartella    | Sezione                         | Disponibile                                                                       |
+| ----------- | ------------------------------- | --------------------------------------------------------------------------------- |
+| `play/`     | Gioca                           | Dalla Fase 1 (posizione), dalla Fase 2 (mosse), dalla Fase 3 (contro il computer) |
+| `archive/`  | Archivio                        | Dalla Fase 4: tutte le partite salvate, con filtri; rivedi, continua, elimina     |
+| `training/` | Allenamento                     | Dalla Fase 6: puzzle di calcolo, visualizzazione, "cosa minaccia?", ripasso       |
+| `tutor/`    | Tutor (barra a destra, tasto T) | Dalla Fase 7: spiega la posizione, schede della base di conoscenza, "e se…"       |
+| `settings/` | Impostazioni                    | Tema dell'app, scacchiera, pezzi, notazione, suoni                                |
 
 ## Sezioni che verranno aggiunte
 
 | Cartella    | Sezione                 | Fase |
 | ----------- | ----------------------- | ---- |
-| `tutor/`    | Tutor                   | 7    |
 | `review/`   | Analisi partite         | 8    |
 | `progress/` | Progressi e statistiche | 9    |

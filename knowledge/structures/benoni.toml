@@ -1,0 +1,33 @@
+title = "La struttura Benoni"
+when = [
+  "structure:benoni",
+]
+summary = "Pedone in d5 (senza pedone in c) contro pedoni in c5 e d6 (senza pedone in e): chi ha d5 ha la maggioranza al centro, l'altro sull'ala di donna."
+ideas = [
+  "Chi ha la maggioranza al centro vuole spingere e4–e5 per aprirlo.",
+  "L'altro vuole spingere b5 con la maggioranza dell'ala di donna.",
+  "Il pedone d6 è debole e la casa e5 è importante per entrambi.",
+  "L'alfiere sulla grande diagonale (in g7 per il Nero) è molto forte.",
+]
+mistakes = [
+  "Permettere la spinta e4–e5 in buone condizioni per l'avversario.",
+  "Lasciare la spinta b5 senza contrasto (spesso serve a4).",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha la maggioranza al centro"
+steps = [
+  "Prepara e4–e5 (con f4 e una torre in e1).",
+  "Frena l'ala di donna avversaria con a4.",
+  "Usa la casa c4 per un cavallo.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi ha la maggioranza sull'ala di donna"
+steps = [
+  "Prepara b5 (con a6 e una torre in b8).",
+  "Controlla la casa e5 con cavallo e alfiere.",
+  "Metti pressione su e4 con la torre sulla colonna e.",
+]

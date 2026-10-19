@@ -1,0 +1,32 @@
+title = "Torre contro pezzo minore"
+when = [
+  "endgame:rook-vs-minor",
+]
+summary = "La torre vale circa due punti più di un alfiere o di un cavallo: con i pedoni sulla scacchiera chi ha la torre di solito vince, ma serve tecnica."
+ideas = [
+  "Chi ha la torre attacca i pedoni avversari e crea un pedone passato.",
+  "Senza pedoni, torre contro alfiere e torre contro cavallo finiscono spesso patta, se chi difende conosce le posizioni giuste.",
+  "Chi ha il pezzo minore tiene i pedoni uniti e protetti, con il re vicino a loro.",
+]
+mistakes = [
+  "Con la torre: cambiare tutti i pedoni (senza pedoni il finale è spesso patta).",
+  "Con il pezzo minore: lasciare i pedoni separati e attaccabili.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha la torre"
+steps = [
+  "Attiva la torre e attacca i pedoni.",
+  "Crea un pedone passato.",
+  "Non cambiare tutti i pedoni.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi ha il pezzo minore"
+steps = [
+  "Tieni i pedoni uniti e protetti dal pezzo e dal re.",
+  "Cambia più pedoni possibile.",
+  "Senza pedoni, con l'alfiere: porta il re nell'angolo di colore opposto a quello del tuo alfiere.",
+]

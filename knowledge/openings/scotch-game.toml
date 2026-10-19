@@ -1,0 +1,30 @@
+title = "Partita Scozzese"
+when = [
+  "opening:Scotch Game",
+]
+summary = "1.e4 e5 2.Cf3 Cc6 3.d4: il Bianco apre subito il centro. Dopo 3…exd4 4.Cxd4 i pezzi escono rapidi e il gioco è aperto."
+ideas = [
+  "Il Bianco ha un pedone in e4 contro nessun pedone nero al centro: più spazio.",
+  "Il Nero attacca subito il cavallo in d4 o il pedone e4 (…Ac5, …Cf6, …Df6).",
+  "Dopo Cxc6 bxc6 il Nero ha pedoni doppiati ma un centro più forte con …d5.",
+]
+mistakes = [
+  "Per il Nero: giocare in modo passivo, lasciando al Bianco il centro senza contrasto.",
+  "Per il Bianco: perdere tempo con il cavallo in d4 mentre il Nero si sviluppa.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Sviluppa rapidamente e arrocca.",
+  "Mantieni il pedone e4 e il vantaggio di spazio.",
+  "Usa la colonna e semiaperta.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Attacca il cavallo in d4 e il pedone e4.",
+  "Libera il gioco con …d5.",
+  "Arrocca presto: il centro è aperto.",
+]

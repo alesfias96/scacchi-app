@@ -1,0 +1,33 @@
+title = "Sviluppare i pezzi"
+when = [
+  "principle:development",
+]
+summary = "In apertura ogni mossa dovrebbe portare in gioco un pezzo nuovo: cavalli e alfieri verso il centro, poi l'arrocco e il collegamento delle torri."
+ideas = [
+  "Prima i cavalli e gli alfieri, poi la donna e le torri.",
+  "Non muovere lo stesso pezzo due volte senza un buon motivo (una presa, una minaccia da parare).",
+  "Ogni tempo perso in apertura è una mossa regalata all'avversario: chi è più sviluppato può aprire il gioco e attaccare.",
+  "Lo sviluppo è finito quando le torri si «vedono» sulla prima traversa (sono collegate).",
+]
+mistakes = [
+  "Uscire presto con la donna: viene attaccata dai pezzi avversari, che si sviluppano guadagnando tempo.",
+  "Muovere troppi pedoni (soprattutto sulle ali) invece dei pezzi.",
+  "Prendere pedoni «avvelenati» restando indietro nello sviluppo.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi è indietro nello sviluppo"
+steps = [
+  "Porta fuori i pezzi minori ancora a casa, verso case attive e centrali.",
+  "Arrocca.",
+  "Collega le torri togliendo la donna dalla prima traversa.",
+]
+
+[[plans]]
+for = "opponent"
+label = "L'avversario"
+steps = [
+  "Approfitta del vantaggio di sviluppo: apri il gioco al centro.",
+  "Attacca i pezzi già usciti dell'avversario, guadagnando altri tempi.",
+]

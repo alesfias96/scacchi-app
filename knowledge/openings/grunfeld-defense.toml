@@ -1,0 +1,31 @@
+title = "Difesa Grünfeld"
+when = [
+  "opening:Grünfeld Defense",
+  "opening:Neo-Grünfeld Defense",
+]
+summary = "1.d4 Cf6 2.c4 g6 3.Cc3 d5: il Nero colpisce subito il centro. Dopo il cambio in d5 il Bianco ottiene un grande centro, che il Nero attacca con pezzi e pedoni."
+ideas = [
+  "Nella variante di cambio il Bianco ha pedoni in c3, d4 ed e4; il Nero li attacca con …c5, …Ag7 e …Cc6.",
+  "L'alfiere in g7 punta diritto su d4.",
+  "Il Bianco cerca la spinta d5 o l'attacco al re; il Nero cerca pressione e un finale migliore.",
+]
+mistakes = [
+  "Per il Nero: lasciare il centro bianco senza pressione.",
+  "Per il Bianco: avanzare il centro perdendo il controllo di d4.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Costruisci il centro (e4, c3, d4) e sostienilo (Ae3, Cf3 o Ce2).",
+  "Prepara d5 al momento giusto.",
+  "Attenzione alla pressione su d4.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Attacca d4 con …c5, …Cc6 e …Ag4.",
+  "Tieni l'alfiere in g7 sulla grande diagonale.",
+  "Cerca cambi che indeboliscano il centro bianco.",
+]

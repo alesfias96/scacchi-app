@@ -1,0 +1,30 @@
+title = "Difesa Est-Indiana"
+when = [
+  "opening:King's Indian Defense",
+]
+summary = "1.d4 Cf6 2.c4 g6 3.Cc3 Ag7 4.e4 d6: il Nero lascia al Bianco un grande centro e lo attacca dopo, spesso con …e5. È molto combattiva."
+ideas = [
+  "Dopo …e5 e d5 il centro si chiude: il Bianco gioca sull'ala di donna (c5), il Nero sull'ala di re (…f5).",
+  "L'alfiere in g7 è il pezzo più importante del Nero.",
+  "Il Bianco ha più spazio; il Nero ha prospettive di attacco al re.",
+]
+mistakes = [
+  "Per il Nero: giocare sull'ala di donna quando il centro è chiuso.",
+  "Per il Bianco: ignorare l'attacco del Nero sul re.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Costruisci il centro (e4, d4, c4) e sviluppa.",
+  "Se il centro si chiude, attacca sull'ala di donna (b4, c5).",
+  "Difendi il re dall'attacco …f5–f4.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Arrocca e attacca il centro con …e5 (oppure …c5).",
+  "Con il centro chiuso attacca sull'ala di re con …f5.",
+  "Non cambiare l'alfiere in g7.",
+]

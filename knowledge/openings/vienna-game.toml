@@ -1,0 +1,30 @@
+title = "Partita Viennese"
+when = [
+  "opening:Vienna Game",
+]
+summary = "1.e4 e5 2.Cc3: il Bianco sviluppa il cavallo e prepara spesso f4, con un gioco aggressivo sull'ala di re."
+ideas = [
+  "La spinta f4 apre la colonna f, come nel Gambetto di Re ma preparata meglio.",
+  "Con Ac4 il Bianco punta su f7.",
+  "Il Nero contrattacca con …Cf6 e …d5 al centro.",
+]
+mistakes = [
+  "Per il Nero: lasciare al Bianco f4 e un centro forte senza reagire.",
+  "Per il Bianco: spingere f4 senza aver calcolato le risposte al centro.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Prepara f4 (oppure gioca Ac4).",
+  "Sviluppa e arrocca corto.",
+  "Usa la colonna f dopo il cambio dei pedoni.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Rispondi con …Cf6 e, al momento giusto, …d5.",
+  "Sviluppa l'alfiere in c5 o in b4.",
+  "Non lasciare al Bianco un attacco facile su f7.",
+]

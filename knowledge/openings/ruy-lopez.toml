@@ -1,0 +1,31 @@
+title = "Partita Spagnola (Ruy Lopez)"
+when = [
+  "opening:Ruy Lopez",
+]
+summary = "1.e4 e5 2.Cf3 Cc6 3.Ab5: l'alfiere attacca il cavallo che difende e5. È l'apertura più giocata dai campioni con 1.e4 e5."
+ideas = [
+  "La minaccia su e5 non è immediata (dopo 3…a6 4.Axc6 dxc6 5.Cxe5 il Nero riprende il pedone con …Dd4), ma la pressione dura a lungo.",
+  "Il Bianco prepara c3 e d4 per un centro forte; l'alfiere si ritira spesso in a4 e poi in b3.",
+  "Il Nero gioca spesso …a6 e …b5 per cacciare l'alfiere, guadagnando spazio sull'ala di donna.",
+  "Nella Difesa Berlinese (3…Cf6) il Nero cerca un gioco solido, spesso con un finale senza donne.",
+]
+mistakes = [
+  "Per il Nero: prendere il pedone e4 senza aver arroccato, quando la colonna e si apre.",
+  "Per il Bianco: cambiare in c6 senza un piano chiaro, dando al Nero la coppia degli alfieri.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Arrocca, gioca Te1, c3 e d4.",
+  "Ritira l'alfiere in b3, dove punta su f7.",
+  "Porta il cavallo b1 verso g3 (passando da d2 e f1) e cerca l'attacco sull'ala di re.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Caccia l'alfiere con …a6 e …b5.",
+  "Difendi e5 con …d6 e sviluppa con …Ae7 e l'arrocco.",
+  "Cerca controgioco sull'ala di donna (…c5, …Ca5 contro l'alfiere in b3).",
+]

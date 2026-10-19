@@ -1,0 +1,32 @@
+title = "Gli alfieri di colore contrario"
+when = [
+  "endgame:opposite-bishops",
+]
+summary = "Ognuno ha un alfiere che corre su case di colore diverso: i due alfieri non si incontrano mai. È il finale di patta più famoso, a volte anche con due pedoni in meno."
+ideas = [
+  "Chi difende blocca i pedoni avversari su case che il suo alfiere controlla, e mette il re davanti a loro.",
+  "Chi attacca ha bisogno di due pedoni passati lontani tra loro: un alfiere solo non riesce a fermarli entrambi.",
+  "Nel mediogioco, invece, gli alfieri di colore contrario favoriscono chi attacca: l'altro alfiere non può difendere le case del colore opposto.",
+]
+mistakes = [
+  "Per chi attacca: cambiare gli altri pezzi quando servono per vincere.",
+  "Per chi difende: perdere il controllo della diagonale che ferma i pedoni.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni"
+steps = [
+  "Crea due pedoni passati lontani tra loro.",
+  "Porta il re verso i pedoni da spingere.",
+  "Con il materiale pari, questo finale è quasi sempre patta.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Blocca i pedoni avversari su case del colore del tuo alfiere.",
+  "Metti il re davanti al pedone più pericoloso.",
+  "Cerca la patta: qui anche un pedone in meno spesso non basta per perdere.",
+]

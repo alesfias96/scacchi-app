@@ -1,0 +1,32 @@
+title = "La morsa Maróczy"
+when = [
+  "structure:maroczy-bind",
+]
+summary = "Pedoni in c4 ed e4, senza pedone in d, contro un pedone avversario in d6: chi ha la morsa controlla la casa d5 e toglie spazio all'altro. È tipica della Siciliana."
+ideas = [
+  "La morsa impedisce all'avversario le spinte liberatorie d6–d5 e b7–b5.",
+  "Chi ha la morsa ha più spazio; l'altro deve evitare di restare soffocato.",
+  "Chi è nella morsa spera nelle spinte b5 o f5, o in cambi che liberino il gioco.",
+]
+mistakes = [
+  "Per chi è nella morsa: restare completamente passivo.",
+  "Per chi ha la morsa: lasciare senza controllo la casa d4, dove i pezzi avversari si attivano.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha la morsa"
+steps = [
+  "Tieni il controllo di d5 con cavallo e pedoni.",
+  "Usa lo spazio per manovrare e preparare un attacco (spesso sull'ala di donna).",
+  "Evita i cambi che liberano l'avversario.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi è nella morsa"
+steps = [
+  "Cambia i pezzi, soprattutto gli alfieri, per avere più spazio.",
+  "Prepara le spinte b5 o f5.",
+  "Usa le case scure (l'alfiere sulla grande diagonale) e la casa d4.",
+]

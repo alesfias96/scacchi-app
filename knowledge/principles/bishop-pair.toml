@@ -1,0 +1,32 @@
+title = "La coppia degli alfieri"
+when = [
+  "principle:bishop-pair",
+]
+summary = "Due alfieri insieme controllano case di entrambi i colori: in una posizione aperta valgono spesso più di alfiere e cavallo o di due cavalli."
+ideas = [
+  "La coppia degli alfieri vale circa mezzo pedone in più, soprattutto quando la posizione è aperta.",
+  "Aprire la posizione, cambiando pedoni, aumenta la forza degli alfieri.",
+  "Nel finale due alfieri dominano spesso un cavallo e un alfiere.",
+]
+mistakes = [
+  "Cambiare uno dei due alfieri senza motivo: la coppia si perde.",
+  "Chiudere la posizione con i propri pedoni, togliendo diagonali agli alfieri.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha la coppia degli alfieri"
+steps = [
+  "Apri la posizione con cambi di pedoni.",
+  "Tieni gli alfieri su diagonali lunghe e libere.",
+  "Cerca il finale: lì la coppia degli alfieri pesa ancora di più.",
+]
+
+[[plans]]
+for = "opponent"
+label = "L'avversario"
+steps = [
+  "Tieni la posizione chiusa, con i pedoni bloccati.",
+  "Cerca di cambiare uno dei due alfieri, anche con un cavallo.",
+  "Crea case forti (avamposti) per i tuoi cavalli.",
+]

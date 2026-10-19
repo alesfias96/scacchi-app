@@ -58,3 +58,10 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `Reveal.ts`           | `crates/training/src/attempt_view.rs`       | Ciò che si scopre a puzzle finito: difficoltà, temi, soluzione, perché funziona             |
 | `ThemeInfo.ts`        | `crates/training/src/theme.rs`              | Un tema dei puzzle: nome di Lichess, nome italiano, quanti puzzle                           |
 | `TrainingOverview.ts` | `crates/training/src/training_overview.rs`  | Il riepilogo dell'allenamento: rating, puzzle risolti, ripassi di oggi, temi                |
+| `TutorExplanation.ts` | `crates/tutor/src/explanation_view.rs`      | La spiegazione di una posizione: parti, schede, posizione con le mosse legali               |
+| `TutorSection.ts`     | `crates/tutor/src/explanation_view.rs`      | Una parte della spiegazione, con il titolo e le frasi                                       |
+| `TutorItem.ts`        | `crates/tutor/src/explanation_view.rs`      | Una frase del tutor (con case da evidenziare) e la scheda che la approfondisce              |
+| `CardView.ts`         | `crates/tutor/src/explanation_view.rs`      | Una scheda della base di conoscenza adattata alla posizione                                 |
+| `PlanView.ts`         | `crates/tutor/src/explanation_view.rs`      | Un piano di una scheda, con chi deve seguirlo                                               |
+| `Topic.ts`            | `crates/tutor/src/topic.rs`                 | L'argomento di una scheda: apertura, struttura, mediogioco, finale, principio               |
+| `WhatIfView.ts`       | `crates/tutor/src/what_if.rs`               | Una mossa provata ("e se…"): giudizio, valutazioni, risposta migliore, cosa cambia          |

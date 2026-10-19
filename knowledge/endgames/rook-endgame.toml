@@ -1,0 +1,34 @@
+title = "Il finale di torre"
+when = [
+  "endgame:rook-endgame",
+]
+summary = "È il finale più frequente negli scacchi. Anche con un pedone in più finisce spesso patta: conta l'attività della torre."
+ideas = [
+  "La torre va dietro i pedoni passati: dietro i propri per spingerli, dietro quelli avversari per fermarli.",
+  "Una torre attiva vale spesso più di un pedone: meglio attaccare che difendere in modo passivo.",
+  "La posizione di Lucena (il re davanti al proprio pedone in settima): si vince «costruendo il ponte» con la torre sulla quarta traversa.",
+  "La posizione di Philidor: chi difende tiene la torre sulla sesta traversa finché il pedone non avanza, poi la porta in fondo e dà scacco da dietro.",
+]
+mistakes = [
+  "Mettere la torre davanti al proprio pedone passato.",
+  "Difendere in modo passivo, con la torre legata a un pedone.",
+  "Lasciare il re lontano dal gioco.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha più pedoni"
+steps = [
+  "Attiva la torre e mettila dietro il pedone passato.",
+  "Taglia il re avversario lungo una colonna o una traversa.",
+  "Porta il re davanti al pedone e punta alla posizione di Lucena.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Tieni la torre attiva: scacchi da lontano o attacco ai pedoni.",
+  "Porta il re davanti al pedone avversario.",
+  "Usa la difesa di Philidor: torre sulla sesta traversa, poi scacchi da dietro.",
+]

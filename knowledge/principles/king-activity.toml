@@ -1,0 +1,24 @@
+title = "Il re attivo nel finale"
+when = [
+  "principle:king-activity",
+]
+summary = "Quando le donne sono cambiate il re non rischia più il matto e diventa un pezzo forte: va portato verso il centro e verso i pedoni."
+ideas = [
+  "Nel finale il re vale circa quanto un pezzo minore: va usato.",
+  "Al centro il re può raggiungere entrambe le ali.",
+  "Davanti ai propri pedoni li scorta; davanti a quelli avversari li blocca.",
+  "In molti finali vince chi arriva per primo con il re al centro.",
+]
+mistakes = [
+  "Lasciare il re in un angolo mentre l'avversario attiva il suo.",
+  "Attivare il re troppo presto, quando ci sono ancora le donne (rischio di matto).",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha il re ancora indietro"
+steps = [
+  "Porta il re verso il centro, una casa alla volta.",
+  "Dirigilo verso i pedoni: i tuoi da spingere o quelli avversari da attaccare.",
+  "Usa il re per difendere i pedoni deboli, così gli altri pezzi restano liberi.",
+]

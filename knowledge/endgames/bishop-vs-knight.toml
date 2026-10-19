@@ -1,0 +1,33 @@
+title = "Alfiere contro cavallo"
+when = [
+  "endgame:bishop-vs-knight",
+]
+summary = "L'alfiere è più forte con la posizione aperta e i pedoni su entrambe le ali; il cavallo è più forte con la posizione chiusa e i pedoni su una sola ala."
+ideas = [
+  "L'alfiere controlla le diagonali da lontano: è ottimo per fermare i pedoni passati e per giocare su entrambe le ali.",
+  "Il cavallo può raggiungere case di entrambi i colori: è forte quando i pedoni sono bloccati.",
+  "Chi ha l'alfiere non mette i pedoni sul colore del suo alfiere.",
+  "Chi ha il cavallo cerca avamposti e pedoni fissati.",
+]
+mistakes = [
+  "Con l'alfiere: chiudere la posizione con i propri pedoni.",
+  "Con il cavallo: lasciare che la posizione si apra su entrambe le ali.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha l'alfiere"
+steps = [
+  "Apri la posizione e crea pedoni passati su entrambe le ali.",
+  "Metti i pedoni sulle case del colore opposto a quello del tuo alfiere.",
+  "Usa l'alfiere per fermare da lontano i pedoni avversari.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi ha il cavallo"
+steps = [
+  "Tieni i pedoni su una sola ala e la posizione chiusa.",
+  "Cerca case forti per il cavallo.",
+  "Fissa i pedoni avversari sul colore dell'alfiere avversario.",
+]

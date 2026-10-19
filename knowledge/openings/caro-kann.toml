@@ -1,0 +1,30 @@
+title = "Difesa Caro-Kann"
+when = [
+  "opening:Caro-Kann Defense",
+]
+summary = "1.e4 c6 2.d4 d5: come nella Francese il Nero sfida il centro, ma tiene libero l'alfiere delle case chiare. È molto solida."
+ideas = [
+  "L'alfiere nero esce spesso in f5 o in g4 prima di …e6.",
+  "Nella variante classica (3.Cc3 dxe4 4.Cxe4 Af5) il Nero ha una posizione solida e senza debolezze.",
+  "Nella variante di spinta (3.e5) il Bianco ha spazio; il Nero gioca …Af5, …e6 e …c5.",
+]
+mistakes = [
+  "Per il Nero: chiudere l'alfiere con …e6 prima di averlo sviluppato.",
+  "Per il Bianco: aspettarsi debolezze facili: la Caro-Kann ne ha poche.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Guadagna spazio (3.e5) oppure sviluppa rapidamente (3.Cc3).",
+  "Usa lo spazio in più per attaccare sull'ala di re.",
+  "In alcune varianti spingi h4–h5 contro l'alfiere in g6.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Sviluppa l'alfiere in f5 o in g4 prima di …e6.",
+  "Contrattacca con …c5 al momento giusto.",
+  "Cerca un mediogioco solido e un finale con una buona struttura.",
+]

@@ -1,0 +1,34 @@
+title = "Mettere al sicuro il re"
+when = [
+  "principle:castle-king",
+]
+summary = "Al centro il re è esposto: quando si aprono le colonne d ed e diventa un bersaglio. L'arrocco lo mette al riparo dietro i pedoni e porta in gioco una torre."
+ideas = [
+  "Di solito si arrocca entro le prime 8–10 mosse.",
+  "Dopo l'arrocco non spingere senza motivo i pedoni davanti al re: sono il suo scudo.",
+  "Se l'avversario ha il re al centro, aprire il gioco al centro (con spinte di pedone o sacrifici) può essere decisivo.",
+  "L'arrocco lungo (sull'ala di donna) è più lento ma può preparare un attacco di pedoni sull'altra ala.",
+]
+mistakes = [
+  "Rimandare l'arrocco per andare a prendere materiale.",
+  "Muovere il re (perdendo il diritto di arroccare) senza necessità.",
+  "Arroccare proprio dove l'avversario sta già attaccando.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha il re al centro"
+steps = [
+  "Libera le case tra re e torre sviluppando i pezzi.",
+  "Arrocca appena possibile, sul lato più sicuro.",
+  "Se non puoi arroccare, tieni il centro chiuso finché il re non è al sicuro.",
+]
+
+[[plans]]
+for = "opponent"
+label = "L'avversario"
+steps = [
+  "Apri il centro: le colonne d ed e aperte portano le torri verso il re.",
+  "Impedisci l'arrocco controllando le case di passaggio del re.",
+  "Attacca prima che il re trovi riparo: il tempo conta più del materiale.",
+]

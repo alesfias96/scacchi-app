@@ -1,0 +1,32 @@
+title = "Difesa Slava e Semi-Slava"
+when = [
+  "opening:Slav Defense",
+  "opening:Semi-Slav Defense",
+]
+summary = "1.d4 d5 2.c4 c6: il Nero difende d5 con il pedone c, lasciando libero l'alfiere delle case chiare. Nella Semi-Slava aggiunge anche …e6."
+ideas = [
+  "Nella Slava l'alfiere nero esce spesso in f5 prima di …e6.",
+  "Il Nero può prendere in c4 e cercare di tenere il pedone con …b5.",
+  "La Semi-Slava porta a posizioni molto ricche (varianti Meran e Botvinnik).",
+  "Il Bianco cerca pressione al centro e la spinta e4.",
+]
+mistakes = [
+  "Per il Nero: chiudere l'alfiere in c8 con …e6 troppo presto nella Slava.",
+  "Per il Bianco: lasciare al Nero il pedone c4 sostenuto da …b5 senza contrasto (spesso serve a4).",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Sviluppa (Cf3, Cc3, e3) e prepara e4.",
+  "Riprendi il pedone c4 se il Nero lo prende.",
+  "Usa lo spazio in più al centro.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Nella Slava sviluppa l'alfiere in f5 o in g4 prima di …e6.",
+  "Prepara …dxc4 e …b5, oppure …e5 o …c5 per liberarti.",
+  "Arrocca e completa lo sviluppo.",
+]

@@ -1,0 +1,32 @@
+title = "La torre in settima"
+when = [
+  "middlegame:seventh-rank",
+]
+summary = "Una torre sulla settima traversa (la seconda dell'avversario) attacca i pedoni rimasti a casa e chiude il re sull'ultima traversa."
+ideas = [
+  "Due torri in settima («i maiali in settima») possono dare matto o vincere molti pedoni.",
+  "La torre in settima è più forte quando il re avversario è sull'ultima traversa.",
+  "Nel finale una torre in settima vale spesso un pedone.",
+]
+mistakes = [
+  "Andare in settima quando la torre può essere cacciata o catturata.",
+  "Lasciare all'avversario l'entrata in settima senza contrastarla.",
+]
+
+[[plans]]
+for = "owner"
+label = "Chi ha la torre in settima"
+steps = [
+  "Attacca i pedoni sulla settima traversa.",
+  "Porta anche la seconda torre in settima.",
+  "Cerca combinazioni di matto con il re chiuso sull'ultima traversa.",
+]
+
+[[plans]]
+for = "opponent"
+label = "Chi difende"
+steps = [
+  "Contesta la traversa con una tua torre.",
+  "Dai al re una casa di fuga dall'ultima traversa.",
+  "Contrattacca: spesso la difesa passiva non basta.",
+]

@@ -1,0 +1,31 @@
+title = "Difesa Siciliana"
+when = [
+  "opening:Sicilian Defense",
+]
+summary = "1.e4 c5: il Nero lotta per il centro dal lato, creando posizioni sbilanciate. È la risposta più giocata e più combattiva a 1.e4."
+ideas = [
+  "Dopo d4 e cxd4 il Nero ha due pedoni centrali contro uno: una maggioranza centrale utile più avanti.",
+  "Il Bianco ha più spazio e sviluppo, e attacca spesso sull'ala di re.",
+  "Il Nero gioca sull'ala di donna e sulla colonna c semiaperta (…Tc8, …b5).",
+  "Spesso i re arroccano su lati opposti: è una corsa all'attacco.",
+]
+mistakes = [
+  "Per il Nero: perdere tempo sull'ala di donna mentre il Bianco attacca il re.",
+  "Per il Bianco: giocare lentamente: nella Siciliana l'iniziativa conta moltissimo.",
+]
+
+[[plans]]
+for = "white"
+steps = [
+  "Apri con d4 (Siciliana aperta) e sviluppa rapidamente.",
+  "Cerca l'attacco sull'ala di re (f4 o g4, Ae3, Dd2).",
+  "Controlla la casa d5, il punto chiave.",
+]
+
+[[plans]]
+for = "black"
+steps = [
+  "Usa la colonna c e la spinta …b5 sull'ala di donna.",
+  "Prepara …d5 o …e5 per liberare il centro.",
+  "Attenzione al re: arrocca e non indebolire le case vicine.",
+]
