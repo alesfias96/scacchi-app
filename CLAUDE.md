@@ -79,10 +79,30 @@ quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul b
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Proposto il piano della Fase 9 (Statistiche), in attesa della risposta di Alessandro.** Il piano
-completo (punti 1–6 con le opzioni A consigliate) è l'ultimo messaggio della conversazione; in breve:
-sezione «Progressi»; crate `stats`; grafici disegnati da noi in SVG; livello stimato dai risultati
-contro i livelli del computer; analisi in coda delle partite non ancora analizzate; filtri per periodo.
+**Proposto il piano della Fase 9 (Statistiche), in attesa della risposta di Alessandro.**
+
+Dati già disponibili: `games` (data, avversario, livello, colore, tempo, risultato, apertura),
+`moves` (tempo usato e rimasto; per le partite analizzate anche valutazioni, centipedoni persi,
+fase, temi, minacce concesse), `puzzle_attempts` (data, modalità, esito, tempo, rating dopo; temi e
+profondità dal catalogo dei puzzle). Limite: precisione, errori e fasi solo per le partite analizzate.
+
+Il piano proposto (A = consigliata):
+
+1. Sezione «Progressi» con quattro schede — **A**: _Livello_ (Elo stimato, rating dei puzzle nel
+   tempo, precisione media nel tempo); _Partite_ (vinte/perse/patte per avversario e colore,
+   precisione ed errori per fase, errori con poco tempo); _Aperture_ (le più giocate con risultati e
+   precisione, per Bianco e Nero); _Calcolo e tattica_ (puzzle risolti per numero di mosse — la
+   profondità di calcolo, anche nel tempo — e per tema; ripassi in attesa). B: una pagina con pochi numeri.
+2. Livello stimato — **A**: Elo di rendimento dai risultati contro i livelli del computer (che hanno
+   un Elo indicativo), solo dopo almeno 5 partite; il rating dei puzzle resta a parte. B: dalla precisione.
+3. Partite non analizzate — **A**: pulsante «Analizza le partite mancanti» (coda in sottofondo, una
+   alla volta, con avanzamento e stop); le schede dicono su quante partite si basano. B: solo quelle già analizzate.
+4. Grafici — **A**: disegnati da noi in SVG (linea nel tempo, barre orizzontali), colori del tema,
+   nessuna libreria. B: una libreria tipo Recharts.
+5. Filtri — **A**: periodo (30 giorni, 90 giorni, tutto) e avversario (computer, due giocatori,
+   tutti), validi per tutte le schede e ricordati nelle impostazioni.
+6. Dove sta il calcolo — **A**: crate `stats` (calcoli puri e testati); `storage` legge i dati
+   grezzi, il ponte li unisce, l'interfaccia mostra soltanto.
 
 ## 7. Cosa resta da fare
 
