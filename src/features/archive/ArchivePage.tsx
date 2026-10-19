@@ -12,12 +12,13 @@
  * Restituisce: la pagina della sezione.
  */
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { GameFilter } from '../../bindings/GameFilter';
 import { useEngineLevels } from '../../hooks/useEngineLevels';
 import { describeError } from '../../lib/describeError';
 import { deleteSavedGame } from '../../services/archiveService';
 import { useGameStore } from '../../state/gameStore';
+import { useReviewStore } from '../../state/reviewStore';
 import { ArchiveFilters } from './archive-filters/ArchiveFilters';
 import styles from './ArchivePage.module.css';
 import { GameRow } from './game-row/GameRow';
@@ -29,9 +30,18 @@ const NO_FILTER: GameFilter = { opponent: null, outcome: null, text: null };
 export function ArchivePage() {
   const navigate = useNavigate();
   const openSaved = useGameStore((state) => state.openSaved);
+  const startReview = useReviewStore((state) => state.start);
+  const lastFinished = useReviewStore((state) => state.lastFinished);
   const levels = useEngineLevels();
   const [filter, setFilter] = useState<GameFilter>(NO_FILTER);
   const { games, isLoading, error, reload } = useArchiveGames(filter);
+  // Finita un'analisi, l'elenco si rilegge: il pulsante diventa «Vedi l'analisi».
+  useEffect(() => {
+    if (lastFinished !== null) {
+      reload();
+    }
+  }, [lastFinished, reload]);
+
   /** Il motivo dell'ultima apertura o eliminazione non riuscita, oppure `null`. */
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -43,6 +53,14 @@ export function ArchivePage() {
     } catch (openError) {
       setActionError(describeError(openError));
     }
+  };
+
+  /** Apre l'analisi della partita; se non è ancora analizzata, la fa cominciare. */
+  const reviewGame = async (id: string, analyzed: boolean) => {
+    if (!analyzed) {
+      await startReview(id);
+    }
+    await navigate({ to: '/analisi', search: { partita: id } });
   };
 
   /** Elimina la partita e aggiorna l'elenco. */
@@ -94,6 +112,9 @@ export function ArchivePage() {
                 levelName={levels.find((info) => info.level === game.level)?.name}
                 onOpen={(id) => {
                   void openGame(id);
+                }}
+                onReview={(id) => {
+                  void reviewGame(id, game.analyzed);
                 }}
                 onDelete={(id) => {
                   void deleteGame(id);

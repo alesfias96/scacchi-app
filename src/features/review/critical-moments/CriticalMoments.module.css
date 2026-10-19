@@ -1,0 +1,69 @@
+/* I momenti critici: un riquadro per ciascuno; quello mostrato è evidenziato. */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+}
+
+.selected {
+  box-shadow: inset 0 0 0 var(--focus-ring-width) var(--color-accent);
+}
+
+.move {
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+}
+
+.inaccuracy {
+  color: var(--color-warning);
+}
+
+.mistake {
+  color: var(--color-accent);
+}
+
+.blunder {
+  color: var(--color-danger);
+}
+
+.text,
+.facts {
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.best {
+  font-weight: var(--weight-semibold);
+}
+
+.heading {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.facts {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.empty {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

@@ -5,7 +5,7 @@ use std::hash::BuildHasher;
 
 use app_settings::{Difficulty, TrainingMode, TrainingSetup};
 
-use crate::catalog::{all_puzzles, puzzle_by_id};
+use crate::catalog::all_puzzles;
 use crate::puzzle::Puzzle;
 use crate::random::pick;
 
@@ -70,14 +70,16 @@ pub fn choose_puzzle<S: BuildHasher>(
 
 /// Sceglie un puzzle da ripassare tra quelli in scadenza (con il tema scelto, se c'è).
 ///
-/// Restituisce `None` se non c'è nulla da ripassare.
+/// - Riceve: le scelte, i puzzle in scadenza (quelli di Lichess e quelli nati
+///   dalle proprie partite) e un numero di partenza per la scelta a caso.
+/// - Restituisce: il puzzle, oppure `None` se non c'è nulla da ripassare.
 #[must_use]
-pub fn choose_review(setup: &TrainingSetup, due: &[String], seed: u64) -> Option<&'static Puzzle> {
-    let candidates: Vec<&'static Puzzle> = due
-        .iter()
-        .filter_map(|id| puzzle_by_id(id))
-        .filter(|puzzle| matches(puzzle, setup))
-        .collect();
+pub fn choose_review<'a>(
+    setup: &TrainingSetup,
+    due: &'a [Puzzle],
+    seed: u64,
+) -> Option<&'a Puzzle> {
+    let candidates: Vec<&Puzzle> = due.iter().filter(|puzzle| matches(puzzle, setup)).collect();
     pick(&candidates, seed).copied()
 }
 
@@ -147,12 +149,12 @@ mod tests {
 
     #[test]
     fn reviews_only_the_due_puzzles() {
-        let due = vec![all_puzzles()[10].id.clone()];
+        let due = vec![all_puzzles()[10].clone()];
 
         let chosen =
             choose_review(&setup(TrainingMode::Review, 1, None), &due, 5).expect("in ripasso");
 
-        assert_eq!(chosen.id, due[0]);
+        assert_eq!(chosen.id, due[0].id);
         assert_eq!(
             choose_review(&setup(TrainingMode::Review, 1, None), &[], 5),
             None

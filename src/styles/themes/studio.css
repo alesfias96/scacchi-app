@@ -26,6 +26,9 @@
   --color-danger-soft: #fbe9e7; /* fondo delle etichette "persa" */
   --color-success: #2f7a4a; /* partite vinte */
   --color-success-soft: #e6f3ea;
+  --color-warning: #b07a12; /* imprecisioni nell'analisi delle partite */
+  --eval-graph-black: #2a313c; /* grafico della valutazione: parte del Nero */
+  --eval-graph-white: #f8f4ec; /* grafico della valutazione: parte del Bianco */
   --color-overlay: rgb(17 22 38 / 45%); /* velo dietro le finestre di dialogo */
 
   /* Barra laterale */

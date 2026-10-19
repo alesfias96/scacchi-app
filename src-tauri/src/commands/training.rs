@@ -5,27 +5,20 @@
 #![allow(clippy::needless_pass_by_value)]
 
 use std::collections::HashSet;
-use std::time::{Instant, SystemTime, UNIX_EPOCH};
+use std::time::Instant;
 
 use app_settings::{TrainingMode, TrainingSetup};
 use storage::{Database, PuzzleAttemptRecord, StoredReview};
 use tauri::{AppHandle, Manager};
 use training::{
-    AttemptView, PuzzleAttempt, ReviewState, START_RATING, TrainingError, TrainingOverview,
-    available_themes, choose_puzzle, choose_review, next_review, seed_from_clock,
+    AttemptView, OWN_GAME_THEME, Puzzle, PuzzleAttempt, ReviewState, START_RATING, TrainingError,
+    TrainingOverview, available_themes, choose_puzzle, choose_review, next_review, puzzle_by_id,
+    seed_from_clock,
 };
 
 use crate::state::database_state::DatabaseState;
 use crate::state::training_state::{ActivePuzzle, TrainingState};
-
-/// L'istante attuale in millesimi di secondo dal 1970 (come si salva nel database).
-fn now_ms() -> i64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map_or(0, |elapsed| {
-            i64::try_from(elapsed.as_millis()).unwrap_or(i64::MAX)
-        })
-}
+use crate::wall_clock::now_ms;
 
 /// Il rating dei puzzle salvato (1500 prima del primo puzzle).
 async fn current_rating(database: &Database) -> Result<i32, String> {
@@ -60,6 +53,35 @@ pub async fn get_training_overview(app: AppHandle) -> Result<TrainingOverview, S
     })
 }
 
+/// I puzzle da ripassare oggi: quelli di Lichess (inclusi nell'app) e quelli
+/// nati dagli errori gravi delle proprie partite (salvati nel database).
+/// Un puzzle che non esiste più (la sua partita è stata eliminata) si salta.
+async fn due_puzzles(database: &Database) -> Result<Vec<Puzzle>, String> {
+    let ids = database
+        .due_puzzle_reviews(now_ms())
+        .await
+        .map_err(|error| error.to_string())?;
+    let mut puzzles = Vec::with_capacity(ids.len());
+    for id in ids {
+        if let Some(puzzle) = puzzle_by_id(&id) {
+            puzzles.push(puzzle.clone());
+        } else if let Some(own) = database
+            .own_puzzle(&id)
+            .await
+            .map_err(|error| error.to_string())?
+        {
+            puzzles.push(Puzzle {
+                id: own.id,
+                fen: own.fen,
+                moves: own.moves.split_whitespace().map(str::to_owned).collect(),
+                rating: own.rating,
+                themes: vec![OWN_GAME_THEME.to_owned()],
+            });
+        }
+    }
+    Ok(puzzles)
+}
+
 /// Comincia un puzzle adatto alle scelte fatte (oppure uno da ripassare).
 ///
 /// - Nome per l'interfaccia: `start_puzzle`.
@@ -72,11 +94,10 @@ pub async fn start_puzzle(app: AppHandle, setup: TrainingSetup) -> Result<Attemp
     let rating = current_rating(database).await?;
     let seed = seed_from_clock();
     let puzzle = if setup.mode == TrainingMode::Review {
-        let due = database
-            .due_puzzle_reviews(now_ms())
-            .await
-            .map_err(|error| error.to_string())?;
-        choose_review(&setup, &due, seed).ok_or(TrainingError::NothingToReview)
+        let due = due_puzzles(database).await?;
+        choose_review(&setup, &due, seed)
+            .cloned()
+            .ok_or(TrainingError::NothingToReview)
     } else {
         let attempted: HashSet<String> = database
             .attempted_puzzle_ids()
@@ -84,7 +105,9 @@ pub async fn start_puzzle(app: AppHandle, setup: TrainingSetup) -> Result<Attemp
             .map_err(|error| error.to_string())?
             .into_iter()
             .collect();
-        choose_puzzle(&setup, rating, &attempted, seed).ok_or(TrainingError::NoPuzzle)
+        choose_puzzle(&setup, rating, &attempted, seed)
+            .cloned()
+            .ok_or(TrainingError::NoPuzzle)
     }
     .map_err(|error| error.to_string())?;
 

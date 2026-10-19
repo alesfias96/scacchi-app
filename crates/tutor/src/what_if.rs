@@ -16,6 +16,13 @@ use crate::explanation::replay;
 use crate::explanation_view::{TutorItem, TutorSection};
 use crate::tutor_error::TutorError;
 
+/// Il titolo della parte con ciò che la mossa concede all'avversario.
+pub const CONCEDED_TITLE: &str = "Cosa concedi all'avversario";
+/// Il titolo della parte con ciò che la mossa crea.
+pub const CREATED_TITLE: &str = "Cosa crei";
+/// Il titolo della parte con le minacce che la mossa risolve.
+pub const SOLVED_TITLE: &str = "Minacce che risolvi";
+
 /// Il risultato di una mossa provata.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(
@@ -122,11 +129,14 @@ pub fn what_if(
     let solved: Vec<TutorItem> = new_facts(&report_after, &report_before, opponent);
     for (title, items) in [
         (
-            "Cosa concedi all'avversario",
+            CONCEDED_TITLE,
             new_facts(&report_before, &report_after, opponent),
         ),
-        ("Cosa crei", new_facts(&report_before, &report_after, mover)),
-        ("Minacce che risolvi", solved),
+        (
+            CREATED_TITLE,
+            new_facts(&report_before, &report_after, mover),
+        ),
+        (SOLVED_TITLE, solved),
     ] {
         if !items.is_empty() {
             sections.push(TutorSection {

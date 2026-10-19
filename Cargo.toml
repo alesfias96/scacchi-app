@@ -24,6 +24,7 @@ resolver = "3"
 # - crates/analysis: i rilevatori (minacce, tattiche, pedoni, re, attività dei pezzi).
 # - crates/training: l'allenamento con i puzzle (scelta, verifica, rating, ripasso).
 # - crates/tutor: le spiegazioni delle posizioni (fatti + base di conoscenza in knowledge/).
+# - crates/review: l'analisi delle partite giocate (giudizio delle mosse, momenti critici).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -36,6 +37,7 @@ members = [
     "crates/analysis",
     "crates/training",
     "crates/tutor",
+    "crates/review",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -77,6 +79,7 @@ storage = { path = "crates/storage" }
 analysis = { path = "crates/analysis" }
 training = { path = "crates/training" }
 tutor = { path = "crates/tutor" }
+review = { path = "crates/review" }
 
 # Desktop.
 tauri = { version = "2", features = [] }

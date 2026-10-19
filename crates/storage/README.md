@@ -16,6 +16,9 @@ si chiude all'improvviso.
   della Fase 8; se una mossa viene salvata di nuovo uguale, questi dati restano.
 - **Tentativi dei puzzle** (tabella `puzzle_attempts`): quale puzzle, quando, in che modalità, se
   è stato risolto, quanto tempo è servito e il rating dopo il tentativo (l'ultimo è il rating attuale).
+- **Analisi** (Fase 8): le colonne per le statistiche della tabella `moves` vengono riempite
+  quando si analizza la partita; `games.analyzed_at` dice quando.
+- **Puzzle dalle proprie partite** (tabella `own_puzzles`): gli errori gravi, da ripassare.
 - **Ripasso** (tabella `puzzle_reviews`): per ogni puzzle sbagliato, la scatola in cui si trova e
   quando torna.
 

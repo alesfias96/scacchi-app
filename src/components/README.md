@@ -23,3 +23,4 @@ i test (`.test.tsx`) e un README.
 | `promotion-picker/` | La scelta del pezzo quando un pedone arriva in fondo (in "Gioca" e in "Allenamento")                    |
 | `knowledge-cards/`  | Le schede della base di conoscenza del tutor, da aprire (nel pannello del tutor e nella modalità Tutor) |
 | `tab-switch/`       | Il selettore a schede (es. «Partita \| Tutor» in cima alla colonna di destra)                           |
+| `eval-graph/`       | Il grafico della partita: la probabilità di vittoria mossa per mossa (nell'analisi delle partite)       |

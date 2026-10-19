@@ -33,4 +33,6 @@ pub struct GameSummary {
     pub opening: Option<Opening>,
     /// Quante mezze mosse sono state giocate.
     pub ply_count: u32,
+    /// `true` se la partita è già stata analizzata (Fase 8).
+    pub analyzed: bool,
 }

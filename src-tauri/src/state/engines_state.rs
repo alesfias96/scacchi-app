@@ -1,4 +1,5 @@
-//! I motori Stockfish dell'app: uno che gioca, uno che analizza e uno per il tutor.
+//! I motori Stockfish dell'app: uno che gioca, uno che analizza, uno per il
+//! tutor e uno per l'analisi delle partite giocate.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::available_parallelism;
@@ -27,6 +28,8 @@ enum Role {
     Analyzer,
     /// Dà al tutor valutazioni brevi a richiesta.
     Tutor,
+    /// Analizza le partite giocate, posizione per posizione.
+    Reviewer,
 }
 
 /// I motori in funzione.
@@ -43,6 +46,8 @@ pub struct EnginesState {
     analyzer: Mutex<Option<EngineHandle>>,
     /// Il motore del tutor, se è già stato avviato.
     tutor: Mutex<Option<EngineHandle>>,
+    /// Il motore dell'analisi delle partite, se è già stato avviato.
+    reviewer: Mutex<Option<EngineHandle>>,
     /// Se l'utente ha acceso l'analisi.
     analysis_enabled: AtomicBool,
 }
@@ -75,6 +80,15 @@ impl EnginesState {
         self.get_or_launch(app, Role::Tutor).await
     }
 
+    /// Il motore dell'analisi delle partite, avviandolo se serve.
+    ///
+    /// # Errors
+    ///
+    /// Un messaggio leggibile se Stockfish non si avvia.
+    pub async fn reviewer(&self, app: &AppHandle) -> Result<EngineHandle, String> {
+        self.get_or_launch(app, Role::Reviewer).await
+    }
+
     /// Il motore che gioca, solo se è già in funzione e libero in questo
     /// istante (per fermarlo senza avviarlo e senza aspettare).
     pub fn try_running_player(&self) -> Option<EngineHandle> {
@@ -103,6 +117,7 @@ impl EnginesState {
             Role::Player => &self.player,
             Role::Analyzer => &self.analyzer,
             Role::Tutor => &self.tutor,
+            Role::Reviewer => &self.reviewer,
         }
     }
 
@@ -119,7 +134,8 @@ impl EnginesState {
             Role::Player => Vec::new(),
             // Il tutor pensa mezzo secondo per volta: bastano poche risorse.
             Role::Tutor => vec![("Hash".to_owned(), TUTOR_HASH_MB.to_owned())],
-            Role::Analyzer => {
+            // Analizzare una partita intera richiede forza: come il motore che analizza.
+            Role::Analyzer | Role::Reviewer => {
                 let threads = available_parallelism()
                     .map_or(1, |count| count.get() / 2)
                     .clamp(1, ANALYZER_MAX_THREADS);

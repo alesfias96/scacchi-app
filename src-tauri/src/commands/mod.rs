@@ -10,6 +10,7 @@ pub mod engine;
 pub mod game;
 pub mod pgn_file;
 pub mod position;
+pub mod review;
 pub mod settings;
 pub mod training;
 pub mod tutor;

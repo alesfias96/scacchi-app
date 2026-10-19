@@ -33,6 +33,8 @@ openings.workspace = true
 # La "fotografia" della partita da salvare (SessionSnapshot).
 game-session.workspace = true
 sqlx.workspace = true
+# Gli elenchi (temi tattici, minacce) si salvano come testo JSON.
+serde_json.workspace = true
 thiserror.workspace = true
 serde = { workspace = true, optional = true }
 ts-rs = { workspace = true, optional = true }

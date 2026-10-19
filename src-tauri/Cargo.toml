@@ -42,6 +42,8 @@ storage = { workspace = true, features = ["bindings"] }
 training = { workspace = true, features = ["bindings"] }
 # Il tutor: spiegazioni delle posizioni e scenari "e se…".
 tutor = { workspace = true, features = ["bindings"] }
+# L'analisi delle partite giocate (giudizio delle mosse, momenti critici).
+review = { workspace = true, features = ["bindings"] }
 # Le finestre di sistema per salvare e aprire i file .pgn.
 tauri-plugin-dialog.workspace = true
 # Per aspettare senza bloccare (ad esempio l'istante in cui scade il tempo).

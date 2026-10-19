@@ -8,6 +8,8 @@ Da ogni partita:
 
 - **Rivedi** (partita finita) o **Continua** (non finita): la apre in "Gioca", con il proprio colore
   in basso. Una partita con l'orologio riparte con l'orologio fermo fino alla mossa successiva.
+- **Analizza** (o **Vedi l'analisi**, se è già stata analizzata): la apre in «Analisi partite»;
+  l'analisi parte da sola se serve.
 - **Elimina**: la toglie dall'archivio, dopo una conferma.
 
 ## Contenuto

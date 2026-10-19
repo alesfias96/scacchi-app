@@ -45,4 +45,8 @@ opening: Opening | null,
 /**
  * Quante mezze mosse sono state giocate.
  */
-plyCount: number, };
+plyCount: number, 
+/**
+ * `true` se la partita è già stata analizzata (Fase 8).
+ */
+analyzed: boolean, };

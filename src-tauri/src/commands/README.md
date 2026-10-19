@@ -18,6 +18,7 @@ passano la richiesta alla crate giusta in `crates/` e restituiscono la risposta.
 | `settings.rs` | Comandi sulle impostazioni: `get_settings` (le legge) e `save_settings` (le salva), nella cartella di configurazione dell'app                                                                                                                                                                                          |
 | `training.rs` | Comandi dell'allenamento: `get_training_overview` (rating, statistiche, ripassi, temi), `start_puzzle`, `play_puzzle_move`, `puzzle_hint`, `show_puzzle_solution`. Quando il risultato di un puzzle si decide, lo salva nel database (tentativo, rating, ripasso)                                                      |
 | `tutor.rs`    | Comandi del tutor: `explain_position` (la spiegazione della posizione) e `try_what_if` (cosa cambia con una mossa provata). Se richiesto, chiedono al terzo Stockfish una valutazione di mezzo secondo                                                                                                                 |
+| `review.rs`   | Comandi dell'analisi delle partite: `start_review` (la fa partire in sottofondo), `cancel_review`, `running_review` (quale partita si sta analizzando), `get_review` (la revisione di una partita già analizzata)                                                                                                      |
 
 ## Come si aggiunge un comando
 

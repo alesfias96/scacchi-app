@@ -28,10 +28,10 @@ describe('Sidebar', () => {
   it('disattiva le sezioni non ancora disponibili e indica la fase', async () => {
     renderWithRouter(<Sidebar />, '/');
 
-    const reviewButton = await screen.findByRole('button', { name: /Analisi partite/ });
+    const progressButton = await screen.findByRole('button', { name: /Progressi/ });
 
-    expect(reviewButton.hasAttribute('disabled')).toBe(true);
-    expect(reviewButton.textContent).toContain('Fase 8');
+    expect(progressButton.hasAttribute('disabled')).toBe(true);
+    expect(progressButton.textContent).toContain('Fase 9');
   });
 
   it('porta alla modalità Tutor', async () => {

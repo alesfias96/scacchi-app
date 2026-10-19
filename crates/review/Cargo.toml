@@ -1,0 +1,48 @@
+# =============================================================================
+# Crate "review" — l'analisi delle partite giocate
+# -----------------------------------------------------------------------------
+# Riceve una partita e le valutazioni di Stockfish di ogni sua posizione e ne
+# ricava la revisione: il giudizio di ogni mossa (ottima, buona, imprecisione,
+# errore, errore grave), la precisione di ciascun giocatore, i momenti critici
+# spiegati, il grafico della probabilità di vittoria, i dati da salvare per le
+# statistiche e i puzzle da creare con gli errori gravi.
+# Il motore lo fa lavorare il ponte src-tauri: questa crate riceve già le
+# valutazioni e non sa nulla dell'interfaccia né di Tauri.
+# =============================================================================
+
+[package]
+name = "review"
+description = "Analisi delle partite: giudizio delle mosse, precisione, momenti critici"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:serde",
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "analysis/bindings",
+    "engine/bindings",
+    "tutor/bindings",
+]
+
+[dependencies]
+# Le regole: rigiocare la partita, scrivere le mosse in SAN.
+chess-core.workspace = true
+# I rilevatori: la fase di gioco e i temi tattici di ogni posizione.
+analysis.workspace = true
+# Solo i tipi della valutazione del motore.
+engine.workspace = true
+# Il confronto prima/dopo di una mossa (cosa concede, cosa crea).
+tutor.workspace = true
+# Il colore di chi muove, per i centipedoni persi.
+shakmaty.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

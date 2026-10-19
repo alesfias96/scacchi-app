@@ -6,6 +6,7 @@
  * - "/archivio"      → Archivio delle partite
  * - "/allenamento"   → Allenamento con i puzzle
  * - "/tutor"         → Tutor (la partita di «Gioca» con i commenti dopo ogni mossa)
+ * - "/analisi"       → Analisi partite (con `?partita=<nome>`: la revisione di una partita)
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -19,6 +20,7 @@ import {
 } from '@tanstack/react-router';
 import { ArchivePage } from '../features/archive/ArchivePage';
 import { CoachedPlayPage, PlayPage } from '../features/play/PlayPage';
+import { ReviewPage } from '../features/review/ReviewPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
 import { TrainingPage } from '../features/training/TrainingPage';
 import { RootLayout } from './root-layout/RootLayout';
@@ -52,6 +54,15 @@ const tutorRoute = createRoute({
   component: CoachedPlayPage,
 });
 
+const reviewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/analisi',
+  component: ReviewPage,
+  // La partita da rivedere arriva nell'indirizzo; senza, la pagina invita a sceglierne una.
+  validateSearch: (search: Record<string, unknown>): { partita?: string } =>
+    typeof search.partita === 'string' ? { partita: search.partita } : {},
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
@@ -63,6 +74,7 @@ const routeTree = rootRoute.addChildren([
   archiveRoute,
   trainingRoute,
   tutorRoute,
+  reviewRoute,
   settingsRoute,
 ]);
 

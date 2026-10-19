@@ -17,6 +17,7 @@ function game(overrides: Partial<GameSummary>): GameSummary {
     result: null,
     opening: null,
     plyCount: 10,
+    analyzed: false,
     ...overrides,
   };
 }

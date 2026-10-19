@@ -1,7 +1,8 @@
 # src/features/play/game-result-banner — L'annuncio di fine partita
 
 Quando la partita finisce, sopra le schede compare un riquadro con il motivo,
-il vincitore e il punteggio:
+il vincitore e il punteggio. In «Gioca» c'è anche il pulsante «Analizza la partita», che apre
+la sezione «Analisi partite»:
 
 | Motivo (da Rust)                | Testo mostrato                                        | Punteggio      |
 | ------------------------------- | ----------------------------------------------------- | -------------- |

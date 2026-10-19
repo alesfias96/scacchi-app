@@ -38,6 +38,6 @@ pub use random::seed_from_clock;
 pub use rating::{START_RATING, updated_rating};
 pub use review_schedule::{ReviewState, next_review};
 pub use selection::{choose_puzzle, choose_review};
-pub use theme::{ThemeInfo, available_themes, theme_name};
+pub use theme::{OWN_GAME_THEME, ThemeInfo, available_themes, theme_name};
 pub use training_error::TrainingError;
 pub use training_overview::TrainingOverview;

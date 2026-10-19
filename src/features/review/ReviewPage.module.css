@@ -1,0 +1,105 @@
+/*
+ * Sezione «Analisi partite»: come «Gioca». A sinistra la scacchiera con, sotto,
+ * il grafico della partita e i comandi; a destra la colonna con le schede,
+ * alta quanto l'area della scacchiera e con lo scorrimento interno.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.title {
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+/* Il titolo della pagina, presente per i lettori di schermo ma invisibile. */
+.hiddenTitle {
+  position: absolute;
+  width: var(--border-width);
+  height: var(--border-width);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Una sola riga, alta quanto l'area della scacchiera (vedi .sidePanel): la pagina non si allunga. */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--play-panel-width);
+  align-content: start;
+  gap: var(--space-6);
+  min-height: 0;
+}
+
+/* La scacchiera lascia posto, sotto di sé, al grafico e ai comandi. */
+.boardArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  justify-self: center;
+  width: 100%;
+  max-width: min(
+    var(--board-focus-max-size),
+    calc(100vh - var(--board-vertical-reserve) - var(--eval-graph-height))
+  );
+  min-width: var(--board-min-size);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+/* "contain: size" esclude la colonna dal calcolo dell'altezza della riga. */
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  contain: size;
+}
+
+.sideContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+  overscroll-behavior: contain;
+}
+
+/* La partita non ancora analizzata: spiegazione, pulsante, avanzamento. */
+.start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  max-width: var(--settings-max-width);
+}
+
+.progress {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.message {
+  color: var(--color-text-muted);
+  line-height: var(--leading-body);
+}
+
+.error {
+  color: var(--color-danger);
+}

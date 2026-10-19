@@ -15,6 +15,7 @@ mod commands;
 mod events;
 mod reactions;
 mod state;
+mod wall_clock;
 
 use tauri::Manager;
 
@@ -40,6 +41,7 @@ pub fn run() {
         .manage(state::session_state::SessionState::default())
         .manage(state::engines_state::EnginesState::default())
         .manage(state::training_state::TrainingState::default())
+        .manage(state::review_state::ReviewState::default())
         // All'avvio: il database delle partite (nella cartella dati dell'app,
         // fornita da Tauri per ogni sistema), il lavoratore che salva le
         // partite e la ripresa della partita lasciata a metà.
@@ -83,6 +85,10 @@ pub fn run() {
             commands::training::show_puzzle_solution,
             commands::tutor::explain_position,
             commands::tutor::try_what_if,
+            commands::review::start_review,
+            commands::review::cancel_review,
+            commands::review::running_review,
+            commands::review::get_review,
         ])
         // `generate_context!` legge tauri.conf.json durante la compilazione
         // e incorpora nell'eseguibile configurazione, icone e interfaccia.

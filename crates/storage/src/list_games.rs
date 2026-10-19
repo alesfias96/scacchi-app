@@ -25,7 +25,7 @@ impl Database {
         let mut query: QueryBuilder<Sqlite> = QueryBuilder::new(
             "SELECT id, started_at, opponent, computer_side, level, time_initial_seconds,
                     time_increment_seconds, result_score, result_winner, result_reason,
-                    opening_eco, opening_name, ply_count
+                    opening_eco, opening_name, ply_count, analyzed_at IS NOT NULL AS analyzed
              FROM games WHERE 1 = 1",
         );
         if let Some(opponent) = filter.opponent {
@@ -109,6 +109,7 @@ fn summary_from_row(row: &SqliteRow) -> Result<GameSummary, StorageError> {
             .zip(row.try_get::<Option<String>, _>("opening_name")?)
             .map(|(eco, name)| Opening { eco, name }),
         ply_count: row.try_get("ply_count")?,
+        analyzed: row.try_get("analyzed")?,
         id,
     })
 }

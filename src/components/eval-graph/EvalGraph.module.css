@@ -1,0 +1,54 @@
+/*
+ * Il grafico della partita: striscia chiara (Bianco) e scura (Nero), la linea
+ * della parità, la posizione mostrata e i pallini delle mosse sbagliate.
+ */
+
+.graph {
+  display: block;
+  width: 100%;
+  height: var(--eval-graph-height);
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+}
+
+.graph:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.black {
+  fill: var(--eval-graph-black);
+}
+
+.white {
+  fill: var(--eval-graph-white);
+}
+
+.middle {
+  stroke: var(--color-text-muted);
+  stroke-dasharray: 6 6;
+  vector-effect: non-scaling-stroke;
+}
+
+.current {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.mark {
+  stroke: var(--color-surface);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.inaccuracy {
+  fill: var(--color-warning);
+}
+
+.mistake {
+  fill: var(--color-accent);
+}
+
+.blunder {
+  fill: var(--color-danger);
+}

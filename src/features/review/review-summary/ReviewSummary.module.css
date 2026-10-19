@@ -1,0 +1,48 @@
+/* Riepilogo: un blocco per giocatore, con la precisione in grande. */
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.name {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-weight: var(--weight-bold);
+}
+
+.accuracy {
+  font-size: var(--text-large);
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-small);
+}
+
+.inaccuracy {
+  color: var(--color-warning);
+}
+
+.mistake {
+  color: var(--color-accent);
+}
+
+.blunder {
+  color: var(--color-danger);
+}
+
+.phase {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

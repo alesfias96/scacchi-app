@@ -2,7 +2,7 @@
 
 Una riga per partita: a sinistra un'etichetta colorata con l'esito (verde **Vinta**, rossa **Persa**,
 grigia **Patta** o "Vince il …", nel colore d'accento **In corso**), al centro apertura, data,
-avversario, tempo e numero di mosse, a destra i pulsanti **Rivedi**/**Continua** ed **Elimina**
+avversario, tempo e numero di mosse, a destra i pulsanti **Rivedi**/**Continua**, **Analizza**/**Vedi l'analisi** ed **Elimina**
 (che chiede conferma).
 
 | File                 | Cosa fa                                                                      |

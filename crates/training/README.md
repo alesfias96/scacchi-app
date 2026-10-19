@@ -22,7 +22,8 @@ all'istante, perché restano in memoria (circa 15 MB) invece di stare nel databa
   e si indovina la mossa forte dell'avversario), ripasso.
 - **Il rating dei puzzle**: un numero che misura il proprio livello, con la formula Elo (quella dei
   tornei). Parte da 1500; il ripasso non lo cambia.
-- **Il ripasso** dei puzzle sbagliati, con il metodo delle "scatole" (Leitner): un puzzle
+- **Il ripasso** dei puzzle sbagliati (anche quelli nati dagli errori gravi delle proprie
+  partite, tema «Dalle tue partite», che l'analisi della Fase 8 mette subito in ripasso), con il metodo delle "scatole" (Leitner): un puzzle
   sbagliato torna dopo 1 giorno, poi dopo 3, 7, 14 e 30 giorni se lo si risolve ogni volta; un
   nuovo errore lo riporta all'inizio.
 - **Spiegare la soluzione**: a puzzle finito, i rilevatori (crate `analysis`) dicono cosa c'era

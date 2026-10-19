@@ -13,7 +13,8 @@
  * - Sopra e sotto la scacchiera: i due giocatori, con l'orologio se c'è.
  * - Accanto alla scacchiera, se l'analisi è accesa: la barra di valutazione;
  *   sulla scacchiera la freccia della mossa migliore.
- * - A fine partita: l'annuncio (motivo e punteggio) sopra la scacchiera.
+ * - A fine partita: l'annuncio (motivo e punteggio) sopra la scacchiera, con
+ *   «Analizza la partita» (apre la sezione «Analisi partite»).
  * - Nella colonna "Partita": le mosse con i comandi (scorri,
  *   nuova partita, annulla, abbandona, gira) con il nome dell'apertura,
  *   l'analisi, le osservazioni dei rilevatori (passando il mouse su una, la
@@ -39,6 +40,7 @@
  * Riceve: `coached` (facoltativo), `true` nella modalità Tutor.
  * Restituisce: la pagina della sezione.
  */
+import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Fact } from '../../bindings/Fact';
 import type { GameSetup } from '../../bindings/GameSetup';
@@ -58,6 +60,7 @@ import { exportPgn, savePgnFile } from '../../services/gameService';
 import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
 import { useObservationsStore } from '../../state/observationsStore';
+import { useReviewStore } from '../../state/reviewStore';
 import type { TutorTarget } from '../../state/tutorStore';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { AnalysisPanel } from './analysis-panel/AnalysisPanel';
@@ -109,6 +112,8 @@ export function PlayPage({ coached = false }: PlayPageProps) {
   const title = coached ? 'Tutor' : 'Gioca';
   const { notation, sounds, gameSetup } = useLoadedSettings();
   const updateSettings = useSettingsStore((state) => state.update);
+  const navigate = useNavigate();
+  const startReview = useReviewStore((state) => state.start);
   const session = useGameStore((state) => state.session);
   const loadError = useGameStore((state) => state.loadError);
   const actionError = useGameStore((state) => state.actionError);
@@ -191,6 +196,15 @@ export function PlayPage({ coached = false }: PlayPageProps) {
     [coachMessage, marks],
   );
   const coachCard = coach.explanation?.cards.find((card) => card.id === coachCardId) ?? null;
+
+  /** A fine partita: comincia l'analisi e apre la sezione «Analisi partite». */
+  const analyzeGame = useCallback(async () => {
+    if (sessionId === undefined) {
+      return;
+    }
+    await startReview(sessionId);
+    await navigate({ to: '/analisi', search: { partita: sessionId } });
+  }, [sessionId, startReview, navigate]);
 
   /** Riporta i pezzi alla posizione vera (dopo una mossa annullata o rifiutata). */
   const resyncBoard = useCallback(() => {
@@ -374,7 +388,18 @@ export function PlayPage({ coached = false }: PlayPageProps) {
             />
             {result !== null && (
               <div className={styles.resultOverlay}>
-                <GameResultBanner result={result} />
+                <GameResultBanner
+                  result={result}
+                  action={
+                    <Button
+                      onClick={() => {
+                        void analyzeGame();
+                      }}
+                    >
+                      Analizza la partita
+                    </Button>
+                  }
+                />
               </div>
             )}
             {pendingPromotion !== null && (

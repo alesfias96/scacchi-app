@@ -5,12 +5,14 @@
  * livello), con che colore, con che tempo, l'apertura, quante mosse e
  * com'è andata (etichetta colorata: vinta, persa, patta, in corso). A destra:
  * - "Rivedi" (partita finita) o "Continua" (non finita): la apre in "Gioca";
+ * - "Analizza" o, se è già stata analizzata, "Vedi l'analisi": la apre in
+ *   "Analisi partite" (l'analisi parte da sola se serve);
  * - "Elimina": la toglie dall'archivio, dopo una conferma.
  *
  * Riceve:
  * - `game`: il riassunto della partita;
  * - `levelName`: il nome del livello del computer (es. "Circolo"), se c'è;
- * - `onOpen`, `onDelete`: chiamate con il nome unico della partita.
+ * - `onOpen`, `onReview`, `onDelete`: chiamate con il nome unico della partita.
  * Restituisce: la riga.
  */
 import { useState } from 'react';
@@ -29,11 +31,13 @@ export interface GameRowProps {
   levelName?: string;
   /** Apre la partita in "Gioca". */
   onOpen: (id: string) => void;
+  /** Apre l'analisi della partita. */
+  onReview: (id: string) => void;
   /** Elimina la partita (dopo la conferma). */
   onDelete: (id: string) => void;
 }
 
-export function GameRow({ game, levelName, onOpen, onDelete }: GameRowProps) {
+export function GameRow({ game, levelName, onOpen, onReview, onDelete }: GameRowProps) {
   /** `true` mentre si chiede conferma dell'eliminazione. */
   const [isConfirming, setIsConfirming] = useState(false);
   const outcome = describeOutcome(game);
@@ -86,6 +90,13 @@ export function GameRow({ game, levelName, onOpen, onDelete }: GameRowProps) {
             }}
           >
             {game.result === null ? 'Continua' : 'Rivedi'}
+          </Button>
+          <Button
+            onClick={() => {
+              onReview(game.id);
+            }}
+          >
+            {game.analyzed ? 'Vedi l’analisi' : 'Analizza'}
           </Button>
           <Button
             onClick={() => {

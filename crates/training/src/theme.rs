@@ -21,13 +21,16 @@ pub struct ThemeInfo {
     pub count: u32,
 }
 
+/// Il tema dei puzzle nati dagli errori gravi delle proprie partite.
+pub const OWN_GAME_THEME: &str = "ownGame";
+
 /// I temi riconosciuti, con il nome italiano.
 ///
 /// Mancano apposta le etichette di Lichess che non sono temi di gioco: la
 /// lunghezza ("short", "long", "veryLong", "oneMove"), il vantaggio finale
 /// ("crushing", "advantage", "equality") e la provenienza ("master",
 /// "masterVsMaster", "superGM").
-const THEME_NAMES: [(&str, &str); 63] = [
+const THEME_NAMES: [(&str, &str); 64] = [
     ("opening", "Apertura"),
     ("middlegame", "Mediogioco"),
     ("endgame", "Finale"),
@@ -91,6 +94,8 @@ const THEME_NAMES: [(&str, &str); 63] = [
     ("knightEndgame", "Finale di cavalli"),
     ("queenEndgame", "Finale di donne"),
     ("queenRookEndgame", "Finale di donna e torre"),
+    // I puzzle nati dagli errori gravi delle proprie partite (Fase 8).
+    (OWN_GAME_THEME, "Dalle tue partite"),
 ];
 
 /// Il nome italiano di un tema, se è un tema riconosciuto.

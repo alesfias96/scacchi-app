@@ -30,6 +30,7 @@ const GAME: GameSummary = {
   result: null,
   opening: { eco: 'C50', name: 'Italian Game' },
   plyCount: 12,
+  analyzed: false,
 };
 
 describe('ArchivePage', () => {

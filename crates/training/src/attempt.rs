@@ -26,7 +26,7 @@ pub struct Outcome {
 /// trova la mossa giusta.
 #[derive(Debug, Clone)]
 pub struct PuzzleAttempt {
-    puzzle: &'static Puzzle,
+    puzzle: Puzzle,
     mode: TrainingMode,
     /// La partita del puzzle: la mossa dell'avversario e le mosse trovate.
     game: Game,
@@ -50,11 +50,7 @@ impl PuzzleAttempt {
     /// # Errors
     ///
     /// [`TrainingError::InvalidPuzzle`] se la posizione o la prima mossa non sono valide.
-    pub fn start(
-        puzzle: &'static Puzzle,
-        mode: TrainingMode,
-        rating: i32,
-    ) -> Result<Self, TrainingError> {
+    pub fn start(puzzle: Puzzle, mode: TrainingMode, rating: i32) -> Result<Self, TrainingError> {
         let invalid = || TrainingError::InvalidPuzzle(puzzle.id.clone());
         let mut game = Game::from_fen(&puzzle.fen).map_err(|_| invalid())?;
         game.play_uci(&puzzle.moves[0]).map_err(|_| invalid())?;
@@ -73,8 +69,8 @@ impl PuzzleAttempt {
 
     /// Il puzzle in corso.
     #[must_use]
-    pub fn puzzle(&self) -> &'static Puzzle {
-        self.puzzle
+    pub fn puzzle(&self) -> &Puzzle {
+        &self.puzzle
     }
 
     /// `true` se il puzzle è finito.
@@ -289,19 +285,19 @@ mod tests {
 
     /// Un puzzle inventato: il nero gioca h7h6, il bianco dà matto con la
     /// donna (Dxf7#), una mossa sola da trovare.
-    fn mate_in_one() -> &'static Puzzle {
-        Box::leak(Box::new(Puzzle {
+    fn mate_in_one() -> Puzzle {
+        Puzzle {
             id: "TEST1".to_owned(),
             fen: "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3".to_owned(),
             moves: vec!["h7h6".to_owned(), "f3f7".to_owned()],
             rating: 1500,
             themes: vec!["mateIn1".to_owned(), "short".to_owned()],
-        }))
+        }
     }
 
     /// Un puzzle inventato con due mosse da trovare (Cc3, poi Cd5).
-    fn fork_in_two() -> &'static Puzzle {
-        Box::leak(Box::new(Puzzle {
+    fn fork_in_two() -> Puzzle {
+        Puzzle {
             id: "TEST2".to_owned(),
             fen: "4k3/8/8/3q4/8/8/8/1N2K3 b - - 0 1".to_owned(),
             moves: vec![
@@ -312,7 +308,7 @@ mod tests {
             ],
             rating: 1500,
             themes: vec!["fork".to_owned()],
-        }))
+        }
     }
 
     #[test]

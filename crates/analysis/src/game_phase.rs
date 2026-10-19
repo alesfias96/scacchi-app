@@ -3,7 +3,7 @@
 use shakmaty::{Chess, Position, Role};
 
 /// La fase della partita.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(
     feature = "bindings",
     derive(serde::Serialize, ts_rs::TS),

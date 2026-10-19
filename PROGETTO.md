@@ -38,38 +38,39 @@ Obiettivi, in ordine di importanza:
 
 ## 3. Stack tecnologico
 
-| Ambito                   | Scelta                                                                                                                               | Stato                                                  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| Contenitore desktop      | Tauri 2                                                                                                                              | ✅ deciso                                              |
-| Logica, motore, dati     | Rust                                                                                                                                 | ✅ deciso                                              |
-| Interfaccia              | React 19 + TypeScript                                                                                                                | ✅ deciso                                              |
-| Build interfaccia        | Vite                                                                                                                                 | ✅ deciso                                              |
-| Regole degli scacchi     | `shakmaty` (Rust)                                                                                                                    | ✅ deciso                                              |
-| Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`                                                     | ✅ deciso                                              |
-| Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza                                                  | ✅ deciso                                              |
-| Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)                                                    | ✅ deciso                                              |
-| Motore "umano"           | Maia (via lc0), opzionale                                                                                                            | ✅ deciso                                              |
-| Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app                                                        | ✅ deciso                                              |
-| Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                                                                        | ✅ deciso                                              |
-| File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust                                                             | ✅ deciso                                              |
-| Rilevatori               | crate `analysis` (regole + scambio statico, senza motore); scheda "Osservazioni"                                                     | ✅ deciso                                              |
-| Puzzle                   | ~100.000 puzzle di Lichess (CC0) in `data/puzzles/`, inclusi nell'app e tenuti in memoria; crate `training`                          | ✅ deciso                                              |
-| Tutor                    | crate `tutor`: fatti dei rilevatori + schede TOML in `knowledge/` (incluse con `build.rs`); un terzo Stockfish per valutazioni brevi | ✅ deciso                                              |
-| Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                                                                | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
-| Scacchiera               | `chessground` avvolto in un componente React                                                                                         | ✅ deciso                                              |
-| Stato interfaccia        | Zustand                                                                                                                              | ✅ deciso                                              |
-| Navigazione              | TanStack Router                                                                                                                      | ✅ deciso                                              |
-| CSS                      | CSS Modules + design token                                                                                                           | ✅ deciso                                              |
-| Font                     | uno per tema, inclusi nell'app (`@fontsource`): Outfit, Manrope, Plus Jakarta Sans                                                   | ✅ deciso                                              |
-| Temi                     | Studio (predefinito), Sera, Giorno, Automatico; scelti nelle Impostazioni                                                            | ✅ deciso                                              |
-| Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app                                                      | ✅ deciso                                              |
-| Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app                                                 | ✅ deciso                                              |
-| Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili                                                               | ✅ deciso                                              |
-| Grafici statistiche      | da decidere più avanti                                                                                                               | ⚪ aperto                                              |
-| Linguaggio del tutor     | regole (Fase 7) → poi AI locale (Ollama, Fase 10)                                                                                    | 🔵 regole fatte                                        |
-| Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                                                                              | ✅ deciso                                              |
-| Test                     | `cargo test`, Vitest                                                                                                                 | ✅ deciso                                              |
-| Sicurezza (CSP)          | Content Security Policy restrittiva                                                                                                  | ⚪ aperto — da attivare quando l'interfaccia è stabile |
+| Ambito                   | Scelta                                                                                                                                                | Stato                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Contenitore desktop      | Tauri 2                                                                                                                                               | ✅ deciso                                              |
+| Logica, motore, dati     | Rust                                                                                                                                                  | ✅ deciso                                              |
+| Interfaccia              | React 19 + TypeScript                                                                                                                                 | ✅ deciso                                              |
+| Build interfaccia        | Vite                                                                                                                                                  | ✅ deciso                                              |
+| Regole degli scacchi     | `shakmaty` (Rust)                                                                                                                                     | ✅ deciso                                              |
+| Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`                                                                      | ✅ deciso                                              |
+| Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza                                                                   | ✅ deciso                                              |
+| Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)                                                                     | ✅ deciso                                              |
+| Motore "umano"           | Maia (via lc0), opzionale                                                                                                                             | ✅ deciso                                              |
+| Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app                                                                         | ✅ deciso                                              |
+| Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                                                                                         | ✅ deciso                                              |
+| File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust                                                                              | ✅ deciso                                              |
+| Rilevatori               | crate `analysis` (regole + scambio statico, senza motore); scheda "Osservazioni"                                                                      | ✅ deciso                                              |
+| Puzzle                   | ~100.000 puzzle di Lichess (CC0) in `data/puzzles/`, inclusi nell'app e tenuti in memoria; crate `training`                                           | ✅ deciso                                              |
+| Tutor                    | crate `tutor`: fatti dei rilevatori + schede TOML in `knowledge/` (incluse con `build.rs`); un terzo Stockfish per valutazioni brevi                  | ✅ deciso                                              |
+| Analisi partite          | crate `review`: probabilità di vittoria persa (come Lichess), precisione, momenti critici; un quarto Stockfish, 1 s per posizione; grafico SVG nostro | ✅ deciso                                              |
+| Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                                                                                 | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
+| Scacchiera               | `chessground` avvolto in un componente React                                                                                                          | ✅ deciso                                              |
+| Stato interfaccia        | Zustand                                                                                                                                               | ✅ deciso                                              |
+| Navigazione              | TanStack Router                                                                                                                                       | ✅ deciso                                              |
+| CSS                      | CSS Modules + design token                                                                                                                            | ✅ deciso                                              |
+| Font                     | uno per tema, inclusi nell'app (`@fontsource`): Outfit, Manrope, Plus Jakarta Sans                                                                    | ✅ deciso                                              |
+| Temi                     | Studio (predefinito), Sera, Giorno, Automatico; scelti nelle Impostazioni                                                                             | ✅ deciso                                              |
+| Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app                                                                       | ✅ deciso                                              |
+| Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app                                                                  | ✅ deciso                                              |
+| Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili                                                                                | ✅ deciso                                              |
+| Grafici statistiche      | da decidere più avanti                                                                                                                                | ⚪ aperto                                              |
+| Linguaggio del tutor     | regole (Fase 7) → poi AI locale (Ollama, Fase 10)                                                                                                     | 🔵 regole fatte                                        |
+| Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                                                                                               | ✅ deciso                                              |
+| Test                     | `cargo test`, Vitest                                                                                                                                  | ✅ deciso                                              |
+| Sicurezza (CSP)          | Content Security Policy restrittiva                                                                                                                   | ⚪ aperto — da attivare quando l'interfaccia è stabile |
 
 Versioni minime: **Node.js 22.12+** (richiesto da Vitest 5), **Rust stabile** con edizione **2024**.
 
@@ -175,6 +176,8 @@ app-scacchi/
 │   ├── tutor/                  spiegazioni: riconosce strutture, finali, temi e principi, unisce
 │   │                           fatti e schede di knowledge/; scenari "e se…"
 │   ├── training/               puzzle: scelta, verifica delle mosse, rating Elo, ripasso (scatole)
+│   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
+│   │                           critici, dati per le statistiche, puzzle dagli errori gravi
 │   ├── stats/                  calcolo delle statistiche
 │   └── storage/                database SQLite: partite, archivio, tentativi dei puzzle, ripasso
 │
@@ -210,7 +213,9 @@ app-scacchi/
 │   │   ├── choice-group/       gruppo di scelte a pastiglie (compatto)
 │   │   ├── side-drawer/        barra laterale a comparsa (il menu principale, a sinistra)
 │   │   ├── promotion-picker/   scelta del pezzo nella promozione (Gioca e Allenamento)
-│   │   └── knowledge-cards/    schede della base di conoscenza (pannello del tutor e modalità Tutor)
+│   │   ├── knowledge-cards/    schede della base di conoscenza (pannello del tutor e modalità Tutor)
+│   │   ├── tab-switch/         selettore a schede («Partita | Tutor»)
+│   │   └── eval-graph/         grafico della partita (probabilità di vittoria)
 │   ├── features/               aree dell'app, ognuna autonoma
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/,
@@ -223,7 +228,8 @@ app-scacchi/
 │   │   │                       training-setup/, puzzle-status/, puzzle-reveal/
 │   │   ├── tutor/              pannello del tutor (voce «Tutor» della colonna di destra, tasto T):
 │   │   │                       "e se…"; tutor-sections/, what-if-results/
-│   │   ├── review/             analisi delle partite giocate
+│   │   ├── review/             analisi partite: grafico, momenti critici, riepilogo, mosse con ?!/?/??
+│   │   │                       review-summary/, critical-moments/, review-moves/
 │   │   ├── progress/           statistiche e livello
 │   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione, suoni
 │   ├── sounds/                 suoni del gioco (mossa, presa, fine partita), creati con Web Audio
@@ -314,6 +320,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 6. Allenamento calcolo          | Import puzzle Lichess; puzzle per profondità; modalità visualizzazione; "cosa minaccia?"; ripasso degli errori                                                 | **Allenamento al calcolo completo**                   |
 | 7. Tutor                        | Pannello richiamabile ovunque; spiegazioni delle posizioni; base di conoscenza (principi, aperture col bianco e col nero, mediogioco, finali); scenari "e se…" | **Il tutor spiega ogni posizione**                    |
 | 8. Analisi partite              | Revisione automatica; momenti critici; mosse mancate spiegate                                                                                                  | Si impara dalle proprie partite                       |
+| 8-bis. Varianti                 | Una mossa da una posizione passata crea una variante; lista mosse ad albero; PGN con varianti                                                                  | Si esplorano le alternative senza perdere la partita  |
 | 9. Statistiche                  | Metriche, grafici, livello stimato, profondità di calcolo nel tempo                                                                                            | Progressi misurabili                                  |
 | 10. Estensioni                  | Maia (avversario "umano"); AI locale per spiegazioni più naturali; conoscenza avanzata; installatori e aggiornamenti                                           | App completa                                          |
 | 11. Appunti personali           | Uno spazio dove scrivere e ritrovare idee, pensieri e note di studio, collegabili a partite e posizioni                                                        | Le proprie idee restano nell'app                      |
@@ -332,7 +339,8 @@ o in un modulo `tests` nello stesso file (Rust).
 | 5. Analisi                      | ✅ completata |
 | 6. Allenamento calcolo          | ✅ completata |
 | 7. Tutor                        | ✅ completata |
-| 8. Analisi partite              | ⚪ da fare    |
+| 8. Analisi partite              | 🔵 in test    |
+| 8-bis. Varianti                 | ⚪ da fare    |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
 | 11. Appunti personali           | ⚪ da fare    |
@@ -442,6 +450,14 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | La colonna di destra è alta quanto l'area della scacchiera, con scorrimento interno (`contain: size`); la pagina non scorre                                                                      | Lo scroll della pagina era eccessivo                                                                                                                                                                                                          |
 | 2026-10-19 | Cambio: niente più barra a comparsa del tutor; in cima alla colonna di destra un selettore «Partita \| Tutor» («Allenamento \| Tutor»), tasto T                                                  | Prima la barra si sovrapponeva alla colonna                                                                                                                                                                                                   |
 | 2026-10-19 | Fase 7 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | Fase 8: l'analisi parte con «Analizza» (Archivio e fine partita in «Gioca»), in sottofondo, interrompibile; il risultato si salva                                                                | Scelta 1A: niente lavoro del processore quando non serve; la seconda volta la revisione è immediata                                                                                                                                           |
+| 2026-10-19 | Un quarto Stockfish dedicato all'analisi delle partite, circa 1 secondo per posizione                                                                                                            | Non disturba il computer avversario né il tutor; una partita di 40 mosse richiede circa un minuto e mezzo                                                                                                                                     |
+| 2026-10-19 | Giudizio delle mosse dalla probabilità di vittoria persa (curva di Lichess): imprecisione ≥ 10, errore ≥ 20, errore grave ≥ 30 punti; precisione con la formula di Lichess                       | Due pedoni persi in una posizione già vinta contano poco, in una pari moltissimo                                                                                                                                                              |
+| 2026-10-19 | Momenti critici: le 5 mosse che perdono di più, spiegate con gli scenari del tutor (cosa concedeva la mossa, cosa otteneva la migliore)                                                          | Imparare dai propri errori con i fatti verificati                                                                                                                                                                                             |
+| 2026-10-19 | Grafico della partita disegnato da noi in SVG, con i colori del tema                                                                                                                             | La libreria dei grafici si sceglie nella Fase 9; qui ne basta uno semplice                                                                                                                                                                    |
+| 2026-10-19 | Gli errori gravi delle proprie partite diventano puzzle (posizione prima della mossa dell'avversario, una mossa da trovare), subito in ripasso; contro il computer solo i propri                 | Extra 6 approvato: è il modo più diretto di imparare dalle proprie partite                                                                                                                                                                    |
+| 2026-10-19 | La revisione si ricalcola ogni volta dai dati salvati (valutazioni e mossa migliore di ogni mossa)                                                                                               | Nel database restano solo i dati grezzi, già pronti per le statistiche della Fase 9                                                                                                                                                           |
+| 2026-10-19 | Le varianti nella lista mosse si fanno in una Fase 8-bis separata                                                                                                                                | Scelta 5A: cambiano il cuore della partita, il salvataggio e il PGN                                                                                                                                                                           |
 
 ---
 
@@ -454,7 +470,8 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 5 — Analisi.** Fatta (vedi registro §10). Per la Fase 8: riempire `tactical_themes` e `missed_threats` con questi rilevatori. Limite noto: lo scambio statico ignora i pezzi inchiodati.
 - **Fase 6 — Allenamento.** Fatta (vedi registro §10). Da valutare più avanti: puzzle dalle proprie partite (Fase 8), statistiche per tema (Fase 9), animare la risposta dell'avversario con una piccola pausa.
 - **Fase 7 — Tutor.** Fatta (vedi registro §10). Da arricchire nel tempo: altre schede (aperture meno comuni, finali specifici), frasi più chiare man mano che Alessandro le legge.
-- **Fase 8 — Analisi partite.** Momenti critici, mosse mancate spiegate, grafico della valutazione; varianti nella lista mosse (albero al posto della sostituzione del seguito: richiede di estendere `Game`).
+- **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
+- **Fase 8-bis — Varianti.** Una mossa giocata da una posizione passata crea una variante invece di sostituire il seguito: albero di mosse in `Game` (chess-core), salvataggio delle varianti, PGN con varianti, lista mosse ad albero.
 - **Fase 9 — Statistiche.** Crate `crates/stats`; libreria dei grafici da scegliere (offline, rispettosa dei temi).
 - **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
@@ -485,5 +502,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Aperture:** i nomi di Lichess sono in inglese; la ricerca nell'archivio va fatta in inglese ("Sicilian") o per codice ECO.
 - **Database dei puzzle di Lichess:** è compresso con `pzstd`, che aggiunge "frame saltabili" che `zlib.createZstdDecompress` di Node (≥ 22.15) non accetta: lo script li toglie prima di decomprimere.
 - **Schede di `knowledge/`:** le include `build.rs` della crate `tutor`; un file nuovo si vede dopo la ricompilazione. Nei TOML i campi semplici (`ideas`, `mistakes`) vanno prima delle tabelle `[[plans]]`, altrimenti finiscono dentro l'ultimo piano. Le virgolette nei testi si scrivono «così».
+- **Colonna di destra alta quanto la scacchiera:** `contain: size` sulla colonna (e `align-content: start` sulla griglia): la colonna non conta nel calcolo dell'altezza della riga e scorre al suo interno.
+- **TanStack Router:** una pagina che legge l'indirizzo con `useSearch({ strict: false })` funziona anche nei test (`renderWithRouter`), senza dipendere dalla rotta.
 - **Puzzle di Lichess:** la prima mossa è dell'avversario; il puzzle comincia dopo. La "profondità" è il numero di mosse di chi risolve (mosse ÷ 2).
 - **Gusti di Alessandro:** cornici attorno alla scacchiera, pezzi puliti e minimal, tanta scelta di stili, ogni scelta valida in tutta l'app; a ogni fase chiede ritocchi estetici.

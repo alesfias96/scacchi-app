@@ -65,3 +65,10 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `PlanView.ts`         | `crates/tutor/src/explanation_view.rs`      | Un piano di una scheda, con chi deve seguirlo                                               |
 | `Topic.ts`            | `crates/tutor/src/topic.rs`                 | L'argomento di una scheda: apertura, struttura, mediogioco, finale, principio               |
 | `WhatIfView.ts`       | `crates/tutor/src/what_if.rs`               | Una mossa provata ("e se…"): giudizio, valutazioni, risposta migliore, cosa cambia          |
+| `GameReview.ts`       | `crates/review/src/review_view.rs`          | La revisione di una partita: mosse giudicate, grafico, riepiloghi, momenti critici          |
+| `MoveReview.ts`       | `crates/review/src/review_view.rs`          | Una mossa con il suo giudizio, la valutazione e la mossa migliore                           |
+| `MoveQuality.ts`      | `crates/review/src/move_quality.rs`         | Il giudizio di una mossa: ottima, buona, imprecisione, errore, errore grave                 |
+| `PlayerSummary.ts`    | `crates/review/src/review_view.rs`          | Il riepilogo di un giocatore: precisione, errori, fase peggiore                             |
+| `CriticalMoment.ts`   | `crates/review/src/review_view.rs`          | Un momento critico spiegato                                                                 |
+| `ReviewProgress.ts`   | `crates/review/src/review_progress.rs`      | L'avanzamento dell'analisi in corso                                                         |
+| `ReviewFinished.ts`   | `crates/review/src/review_progress.rs`      | La fine dell'analisi (riuscita, fermata o fallita)                                          |

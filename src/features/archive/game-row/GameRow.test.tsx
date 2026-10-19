@@ -16,18 +16,26 @@ const FINISHED: GameSummary = {
   result: { winner: 'white', reason: 'checkmate', score: '1-0' },
   opening: { eco: 'B20', name: 'Sicilian Defense' },
   plyCount: 41,
+  analyzed: false,
 };
 
 /** Disegna la riga con funzioni simulate. */
 function renderRow(game: GameSummary) {
   const onOpen = vi.fn();
+  const onReview = vi.fn();
   const onDelete = vi.fn();
   render(
     <ul>
-      <GameRow game={game} levelName="Circolo" onOpen={onOpen} onDelete={onDelete} />
+      <GameRow
+        game={game}
+        levelName="Circolo"
+        onOpen={onOpen}
+        onReview={onReview}
+        onDelete={onDelete}
+      />
     </ul>,
   );
-  return { onOpen, onDelete };
+  return { onOpen, onReview, onDelete };
 }
 
 describe('GameRow', () => {
@@ -57,5 +65,18 @@ describe('GameRow', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sì, elimina' }));
 
     expect(onDelete).toHaveBeenCalledWith('partita-1');
+  });
+
+  it('propone di analizzare la partita, o di vedere l’analisi già fatta', () => {
+    const { onReview } = renderRow(FINISHED);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Analizza' }));
+    expect(onReview).toHaveBeenCalledWith(FINISHED.id);
+  });
+
+  it('dopo l’analisi offre «Vedi l’analisi»', () => {
+    renderRow({ ...FINISHED, analyzed: true });
+
+    expect(screen.getByRole('button', { name: 'Vedi l’analisi' })).toBeDefined();
   });
 });

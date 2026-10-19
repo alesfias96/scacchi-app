@@ -1,0 +1,58 @@
+/* Le mosse dell'analisi: tre colonne (numero, Bianco, Nero), simboli colorati. */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  max-height: var(--move-list-max-height);
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--move-number-width) 1fr 1fr;
+  align-items: center;
+}
+
+.number {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.move {
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-small);
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.move:hover {
+  background: var(--color-surface-muted);
+}
+
+.move:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.current {
+  background: var(--color-accent-soft);
+  font-weight: var(--weight-bold);
+}
+
+.inaccuracy {
+  color: var(--color-warning);
+}
+
+.mistake {
+  color: var(--color-accent);
+}
+
+.blunder {
+  color: var(--color-danger);
+}

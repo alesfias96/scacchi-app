@@ -125,6 +125,7 @@
   --switch-travel: 1.125rem; /* quanto scorre il pomello: larghezza − pomello − 2 spazi */
   --disabled-opacity: 40%; /* elementi spenti o non disponibili */
   --shadow-knob: 0 1px 3px rgb(0 0 0 / 30%); /* ombra del pomello */
+  --eval-graph-height: 5.5rem; /* il grafico della partita nell'analisi */
   --coach-strip-height: 9.5rem; /* la fascia dei messaggi del tutor sotto la scacchiera */
   --coach-popup-rise: 0.5rem; /* di quanto sale il messaggio del tutor quando compare */
 
