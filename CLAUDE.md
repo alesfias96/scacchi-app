@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — Fase 11 approvata, versione 0.11.0 in pubblicazione; proposta la Fase 12 (tutor che spiega il perché), in attesa di risposta.**
+> **Ultimo aggiornamento: 2026-10-19 — 0.11.0 in pubblicazione; piano rivisto della Fase 12 (tutor avanzato, sguardo lungo), in attesa di risposta.**
 
 ---
 
@@ -83,30 +83,38 @@ quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul b
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Roadmap 1–11 finita.** Versione 0.11.0: etichetta `v0.11.0` sul commit `8706b1d` (un primo
-tentativo era finito sul commit sbagliato: quella bozza di Release va cancellata prima di caricare
-l'etichetta giusta). Da provare: l'aggiornamento automatico dalla 0.10.0 installata.
+**Roadmap 1–11 finita.** Versione 0.11.0: etichetta `v0.11.0` sul commit `8706b1d` (la bozza
+sbagliata del primo tentativo è stata cancellata e l'etichetta giusta caricata). Da provare: l'aggiornamento automatico dalla 0.10.0 installata.
 
-**Proposta la Fase 12 — «Il tutor che spiega il perché», in attesa della risposta di Alessandro.**
-Sua richiesta: i messaggi del tutor sono semplici, non spiegano il perché delle mosse né quali
-strategie usare e quando. Diagnosi: oggi il commento a una mossa dice solo il giudizio di Stockfish e
-cosa cambia (minacce, concessioni); il piano viene da poche schede (3 di mediogioco, 9 strutture, 8
-principi); la variante di Stockfish non viene mai spiegata. Un'AI da sola non risolve: il "perché"
-deve venire da motore + rilevatori, l'AI (10-C) potrà solo renderlo più scorrevole.
+**Proposta la Fase 12 — «Il tutor che spiega il perché» (piano rivisto), in attesa di risposta.**
+Richiesta di Alessandro: strategie e tattiche **molto avanzate**; il tutor deve capire la strategia
+di una mossa **guardando molto avanti** nella partita, senza soffermarsi sulla mossa in sé.
+Diagnosi: oggi il commento dice solo giudizio e cambiamenti immediati; la variante di Stockfish
+(che il motore già calcola) non viene mai spiegata; le schede di strategia sono poche.
 
-Piano proposto (tre passi, A = consigliata):
+Idea centrale: l'"intenzione" di una mossa si ricava dalla **variante lunga di Stockfish**: si
+gioca per 12–20 mezze mosse e si confronta la posizione di oggi con quella alla fine (e lungo il
+percorso), con i rilevatori e con nuovi riconoscitori strategici.
 
-- **12-A Il perché delle mosse**: lo scopo di ogni mossa (sviluppa, centro, arrocco, colonna,
-  avamposto, spinta, cambi, pezzo peggiore, difesa, minaccia); se Stockfish preferiva altro, il
-  confronto «la tua fa…, la migliore era… perché…» con la conseguenza concreta (si gioca la sua
-  variante per qualche mossa e i rilevatori dicono cosa si ottiene); per gli errori, «cosa non hai visto».
-- **12-B Strategia: piani e quando usarli**: lettura degli squilibri (materiale, struttura, spazio,
-  colonne, case deboli, alfieri, re, sviluppo) → uno o due piani con perché, come e quando no; circa
-  25 schede nuove (attacco di minoranza, rotture, case deboli, alfiere cattivo, spazio, pezzo
-  peggiore, profilassi, quando cambiare, quando attaccare il re, maggioranze…).
-- **12-C Tattiche: riconoscerle e cercarle**: una scheda per ogni motivo tattico con i "segnali"; nel
-  tutor prima l'indizio («c'è una forchetta: la trovi?») poi la soluzione; il "metodo di pensiero"
-  prima di ogni mossa in modalità Tutor; collegamento ai puzzle dello stesso tema.
+Piano rivisto (A = consigliata):
+
+- **12-A Lo sguardo lungo**: analisi profonda del tutor (alcuni secondi, con 3 varianti); dalla
+  variante si ricavano percorsi dei pezzi (es. Cd2–f1–g3–f5), rotture di pedone, colonne aperte, case
+  conquistate, cambi e trasformazioni (verso quale finale), debolezze create, attacco al re, e le
+  **combinazioni** (motivi tattici in sequenza). Messaggio principale: «L'idea: …, si vede tra N
+  mosse», con **«Guarda l'idea sulla scacchiera»** (la variante scorre con frecce e i momenti chiave).
+  Confronto tra le 3 idee del motore (perché la prima è migliore). La mossa in sé passa in secondo piano.
+- **12-B Strategia avanzata**: lettura degli squilibri; piani con perché, come e quando no; circa 30
+  schede avanzate (profilassi, manovre dei pezzi, principio delle due debolezze, trasformazione del
+  vantaggio, complessi di case, alfiere cattivo, spazio, attacco di minoranza, sacrificio di qualità
+  e posizionale, iniziativa e compenso, passaggio al finale giusto, fortezza, zugzwang…).
+- **12-C Tattica avanzata e metodo di pensiero**: motivi e combinazioni (deviazione, adescamento,
+  eliminazione del difensore, sovraccarico, intermezzo, raggi X, ultima traversa, sacrifici di
+  attrazione…), indizio prima della soluzione, metodo di pensiero prima di ogni mossa, puzzle dello
+  stesso tema.
+
+Domande aperte nel piano: quanto tempo può pensare il tutor (A: ~3 s in sottofondo in modalità
+Tutor, di più a richiesta); come mostrare l'idea (A: variante animata sulla scacchiera).
 
 Distribuzione (10-B, fatta): repository <https://github.com/alesfias96/scacchi-app> (pubblico, push
 HTTPS); chiave privata degli aggiornamenti in `C:\Users\afias\.tauri\scacchi.key`, password in
