@@ -359,7 +359,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 9. Statistiche                    | ✅ completata                                             |
 | 10. Estensioni                    | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
 | 11. Appunti personali             | ✅ completata                                             |
-| 12. Il tutor che spiega il perché | 🔵 12-A in test; 12-B e 12-C da fare                      |
+| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B e 12-C da fare                           |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -524,6 +524,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Le frasi delle idee non contengono mosse: l'interfaccia aggiunge "dopo 12. ♞c6+" dal numero della mezza mossa                                                                                                                                                       | Così le mosse seguono la notazione scelta nelle Impostazioni                                                                                                                                                                                  |
 | 2026-10-19 | Modalità Tutor: dopo i commenti, in sottofondo, l'idea della tua ultima mossa (1,5 s per posizione, con la migliore se valeva almeno mezzo pedone in più) e le idee per continuare (3 s); nel pannello del tutor «Guarda avanti» (3 s) e «Pensa più a lungo» (15 s) | Il motore del tutor segue una richiesta alla volta; una mossa nuova annulla il calcolo vecchio                                                                                                                                                |
 | 2026-10-19 | «Guarda sulla scacchiera»: le scacchiere mostrano la variante (stato `ideaReplayStore`), i comandi stanno accanto all'idea nella colonna di destra                                                                                                                  | Nulla copre la scacchiera; si torna alla partita da soli appena la posizione cambia                                                                                                                                                           |
+| 2026-10-19 | Fase 12-A approvata                                                                                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
