@@ -360,7 +360,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 9. Statistiche                    | ✅ completata                                             |
 | 10. Estensioni                    | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
 | 11. Appunti personali             | ✅ completata                                             |
-| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B in test; 12-C da fare                    |
+| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B ✅; 12-C da fare                         |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -530,6 +530,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | 28 schede nuove di strategia (23 di mediogioco, 5 di finale) con i campi facoltativi `use_when`, `avoid_when`, `signs`; le propone il tutor come piani, non i riconoscitori dei temi                                                                                | Spiegare quando usare una strategia e quando no                                                                                                                                                                                               |
 | 2026-10-19 | «Stockfish conferma»: un piano è confermato se nella variante migliore (dopo «Guarda avanti») c'è un evento dello stesso genere (es. rottura di pedone per la rottura centrale)                                                                                     | Collegare i piani generali allo sguardo lungo della 12-A                                                                                                                                                                                      |
 | 2026-10-19 | Modalità Tutor: scheda «Il piano» nella colonna di destra con l'etichetta «Piano nuovo» solo quando i piani cambiano; mentre il tutor prepara la posizione nuova resta il piano di prima                                                                            | Non ripetere a ogni mossa lo stesso consiglio                                                                                                                                                                                                 |
+| 2026-10-20 | Fase 12-B approvata                                                                                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
@@ -546,7 +547,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
-- **Fase 12 — Tutor che spiega il perché.** 12-A fatta e approvata; 12-B in test. Da valutare: evidenziare sulla scacchiera le case di un piano (i dati `squares` ci sono già), altre regole di piano man mano che Alessandro segnala posizioni dove il consiglio non torna. 12-C: tattica avanzata e metodo di pensiero.
+- **Fase 12 — Tutor che spiega il perché.** 12-A e 12-B fatte e approvate. Da valutare: evidenziare sulla scacchiera le case di un piano (i dati `squares` ci sono già), altre regole di piano man mano che Alessandro segnala posizioni dove il consiglio non torna. 12-C: tattica avanzata e metodo di pensiero.
 - **Fase 11 — Appunti personali.** Fatta (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
