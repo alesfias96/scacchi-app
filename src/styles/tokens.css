@@ -29,6 +29,7 @@
   --leading-tight: 1.2;
   --leading-body: 1.5;
   --tracking-title: -0.02em;
+  --tracking-label: 0.06em; /* titoletti in maiuscolo (es. gruppi delle osservazioni) */
 
   /* ---------- Spaziature (multipli di 4px) ---------- */
   --space-1: 0.25rem;

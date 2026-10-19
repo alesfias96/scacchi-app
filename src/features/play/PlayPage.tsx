@@ -10,7 +10,8 @@
  *   sulla scacchiera la freccia della mossa migliore.
  * - Nel pannello: l'annuncio di fine partita, le mosse con i comandi (scorri,
  *   nuova partita, annulla, abbandona, gira) con il nome dell'apertura,
- *   l'analisi, la situazione, copia e incolla di posizioni (FEN) e partite
+ *   l'analisi, le osservazioni dei rilevatori (passando il mouse su una, la
+ *   scacchiera mostra le case coinvolte), la situazione, copia e incolla di posizioni (FEN) e partite
  *   (PGN), salvataggio e apertura di file `.pgn`.
  * La partita si salva da sola nell'archivio a ogni mossa; quando si apre una
  * partita (dall'archivio o all'avvio) il proprio colore va in basso.
@@ -25,6 +26,7 @@
  * Restituisce: la pagina della sezione.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Fact } from '../../bindings/Fact';
 import type { GameSetup } from '../../bindings/GameSetup';
 import type { LegalMove } from '../../bindings/LegalMove';
 import type { Side } from '../../bindings/Side';
@@ -34,9 +36,11 @@ import { EvalBar } from '../../components/eval-bar/EvalBar';
 import { PanelCard } from '../../components/panel-card/PanelCard';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
+import { usePositionReport } from '../../hooks/usePositionReport';
 import { exportPgn, savePgnFile } from '../../services/gameService';
 import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
+import { useObservationsStore } from '../../state/observationsStore';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { AnalysisPanel } from './analysis-panel/AnalysisPanel';
 import { GameControls } from './game-controls/GameControls';
@@ -44,6 +48,7 @@ import { GameResultBanner } from './game-result-banner/GameResultBanner';
 import { ImportExport } from './import-export/ImportExport';
 import { MoveList } from './move-list/MoveList';
 import { NewGameDialog } from './new-game-dialog/NewGameDialog';
+import { ObservationsPanel } from './observations-panel/ObservationsPanel';
 import { OpeningLabel } from './opening-label/OpeningLabel';
 import { PgnFileButtons } from './pgn-file/PgnFileButtons';
 import { PlayerBar } from './player-bar/PlayerBar';
@@ -83,6 +88,8 @@ export function PlayPage() {
   const listenToEngine = useEngineStore((state) => state.listen);
   const setAnalysisEnabled = useEngineStore((state) => state.setAnalysisEnabled);
   const dismissEngineError = useEngineStore((state) => state.dismissError);
+  const observationsEnabled = useObservationsStore((state) => state.enabled);
+  const setObservationsEnabled = useObservationsStore((state) => state.setEnabled);
 
   /** Il colore mostrato in basso sulla scacchiera. */
   const [orientation, setOrientation] = useState<Side>('white');
@@ -92,6 +99,8 @@ export function PlayPage() {
   const [resyncKey, setResyncKey] = useState(0);
   /** `true` mentre è aperta la finestra "Nuova partita". */
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
+  /** L'osservazione indicata con il mouse, da evidenziare sulla scacchiera. */
+  const [highlighted, setHighlighted] = useState<Fact | null>(null);
 
   // All'apertura della sezione legge la partita in corso e ascolta il motore.
   useEffect(() => {
@@ -101,6 +110,19 @@ export function PlayPage() {
 
   const game = session?.game ?? null;
   useMoveSound(game, sounds === 'on');
+
+  // Le osservazioni della posizione mostrata (solo se accese). A ogni nuova
+  // posizione l'evidenziazione si toglie: le case di prima non valgono più.
+  const shownFen = game?.position.fen ?? null;
+  const report = usePositionReport(shownFen, observationsEnabled);
+  useEffect(() => {
+    setHighlighted(null);
+  }, [shownFen]);
+  const marks = useMemo(
+    () =>
+      highlighted === null ? null : { arrows: highlighted.arrows, circles: highlighted.squares },
+    [highlighted],
+  );
 
   // A ogni partita diversa (nuova, ripresa all'avvio, aperta dall'archivio)
   // il colore della persona va in basso: il nero se il computer ha il bianco.
@@ -169,18 +191,21 @@ export function PlayPage() {
 
   /**
    * Avvia la partita scelta nella finestra "Nuova partita": ricorda le scelte
-   * e spegne l'analisi contro il computer (sarebbe un aiuto).
+   * e, contro il computer, spegne analisi e osservazioni (sarebbero un aiuto).
    */
   const startGame = useCallback(
     async (setup: GameSetup) => {
       setIsNewGameOpen(false);
       void updateSettings({ gameSetup: setup });
-      if (setup.opponent === 'computer' && useEngineStore.getState().analysisEnabled) {
-        void setAnalysisEnabled(false);
+      if (setup.opponent === 'computer') {
+        if (useEngineStore.getState().analysisEnabled) {
+          void setAnalysisEnabled(false);
+        }
+        setObservationsEnabled(false);
       }
       await newGame(setup);
     },
-    [updateSettings, setAnalysisEnabled, newGame],
+    [updateSettings, setAnalysisEnabled, setObservationsEnabled, newGame],
   );
 
   /** Il numero di mosse della partita e quella mostrata (per la tastiera). */
@@ -260,6 +285,7 @@ export function PlayPage() {
                 // la scacchiera è in sola lettura.
                 onMove={session.canMove ? handleMove : undefined}
                 arrow={analysis?.line.firstMove ?? null}
+                marks={marks}
                 resyncKey={resyncKey}
               />
               {pendingPromotion !== null && (
@@ -335,6 +361,14 @@ export function PlayPage() {
             update={analysis}
             isGameOver={result !== null}
             notation={notation}
+          />
+
+          <ObservationsPanel
+            enabled={observationsEnabled}
+            onToggle={setObservationsEnabled}
+            report={report}
+            notation={notation}
+            onHighlight={setHighlighted}
           />
 
           <PositionPanel position={position} />

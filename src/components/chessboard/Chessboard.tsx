@@ -24,8 +24,9 @@
  *   viene chiamato `onMove` con casa di partenza e di arrivo. I pezzi che si
  *   possono muovere mostrano la "mano" al passaggio del cursore. Senza `onMove`
  *   la scacchiera è in sola lettura;
- * - `arrow`: facoltativa, una mossa da indicare con una freccia (ad esempio
- *   la mossa migliore secondo il motore);
+ * - `arrow`: facoltativa, una mossa da indicare con una freccia verde (la
+ *   mossa migliore secondo il motore);
+ * - `marks`: facoltativi, frecce e cerchi blu (le case di un'osservazione);
  * - `resyncKey`: facoltativo. Cambiarlo riporta i pezzi alla posizione
  *   ricevuta, ad esempio dopo una promozione annullata (quando il pedone è
  *   già stato spostato sulla scacchiera ma la mossa non è stata giocata).
@@ -40,6 +41,7 @@ import type { LegalMove } from '../../bindings/LegalMove';
 import type { Side } from '../../bindings/Side';
 import { useLoadedSettings } from '../../state/settingsStore';
 import { buildDests } from './buildDests';
+import { buildShapes, type BoardMarks } from './buildShapes';
 import styles from './Chessboard.module.css';
 import { isSquareKey } from './isSquareKey';
 import { prefersReducedMotion } from './prefersReducedMotion';
@@ -71,6 +73,8 @@ export interface ChessboardProps {
   onMove?: (from: string, to: string) => void;
   /** Una mossa da indicare con una freccia; `null` o assente se nessuna. */
   arrow?: LegalMove | null;
+  /** Frecce e cerchi da disegnare (le case di un'osservazione); `null` o assenti se nessuno. */
+  marks?: BoardMarks | null;
   /** Cambiarlo riporta i pezzi alla posizione ricevuta (vedi descrizione sopra). */
   resyncKey?: number;
 }
@@ -80,9 +84,6 @@ export interface ChessboardProps {
  * da seguire il movimento con l'occhio, abbastanza breve da non far aspettare.
  */
 const MOVE_ANIMATION_MS = 220;
-
-/** Il "pennello" della freccia: uno di quelli già pronti in chessground (verde tenue). */
-const ARROW_BRUSH = 'paleGreen';
 
 /** Nessuna mossa possibile: valore usato quando `legalMoves` non viene passato. */
 const NO_MOVES: readonly LegalMove[] = [];
@@ -96,6 +97,7 @@ export function Chessboard({
   legalMoves = NO_MOVES,
   onMove,
   arrow = null,
+  marks = null,
   resyncKey = 0,
 }: ChessboardProps) {
   /** Lo stile di scacchiera e pezzi scelto nelle Impostazioni. */
@@ -132,14 +134,13 @@ export function Chessboard({
         ? [lastFrom, lastTo]
         : undefined;
 
-    /** La freccia, solo se entrambe le case sono valide. */
-    const autoShapes =
-      arrowFrom !== undefined &&
-      arrowTo !== undefined &&
-      isSquareKey(arrowFrom) &&
-      isSquareKey(arrowTo)
-        ? [{ orig: arrowFrom, dest: arrowTo, brush: ARROW_BRUSH }]
-        : [];
+    /** La freccia della mossa migliore e i segni delle osservazioni. */
+    const autoShapes = buildShapes(
+      arrowFrom !== undefined && arrowTo !== undefined
+        ? { from: arrowFrom, to: arrowTo, uci: `${arrowFrom}${arrowTo}` }
+        : null,
+      marks,
+    );
 
     const config: Config = {
       fen: boardFen,
@@ -186,6 +187,7 @@ export function Chessboard({
     lastTo,
     arrowFrom,
     arrowTo,
+    marks,
     resyncKey,
   ]);
 

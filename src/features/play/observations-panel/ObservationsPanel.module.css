@@ -1,0 +1,80 @@
+/*
+ * Scheda "Osservazioni": interruttore, fase di gioco, poi i fatti divisi per
+ * gruppo. Ogni fatto è un pulsante (per la tastiera) che si illumina al passaggio.
+ */
+
+.message,
+.summary {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.groupTitle {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fact {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+  text-align: left;
+  cursor: default;
+  transition: background var(--duration-fast) var(--easing-standard);
+}
+
+.fact:hover,
+.fact:focus-visible {
+  background: var(--color-accent-soft);
+  outline: none;
+}
+
+/* Il pallino del colore a cui il fatto si riferisce. */
+.dot {
+  flex-shrink: 0;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-round);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-piece-edge);
+}
+
+.white {
+  background: var(--color-piece-white);
+}
+
+.black {
+  background: var(--color-piece-black);
+}

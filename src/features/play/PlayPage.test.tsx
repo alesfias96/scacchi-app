@@ -15,6 +15,7 @@ import type { GameView } from '../../bindings/GameView';
 import type { SessionView } from '../../bindings/SessionView';
 import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
+import { useObservationsStore } from '../../state/observationsStore';
 import { useSettingsStore } from '../../state/settingsStore';
 import { PlayPage } from './PlayPage';
 
@@ -40,6 +41,10 @@ const archiveMock = vi.hoisted(() => ({
 }));
 
 vi.mock('../../services/archiveService', () => archiveMock);
+
+const insightMock = vi.hoisted(() => ({ fetchPositionReport: vi.fn() }));
+
+vi.mock('../../services/insightService', () => insightMock);
 
 const engineServiceMock = vi.hoisted(() => ({
   fetchEngineLevels: vi.fn(),
@@ -179,6 +184,7 @@ describe('PlayPage', () => {
       storageError: null,
     });
     useEngineStore.setState({ analysisEnabled: false, latest: null, engineError: null });
+    useObservationsStore.setState({ enabled: false });
     useSettingsStore.setState({
       settings: {
         theme: 'studio',
@@ -375,6 +381,58 @@ describe('PlayPage', () => {
 
     await waitFor(() => {
       expect(chessgroundMock.state.config?.orientation).toBe('black');
+    });
+  });
+
+  it('le osservazioni accese evidenziano sulla scacchiera il fatto indicato', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    insightMock.fetchPositionReport.mockResolvedValue({
+      fen: AFTER_E4_GAME.position.fen,
+      turn: 'black',
+      phase: 'opening',
+      material: {
+        white: { pawns: 8, knights: 2, bishops: 2, rooks: 2, queens: 1, points: 39 },
+        black: { pawns: 8, knights: 2, bishops: 2, rooks: 2, queens: 1, points: 39 },
+        advantage: 0,
+      },
+      facts: [
+        {
+          category: 'tactics',
+          side: 'white',
+          text: 'Una tattica di prova',
+          squares: ['e5'],
+          arrows: [{ from: 'e4', to: 'e5' }],
+          moves: [],
+        },
+      ],
+    });
+    render(<PlayPage />);
+    await pageReady();
+
+    fireEvent.click(screen.getByRole('switch', { name: 'Mostra osservazioni' }));
+    fireEvent.mouseEnter(await screen.findByRole('button', { name: /Una tattica di prova/ }));
+
+    await waitFor(() => {
+      expect(chessgroundMock.state.config?.drawable?.autoShapes).toEqual([
+        { orig: 'e4', dest: 'e5', brush: 'blue' },
+        { orig: 'e5', brush: 'blue' },
+      ]);
+    });
+  });
+
+  it('una nuova partita contro il computer spegne le osservazioni', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    serviceMock.startNewGame.mockResolvedValue(COMPUTER_THINKING);
+    useObservationsStore.setState({ enabled: true });
+    insightMock.fetchPositionReport.mockReturnValue(new Promise(() => undefined));
+    render(<PlayPage />);
+    await pageReady();
+
+    fireEvent.click(screen.getByRole('button', { name: /Nuova partita/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Inizia la partita' }));
+
+    await waitFor(() => {
+      expect(useObservationsStore.getState().enabled).toBe(false);
     });
   });
 });

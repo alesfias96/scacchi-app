@@ -16,6 +16,7 @@ Le crate vengono aggiunte una alla volta, solo quando servono.
 | `game-session/` | La partita in corso: avversario, livello, orologio, chi può muovere, abbandono e tempo scaduto |
 | `openings/`     | Il riconoscimento delle aperture (elenco di Lichess): codice ECO e nome                        |
 | `storage/`      | Il database delle partite (SQLite): salvataggio a ogni mossa, archivio, ripresa                |
+| `analysis/`     | I rilevatori: minacce, tattiche, struttura dei pedoni, sicurezza del re, attività dei pezzi    |
 
 Come si usano tra loro: `game-session` usa `chess-core` (le regole), `engine` (i livelli e le
 richieste), `app-settings` (la configurazione scelta) e `openings` (l'apertura giocata);
@@ -24,9 +25,8 @@ richieste), `app-settings` (la configurazione scelta) e `openings` (l'apertura g
 
 ## Crate che verranno aggiunte
 
-| Crate       | Fase | Compito                                                                 |
-| ----------- | ---- | ----------------------------------------------------------------------- |
-| `analysis/` | 5    | I rilevatori: minacce, tattiche, struttura dei pedoni, sicurezza del re |
-| `training/` | 6    | Gli esercizi di calcolo e visualizzazione                               |
-| `tutor/`    | 7    | Unisce analisi e conoscenza strategica e produce le spiegazioni         |
-| `stats/`    | 9    | Il calcolo delle statistiche                                            |
+| Crate       | Fase | Compito                                                         |
+| ----------- | ---- | --------------------------------------------------------------- |
+| `training/` | 6    | Gli esercizi di calcolo e visualizzazione                       |
+| `tutor/`    | 7    | Unisce analisi e conoscenza strategica e produce le spiegazioni |
+| `stats/`    | 9    | Il calcolo delle statistiche                                    |

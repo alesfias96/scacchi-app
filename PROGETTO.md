@@ -52,6 +52,7 @@ Obiettivi, in ordine di importanza:
 | Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app        | ✅ deciso                                              |
 | Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                        | ✅ deciso                                              |
 | File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust             | ✅ deciso                                              |
+| Rilevatori               | crate `analysis` (regole + scambio statico, senza motore); scheda "Osservazioni"     | ✅ deciso                                              |
 | Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
 | Scacchiera               | `chessground` avvolto in un componente React                                         | ✅ deciso                                              |
 | Stato interfaccia        | Zustand                                                                              | ✅ deciso                                              |
@@ -167,8 +168,8 @@ app-scacchi/
 │   ├── game-session/           partita in corso: avversario, livello, orologio, chi può muovere,
 │   │                           tempo di ogni mossa, fotografia da salvare e ripresa
 │   ├── openings/               riconoscimento delle aperture (elenco di Lichess)
-│   ├── analysis/               rilevatori: minacce, tattiche, struttura,
-│   │                           sicurezza del re, fase di gioco
+│   ├── analysis/               rilevatori: minacce, tattiche, struttura pedonale,
+│   │                           sicurezza del re, attività, materiale, fase di gioco
 │   ├── tutor/                  unisce analisi e conoscenza, produce spiegazioni
 │   ├── training/               generazione e verifica degli esercizi di calcolo
 │   ├── stats/                  calcolo delle statistiche
@@ -209,7 +210,7 @@ app-scacchi/
 │   │   │                       move-list/, game-controls/, promotion-picker/,
 │   │   │                       game-result-banner/, import-export/, position-panel/,
 │   │   │                       player-bar/, clock-face/, new-game-dialog/, analysis-panel/,
-│   │                       opening-label/, pgn-file/
+│   │                       opening-label/, pgn-file/, observations-panel/
 │   │   ├── archive/            archivio delle partite: filtri, rivedi, continua, elimina
 │   │   ├── training/           esercizi di calcolo e visualizzazione
 │   │   ├── tutor/              pannello del tutor, apribile ovunque
@@ -318,7 +319,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 2. Regole e partita             | ✅ completata |
 | 3. Motore                       | ✅ completata |
 | 4. Database                     | ✅ completata |
-| 5. Analisi                      | ⚪ da fare    |
+| 5. Analisi                      | 🔵 in test    |
 | 6. Allenamento calcolo          | ⚪ da fare    |
 | 7. Tutor                        | ⚪ da fare    |
 | 8. Analisi partite              | ⚪ da fare    |
@@ -396,6 +397,10 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-18 | Nuova sezione "Archivio" nella barra laterale                                                                                      | Rivedere, continuare, eliminare e filtrare le partite                                                                                                                       |
 | 2026-10-18 | File `.pgn` con la finestra di sistema (`tauri-plugin-dialog` 2.8); la lettura accetta codifiche vecchie                           | Promesso nella Fase 2; nessun permesso da dare all'interfaccia (lo fa Rust)                                                                                                 |
 | 2026-10-19 | Fase 4 approvata                                                                                                                   | Conferma di Alessandro ("va tutto bene")                                                                                                                                    |
+| 2026-10-19 | Fase 5: osservazioni spente di base contro il computer, con interruttore                                                           | Scelta 1A di Alessandro                                                                                                                                                     |
+| 2026-10-19 | Minacce calcolate solo dai rilevatori in Rust (non da Stockfish)                                                                   | Scelta 2A di Alessandro: istantanee e spiegabili; Stockfish servirà agli scenari "e se…" del tutor                                                                          |
+| 2026-10-19 | Tutti i rilevatori della roadmap, con filtri contro i falsi allarmi                                                                | Scelta 3A di Alessandro; i fatti devono essere veri e utili, non rumore                                                                                                     |
+| 2026-10-19 | Le frasi dei fatti le scrive Rust; le mosse citate restano a parte e l'interfaccia le traduce nella notazione scelta               | Una sola fonte per il contenuto, la notazione resta una scelta dell'utente                                                                                                  |
 
 ---
 
@@ -405,7 +410,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 
 - **Fase 3 — Motore.** Fatta (vedi registro §10). Da riprendere più avanti: più varianti nell'analisi (`MultiPV`) e il motore "umano" Maia (Fase 10).
 - **Fase 4 — Database.** Fatta (vedi registro §10). Per la Fase 8: riempire le colonne `eval_*`, `best_move_uci`, `centipawn_loss`, `game_phase`, `tactical_themes`, `missed_threats` della tabella `moves` (vedi `crates/storage/migrations/`).
-- **Fase 5 — Analisi.** Crate `crates/analysis`, un rilevatore per file (pezzi indifesi, minacce, tattiche, struttura pedonale, sicurezza del re, attività, fase di gioco), ognuno con test su FEN note.
+- **Fase 5 — Analisi.** Fatta (vedi registro §10). Per la Fase 8: riempire `tactical_themes` e `missed_threats` con questi rilevatori. Limite noto: lo scambio statico ignora i pezzi inchiodati.
 - **Fase 6 — Allenamento.** Crate `crates/training`; puzzle di Lichess (CSV, licenza CC0) in `data/`; puzzle per profondità, visualizzazione, "cosa minaccia?", ripasso degli errori con ripetizione dilazionata.
 - **Fase 7 — Tutor.** Crate `crates/tutor` e `knowledge/` con testi curati; pannello richiamabile ovunque con una scorciatoia unica.
 - **Fase 8 — Analisi partite.** Momenti critici, mosse mancate spiegate, grafico della valutazione; varianti nella lista mosse (albero al posto della sostituzione del seguito: richiede di estendere `Game`).

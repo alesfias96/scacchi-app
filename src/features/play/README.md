@@ -26,6 +26,9 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 - **Analisi**: l'interruttore nella scheda "Analisi" accende Stockfish sulla posizione mostrata:
   barra di valutazione accanto alla scacchiera, freccia della mossa migliore, variante principale.
   Contro il computer parte spenta, perché sarebbe un aiuto.
+- **Osservazioni**: l'interruttore nella scheda "Osservazioni" accende i rilevatori, che elencano
+  minacce, tattiche, pedoni, re e pezzi; passando il mouse su un fatto, la scacchiera lo mostra.
+  Anche questa contro il computer parte spenta.
 - A due giocatori senza orologio si può rigiocare da una posizione passata (le mosse successive
   vengono sostituite; le varianti arriveranno nella Fase 8). Contro il computer o con l'orologio
   si gioca solo dall'ultima posizione.
@@ -41,6 +44,7 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 | `clock-face/`         | Il quadrante dell'orologio, con i secondi che scorrono                                                            |
 | `new-game-dialog/`    | La finestra "Nuova partita": avversario, colore, livello, tempo                                                   |
 | `analysis-panel/`     | La scheda "Analisi": interruttore, valutazione, profondità, variante                                              |
+| `observations-panel/` | La scheda "Osservazioni": i fatti dei rilevatori, per gruppo; passandoci sopra si evidenziano sulla scacchiera    |
 | `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                                        |
 | `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                                              |
 | `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, abbandona, gira la scacchiera                               |

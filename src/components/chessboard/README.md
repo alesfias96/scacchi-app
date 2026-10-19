@@ -9,7 +9,8 @@ il pezzo che si solleva con la sua ombra quando lo si trascina.
 Può essere **in sola lettura** (come l'anteprima nelle Impostazioni) oppure
 **interattiva** (come in Gioca): in quel caso il giocatore di turno può muovere solo verso
 le case permesse dalle mosse legali calcolate da Rust, e la scacchiera comunica la mossa fatta.
-Può anche disegnare una **freccia** (ad esempio la mossa migliore secondo il motore).
+Può anche disegnare **segni**: la freccia verde della mossa migliore secondo il motore e le frecce
+e i cerchi blu delle osservazioni.
 
 È **l'unica scacchiera dell'app**: ogni sezione (Gioca, Allenamento, Tutor, ...) usa questo
 componente. Lo stile della scacchiera e dei pezzi non si passa come proprietà: il componente
@@ -28,6 +29,7 @@ sotto c'è chessground. Per cambiare libreria basterebbe modificare questa carte
 | `Chessboard.test.tsx`     | I test, con chessground simulato                                                                                                   |
 | `buildDests.ts`           | Trasforma le mosse legali di Rust nel formato di chessground (per ogni casa, dove può andare il pezzo)                             |
 | `isSquareKey.ts`          | Controlla che un testo sia una casa valida (da a1 a h8)                                                                            |
+| `buildShapes.ts`          | Prepara i segni da disegnare: la freccia verde della mossa migliore e le frecce e i cerchi blu delle osservazioni                  |
 | `prefersReducedMotion.ts` | Dice se il sistema chiede di ridurre le animazioni (allora i pezzi non scivolano)                                                  |
 | `*.test.ts`               | I test delle funzioni qui sopra                                                                                                    |
 | `themes/`                 | Gli stili delle scacchiere e dei set di pezzi (vedi il README della cartella)                                                      |
