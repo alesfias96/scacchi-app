@@ -5,7 +5,7 @@
 //!
 //! - `commands/`: le richieste che l'interfaccia può fare.
 //! - `state/`: le informazioni tenute in memoria mentre l'app è aperta
-//!   (la partita in corso, i motori Stockfish, il database delle partite).
+//!   (la partita in corso, i motori Stockfish, il database, il puzzle in corso).
 //! - `events/`: i messaggi inviati all'interfaccia in tempo reale
 //!   (mossa del computer, analisi, problemi del motore).
 //! - `reactions/`: ciò che succede da solo dopo ogni cambiamento della partita
@@ -35,10 +35,11 @@ pub fn run() {
     tauri::Builder::default()
         // Le finestre di sistema per salvare e aprire i file .pgn.
         .plugin(tauri_plugin_dialog::init())
-        // La partita in corso e i motori: Tauri li custodisce e li passa ai
+        // La partita in corso, i motori e il puzzle in corso: Tauri li custodisce e li passa ai
         // comandi che li chiedono.
         .manage(state::session_state::SessionState::default())
         .manage(state::engines_state::EnginesState::default())
+        .manage(state::training_state::TrainingState::default())
         // All'avvio: il database delle partite (nella cartella dati dell'app,
         // fornita da Tauri per ogni sistema), il lavoratore che salva le
         // partite e la ripresa della partita lasciata a metà.
@@ -75,6 +76,11 @@ pub fn run() {
             commands::engine::set_analysis,
             commands::settings::get_settings,
             commands::settings::save_settings,
+            commands::training::get_training_overview,
+            commands::training::start_puzzle,
+            commands::training::play_puzzle_move,
+            commands::training::puzzle_hint,
+            commands::training::show_puzzle_solution,
         ])
         // `generate_context!` legge tauri.conf.json durante la compilazione
         // e incorpora nell'eseguibile configurazione, icone e interfaccia.

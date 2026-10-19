@@ -3,8 +3,8 @@
  */
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { pieceImageUrl } from '../../../components/piece-icon/pieceImageUrl';
-import { useSettingsStore } from '../../../state/settingsStore';
+import { pieceImageUrl } from '../piece-icon/pieceImageUrl';
+import { useSettingsStore } from '../../state/settingsStore';
 import { PromotionPicker } from './PromotionPicker';
 
 describe('PromotionPicker', () => {
@@ -17,6 +17,13 @@ describe('PromotionPicker', () => {
         notation: 'figurine',
         sounds: 'on',
         gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        trainingSetup: {
+          mode: 'depth',
+          depth: 2,
+          theme: null,
+          difficulty: 'normal',
+          visualizationSeconds: 5,
+        },
       },
     });
   });

@@ -2,7 +2,7 @@
  * Test della scrittura dei fatti dei rilevatori.
  */
 import { describe, expect, it } from 'vitest';
-import type { Fact } from '../../../bindings/Fact';
+import type { Fact } from '../bindings/Fact';
 import { formatFact } from './formatFact';
 
 /** Un fatto di prova. */

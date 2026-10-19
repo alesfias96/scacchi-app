@@ -19,6 +19,13 @@ const DEFAULTS: Settings = {
   notation: 'figurine',
   sounds: 'on',
   gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+  trainingSetup: {
+    mode: 'depth',
+    depth: 2,
+    theme: null,
+    difficulty: 'normal',
+    visualizationSeconds: 5,
+  },
 };
 
 describe('settingsStore', () => {

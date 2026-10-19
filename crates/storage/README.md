@@ -1,4 +1,4 @@
-# crates/storage — Il database delle partite
+# crates/storage — Il database delle partite e dell'allenamento
 
 Ogni partita giocata viene salvata, **mossa per mossa**, in un file **SQLite**: un database
 completo contenuto in un solo file, che sta nella cartella dati dell'app (la sceglie Tauri per ogni
@@ -14,6 +14,10 @@ si chiude all'improvviso.
 - **Colonne per le statistiche**, vuote per ora: valutazione prima e dopo, mossa migliore, perdita
   in centipedoni, fase di gioco, temi tattici, minacce non viste. Le riempirà l'analisi automatica
   della Fase 8; se una mossa viene salvata di nuovo uguale, questi dati restano.
+- **Tentativi dei puzzle** (tabella `puzzle_attempts`): quale puzzle, quando, in che modalità, se
+  è stato risolto, quanto tempo è servito e il rating dopo il tentativo (l'ultimo è il rating attuale).
+- **Ripasso** (tabella `puzzle_reviews`): per ogni puzzle sbagliato, la scatola in cui si trova e
+  quando torna.
 
 ## Le migrazioni
 

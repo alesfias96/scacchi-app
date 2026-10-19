@@ -4,6 +4,7 @@
  * Usa TanStack Router. Ogni sezione utilizzabile ha un indirizzo:
  * - "/"              → Gioca
  * - "/archivio"      → Archivio delle partite
+ * - "/allenamento"   → Allenamento con i puzzle
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -18,6 +19,7 @@ import {
 import { ArchivePage } from '../features/archive/ArchivePage';
 import { PlayPage } from '../features/play/PlayPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
+import { TrainingPage } from '../features/training/TrainingPage';
 import { RootLayout } from './root-layout/RootLayout';
 
 /** Il tipo di cronologia accettato dal router (a hash nell'app, in memoria nei test). */
@@ -37,13 +39,19 @@ const archiveRoute = createRoute({
   component: ArchivePage,
 });
 
+const trainingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/allenamento',
+  component: TrainingPage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
   component: SettingsPage,
 });
 
-const routeTree = rootRoute.addChildren([playRoute, archiveRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([playRoute, archiveRoute, trainingRoute, settingsRoute]);
 
 /**
  * Crea il router dell'app.

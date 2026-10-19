@@ -9,9 +9,9 @@
  * @param notation - la notazione scelta nelle Impostazioni.
  * @returns la frase da mostrare, ad esempio "… in una mossa con ♛xf7#".
  */
-import type { Fact } from '../../../bindings/Fact';
-import type { Notation } from '../../../bindings/Notation';
-import { formatSan } from '../../../lib/formatSan';
+import type { Fact } from '../bindings/Fact';
+import type { Notation } from '../bindings/Notation';
+import { formatSan } from './formatSan';
 
 export function formatFact(fact: Fact, notation: Notation): string {
   if (fact.moves.length === 0) {

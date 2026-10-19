@@ -6,9 +6,10 @@ Si avviano con `npm run …`, mai a mano.
 
 ## Contenuto
 
-| File               | Comando           | Cosa fa                                                                                                                                                                                                                               |
-| ------------------ | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fetch-engines.js` | `npm run engines` | Scarica **Stockfish 19** ufficiale per il sistema in uso, ne controlla l'impronta SHA-256 (se il file non è quello ufficiale si ferma) e lo salva in `src-tauri/binaries/` con il nome che Tauri si aspetta, insieme alla sua licenza |
+| File               | Comando           | Cosa fa                                                                                                                                                                                                                                     |
+| ------------------ | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fetch-engines.js` | `npm run engines` | Scarica **Stockfish 19** ufficiale per il sistema in uso, ne controlla l'impronta SHA-256 (se il file non è quello ufficiale si ferma) e lo salva in `src-tauri/binaries/` con il nome che Tauri si aspetta, insieme alla sua licenza       |
+| `fetch-puzzles.js` | `npm run puzzles` | Scarica il database dei puzzle di Lichess (licenza CC0), sceglie circa 100.000 puzzle affidabili ed equilibrati per difficoltà e lunghezza e li salva in `data/puzzles/`. Si usa solo per aggiornare i puzzle: il file è già nel repository |
 
 ## Quando parte da solo
 

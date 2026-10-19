@@ -13,9 +13,9 @@
  * Restituisce: la finestra di scelta (da mettere sopra la scacchiera).
  */
 import { useEffect } from 'react';
-import type { Side } from '../../../bindings/Side';
-import type { PieceRole } from '../../../components/piece-icon/pieceCode';
-import { PieceIcon } from '../../../components/piece-icon/PieceIcon';
+import type { Side } from '../../bindings/Side';
+import type { PieceRole } from '../piece-icon/pieceCode';
+import { PieceIcon } from '../piece-icon/PieceIcon';
 import styles from './PromotionPicker.module.css';
 
 /** La lettera UCI del pezzo scelto, aggiunta in fondo alla mossa (es. `e7e8q`). */

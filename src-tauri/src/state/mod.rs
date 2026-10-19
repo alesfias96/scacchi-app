@@ -6,3 +6,4 @@ pub mod database_state;
 pub mod engine_path;
 pub mod engines_state;
 pub mod session_state;
+pub mod training_state;

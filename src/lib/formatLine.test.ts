@@ -2,7 +2,7 @@
  * Test della scrittura della variante del motore.
  */
 import { describe, expect, it } from 'vitest';
-import type { LineView } from '../../../bindings/LineView';
+import type { LineView } from '../bindings/LineView';
 import { formatLine } from './formatLine';
 
 /** Una variante di prova. */

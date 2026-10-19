@@ -9,7 +9,8 @@ Descrive le scelte che valgono in tutta l'app e sa salvarle e rileggerle da un f
 - **suoni** di mosse, prese e fine partita: Attivi (predefinito), Disattivati.
 
 Ricorda anche l'**ultima configurazione di partita** scelta (avversario, colore, livello del
-computer, tempo), così la finestra "Nuova partita" la ripropone.
+computer, tempo), così la finestra "Nuova partita" la ripropone, e le **ultime scelte
+dell'allenamento** (modalità, mosse da trovare, tema, difficoltà, secondi della visualizzazione).
 
 Le impostazioni vengono salvate in un piccolo file `settings.json`, nella cartella di
 configurazione dell'app (su Windows in `AppData\Roaming`). Il percorso lo decide il ponte
@@ -27,7 +28,8 @@ Un file mancante (primo avvio) o rovinato non blocca mai l'app: vengono usate le
 ## L'opzione `bindings`
 
 Con l'opzione `bindings` (attivata da `src-tauri`) i test generano automaticamente i tipi
-TypeScript corrispondenti in `src/bindings/` (`AppTheme`, `BoardStyle`, `PieceStyle`, `Notation`, `SoundSetting`, `Settings`).
+TypeScript corrispondenti in `src/bindings/` (`AppTheme`, `BoardStyle`, `PieceStyle`, `Notation`, `SoundSetting`, `Settings`, `GameSetup`,
+`TrainingSetup`, `TrainingMode`, `Difficulty`, …).
 
 ## Test
 

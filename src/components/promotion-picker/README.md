@@ -1,4 +1,4 @@
-# src/features/play/promotion-picker — La scelta della promozione
+# src/components/promotion-picker — La scelta della promozione
 
 Quando un pedone arriva sull'ultima traversa, sopra la scacchiera compare una
 finestra con quattro pezzi: **donna, torre, alfiere, cavallo**, del colore del

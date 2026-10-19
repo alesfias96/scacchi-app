@@ -12,9 +12,8 @@ Intanto accanto alla scacchiera compaiono la barra di valutazione e, sulla scacc
 della mossa migliore. Contro il computer l'analisi parte spenta: vederla mentre si gioca toglierebbe
 l'esercizio di calcolo.
 
-| File                       | Cosa fa                                                          |
-| -------------------------- | ---------------------------------------------------------------- |
-| `AnalysisPanel.tsx`        | La scheda                                                        |
-| `AnalysisPanel.module.css` | I suoi stili                                                     |
-| `formatLine.ts`            | Scrive la variante con i numeri di mossa, nella notazione scelta |
-| `*.test.ts(x)`             | I test                                                           |
+| File                       | Cosa fa      |
+| -------------------------- | ------------ |
+| `AnalysisPanel.tsx`        | La scheda    |
+| `AnalysisPanel.module.css` | I suoi stili |
+| `*.test.ts(x)`             | I test       |

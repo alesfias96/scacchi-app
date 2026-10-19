@@ -44,6 +44,13 @@ describe('Chessboard', () => {
         notation: 'figurine',
         sounds: 'on',
         gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        trainingSetup: {
+          mode: 'depth',
+          depth: 2,
+          theme: null,
+          difficulty: 'normal',
+          visualizationSeconds: 5,
+        },
       },
     });
   });
@@ -94,6 +101,13 @@ describe('Chessboard', () => {
         notation: 'figurine',
         sounds: 'on',
         gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        trainingSetup: {
+          mode: 'depth',
+          depth: 2,
+          theme: null,
+          difficulty: 'normal',
+          visualizationSeconds: 5,
+        },
       },
     });
 
@@ -175,6 +189,21 @@ describe('Chessboard', () => {
 
     rerender(<Chessboard boardFen={STARTING_BOARD} turn="black" inCheck={false} />);
     expect(container.querySelector('[data-board]')?.hasAttribute('data-movable')).toBe(false);
+  });
+
+  it('nasconde i pezzi e le case possibili quando richiesto', () => {
+    const { container } = render(
+      <Chessboard
+        boardFen={STARTING_BOARD}
+        turn="white"
+        inCheck={false}
+        onMove={vi.fn()}
+        hidePieces
+      />,
+    );
+
+    expect(container.querySelector('[data-board]')?.hasAttribute('data-hidden-pieces')).toBe(true);
+    expect(chessgroundMock.create.mock.calls[0]?.[1].movable?.showDests).toBe(false);
   });
 
   it('anima i pezzi, tranne se il sistema chiede di ridurre le animazioni', () => {

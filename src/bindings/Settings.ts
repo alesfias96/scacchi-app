@@ -5,6 +5,7 @@ import type { GameSetup } from "./GameSetup";
 import type { Notation } from "./Notation";
 import type { PieceStyle } from "./PieceStyle";
 import type { SoundSetting } from "./SoundSetting";
+import type { TrainingSetup } from "./TrainingSetup";
 
 /**
  * Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
@@ -37,4 +38,8 @@ sounds: SoundSetting,
 /**
  * L'ultima configurazione scelta per una nuova partita.
  */
-gameSetup: GameSetup, };
+gameSetup: GameSetup, 
+/**
+ * L'ultima configurazione scelta per l'allenamento.
+ */
+trainingSetup: TrainingSetup, };

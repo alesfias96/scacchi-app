@@ -11,3 +11,4 @@ pub mod game;
 pub mod pgn_file;
 pub mod position;
 pub mod settings;
+pub mod training;

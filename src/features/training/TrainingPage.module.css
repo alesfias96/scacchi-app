@@ -1,0 +1,81 @@
+/*
+ * Sezione "Allenamento": come "Gioca". A sinistra la scacchiera, grande quanto
+ * l'altezza della finestra permette; a destra la colonna con le schede, alta
+ * quanto la finestra e con il suo scorrimento interno.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Il titolo della pagina, presente per i lettori di schermo ma invisibile. */
+.hiddenTitle {
+  position: absolute;
+  width: var(--border-width);
+  height: var(--border-width);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--play-panel-width);
+  gap: var(--space-6);
+  height: 100%;
+  min-height: 0;
+}
+
+/* La scacchiera cresce fino alla dimensione massima, ma resta sempre visibile intera. */
+.boardArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  justify-self: center;
+  width: 100%;
+  max-width: min(var(--board-focus-max-size), calc(100vh - var(--board-vertical-reserve)));
+  min-width: var(--board-min-size);
+}
+
+.boardWrap {
+  /* Riferimento per la scelta della promozione, che compare sopra la scacchiera. */
+  position: relative;
+}
+
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+  overscroll-behavior: contain;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+}
+
+.stats dt {
+  color: var(--color-text-muted);
+}
+
+.stats dd {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+  text-align: right;
+}
+
+.message {
+  color: var(--color-text-muted);
+  line-height: var(--leading-body);
+}
+
+.error {
+  color: var(--color-danger);
+}

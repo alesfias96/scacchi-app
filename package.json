@@ -10,6 +10,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "engines": "node scripts/fetch-engines.js",
+    "puzzles": "node scripts/fetch-puzzles.js",
     "pretauri": "npm run engines",
     "tauri": "tauri",
     "format": "prettier --write .",

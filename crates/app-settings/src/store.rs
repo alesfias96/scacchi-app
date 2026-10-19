@@ -56,6 +56,7 @@ mod tests {
     use super::{load, load_or_default, save};
     use crate::{
         AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, Settings, SoundSetting, StoreError,
+        TrainingSetup,
     };
     use std::path::PathBuf;
 
@@ -86,6 +87,7 @@ mod tests {
             notation: Notation::Internazionale,
             sounds: SoundSetting::Off,
             game_setup: GameSetup::default(),
+            training_setup: TrainingSetup::default(),
         };
 
         save(&path, &settings).expect("salvataggio riuscito");

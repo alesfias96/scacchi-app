@@ -1,0 +1,41 @@
+# =============================================================================
+# Crate "training" — l'allenamento con i puzzle
+# -----------------------------------------------------------------------------
+# Contiene i puzzle scelti dal database di Lichess (data/puzzles/, licenza
+# CC0) e sa: sceglierne uno adatto (profondità, tema, difficoltà), verificare
+# le mosse di chi lo risolve, aggiornare il rating dei puzzle e decidere
+# quando un puzzle sbagliato torna per il ripasso.
+# Non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "training"
+description = "Allenamento con i puzzle: scelta, verifica, rating, ripasso"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:serde",
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "analysis/bindings",
+    "app-settings/bindings",
+]
+
+[dependencies]
+# Le regole: giocare le mosse del puzzle e scrivere la soluzione in SAN.
+chess-core.workspace = true
+# I rilevatori: spiegano la soluzione (forchetta, inchiodatura, ...).
+analysis.workspace = true
+# Le scelte dell'allenamento (modalità, difficoltà) sono impostazioni dell'utente.
+app-settings.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

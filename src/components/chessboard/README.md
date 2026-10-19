@@ -11,6 +11,8 @@ Può essere **in sola lettura** (come l'anteprima nelle Impostazioni) oppure
 le case permesse dalle mosse legali calcolate da Rust, e la scacchiera comunica la mossa fatta.
 Può anche disegnare **segni**: la freccia verde della mossa migliore secondo il motore e le frecce
 e i cerchi blu delle osservazioni.
+Per l'allenamento "visualizzazione" può infine **nascondere i pezzi**: restano al loro posto e si
+muovono con due clic sulle case, senza i pallini delle case raggiungibili (li rivelerebbero).
 
 È **l'unica scacchiera dell'app**: ogni sezione (Gioca, Allenamento, Tutor, ...) usa questo
 componente. Lo stile della scacchiera e dei pezzi non si passa come proprietà: il componente

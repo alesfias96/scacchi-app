@@ -28,7 +28,7 @@ import type { PositionReport } from '../../../bindings/PositionReport';
 import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { Switch } from '../../../components/switch/Switch';
 import { classNames } from '../../../lib/classNames';
-import { formatFact } from './formatFact';
+import { formatFact } from '../../../lib/formatFact';
 import styles from './ObservationsPanel.module.css';
 
 /** I titoli dei gruppi, nell'ordine in cui compaiono. */

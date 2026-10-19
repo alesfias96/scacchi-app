@@ -25,7 +25,7 @@ import { formatEvaluation } from '../../../lib/formatEvaluation';
 import { PanelCard } from '../../../components/panel-card/PanelCard';
 import { Switch } from '../../../components/switch/Switch';
 import styles from './AnalysisPanel.module.css';
-import { formatLine } from './formatLine';
+import { formatLine } from '../../../lib/formatLine';
 
 /** Quante mezze mosse della variante mostrare. */
 const LINE_LENGTH = 12;

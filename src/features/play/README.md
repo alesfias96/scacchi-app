@@ -55,7 +55,6 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 | `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                                                          |
 | `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                                                                |
 | `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, abbandona, gira la scacchiera                                                 |
-| `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                                                                |
 | `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                                                           |
 | `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                                                 |
 | `pgn-file/`           | Salvare la partita in un file `.pgn` e aprirne uno, con la finestra del sistema                                                     |

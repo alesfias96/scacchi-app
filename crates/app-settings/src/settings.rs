@@ -6,13 +6,14 @@ use crate::game_setup::GameSetup;
 use crate::notation::Notation;
 use crate::piece_style::PieceStyle;
 use crate::sound_setting::SoundSetting;
+use crate::training_setup::TrainingSetup;
 
 /// Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
 ///
 /// `#[serde(default)]`: se nel file manca un valore (ad esempio perché
 /// l'impostazione è stata aggiunta in una versione successiva dell'app),
 /// viene usato quello predefinito invece di scartare tutto il file.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 #[cfg_attr(feature = "bindings", derive(ts_rs::TS), ts(export))]
 pub struct Settings {
@@ -28,12 +29,16 @@ pub struct Settings {
     pub sounds: SoundSetting,
     /// L'ultima configurazione scelta per una nuova partita.
     pub game_setup: GameSetup,
+    /// L'ultima configurazione scelta per l'allenamento.
+    pub training_setup: TrainingSetup,
 }
 
 #[cfg(test)]
 mod tests {
     use super::Settings;
-    use crate::{AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting};
+    use crate::{
+        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting, TrainingSetup,
+    };
 
     #[test]
     fn the_defaults_are_studio_rovere_icona_figurine_with_sounds() {
@@ -55,13 +60,14 @@ mod tests {
             notation: Notation::Italiana,
             sounds: SoundSetting::Off,
             game_setup: GameSetup::default(),
+            training_setup: TrainingSetup::default(),
         };
 
         let json = serde_json::to_string(&settings).expect("conversione in JSON");
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}}}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5}}"#
         );
     }
 

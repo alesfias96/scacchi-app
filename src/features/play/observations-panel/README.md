@@ -8,9 +8,8 @@ Passando il mouse su un fatto (o raggiungendolo con il tasto Tab) la scacchiera 
 cerchi blu sulle case coinvolte. La scheda si aggiorna da sola a ogni mossa e quando si scorre
 la partita. Contro il computer parte spenta: vederla mentre si gioca sarebbe un aiuto.
 
-| File                           | Cosa fa                                                                   |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| `ObservationsPanel.tsx`        | La scheda                                                                 |
-| `ObservationsPanel.module.css` | I suoi stili                                                              |
-| `formatFact.ts`                | La frase completa di un fatto, con le mosse citate nella notazione scelta |
-| `*.test.ts(x)`                 | I test                                                                    |
+| File                           | Cosa fa      |
+| ------------------------------ | ------------ |
+| `ObservationsPanel.tsx`        | La scheda    |
+| `ObservationsPanel.module.css` | I suoi stili |
+| `*.test.ts(x)`                 | I test       |

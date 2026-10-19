@@ -6,6 +6,7 @@ il database controlla quali passi ha già fatto e applica, in ordine, quelli man
 **Regola:** un file già rilasciato non si modifica mai. Per cambiare lo schema se ne aggiunge uno
 nuovo, con il numero successivo (`0002_descrizione.sql`).
 
-| File                       | Cosa fa                                                                                  |
-| -------------------------- | ---------------------------------------------------------------------------------------- |
-| `0001_games_and_moves.sql` | Crea le tabelle `games` (le partite) e `moves` (le mosse, con i dati per le statistiche) |
+| File                       | Cosa fa                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| `0001_games_and_moves.sql` | Crea le tabelle `games` (le partite) e `moves` (le mosse, con i dati per le statistiche)   |
+| `0002_training.sql`        | Crea le tabelle `puzzle_attempts` (i tentativi dei puzzle) e `puzzle_reviews` (il ripasso) |

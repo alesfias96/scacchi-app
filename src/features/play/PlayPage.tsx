@@ -59,7 +59,10 @@ import { PgnFileButtons } from './pgn-file/PgnFileButtons';
 import { PlayerBar } from './player-bar/PlayerBar';
 import { describePlayer } from './player-bar/describePlayer';
 import { PositionPanel } from './position-panel/PositionPanel';
-import { PromotionPicker, type PromotionPiece } from './promotion-picker/PromotionPicker';
+import {
+  PromotionPicker,
+  type PromotionPiece,
+} from '../../components/promotion-picker/PromotionPicker';
 import styles from './PlayPage.module.css';
 
 /** Una promozione in attesa della scelta del pezzo: le due case della mossa. */

@@ -1,0 +1,87 @@
+/*
+ * Scheda "Soluzione": i dettagli in due colonne (nome e valore), poi i fatti
+ * che spiegano la soluzione, ognuno un pulsante che si illumina al passaggio.
+ */
+
+.details {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  font-size: var(--text-small);
+}
+
+.details dt {
+  color: var(--color-text-muted);
+}
+
+.details dd {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+}
+
+.change {
+  color: var(--color-text-muted);
+}
+
+.up {
+  color: var(--color-success);
+}
+
+.down {
+  color: var(--color-danger);
+}
+
+.solution {
+  line-height: var(--leading-body);
+}
+
+.why {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.whyTitle {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fact {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+  text-align: left;
+  cursor: default;
+  transition: background var(--duration-fast) var(--easing-standard);
+}
+
+.fact:hover,
+.fact:focus-visible {
+  background: var(--color-accent-soft);
+  outline: none;
+}

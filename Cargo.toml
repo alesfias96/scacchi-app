@@ -22,6 +22,7 @@ resolver = "3"
 # - crates/openings: il riconoscimento delle aperture (elenco di Lichess).
 # - crates/storage: il database delle partite (SQLite).
 # - crates/analysis: i rilevatori (minacce, tattiche, pedoni, re, attività dei pezzi).
+# - crates/training: l'allenamento con i puzzle (scelta, verifica, rating, ripasso).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -32,6 +33,7 @@ members = [
     "crates/openings",
     "crates/storage",
     "crates/analysis",
+    "crates/training",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -71,6 +73,7 @@ game-session = { path = "crates/game-session" }
 openings = { path = "crates/openings" }
 storage = { path = "crates/storage" }
 analysis = { path = "crates/analysis" }
+training = { path = "crates/training" }
 
 # Desktop.
 tauri = { version = "2", features = [] }

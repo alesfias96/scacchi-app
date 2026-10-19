@@ -27,6 +27,9 @@
  * - `arrow`: facoltativa, una mossa da indicare con una freccia verde (la
  *   mossa migliore secondo il motore);
  * - `marks`: facoltativi, frecce e cerchi blu (le case di un'osservazione);
+ * - `hidePieces`: facoltativo. Se `true` i pezzi diventano invisibili (allenamento
+ *   "visualizzazione"): restano al loro posto e si muovono con due clic, senza
+ *   mostrare le case possibili (le rivelerebbero);
  * - `resyncKey`: facoltativo. Cambiarlo riporta i pezzi alla posizione
  *   ricevuta, ad esempio dopo una promozione annullata (quando il pedone è
  *   già stato spostato sulla scacchiera ma la mossa non è stata giocata).
@@ -75,6 +78,8 @@ export interface ChessboardProps {
   arrow?: LegalMove | null;
   /** Frecce e cerchi da disegnare (le case di un'osservazione); `null` o assenti se nessuno. */
   marks?: BoardMarks | null;
+  /** `true` per nascondere i pezzi (vedi descrizione sopra). */
+  hidePieces?: boolean;
   /** Cambiarlo riporta i pezzi alla posizione ricevuta (vedi descrizione sopra). */
   resyncKey?: number;
 }
@@ -98,6 +103,7 @@ export function Chessboard({
   onMove,
   arrow = null,
   marks = null,
+  hidePieces = false,
   resyncKey = 0,
 }: ChessboardProps) {
   /** Lo stile di scacchiera e pezzi scelto nelle Impostazioni. */
@@ -162,7 +168,7 @@ export function Chessboard({
         free: false,
         color: isInteractive ? turn : undefined,
         dests: isInteractive ? buildDests(legalMoves) : new Map(),
-        showDests: true,
+        showDests: !hidePieces,
         events: {
           after: (from, to) => {
             onMoveRef.current?.(from, to);
@@ -188,6 +194,7 @@ export function Chessboard({
     arrowFrom,
     arrowTo,
     marks,
+    hidePieces,
     resyncKey,
   ]);
 
@@ -200,13 +207,15 @@ export function Chessboard({
   }, []);
 
   // data-board e data-pieces attivano gli stili scelti (vedi themes/);
-  // data-movable indica il colore che può muovere (cursore a mano sui suoi pezzi).
+  // data-movable indica il colore che può muovere (cursore a mano sui suoi pezzi);
+  // data-hidden-pieces nasconde i pezzi.
   return (
     <div
       className={styles.frame}
       data-board={board}
       data-pieces={pieces}
       data-movable={isInteractive ? turn : undefined}
+      data-hidden-pieces={hidePieces ? '' : undefined}
     >
       <div ref={containerRef} className={styles.board} />
     </div>

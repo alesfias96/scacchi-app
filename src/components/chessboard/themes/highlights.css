@@ -112,3 +112,12 @@
 [data-pieces] .cg-wrap piece.ghost {
   opacity: var(--piece-ghost-opacity);
 }
+
+/*
+ * Allenamento "visualizzazione": i pezzi spariscono (data-hidden-pieces,
+ * impostato da Chessboard.tsx). Restano al loro posto e si muovono con due
+ * clic sulle case, come alla cieca.
+ */
+[data-hidden-pieces] .cg-wrap piece {
+  visibility: hidden;
+}
