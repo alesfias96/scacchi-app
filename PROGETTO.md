@@ -324,7 +324,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 3. Motore                       | ✅ completata |
 | 4. Database                     | ✅ completata |
 | 5. Analisi                      | ✅ completata |
-| 6. Allenamento calcolo          | 🔵 in test    |
+| 6. Allenamento calcolo          | ✅ completata |
 | 7. Tutor                        | ⚪ da fare    |
 | 8. Analisi partite              | ⚪ da fare    |
 | 9. Statistiche                  | ⚪ da fare    |
@@ -421,6 +421,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Ripasso con le scatole di Leitner: 1, 3, 7, 14, 30 giorni; un nuovo errore riporta alla prima; il ripasso non cambia il rating                                                                   | Metodo semplice e collaudato; ripassare un puzzle già visto non misura il livello                                                                                                                                                             |
 | 2026-10-19 | A puzzle finito si mostrano rating, difficoltà, temi in italiano, soluzione e i fatti dei rilevatori a favore di chi risolve                                                                     | "Perché funziona" usa i rilevatori della Fase 5, senza motore                                                                                                                                                                                 |
 | 2026-10-19 | La scelta della promozione e la scrittura di varianti e fatti diventano condivise (`components/promotion-picker`, `lib/formatLine`, `lib/formatFact`)                                            | Servono sia in "Gioca" sia in "Allenamento"                                                                                                                                                                                                   |
+| 2026-10-19 | Fase 6 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
