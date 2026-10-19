@@ -51,6 +51,7 @@ describe('Chessboard', () => {
           difficulty: 'normal',
           visualizationSeconds: 5,
         },
+        statsFilter: { period: 'all', opponent: 'all' },
       },
     });
   });
@@ -108,6 +109,7 @@ describe('Chessboard', () => {
           difficulty: 'normal',
           visualizationSeconds: 5,
         },
+        statsFilter: { period: 'all', opponent: 'all' },
       },
     });
 

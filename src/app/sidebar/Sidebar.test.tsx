@@ -1,5 +1,5 @@
 /**
- * Test della barra laterale: sezione attiva, Impostazioni e sezioni in arrivo.
+ * Test della barra laterale: sezione attiva, Impostazioni e collegamenti alle sezioni.
  */
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -25,13 +25,12 @@ describe('Sidebar', () => {
     expect(playLink.getAttribute('aria-current')).toBeNull();
   });
 
-  it('disattiva le sezioni non ancora disponibili e indica la fase', async () => {
-    renderWithRouter(<Sidebar />, '/');
+  it('porta alla sezione Progressi', async () => {
+    renderWithRouter(<Sidebar />, '/progressi');
 
-    const progressButton = await screen.findByRole('button', { name: /Progressi/ });
+    const link = await screen.findByRole('link', { name: 'Progressi' });
 
-    expect(progressButton.hasAttribute('disabled')).toBe(true);
-    expect(progressButton.textContent).toContain('Fase 9');
+    expect(link.getAttribute('aria-current')).toBe('page');
   });
 
   it('porta alla modalità Tutor', async () => {

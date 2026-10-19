@@ -25,6 +25,7 @@ resolver = "3"
 # - crates/training: l'allenamento con i puzzle (scelta, verifica, rating, ripasso).
 # - crates/tutor: le spiegazioni delle posizioni (fatti + base di conoscenza in knowledge/).
 # - crates/review: l'analisi delle partite giocate (giudizio delle mosse, momenti critici).
+# - crates/stats: le statistiche dei progressi (livello, precisione, aperture, calcolo).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -38,6 +39,7 @@ members = [
     "crates/training",
     "crates/tutor",
     "crates/review",
+    "crates/stats",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -80,6 +82,7 @@ analysis = { path = "crates/analysis" }
 training = { path = "crates/training" }
 tutor = { path = "crates/tutor" }
 review = { path = "crates/review" }
+stats = { path = "crates/stats" }
 
 # Desktop.
 tauri = { version = "2", features = [] }

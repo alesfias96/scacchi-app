@@ -55,8 +55,8 @@ pub fn save(path: &Path, settings: &Settings) -> Result<(), StoreError> {
 mod tests {
     use super::{load, load_or_default, save};
     use crate::{
-        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, Settings, SoundSetting, StoreError,
-        TrainingSetup,
+        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, Settings, SoundSetting, StatsFilter,
+        StoreError, TrainingSetup,
     };
     use std::path::PathBuf;
 
@@ -88,6 +88,7 @@ mod tests {
             sounds: SoundSetting::Off,
             game_setup: GameSetup::default(),
             training_setup: TrainingSetup::default(),
+            stats_filter: StatsFilter::default(),
         };
 
         save(&path, &settings).expect("salvataggio riuscito");

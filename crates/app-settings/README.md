@@ -29,7 +29,7 @@ Un file mancante (primo avvio) o rovinato non blocca mai l'app: vengono usate le
 
 Con l'opzione `bindings` (attivata da `src-tauri`) i test generano automaticamente i tipi
 TypeScript corrispondenti in `src/bindings/` (`AppTheme`, `BoardStyle`, `PieceStyle`, `Notation`, `SoundSetting`, `Settings`, `GameSetup`,
-`TrainingSetup`, `TrainingMode`, `Difficulty`, …).
+`TrainingSetup`, `TrainingMode`, `Difficulty`, `StatsFilter`, `StatsPeriod`, `StatsOpponent`, …).
 
 ## Test
 

@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — Fase 8-bis completata; proposto il piano della Fase 9 (Statistiche), in attesa di risposta.**
+> **Ultimo aggiornamento: 2026-10-19 — Fase 9 (Statistiche) fatta, in test: si aspettano i test a mano di Alessandro.**
 
 ---
 
@@ -62,58 +62,46 @@ App desktop **offline** per giocare, imparare e allenarsi a scacchi (Windows, ma
 
 ## 5. Stato: cosa è fatto
 
-| Fase     | Cosa ha portato                                                                                                                                                                                           |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, 1-bis | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
-| 2        | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
-| 3        | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
-| 4        | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
-| 5        | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
-| 6        | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
-| 7        | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
-| 8        | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
-| 8-bis    | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
+| Fase        | Cosa ha portato                                                                                                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, 1-bis    | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
+| 2           | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
+| 3           | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
+| 4           | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
+| 5           | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
+| 6           | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
+| 7           | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
+| 8           | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
+| 8-bis       | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
+| 9 (in test) | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                     |
 
 Disposizione attuale delle sezioni con scacchiera: scacchiera a sinistra, colonna a destra **alta
 quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul bordo sinistro (tasto M).
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Proposto il piano della Fase 9 (Statistiche), in attesa della risposta di Alessandro.**
+**Fase 9 (Statistiche) implementata e in test** (`PROGETTO.md` §9: 🔵). Si aspetta che Alessandro
+faccia i test a mano e dica se va bene o cosa ritoccare. Quando approva: fase ✅, riga «Fase 9
+approvata» nel registro, commit, aggiornare questo file e proporre il piano della Fase 10.
 
-Dati già disponibili: `games` (data, avversario, livello, colore, tempo, risultato, apertura),
-`moves` (tempo usato e rimasto; per le partite analizzate anche valutazioni, centipedoni persi,
-fase, temi, minacce concesse), `puzzle_attempts` (data, modalità, esito, tempo, rating dopo; temi e
-profondità dal catalogo dei puzzle). Limite: precisione, errori e fasi solo per le partite analizzate.
+Com'è fatta la Fase 9 (scelte 1A–6A approvate):
 
-Il piano proposto (A = consigliata):
-
-1. Sezione «Progressi» con quattro schede — **A**: _Livello_ (Elo stimato, rating dei puzzle nel
-   tempo, precisione media nel tempo); _Partite_ (vinte/perse/patte per avversario e colore,
-   precisione ed errori per fase, errori con poco tempo); _Aperture_ (le più giocate con risultati e
-   precisione, per Bianco e Nero); _Calcolo e tattica_ (puzzle risolti per numero di mosse — la
-   profondità di calcolo, anche nel tempo — e per tema; ripassi in attesa). B: una pagina con pochi numeri.
-2. Livello stimato — **A**: Elo di rendimento dai risultati contro i livelli del computer (che hanno
-   un Elo indicativo), solo dopo almeno 5 partite; il rating dei puzzle resta a parte. B: dalla precisione.
-3. Partite non analizzate — **A**: pulsante «Analizza le partite mancanti» (coda in sottofondo, una
-   alla volta, con avanzamento e stop); le schede dicono su quante partite si basano. B: solo quelle già analizzate.
-4. Grafici — **A**: disegnati da noi in SVG (linea nel tempo, barre orizzontali), colori del tema,
-   nessuna libreria. B: una libreria tipo Recharts.
-5. Filtri — **A**: periodo (30 giorni, 90 giorni, tutto) e avversario (computer, due giocatori,
-   tutti), validi per tutte le schede e ricordati nelle impostazioni.
-6. Dove sta il calcolo — **A**: crate `stats` (calcoli puri e testati); `storage` legge i dati
-   grezzi, il ponte li unisce, l'interfaccia mostra soltanto.
+- `crates/stats`: calcoli puri (`build_report`); Elo stimato = media Elo dei livelli affrontati
+  - 400 × (vinte − perse) ÷ partite, con almeno 5 partite finite contro il computer.
+- `crates/storage/src/stats_data.rs`: legge i dati grezzi con i filtri; `unanalyzed_games`.
+- `crates/app-settings/src/stats_filter.rs`: `statsFilter` (periodo, partite) in `settings.json`.
+- Ponte: `commands/stats.rs` (`get_stats`, `analyze_missing_games`),
+  `reactions/review_queue.rs` (coda, evento `review-queue`).
+- Interfaccia: `features/progress/`, `components/line-chart/`, `components/bar-list/`,
+  `services/statsService.ts`, coda in `state/reviewStore.ts`; rotta `/progressi`.
+- La barra laterale non ha più sezioni «in arrivo» (codice cancellato).
 
 ## 7. Cosa resta da fare
 
-- **9. Statistiche** — sezione «Progressi»: precisione ed errori nel tempo, per fase e per apertura,
-  livello stimato, rating dei puzzle, temi tattici più sbagliati; crate `crates/stats`; libreria
-  dei grafici da scegliere (offline, rispettosa dei temi). I dati sono già nella tabella `moves`
-  (riempita dall'analisi delle partite) e in `puzzle_attempts`.
 - **10. Estensioni** — Maia via lc0 (avversario "umano"), AI locale facoltativa (es. Ollama) che
   racconta senza decidere, installatori firmati e aggiornamenti, CSP restrittiva.
 - **11. Appunti personali** — richiesta di Alessandro, alla fine: note libere con ricerca,
-  collegabili a partite e posizioni, salvate nel database.
+  collegabili a partite e posizioni, salvate nel database. Andrà aggiunta una voce nel menu.
 - Prima di distribuire: chessground e Stockfish sono GPL-3.0 (per uso personale nessun problema).
 
 ## 8. Mappa veloce
@@ -121,11 +109,11 @@ Il piano proposto (A = consigliata):
 - `crates/`: `chess-core` (regole, partita, PGN/FEN), `app-settings`, `engine` (UCI; analisi,
   mossa, valutazione breve), `game-session` (partita in corso, orologio), `openings`, `storage`
   (SQLite, migrazioni in `migrations/`), `analysis` (rilevatori), `training` (puzzle), `tutor`
-  (spiegazioni + `knowledge/`), `review` (analisi partite).
+  (spiegazioni + `knowledge/`), `review` (analisi partite), `stats` (statistiche).
 - `src-tauri/src/`: `commands/` (un file per argomento), `state/`, `events/`, `reactions/`.
   Quattro Stockfish: gioca, analizza, tutor, analisi partite.
 - `src/`: `app/` (router, menu, cornice), `features/` (`play` con `coach/`, `archive`,
-  `training`, `tutor`, `review`, `settings`), `components/`, `services/`, `state/`, `hooks/`,
+  `training`, `tutor`, `review`, `progress`, `settings`), `components/`, `services/`, `state/`, `hooks/`,
   `lib/`, `styles/`, `bindings/` (generati), `test/` (dati di prova).
 - `data/`: aperture e puzzle di Lichess (CC0). `knowledge/`: schede TOML del tutor.
 

@@ -42,5 +42,5 @@ pub use move_quality::MoveQuality;
 pub use own_puzzle::{OwnPuzzle, own_puzzles};
 pub use review_error::ReviewError;
 pub use review_input::{PositionEval, ReviewInput};
-pub use review_progress::{ReviewFinished, ReviewProgress};
+pub use review_progress::{ReviewFinished, ReviewProgress, ReviewQueueProgress};
 pub use review_view::{CriticalMoment, GameReview, MoveReview, PlayerSummary};

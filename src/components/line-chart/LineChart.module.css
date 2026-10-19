@@ -1,0 +1,56 @@
+/*
+ * Il grafico a linea: i valori più alto e più basso a sinistra, il disegno a
+ * destra, le date del primo e dell'ultimo punto sotto.
+ */
+
+.chart {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+}
+
+.values {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.drawing {
+  display: block;
+  width: 100%;
+  height: var(--line-chart-height);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+}
+
+.grid {
+  stroke: var(--color-border);
+  vector-effect: non-scaling-stroke;
+}
+
+.line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Le date stanno sotto il disegno (seconda colonna). */
+.dates {
+  display: flex;
+  grid-column: 2;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.empty {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

@@ -153,9 +153,12 @@ async fn analyze_game(app: &AppHandle, game_id: &str, generation: u64) -> Result
 }
 
 /// Analizza una partita in sottofondo e, alla fine, avvisa l'interfaccia.
-pub async fn run_review(app: AppHandle, game_id: String, generation: u64) {
+///
+/// Restituisce `true` se l'analisi è arrivata in fondo (né fermata né fallita).
+pub async fn run_review(app: AppHandle, game_id: String, generation: u64) -> bool {
     let outcome = analyze_game(&app, &game_id, generation).await;
     app.state::<ReviewState>().finish();
+    let completed = matches!(outcome, Ok(true));
     let finished = match outcome {
         Ok(completed) => ReviewFinished {
             game_id,
@@ -169,4 +172,5 @@ pub async fn run_review(app: AppHandle, game_id: String, generation: u64) {
         },
     };
     emit_review_finished(&app, &finished);
+    completed
 }

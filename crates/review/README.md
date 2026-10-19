@@ -40,7 +40,7 @@ giudizio.
 
 Con l'opzione `bindings` (attivata da `src-tauri`) i test generano i tipi TypeScript in
 `src/bindings/`: `GameReview`, `MoveReview`, `MoveQuality`, `PlayerSummary`, `CriticalMoment`,
-`ReviewProgress`, `ReviewFinished`.
+`ReviewProgress`, `ReviewFinished`, `ReviewQueueProgress`.
 
 ## Test
 

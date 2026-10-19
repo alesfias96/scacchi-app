@@ -57,6 +57,7 @@ Obiettivi, in ordine di importanza:
 | Puzzle                   | ~100.000 puzzle di Lichess (CC0) in `data/puzzles/`, inclusi nell'app e tenuti in memoria; crate `training`                                           | ✅ deciso                                              |
 | Tutor                    | crate `tutor`: fatti dei rilevatori + schede TOML in `knowledge/` (incluse con `build.rs`); un terzo Stockfish per valutazioni brevi                  | ✅ deciso                                              |
 | Analisi partite          | crate `review`: probabilità di vittoria persa (come Lichess), precisione, momenti critici; un quarto Stockfish, 1 s per posizione; grafico SVG nostro | ✅ deciso                                              |
+| Statistiche              | crate `stats` (calcoli puri); `storage` legge i dati grezzi, il ponte li unisce; sezione «Progressi» con 4 schede e filtri salvati                    | ✅ deciso                                              |
 | Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                                                                                 | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
 | Scacchiera               | `chessground` avvolto in un componente React                                                                                                          | ✅ deciso                                              |
 | Stato interfaccia        | Zustand                                                                                                                                               | ✅ deciso                                              |
@@ -67,7 +68,7 @@ Obiettivi, in ordine di importanza:
 | Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app                                                                       | ✅ deciso                                              |
 | Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app                                                                  | ✅ deciso                                              |
 | Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili                                                                                | ✅ deciso                                              |
-| Grafici statistiche      | da decidere più avanti                                                                                                                                | ⚪ aperto                                              |
+| Grafici statistiche      | disegnati da noi in SVG (`components/line-chart`, `components/bar-list`), colori del tema, nessuna libreria                                           | ✅ deciso                                              |
 | Linguaggio del tutor     | regole (Fase 7) → poi AI locale (Ollama, Fase 10)                                                                                                     | 🔵 regole fatte                                        |
 | Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                                                                                               | ✅ deciso                                              |
 | Test                     | `cargo test`, Vitest                                                                                                                                  | ✅ deciso                                              |
@@ -179,7 +180,8 @@ app-scacchi/
 │   ├── training/               puzzle: scelta, verifica delle mosse, rating Elo, ripasso (scatole)
 │   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
 │   │                           critici, dati per le statistiche, puzzle dagli errori gravi
-│   ├── stats/                  calcolo delle statistiche
+│   ├── stats/                  statistiche di «Progressi»: Elo stimato, risultati, errori per fase
+│   │                           e con poco tempo, aperture, puzzle per profondità e per tema
 │   └── storage/                database SQLite: partite, archivio, tentativi dei puzzle, ripasso
 │
 ├── src-tauri/                  PONTE — solo comandi ed eventi
@@ -216,7 +218,9 @@ app-scacchi/
 │   │   ├── promotion-picker/   scelta del pezzo nella promozione (Gioca e Allenamento)
 │   │   ├── knowledge-cards/    schede della base di conoscenza (pannello del tutor e modalità Tutor)
 │   │   ├── tab-switch/         selettore a schede («Partita | Tutor»)
-│   │   └── eval-graph/         grafico della partita (probabilità di vittoria)
+│   │   ├── eval-graph/         grafico della partita (probabilità di vittoria)
+│   │   ├── line-chart/         grafico a linea nel tempo (Progressi)
+│   │   └── bar-list/           elenco di barre orizzontali, anche a più colori (Progressi)
 │   ├── features/               aree dell'app, ognuna autonoma
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/,
@@ -231,7 +235,9 @@ app-scacchi/
 │   │   │                       "e se…"; tutor-sections/, what-if-results/
 │   │   ├── review/             analisi partite: grafico, momenti critici, riepilogo, mosse con ?!/?/??
 │   │   │                       review-summary/, critical-moments/, review-moves/
-│   │   ├── progress/           statistiche e livello
+│   │   ├── progress/           «Progressi»: filtri, «Analizza le partite mancanti», 4 schede
+│   │   │                       progress-filters/, analysis-queue/, stat-figure/, level-tab/,
+│   │   │                       games-tab/, openings-tab/, tactics-tab/
 │   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione, suoni
 │   ├── sounds/                 suoni del gioco (mossa, presa, fine partita), creati con Web Audio
 │   ├── hooks/                  hook React condivisi (tastiera, suoni, tema di sistema, orologio)
@@ -342,7 +348,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 7. Tutor                        | ✅ completata |
 | 8. Analisi partite              | ✅ completata |
 | 8-bis. Varianti                 | ✅ completata |
-| 9. Statistiche                  | ⚪ da fare    |
+| 9. Statistiche                  | 🔵 in test    |
 | 10. Estensioni                  | ⚪ da fare    |
 | 11. Appunti personali           | ⚪ da fare    |
 
@@ -467,6 +473,15 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | «Promuovi a linea principale» solo a due giocatori senza orologio e a partita in corso; «Elimina da qui» sempre (non sulla linea principale)                                                     | Nelle partite finite o contro il computer la linea principale è la partita giocata davvero                                                                                                                                                    |
 | 2026-10-19 | «Copia FEN» e «Copia PGN» passano da Rust con `tauri-plugin-clipboard-manager` (comando `copy_text`)                                                                                             | Dal motore web dell'app la scrittura negli appunti non funzionava                                                                                                                                                                             |
 | 2026-10-19 | Fase 8-bis approvata                                                                                                                                                                             | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | Fase 9: sezione «Progressi» con quattro schede (Livello, Partite, Aperture, Calcolo e tattica)                                                                                                   | Scelte 1A–6A approvate                                                                                                                                                                                                                        |
+| 2026-10-19 | Elo stimato = Elo di rendimento: media dell'Elo dei livelli affrontati + 400 × (vinte − perse) ÷ partite, solo con almeno 5 partite finite contro il computer                                    | Si basa su risultati veri; con poche partite la stima sarebbe solo rumore. Il rating dei puzzle resta a parte                                                                                                                                 |
+| 2026-10-19 | «Analizza le partite mancanti»: coda in sottofondo (`reactions/review_queue.rs`), una partita alla volta dalla più vecchia; «Ferma» ferma anche la coda; evento `review-queue`                   | Precisione, errori e fasi esistono solo per le partite analizzate                                                                                                                                                                             |
+| 2026-10-19 | Grafici disegnati da noi in SVG: `LineChart` (linea nel tempo) e `BarList` (barre, anche a più tratti); niente libreria                                                                          | Bastano due tipi di grafico; restano offline, leggeri e con i colori del tema                                                                                                                                                                 |
+| 2026-10-19 | Filtri di «Progressi» (periodo 30/90 giorni o sempre; partite tutte, computer, due giocatori) salvati in `settings.json` (`statsFilter`)                                                         | Alla riapertura si ritrovano i filtri lasciati                                                                                                                                                                                                |
+| 2026-10-19 | Crate `stats` pura; `storage/stats_data.rs` legge i dati grezzi; il comando `get_stats` unisce (temi e profondità dei puzzle dal catalogo di `training`)                                         | Calcoli testabili senza database né interfaccia; lo stesso giudizio delle mosse dell'analisi (crate `review`)                                                                                                                                 |
+| 2026-10-19 | Le aperture si raggruppano per famiglia (il nome di Lichess prima dei due punti), fino a 8 per colore                                                                                            | Le varianti sono troppe: con poche partite ognuna avrebbe 1 partita                                                                                                                                                                           |
+| 2026-10-19 | Errori con poco tempo = mosse giocate con meno di un quinto del tempo iniziale sull'orologio                                                                                                     | Soglia semplice, valida per ogni controllo del tempo                                                                                                                                                                                          |
+| 2026-10-19 | Barra laterale: tolte le sezioni «in arrivo» (Progressi era l'ultima); il codice delle voci disattivate è stato cancellato                                                                       | Codice morto                                                                                                                                                                                                                                  |
 
 ---
 
@@ -481,7 +496,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 7 — Tutor.** Fatta (vedi registro §10). Da arricchire nel tempo: altre schede (aperture meno comuni, finali specifici), frasi più chiare man mano che Alessandro le legge.
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
-- **Fase 9 — Statistiche.** Crate `crates/stats`; libreria dei grafici da scegliere (offline, rispettosa dei temi).
+- **Fase 9 — Statistiche.** Fatta, in test (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.

@@ -2,15 +2,14 @@
  * Sidebar — la barra laterale dell'app.
  *
  * Cosa fa: mostra il nome dell'app, le sezioni e, in fondo, le Impostazioni.
- * Le sezioni utilizzabili sono collegamenti: quella aperta è evidenziata
- * (il router aggiunge da solo `aria-current="page"`). Le sezioni non ancora
- * costruite sono visibili ma disattivate, con la fase in cui arriveranno.
+ * Ogni sezione è un collegamento: quella aperta è evidenziata (il router
+ * aggiunge da solo `aria-current="page"`).
  *
  * Riceve: niente.
  * Restituisce: l'elemento <nav> con la barra laterale.
  */
 import { Link } from '@tanstack/react-router';
-import { NAVIGATION_ITEMS, SETTINGS_ITEM, isAvailable } from './navigation';
+import { NAVIGATION_ITEMS, SETTINGS_ITEM } from './navigation';
 import styles from './Sidebar.module.css';
 
 /**
@@ -27,21 +26,14 @@ export function Sidebar() {
       <ul className={styles.list}>
         {NAVIGATION_ITEMS.map((item) => (
           <li key={item.id}>
-            {isAvailable(item) ? (
-              <Link
-                to={item.to}
-                className={styles.item}
-                activeOptions={{ exact: true }}
-                activeProps={ACTIVE_LINK_PROPS}
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <button type="button" className={styles.item} disabled>
-                <span>{item.label}</span>
-                <span className={styles.phase}>Fase {item.availableFromPhase}</span>
-              </button>
-            )}
+            <Link
+              to={item.to}
+              className={styles.item}
+              activeOptions={{ exact: true }}
+              activeProps={ACTIVE_LINK_PROPS}
+            >
+              {item.label}
+            </Link>
           </li>
         ))}
       </ul>

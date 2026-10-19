@@ -29,6 +29,7 @@ describe('PieceIcon', () => {
           difficulty: 'normal',
           visualizationSeconds: 5,
         },
+        statsFilter: { period: 'all', opponent: 'all' },
       },
     });
   });

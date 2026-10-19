@@ -1,0 +1,57 @@
+/*
+ * L'elenco di barre: nome a sinistra, barra al centro, dettaglio a destra.
+ * Le tre colonne sono uguali per tutte le righe, così le barre si allineano.
+ */
+
+.list {
+  display: grid;
+  grid-template-columns: minmax(var(--bar-label-min-width), auto) 1fr auto;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Ogni riga lascia i suoi tre elementi nelle colonne dell'elenco. */
+.item {
+  display: contents;
+}
+
+.label {
+  font-weight: var(--weight-medium);
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: var(--bar-height);
+  border-radius: var(--radius-small);
+}
+
+.track {
+  fill: var(--color-surface-muted);
+}
+
+.good {
+  fill: var(--color-success);
+}
+
+.neutral {
+  fill: var(--color-text-muted);
+}
+
+.bad {
+  fill: var(--color-danger);
+}
+
+.accent {
+  fill: var(--color-accent);
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

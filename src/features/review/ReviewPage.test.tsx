@@ -21,6 +21,12 @@ const reviewMock = vi.hoisted(() => ({
 
 vi.mock('../../services/reviewService', () => reviewMock);
 
+// La coda «Analizza le partite mancanti» non serve qui: si ascolta e basta.
+vi.mock('../../services/statsService', () => ({
+  analyzeMissingGames: vi.fn(),
+  listenToReviewQueue: () => Promise.resolve(() => undefined),
+}));
+
 /** chessground simulato: ricorda l'ultima configurazione ricevuta. */
 const chessgroundMock = vi.hoisted(() => ({
   state: { config: undefined as Config | undefined },
@@ -61,6 +67,7 @@ describe('ReviewPage', () => {
           difficulty: 'normal',
           visualizationSeconds: 5,
         },
+        statsFilter: { period: 'all', opponent: 'all' },
       },
     });
   });

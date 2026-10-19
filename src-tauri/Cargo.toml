@@ -44,6 +44,8 @@ training = { workspace = true, features = ["bindings"] }
 tutor = { workspace = true, features = ["bindings"] }
 # L'analisi delle partite giocate (giudizio delle mosse, momenti critici).
 review = { workspace = true, features = ["bindings"] }
+# Le statistiche dei progressi.
+stats = { workspace = true, features = ["bindings"] }
 # Le finestre di sistema per salvare e aprire i file .pgn.
 tauri-plugin-dialog.workspace = true
 # Gli appunti del sistema: Copia FEN e Copia PGN.

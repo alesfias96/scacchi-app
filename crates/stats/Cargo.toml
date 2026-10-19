@@ -1,0 +1,47 @@
+# =============================================================================
+# Crate "stats" — le statistiche dei progressi
+# -----------------------------------------------------------------------------
+# Riceve i dati grezzi (partite, mosse delle partite analizzate, tentativi dei
+# puzzle) e calcola le statistiche della sezione «Progressi»: livello stimato,
+# precisione nel tempo, risultati, errori per fase e con poco tempo, aperture,
+# profondità di calcolo e temi tattici.
+# Non legge il database (lo fa storage) e non sa nulla dell'interfaccia.
+# =============================================================================
+
+[package]
+name = "stats"
+description = "Statistiche dei progressi: livello, precisione, aperture, calcolo, tattica"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = [
+    "dep:serde",
+    "dep:ts-rs",
+    "chess-core/bindings",
+    "analysis/bindings",
+    "engine/bindings",
+    "app-settings/bindings",
+]
+
+[dependencies]
+# Il colore dei giocatori.
+chess-core.workspace = true
+# La fase di gioco.
+analysis.workspace = true
+# La valutazione del motore e l'Elo indicativo dei livelli del computer.
+engine.workspace = true
+# Contro chi si è giocato.
+app-settings.workspace = true
+# La probabilità di vittoria e il giudizio delle mosse (gli stessi dell'analisi).
+review.workspace = true
+# I nomi italiani dei temi dei puzzle.
+training.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

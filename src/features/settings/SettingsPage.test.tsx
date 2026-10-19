@@ -43,6 +43,7 @@ describe('SettingsPage', () => {
           difficulty: 'normal',
           visualizationSeconds: 5,
         },
+        statsFilter: { period: 'all', opponent: 'all' },
       },
       saveError: null,
     });
@@ -76,6 +77,7 @@ describe('SettingsPage', () => {
         difficulty: 'normal',
         visualizationSeconds: 5,
       },
+      statsFilter: { period: 'all', opponent: 'all' },
     });
   });
 

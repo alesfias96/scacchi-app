@@ -15,6 +15,6 @@ Ogni file ha un solo compito. I test di ogni file stanno in fondo al file stesso
 | `review_view.rs`     | La forma della revisione per l'interfaccia                                         |
 | `move_analysis.rs`   | I dati di ogni mossa da salvare nel database, per le statistiche                   |
 | `own_puzzle.rs`      | I puzzle nati dagli errori gravi                                                   |
-| `review_progress.rs` | I messaggi sull'analisi in corso (avanzamento, fine)                               |
+| `review_progress.rs` | I messaggi sull'analisi in corso (avanzamento, fine, coda)                             |
 | `review_error.rs`    | Gli errori possibili                                                               |
 | `test_game.rs`       | Una partita di prova, solo per i test                                              |

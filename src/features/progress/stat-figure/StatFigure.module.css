@@ -1,0 +1,29 @@
+/* Un numero in evidenza: nome piccolo sopra, numero grande, nota tenue sotto. */
+
+.figure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: var(--stat-figure-min-width);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-large);
+  background: var(--color-surface);
+}
+
+.label,
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.label {
+  font-weight: var(--weight-semibold);
+}
+
+.value {
+  font-size: var(--text-figure);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}

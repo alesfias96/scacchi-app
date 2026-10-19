@@ -22,6 +22,7 @@ vi.mock('../services/settingsService', () => ({
         difficulty: 'normal',
         visualizationSeconds: 5,
       },
+      statsFilter: { period: 'all', opponent: 'all' },
     }),
   saveSettings: () => Promise.resolve(),
 }));

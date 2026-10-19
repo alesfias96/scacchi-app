@@ -13,5 +13,6 @@ pub mod computer_move;
 pub mod flag_timer;
 pub mod follow_analysis;
 pub mod resume_game;
+pub mod review_queue;
 pub mod review_worker;
 pub mod save_worker;

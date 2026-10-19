@@ -5,6 +5,7 @@ import type { GameSetup } from "./GameSetup";
 import type { Notation } from "./Notation";
 import type { PieceStyle } from "./PieceStyle";
 import type { SoundSetting } from "./SoundSetting";
+import type { StatsFilter } from "./StatsFilter";
 import type { TrainingSetup } from "./TrainingSetup";
 
 /**
@@ -42,4 +43,8 @@ gameSetup: GameSetup,
 /**
  * L'ultima configurazione scelta per l'allenamento.
  */
-trainingSetup: TrainingSetup, };
+trainingSetup: TrainingSetup, 
+/**
+ * I filtri scelti nella sezione «Progressi».
+ */
+statsFilter: StatsFilter, };

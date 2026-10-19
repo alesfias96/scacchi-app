@@ -20,6 +20,7 @@
 //! - [`own_puzzles`]: i puzzle nati dagli errori gravi delle proprie partite;
 //! - [`puzzle_attempts`]: i tentativi dei puzzle (rating, statistiche);
 //! - [`puzzle_reviews`]: il ripasso dei puzzle sbagliati;
+//! - [`stats_data`]: le letture per le statistiche (Fase 9);
 //! - [`game_summary`]: il riassunto di una partita per l'elenco;
 //! - [`codes`]: come i valori diventano testo nel database;
 //! - [`storage_error`]: gli errori possibili.
@@ -36,6 +37,7 @@ pub mod own_puzzles;
 pub mod puzzle_attempts;
 pub mod puzzle_reviews;
 pub mod save_game;
+pub mod stats_data;
 pub mod storage_error;
 
 pub use database::Database;
@@ -45,4 +47,5 @@ pub use move_analysis::MoveAnalysisRecord;
 pub use own_puzzles::OwnPuzzleRecord;
 pub use puzzle_attempts::{PuzzleAttemptRecord, PuzzleTotals};
 pub use puzzle_reviews::StoredReview;
+pub use stats_data::{GameStatRow, MoveStatRow, PuzzleStatRow, StatsQuery};
 pub use storage_error::StorageError;

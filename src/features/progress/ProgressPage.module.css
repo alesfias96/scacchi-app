@@ -1,0 +1,58 @@
+/*
+ * Sezione «Progressi»: titolo, filtri, conteggi, schede. Le classi `.tab`,
+ * `.figures`, `.cards` e `.note` sono condivise dalle quattro schede.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: var(--progress-max-width);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-tight);
+}
+
+.subtitle,
+.note {
+  color: var(--color-text-muted);
+}
+
+.note {
+  font-size: var(--text-small);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+/* Il contenuto di una scheda: numeri in evidenza, poi i riquadri. */
+.tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* I riquadri, due per riga se c'è spazio. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--progress-card-min-width), 1fr));
+  align-items: start;
+  gap: var(--space-4);
+}

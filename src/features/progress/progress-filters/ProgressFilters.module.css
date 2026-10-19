@@ -1,0 +1,7 @@
+/* I due gruppi di filtri, affiancati se c'è spazio. */
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--archive-filter-min-width), 1fr));
+  gap: var(--space-4) var(--space-6);
+}

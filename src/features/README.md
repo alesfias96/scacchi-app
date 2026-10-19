@@ -13,10 +13,5 @@ I componenti usati da più sezioni stanno invece in `src/components/`.
 | `training/` | Allenamento                                                        | Dalla Fase 6: puzzle di calcolo, visualizzazione, "cosa minaccia?", ripasso                                                                              |
 | `tutor/`    | Pannello del tutor (voce «Tutor» della colonna di destra, tasto T) | Dalla Fase 7: spiega la posizione, schede della base di conoscenza, "e se…". La sezione «Tutor» del menu (commenti dopo ogni mossa) sta in `play/coach/` |
 | `review/`   | Analisi partite                                                    | Dalla Fase 8: grafico, momenti critici spiegati, precisione, mosse con ?!, ?, ??                                                                         |
+| `progress/` | Progressi                                                          | Dalla Fase 9: livello stimato, risultati, aperture, calcolo e tattica, con filtri; «Analizza le partite mancanti»                                        |
 | `settings/` | Impostazioni                                                       | Tema dell'app, scacchiera, pezzi, notazione, suoni                                                                                                       |
-
-## Sezioni che verranno aggiunte
-
-| Cartella    | Sezione                 | Fase |
-| ----------- | ----------------------- | ---- |
-| `progress/` | Progressi e statistiche | 9    |

@@ -95,6 +95,8 @@ pub fn run() {
             commands::review::cancel_review,
             commands::review::running_review,
             commands::review::get_review,
+            commands::stats::get_stats,
+            commands::stats::analyze_missing_games,
         ])
         // `generate_context!` legge tauri.conf.json durante la compilazione
         // e incorpora nell'eseguibile configurazione, icone e interfaccia.

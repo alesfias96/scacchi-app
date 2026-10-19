@@ -24,3 +24,5 @@ i test (`.test.tsx`) e un README.
 | `knowledge-cards/`  | Le schede della base di conoscenza del tutor, da aprire (nel pannello del tutor e nella modalità Tutor) |
 | `tab-switch/`       | Il selettore a schede (es. «Partita \| Tutor» in cima alla colonna di destra)                           |
 | `eval-graph/`       | Il grafico della partita: la probabilità di vittoria mossa per mossa (nell'analisi delle partite)       |
+| `line-chart/`       | Il grafico a linea nel tempo (es. il rating dei puzzle in «Progressi»)                                  |
+| `bar-list/`         | L'elenco di barre orizzontali, anche a più colori (es. vinte, patte e perse in «Progressi»)             |

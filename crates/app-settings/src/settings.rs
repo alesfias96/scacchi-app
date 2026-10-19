@@ -6,6 +6,7 @@ use crate::game_setup::GameSetup;
 use crate::notation::Notation;
 use crate::piece_style::PieceStyle;
 use crate::sound_setting::SoundSetting;
+use crate::stats_filter::StatsFilter;
 use crate::training_setup::TrainingSetup;
 
 /// Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
@@ -31,13 +32,16 @@ pub struct Settings {
     pub game_setup: GameSetup,
     /// L'ultima configurazione scelta per l'allenamento.
     pub training_setup: TrainingSetup,
+    /// I filtri scelti nella sezione «Progressi».
+    pub stats_filter: StatsFilter,
 }
 
 #[cfg(test)]
 mod tests {
     use super::Settings;
     use crate::{
-        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting, TrainingSetup,
+        AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting, StatsFilter,
+        TrainingSetup,
     };
 
     #[test]
@@ -61,13 +65,14 @@ mod tests {
             sounds: SoundSetting::Off,
             game_setup: GameSetup::default(),
             training_setup: TrainingSetup::default(),
+            stats_filter: StatsFilter::default(),
         };
 
         let json = serde_json::to_string(&settings).expect("conversione in JSON");
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5}}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5},"statsFilter":{"period":"all","opponent":"all"}}"#
         );
     }
 

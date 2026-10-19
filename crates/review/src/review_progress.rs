@@ -33,3 +33,20 @@ pub struct ReviewFinished {
     /// Il motivo, se non è riuscita.
     pub error: Option<String>,
 }
+
+/// A che punto è la coda delle partite da analizzare («Analizza le partite mancanti»).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(
+    feature = "bindings",
+    derive(serde::Serialize, ts_rs::TS),
+    serde(rename_all = "camelCase"),
+    ts(export)
+)]
+pub struct ReviewQueueProgress {
+    /// Quante partite della coda sono già analizzate.
+    pub done: u32,
+    /// Quante partite c'erano nella coda.
+    pub total: u32,
+    /// `true` quando la coda è finita (o è stata fermata).
+    pub finished: bool,
+}

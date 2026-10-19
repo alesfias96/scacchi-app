@@ -7,6 +7,7 @@
  * - "/allenamento"   → Allenamento con i puzzle
  * - "/tutor"         → Tutor (la partita di «Gioca» con i commenti dopo ogni mossa)
  * - "/analisi"       → Analisi partite (con `?partita=<nome>`: la revisione di una partita)
+ * - "/progressi"     → Progressi (le statistiche)
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -20,6 +21,7 @@ import {
 } from '@tanstack/react-router';
 import { ArchivePage } from '../features/archive/ArchivePage';
 import { CoachedPlayPage, PlayPage } from '../features/play/PlayPage';
+import { ProgressPage } from '../features/progress/ProgressPage';
 import { ReviewPage } from '../features/review/ReviewPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
 import { TrainingPage } from '../features/training/TrainingPage';
@@ -63,6 +65,12 @@ const reviewRoute = createRoute({
     typeof search.partita === 'string' ? { partita: search.partita } : {},
 });
 
+const progressRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/progressi',
+  component: ProgressPage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
@@ -75,6 +83,7 @@ const routeTree = rootRoute.addChildren([
   trainingRoute,
   tutorRoute,
   reviewRoute,
+  progressRoute,
   settingsRoute,
 ]);
 

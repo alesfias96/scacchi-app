@@ -13,7 +13,7 @@ use crate::state::database_state::DatabaseState;
 use crate::state::review_state::ReviewState;
 
 /// La valutazione salvata nelle due colonne del database.
-fn join(cp: Option<i32>, mate: Option<i32>) -> Option<Evaluation> {
+pub(crate) fn join(cp: Option<i32>, mate: Option<i32>) -> Option<Evaluation> {
     cp.map(Evaluation::Centipawns)
         .or(mate.map(Evaluation::Mate))
 }
@@ -30,7 +30,9 @@ pub fn start_review(app: AppHandle, id: String) -> Result<(), String> {
         .state::<ReviewState>()
         .try_start(&id)
         .ok_or_else(|| "è già in corso l'analisi di un'altra partita".to_owned())?;
-    tauri::async_runtime::spawn(run_review(app.clone(), id, generation));
+    tauri::async_runtime::spawn(async move {
+        run_review(app.clone(), id, generation).await;
+    });
     Ok(())
 }
 

@@ -128,6 +128,12 @@
   --eval-graph-height: 5.5rem; /* il grafico della partita nell'analisi */
   --coach-strip-height: 9.5rem; /* la fascia dei messaggi del tutor sotto la scacchiera */
   --coach-popup-rise: 0.5rem; /* di quanto sale il messaggio del tutor quando compare */
+  --progress-max-width: 72rem; /* larghezza massima della sezione Progressi */
+  --progress-card-min-width: 24rem; /* riquadri di Progressi: due per riga se c'è spazio */
+  --stat-figure-min-width: 12rem; /* numeri in evidenza di Progressi */
+  --line-chart-height: 8rem; /* grafico a linea nel tempo */
+  --bar-height: 0.75rem; /* barre orizzontali dei grafici */
+  --bar-label-min-width: 6rem; /* colonna dei nomi accanto alle barre */
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;

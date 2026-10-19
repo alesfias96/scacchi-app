@@ -19,6 +19,7 @@
 //! - [`game_setup`], [`opponent_kind`], [`color_choice`], [`time_control`]: la
 //!   configurazione della partita;
 //! - [`training_setup`], [`training_mode`], [`difficulty`]: la configurazione dell'allenamento;
+//! - [`stats_filter`]: i filtri della sezione «Progressi»;
 //! - [`settings`]: l'insieme delle scelte e i valori predefiniti;
 //! - [`store`]: lettura e scrittura del file;
 //! - [`store_error`]: gli errori possibili durante la scrittura.
@@ -33,6 +34,7 @@ pub mod opponent_kind;
 pub mod piece_style;
 pub mod settings;
 pub mod sound_setting;
+pub mod stats_filter;
 pub mod store;
 pub mod store_error;
 pub mod time_control;
@@ -49,6 +51,7 @@ pub use opponent_kind::OpponentKind;
 pub use piece_style::PieceStyle;
 pub use settings::Settings;
 pub use sound_setting::SoundSetting;
+pub use stats_filter::{StatsFilter, StatsOpponent, StatsPeriod};
 pub use store::{load, load_or_default, save};
 pub use store_error::StoreError;
 pub use time_control::TimeControl;

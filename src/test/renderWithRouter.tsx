@@ -20,9 +20,16 @@ import type { ReactElement } from 'react';
 
 export function renderWithRouter(element: ReactElement, path = '/') {
   const rootRoute = createRootRoute({ component: () => element });
-  const pages = ['/', '/archivio', '/allenamento', '/tutor', '/analisi', '/impostazioni'].map(
-    (pagePath) =>
-      createRoute({ getParentRoute: () => rootRoute, path: pagePath, component: () => null }),
+  const pages = [
+    '/',
+    '/archivio',
+    '/allenamento',
+    '/tutor',
+    '/analisi',
+    '/progressi',
+    '/impostazioni',
+  ].map((pagePath) =>
+    createRoute({ getParentRoute: () => rootRoute, path: pagePath, component: () => null }),
   );
   const router = createRouter({
     routeTree: rootRoute.addChildren(pages),
