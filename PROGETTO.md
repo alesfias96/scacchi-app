@@ -317,7 +317,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 1-bis. Temi e personalizzazione | ✅ completata |
 | 2. Regole e partita             | ✅ completata |
 | 3. Motore                       | ✅ completata |
-| 4. Database                     | 🔵 in test    |
+| 4. Database                     | ✅ completata |
 | 5. Analisi                      | ⚪ da fare    |
 | 6. Allenamento calcolo          | ⚪ da fare    |
 | 7. Tutor                        | ⚪ da fare    |
@@ -395,6 +395,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-18 | All'avvio si riprende l'ultima partita non finita                                                                                  | Nessuna partita va persa (traguardo della Fase 4)                                                                                                                           |
 | 2026-10-18 | Nuova sezione "Archivio" nella barra laterale                                                                                      | Rivedere, continuare, eliminare e filtrare le partite                                                                                                                       |
 | 2026-10-18 | File `.pgn` con la finestra di sistema (`tauri-plugin-dialog` 2.8); la lettura accetta codifiche vecchie                           | Promesso nella Fase 2; nessun permesso da dare all'interfaccia (lo fa Rust)                                                                                                 |
+| 2026-10-19 | Fase 4 approvata                                                                                                                   | Conferma di Alessandro ("va tutto bene")                                                                                                                                    |
 
 ---
 
