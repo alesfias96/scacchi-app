@@ -8,6 +8,9 @@ e a ragionare più mosse avanti, con un tutor che spiega ogni situazione.
 
 > Prima di modificare qualsiasi cosa, leggi **[PROGETTO.md](PROGETTO.md)**: contiene le regole,
 > le decisioni prese e lo stato di avanzamento.
+>
+> Per riprendere il lavoro in una nuova sessione c'è **[CLAUDE.md](CLAUDE.md)**: in breve le regole,
+> cosa è fatto, cosa resta e dove si era rimasti (Claude Code lo legge da solo all'avvio).
 
 ---
 

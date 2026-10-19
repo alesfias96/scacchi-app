@@ -33,6 +33,7 @@ Obiettivi, in ordine di importanza:
 8. **Questo file si aggiorna** a ogni decisione architetturale.
 9. **Multipiattaforma sempre** (vedi §5-bis). Nessuna funzionalità può dipendere da un solo sistema operativo.
 10. **Ogni passo ha i suoi test.** Si passa al successivo solo quando tutti i test sono verdi.
+11. **`CLAUDE.md` si aggiorna a fine fase.** È il file che una nuova sessione legge da sola: dice dove si è rimasti, cosa resta e come si lavora.
 
 ---
 
@@ -459,6 +460,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | La revisione si ricalcola ogni volta dai dati salvati (valutazioni e mossa migliore di ogni mossa)                                                                                               | Nel database restano solo i dati grezzi, già pronti per le statistiche della Fase 9                                                                                                                                                           |
 | 2026-10-19 | Le varianti nella lista mosse si fanno in una Fase 8-bis separata                                                                                                                                | Scelta 5A: cambiano il cuore della partita, il salvataggio e il PGN                                                                                                                                                                           |
 | 2026-10-19 | Fase 8 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | Nuovo file `CLAUDE.md` nella radice: riassunto per riprendere il lavoro in una nuova sessione (regole, stato, prossimo passo)                                                                    | Richiesta di Alessandro: aprire una sessione nuova senza rispiegare il progetto                                                                                                                                                               |
 
 ---
 
