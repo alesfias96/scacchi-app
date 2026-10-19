@@ -340,21 +340,21 @@ o in un modulo `tests` nello stesso file (Rust).
 
 ## 9. Stato di avanzamento
 
-| Fase                            | Stato                                                |
-| ------------------------------- | ---------------------------------------------------- |
-| 1. Fondamenta                   | ✅ completata                                        |
-| 1-bis. Temi e personalizzazione | ✅ completata                                        |
-| 2. Regole e partita             | ✅ completata                                        |
-| 3. Motore                       | ✅ completata                                        |
-| 4. Database                     | ✅ completata                                        |
-| 5. Analisi                      | ✅ completata                                        |
-| 6. Allenamento calcolo          | ✅ completata                                        |
-| 7. Tutor                        | ✅ completata                                        |
-| 8. Analisi partite              | ✅ completata                                        |
-| 8-bis. Varianti                 | ✅ completata                                        |
-| 9. Statistiche                  | ✅ completata                                        |
-| 10. Estensioni                  | 🔵 10-A Maia ✅; 10-B distribuzione ✅; 10-C da fare |
-| 11. Appunti personali           | ⚪ da fare                                           |
+| Fase                            | Stato                                                     |
+| ------------------------------- | --------------------------------------------------------- |
+| 1. Fondamenta                   | ✅ completata                                             |
+| 1-bis. Temi e personalizzazione | ✅ completata                                             |
+| 2. Regole e partita             | ✅ completata                                             |
+| 3. Motore                       | ✅ completata                                             |
+| 4. Database                     | ✅ completata                                             |
+| 5. Analisi                      | ✅ completata                                             |
+| 6. Allenamento calcolo          | ✅ completata                                             |
+| 7. Tutor                        | ✅ completata                                             |
+| 8. Analisi partite              | ✅ completata                                             |
+| 8-bis. Varianti                 | ✅ completata                                             |
+| 9. Statistiche                  | ✅ completata                                             |
+| 10. Estensioni                  | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
+| 11. Appunti personali           | ⚪ da fare                                                |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -503,6 +503,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Il controllo degli aggiornamenti è un'impostazione (`updateCheck`: `manual` predefinito, oppure `onStart`)                                                                                       | L'app resta offline finché non lo si chiede                                                                                                                                                                                                   |
 | 2026-10-19 | I file firmati per gli aggiornamenti si creano solo nel flusso di pubblicazione (`tauri.release.conf.json`)                                                                                      | Così `npm run tauri build` e la CI funzionano anche senza la chiave privata                                                                                                                                                                   |
 | 2026-10-19 | Fase 10-B approvata; prima versione pubblicata: v0.10.0                                                                                                                                          | CI e Release verdi sui tre sistemi; la prova di un aggiornamento vero si farà con la prossima versione                                                                                                                                        |
+| 2026-10-19 | 10-C (AI locale con Ollama) rinviata; si passa alla Fase 11                                                                                                                                      | Alessandro vuole valutarla con calma; il piano proposto resta negli appunti §11                                                                                                                                                               |
 
 ---
 
@@ -518,7 +519,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
-- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
+- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 

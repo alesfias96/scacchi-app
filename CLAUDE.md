@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — 10-B approvata (v0.10.0 pubblicata); proposto il piano della 10-C (AI locale), in attesa di risposta.**
+> **Ultimo aggiornamento: 2026-10-19 — 10-C rinviata; proposto il piano della Fase 11 (Appunti personali), in attesa di risposta.**
 
 ---
 
@@ -82,14 +82,15 @@ quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul b
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Proposto il piano della 10-C (AI locale), in attesa della risposta di Alessandro.**
+**Proposto il piano della Fase 11 (Appunti personali), in attesa della risposta di Alessandro.**
+La 10-C (AI locale) è **rinviata**: il suo piano è qui sotto, da riprendere quando lui vorrà.
 
 Distribuzione (10-B, fatta): repository <https://github.com/alesfias96/scacchi-app> (pubblico, push
 HTTPS); chiave privata degli aggiornamenti in `C:\Users\afias\.tauri\scacchi.key`, password in
 `segreti/` (cartella ignorata da git); segreti GitHub già inseriti; pubblicare: `npm run set-version`,
 commit, push, `git tag vX.Y.Z` + push dell'etichetta, poi pubblicare la bozza. Versione attuale 0.10.0.
 
-Piano proposto per la 10-C (A = consigliata):
+Piano della 10-C, rinviato (A = consigliata):
 
 1. Dove serve — **A**: un paragrafo «In parole semplici» sopra le frasi del tutor (pannello Tutor e
    sezione Tutor del menu); le frasi di Rust restano sotto, con case e frecce. B: sostituire le frasi.
@@ -105,9 +106,23 @@ Piano proposto per la 10-C (A = consigliata):
 6. Impostazioni — **A**: interruttore «Spiegazioni in parole semplici (Ollama)» spento di default, scelta
    del modello, pulsante «Prova il collegamento»; se Ollama non c'è, il pulsante non compare.
 
+Piano proposto per la Fase 11 (A = consigliata):
+
+1. Dove — **A**: sezione «Appunti» nel menu (elenco a sinistra, appunto aperto a destra) e pulsante
+   «Aggiungi un appunto» in Gioca e in Analisi partite, che collega la posizione mostrata. B: solo la sezione.
+2. Contenuto — **A**: titolo, testo semplice (con gli a capo) ed etichette libere (es. "Siciliana").
+   B: testo con formattazione (grassetto, elenchi).
+3. Collegamenti — **A**: posizione (FEN) e, se c'è, partita e mossa; nell'appunto una scacchiera piccola
+   e «Apri in Gioca» / «Apri la partita a questa mossa». B: niente collegamenti.
+4. Ricerca — **A**: in Rust, su titolo, testo ed etichette, senza badare a maiuscole e accenti
+   ("perche" trova "perché"). B: ricerca di SQLite (FTS5).
+5. Salvataggio — **A**: automatico mentre si scrive (come le partite); eliminazione con conferma.
+6. Dove sta il codice — **A**: crate pura `notes` (controlli e ricerca) + migrazione 0005 (tabella
+   `notes`) + comandi nel ponte + sezione `features/notes`.
+
 ## 7. Cosa resta da fare
 
-- **10-C** — vedi §6 qui sopra.
+- **10-C** (AI locale) — rinviata, piano in §6.
 - **11. Appunti personali** — richiesta di Alessandro, alla fine: note libere con ricerca,
   collegabili a partite e posizioni, salvate nel database. Andrà aggiunta una voce nel menu.
 - Prima di distribuire: chessground e Stockfish sono GPL-3.0 (per uso personale nessun problema).
