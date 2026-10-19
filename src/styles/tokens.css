@@ -125,6 +125,11 @@
   --switch-travel: 1.125rem; /* quanto scorre il pomello: larghezza − pomello − 2 spazi */
   --disabled-opacity: 40%; /* elementi spenti o non disponibili */
   --shadow-knob: 0 1px 3px rgb(0 0 0 / 30%); /* ombra del pomello */
+  --shadow-popover: 0 8px 24px rgb(0 0 0 / 28%); /* messaggi sopra la scacchiera */
+  /* fondo del messaggio del tutor: il colore delle schede del tema, un po' trasparente */
+  --coach-popup-background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  --coach-popup-blur: 6px; /* sfocatura dietro il messaggio del tutor */
+  --coach-popup-rise: 0.5rem; /* di quanto sale il messaggio del tutor quando compare */
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;

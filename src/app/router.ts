@@ -5,6 +5,7 @@
  * - "/"              → Gioca
  * - "/archivio"      → Archivio delle partite
  * - "/allenamento"   → Allenamento con i puzzle
+ * - "/tutor"         → Tutor (la partita di «Gioca» con i commenti dopo ogni mossa)
  * - "/impostazioni"  → Impostazioni
  *
  * Per aggiungere una sezione: si crea qui la sua rotta, la si aggiunge a
@@ -17,7 +18,7 @@ import {
   createRouter,
 } from '@tanstack/react-router';
 import { ArchivePage } from '../features/archive/ArchivePage';
-import { PlayPage } from '../features/play/PlayPage';
+import { CoachedPlayPage, PlayPage } from '../features/play/PlayPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
 import { TrainingPage } from '../features/training/TrainingPage';
 import { RootLayout } from './root-layout/RootLayout';
@@ -45,13 +46,25 @@ const trainingRoute = createRoute({
   component: TrainingPage,
 });
 
+const tutorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/tutor',
+  component: CoachedPlayPage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/impostazioni',
   component: SettingsPage,
 });
 
-const routeTree = rootRoute.addChildren([playRoute, archiveRoute, trainingRoute, settingsRoute]);
+const routeTree = rootRoute.addChildren([
+  playRoute,
+  archiveRoute,
+  trainingRoute,
+  tutorRoute,
+  settingsRoute,
+]);
 
 /**
  * Crea il router dell'app.

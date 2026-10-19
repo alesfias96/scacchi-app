@@ -1,4 +1,4 @@
-# src/features/tutor/knowledge-cards — Le schede della base di conoscenza
+# src/components/knowledge-cards — Le schede della base di conoscenza
 
 Le schede che riguardano la posizione (apertura, struttura pedonale, tema di mediogioco, finale,
 principio). Chiuse mostrano l'argomento, il titolo e perché valgono qui; aperte, di cosa si

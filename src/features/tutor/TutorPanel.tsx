@@ -26,7 +26,7 @@ import { Chessboard } from '../../components/chessboard/Chessboard';
 import { Switch } from '../../components/switch/Switch';
 import { useLoadedSettings } from '../../state/settingsStore';
 import { isTutorLocked, useTutorStore } from '../../state/tutorStore';
-import { KnowledgeCards } from './knowledge-cards/KnowledgeCards';
+import { KnowledgeCards } from '../../components/knowledge-cards/KnowledgeCards';
 import { TutorSections } from './tutor-sections/TutorSections';
 import styles from './TutorPanel.module.css';
 import { WhatIfResults } from './what-if-results/WhatIfResults';

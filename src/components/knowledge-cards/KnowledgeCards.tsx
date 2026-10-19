@@ -12,8 +12,8 @@
  * - `onToggle`: chiamata con il nome della scheda aperta, o `null` se chiusa.
  * Restituisce: l'elenco delle schede.
  */
-import type { CardView } from '../../../bindings/CardView';
-import type { Topic } from '../../../bindings/Topic';
+import type { CardView } from '../../bindings/CardView';
+import type { Topic } from '../../bindings/Topic';
 import styles from './KnowledgeCards.module.css';
 
 export interface KnowledgeCardsProps {

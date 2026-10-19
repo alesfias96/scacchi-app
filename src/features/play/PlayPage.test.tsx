@@ -17,7 +17,8 @@ import { useEngineStore } from '../../state/engineStore';
 import { useGameStore } from '../../state/gameStore';
 import { useObservationsStore } from '../../state/observationsStore';
 import { useSettingsStore } from '../../state/settingsStore';
-import { PlayPage } from './PlayPage';
+import { AFTER_E4_SCENARIO, START_EXPLANATION } from '../../test/tutorExplanations';
+import { CoachedPlayPage, PlayPage } from './PlayPage';
 
 const serviceMock = vi.hoisted(() => ({
   fetchGame: vi.fn(),
@@ -45,6 +46,10 @@ vi.mock('../../services/archiveService', () => archiveMock);
 const insightMock = vi.hoisted(() => ({ fetchPositionReport: vi.fn() }));
 
 vi.mock('../../services/insightService', () => insightMock);
+
+const tutorMock = vi.hoisted(() => ({ explainPosition: vi.fn(), tryWhatIf: vi.fn() }));
+
+vi.mock('../../services/tutorService', () => tutorMock);
 
 const engineServiceMock = vi.hoisted(() => ({
   fetchEngineLevels: vi.fn(),
@@ -221,6 +226,23 @@ describe('PlayPage', () => {
     expect(screen.getByRole('button', { name: 'e4' })).toBeDefined();
     expect(screen.getByText('Bianco')).toBeDefined();
     expect(chessgroundMock.state.config?.lastMove).toEqual(['e2', 'e4']);
+  });
+
+  it('in modalità Tutor commenta la mossa sulla scacchiera, un messaggio alla volta', async () => {
+    serviceMock.fetchGame.mockResolvedValue(AFTER_E4);
+    tutorMock.tryWhatIf.mockResolvedValue(AFTER_E4_SCENARIO);
+    tutorMock.explainPosition.mockResolvedValue(START_EXPLANATION);
+
+    render(<CoachedPlayPage />);
+
+    expect(await screen.findByText(/Ottima scelta/)).toBeDefined();
+    expect(tutorMock.tryWhatIf).toHaveBeenCalledWith(AFTER_E4_GAME.startingFen, [], 'e2e4', true);
+    expect(chessgroundMock.state.config?.drawable?.autoShapes).toEqual([
+      { orig: 'e2', dest: 'e4', brush: 'blue' },
+    ]);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Avanti' }));
+    expect(screen.getByText('Tocca al Bianco')).toBeDefined();
   });
 
   it('spiega il problema se Rust non risponde', async () => {

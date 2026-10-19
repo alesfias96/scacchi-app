@@ -1,0 +1,84 @@
+/*
+ * Il messaggio del tutor: una scheda semitrasparente sopra la scacchiera, in
+ * basso (o in alto), che compare con un leggero movimento. Le case
+ * evidenziate restano visibili attraverso il fondo.
+ */
+
+.popup {
+  position: absolute;
+  right: var(--space-4);
+  left: var(--space-4);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-large);
+  background: var(--coach-popup-background);
+  box-shadow: var(--shadow-popover);
+  backdrop-filter: blur(var(--coach-popup-blur));
+  animation: appear var(--duration-medium) var(--easing-standard);
+}
+
+.bottom {
+  bottom: var(--space-4);
+}
+
+.top {
+  top: var(--space-4);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.heading {
+  color: var(--color-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.count {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.text {
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-body);
+}
+
+.line {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(var(--coach-popup-rise));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    animation: none;
+  }
+}

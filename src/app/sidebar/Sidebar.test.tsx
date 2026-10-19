@@ -28,10 +28,18 @@ describe('Sidebar', () => {
   it('disattiva le sezioni non ancora disponibili e indica la fase', async () => {
     renderWithRouter(<Sidebar />, '/');
 
-    const tutorButton = await screen.findByRole('button', { name: /Tutor/ });
+    const reviewButton = await screen.findByRole('button', { name: /Analisi partite/ });
 
-    expect(tutorButton.hasAttribute('disabled')).toBe(true);
-    expect(tutorButton.textContent).toContain('Fase 7');
+    expect(reviewButton.hasAttribute('disabled')).toBe(true);
+    expect(reviewButton.textContent).toContain('Fase 8');
+  });
+
+  it('porta alla modalità Tutor', async () => {
+    renderWithRouter(<Sidebar />, '/');
+
+    const link = await screen.findByRole('link', { name: 'Tutor' });
+
+    expect(link.getAttribute('href')).toContain('/tutor');
   });
 
   it('porta all’archivio delle partite', async () => {

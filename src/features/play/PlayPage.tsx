@@ -29,7 +29,12 @@
  * mostra la partita aggiornata che riceve (anche quando cambia da sola, per
  * una mossa del computer o il tempo scaduto).
  *
- * Riceve: niente.
+ * Con `coached` la stessa pagina diventa la sezione **Tutor** del menu: dopo
+ * ogni mossa il tutor la commenta con dei messaggi sopra la scacchiera, uno
+ * alla volta, mostrando sulla scacchiera le case di cui parla (vedi `coach/`).
+ * La partita è la stessa di «Gioca»: si passa da una sezione all'altra senza perderla.
+ *
+ * Riceve: `coached` (facoltativo), `true` nella modalità Tutor.
  * Restituisce: la pagina della sezione.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -67,6 +72,10 @@ import {
   PromotionPicker,
   type PromotionPiece,
 } from '../../components/promotion-picker/PromotionPicker';
+import { CoachPanel } from './coach/CoachPanel';
+import { CoachPopup } from './coach/CoachPopup';
+import { useCoachMessages } from './coach/useCoachMessages';
+import { useCoachPopup } from './coach/useCoachPopup';
 import styles from './PlayPage.module.css';
 
 /** Una promozione in attesa della scelta del pezzo: le due case della mossa. */
@@ -78,7 +87,14 @@ interface PendingPromotion {
 /** Nessuna mossa possibile (quando non si può muovere). */
 const NO_MOVES: readonly LegalMove[] = [];
 
-export function PlayPage() {
+export interface PlayPageProps {
+  /** `true` nella modalità Tutor: dopo ogni mossa compaiono i commenti del tutor. */
+  coached?: boolean;
+}
+
+export function PlayPage({ coached = false }: PlayPageProps) {
+  /** Il titolo della sezione. */
+  const title = coached ? 'Tutor' : 'Gioca';
   const { notation, sounds, gameSetup } = useLoadedSettings();
   const updateSettings = useSettingsStore((state) => state.update);
   const session = useGameStore((state) => state.session);
@@ -145,6 +161,22 @@ export function PlayPage() {
       setOrientation(computerSide === 'white' ? 'black' : 'white');
     }
   }, [sessionId, computerSide]);
+
+  // Modalità Tutor: i commenti dopo ogni mossa, un messaggio alla volta. Mentre
+  // un messaggio è aperto la scacchiera mostra le sue case al posto delle osservazioni.
+  const [coachWithEngine, setCoachWithEngine] = useState(true);
+  const [coachCardId, setCoachCardId] = useState<string | null>(null);
+  const coach = useCoachMessages(game, sessionId, coached, coachWithEngine, notation);
+  const popup = useCoachPopup(coach.messages);
+  const coachMessage = popup.isOpen ? coach.messages[popup.index] : undefined;
+  const boardMarks = useMemo(
+    () =>
+      coachMessage === undefined
+        ? marks
+        : { arrows: coachMessage.fact.arrows, circles: coachMessage.fact.squares },
+    [coachMessage, marks],
+  );
+  const coachCard = coach.explanation?.cards.find((card) => card.id === coachCardId) ?? null;
 
   /** Riporta i pezzi alla posizione vera (dopo una mossa annullata o rifiutata). */
   const resyncBoard = useCallback(() => {
@@ -274,7 +306,7 @@ export function PlayPage() {
   if (loadError !== null) {
     return (
       <section className={styles.page}>
-        <h1 className={styles.title}>Gioca</h1>
+        <h1 className={styles.title}>{title}</h1>
         <p className={styles.error} role="alert">
           Non riesco a leggere la partita dal nucleo Rust: {loadError}
         </p>
@@ -285,7 +317,7 @@ export function PlayPage() {
   if (session === null || game === null) {
     return (
       <section className={styles.page}>
-        <h1 className={styles.title}>Gioca</h1>
+        <h1 className={styles.title}>{title}</h1>
         <p className={styles.message}>Preparo la scacchiera…</p>
       </section>
     );
@@ -300,7 +332,7 @@ export function PlayPage() {
   return (
     <section className={styles.page}>
       {/* Il titolo resta per i lettori di schermo, ma non occupa spazio. */}
-      <h1 className={styles.hiddenTitle}>Gioca</h1>
+      <h1 className={styles.hiddenTitle}>{title}</h1>
 
       <div className={styles.workspace}>
         <div className={styles.boardArea}>
@@ -323,7 +355,7 @@ export function PlayPage() {
               // la scacchiera è in sola lettura.
               onMove={session.canMove ? handleMove : undefined}
               arrow={analysis?.line.firstMove ?? null}
-              marks={marks}
+              marks={boardMarks}
               resyncKey={resyncKey}
             />
             {result !== null && (
@@ -336,6 +368,16 @@ export function PlayPage() {
                 side={position.turn}
                 onChoose={choosePromotion}
                 onCancel={cancelPromotion}
+              />
+            )}
+            {coached && popup.isOpen && (
+              <CoachPopup
+                messages={coach.messages}
+                index={popup.index}
+                notation={notation}
+                onIndexChange={popup.setIndex}
+                onClose={popup.close}
+                onOpenCard={setCoachCardId}
               />
             )}
           </div>
@@ -360,6 +402,19 @@ export function PlayPage() {
         </div>
 
         <aside className={styles.sidePanel} aria-label="Partita">
+          {coached && (
+            <CoachPanel
+              withEngine={coachWithEngine}
+              onWithEngineChange={setCoachWithEngine}
+              isLoading={coach.isLoading}
+              canReopen={!popup.isOpen && coach.messages.length > 0}
+              onReopen={popup.reopen}
+              card={coachCard}
+              onCloseCard={() => {
+                setCoachCardId(null);
+              }}
+            />
+          )}
           <PanelCard title="Mosse">
             <OpeningLabel opening={session.opening} />
             <MoveList
@@ -436,4 +491,14 @@ export function PlayPage() {
       )}
     </section>
   );
+}
+
+/**
+ * La sezione Tutor del menu: la pagina «Gioca» con i commenti del tutor.
+ *
+ * Riceve: niente.
+ * Restituisce: la pagina.
+ */
+export function CoachedPlayPage() {
+  return <PlayPage coached />;
 }

@@ -22,6 +22,9 @@ Quali posizioni spiega: in «Gioca» quella sulla scacchiera (anche scorrendo le
 computer, a partita in corso, è spento (sarebbe un aiuto) ma si può accendere comunque. In
 «Allenamento» si accende solo a puzzle finito. Lavora solo quando la barra è aperta.
 
+La sezione **Tutor** del menu principale, con i commenti dopo ogni mossa sopra la scacchiera, sta
+in `src/features/play/coach/`; le schede da aprire stanno in `src/components/knowledge-cards/`.
+
 ## Contenuto
 
 | Elemento                | Cosa fa                                                                        |
@@ -30,5 +33,4 @@ computer, a partita in corso, è spento (sarebbe un aiuto) ma si può accendere 
 | `TutorPanel.module.css` | La sua disposizione                                                            |
 | `TutorPanel.test.tsx`   | I test: senza posizione, contro il computer, puzzle, schede, mosse provate     |
 | `tutor-sections/`       | Le parti della spiegazione, con le frasi che si illuminano                     |
-| `knowledge-cards/`      | Le schede della base di conoscenza, da aprire                                  |
 | `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                      |

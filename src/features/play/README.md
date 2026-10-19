@@ -59,3 +59,4 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 | `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                                                 |
 | `pgn-file/`           | Salvare la partita in un file `.pgn` e aprirne uno, con la finestra del sistema                                                     |
 | `opening-label/`      | Il nome dell'apertura giocata, sopra l'elenco delle mosse                                                                           |
+| `coach/`              | La modalità Tutor (sezione «Tutor» del menu): i commenti dopo ogni mossa, un messaggio alla volta sopra la scacchiera               |

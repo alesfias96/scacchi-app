@@ -209,18 +209,20 @@ app-scacchi/
 │   │   ├── switch/             interruttore acceso/spento
 │   │   ├── choice-group/       gruppo di scelte a pastiglie (compatto)
 │   │   ├── side-drawer/        barra laterale a comparsa (il menu principale, a sinistra)
-│   │   └── promotion-picker/   scelta del pezzo nella promozione (Gioca e Allenamento)
+│   │   ├── promotion-picker/   scelta del pezzo nella promozione (Gioca e Allenamento)
+│   │   └── knowledge-cards/    schede della base di conoscenza (barra del tutor e modalità Tutor)
 │   ├── features/               aree dell'app, ognuna autonoma
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/,
 │   │   │                       game-result-banner/, import-export/, position-panel/,
 │   │   │                       player-bar/, clock-face/, new-game-dialog/, analysis-panel/,
-│   │                       opening-label/, pgn-file/, observations-panel/
+│   │   │                       opening-label/, pgn-file/, observations-panel/,
+│   │   │                       coach/ (la sezione «Tutor»: commenti dopo ogni mossa)
 │   │   ├── archive/            archivio delle partite: filtri, rivedi, continua, elimina
 │   │   ├── training/           puzzle: calcolo, visualizzazione, "cosa minaccia?", ripasso
 │   │   │                       training-setup/, puzzle-status/, puzzle-reveal/
 │   │   ├── tutor/              pannello del tutor (barra a destra, tasto T): spiegazione, schede,
-│   │   │                       "e se…"; tutor-sections/, knowledge-cards/, what-if-results/
+│   │   │                       "e se…"; tutor-sections/, what-if-results/
 │   │   ├── review/             analisi delle partite giocate
 │   │   ├── progress/           statistiche e livello
 │   │   └── settings/           impostazioni: tema, scacchiera, pezzi, notazione, suoni
@@ -433,6 +435,9 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Scenari "e se…" sulla scacchiera del tutor: la partita vera non cambia; la promozione è sempre a donna                                                                                           | Provare idee senza rovinare la partita                                                                                                                                                                                                        |
 | 2026-10-19 | Un terzo Stockfish solo per il tutor, con valutazioni di mezzo secondo (interruttore "Giudizio di Stockfish")                                                                                    | Non interrompe l'analisi in tempo reale né il computer avversario                                                                                                                                                                             |
 | 2026-10-19 | Contro il computer, a partita in corso, il tutor è spento ma si può accendere comunque; nei puzzle si accende solo a puzzle finito                                                               | Sarebbe un aiuto / rivelerebbe la soluzione                                                                                                                                                                                                   |
+| 2026-10-19 | Sezione «Tutor» nel menu: la partita di «Gioca» con i commenti dopo ogni mossa, in popup sopra la scacchiera, uno alla volta, con le case mostrate sulla scacchiera                              | Richiesta di Alessandro: imparare mentre si gioca                                                                                                                                                                                             |
+| 2026-10-19 | Ordine dei messaggi: commento alle mosse appena giocate (anche la risposta del computer), minacce attuali, poi solo le novità                                                                    | Evitare di ripetere a ogni mossa le stesse frasi                                                                                                                                                                                              |
+| 2026-10-19 | Popup scorsi a mano (Avanti/Indietro, Invio/Spazio, Esc), in basso e spostabili in alto; giudizio di Stockfish acceso di base                                                                    | Si legge al proprio ritmo, senza coprire la zona interessante                                                                                                                                                                                 |
 
 ---
 
