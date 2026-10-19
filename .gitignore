@@ -24,3 +24,6 @@ Thumbs.db
 # Motori scaricati da `npm run engines` (pesanti, si riscaricano quando servono).
 src-tauri/binaries/*
 !src-tauri/binaries/README.md
+
+# Segreti personali (password della chiave degli aggiornamenti, …): restano solo su questo computer.
+segreti/
