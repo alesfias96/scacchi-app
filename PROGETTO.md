@@ -348,7 +348,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 7. Tutor                        | ✅ completata |
 | 8. Analisi partite              | ✅ completata |
 | 8-bis. Varianti                 | ✅ completata |
-| 9. Statistiche                  | 🔵 in test    |
+| 9. Statistiche                  | ✅ completata |
 | 10. Estensioni                  | ⚪ da fare    |
 | 11. Appunti personali           | ⚪ da fare    |
 
@@ -482,6 +482,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Le aperture si raggruppano per famiglia (il nome di Lichess prima dei due punti), fino a 8 per colore                                                                                            | Le varianti sono troppe: con poche partite ognuna avrebbe 1 partita                                                                                                                                                                           |
 | 2026-10-19 | Errori con poco tempo = mosse giocate con meno di un quinto del tempo iniziale sull'orologio                                                                                                     | Soglia semplice, valida per ogni controllo del tempo                                                                                                                                                                                          |
 | 2026-10-19 | Barra laterale: tolte le sezioni «in arrivo» (Progressi era l'ultima); il codice delle voci disattivate è stato cancellato                                                                       | Codice morto                                                                                                                                                                                                                                  |
+| 2026-10-19 | Fase 9 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
@@ -496,7 +497,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 7 — Tutor.** Fatta (vedi registro §10). Da arricchire nel tempo: altre schede (aperture meno comuni, finali specifici), frasi più chiare man mano che Alessandro le legge.
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
-- **Fase 9 — Statistiche.** Fatta, in test (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
+- **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.

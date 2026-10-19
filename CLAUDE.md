@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — Fase 9 (Statistiche) fatta, in test: si aspettano i test a mano di Alessandro.**
+> **Ultimo aggiornamento: 2026-10-19 — Fase 9 completata; proposto il piano della Fase 10 (Estensioni), in attesa di risposta.**
 
 ---
 
@@ -62,39 +62,45 @@ App desktop **offline** per giocare, imparare e allenarsi a scacchi (Windows, ma
 
 ## 5. Stato: cosa è fatto
 
-| Fase        | Cosa ha portato                                                                                                                                                                                           |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, 1-bis    | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
-| 2           | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
-| 3           | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
-| 4           | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
-| 5           | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
-| 6           | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
-| 7           | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
-| 8           | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
-| 8-bis       | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
-| 9 (in test) | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                     |
+| Fase     | Cosa ha portato                                                                                                                                                                                           |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, 1-bis | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
+| 2        | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
+| 3        | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
+| 4        | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
+| 5        | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
+| 6        | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
+| 7        | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
+| 8        | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
+| 8-bis    | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
+| 9        | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                     |
 
 Disposizione attuale delle sezioni con scacchiera: scacchiera a sinistra, colonna a destra **alta
 quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul bordo sinistro (tasto M).
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Fase 9 (Statistiche) implementata e in test** (`PROGETTO.md` §9: 🔵). Si aspetta che Alessandro
-faccia i test a mano e dica se va bene o cosa ritoccare. Quando approva: fase ✅, riga «Fase 9
-approvata» nel registro, commit, aggiornare questo file e proporre il piano della Fase 10.
+**Proposto il piano della Fase 10 (Estensioni), in attesa della risposta di Alessandro.**
 
-Com'è fatta la Fase 9 (scelte 1A–6A approvate):
+La Fase 10 è divisa in tre passi, uno per volta (A = consigliata):
 
-- `crates/stats`: calcoli puri (`build_report`); Elo stimato = media Elo dei livelli affrontati
-  - 400 × (vinte − perse) ÷ partite, con almeno 5 partite finite contro il computer.
-- `crates/storage/src/stats_data.rs`: legge i dati grezzi con i filtri; `unanalyzed_games`.
-- `crates/app-settings/src/stats_filter.rs`: `statsFilter` (periodo, partite) in `settings.json`.
-- Ponte: `commands/stats.rs` (`get_stats`, `analyze_missing_games`),
-  `reactions/review_queue.rs` (coda, evento `review-queue`).
-- Interfaccia: `features/progress/`, `components/line-chart/`, `components/bar-list/`,
-  `services/statsService.ts`, coda in `state/reviewStore.ts`; rotta `/progressi`.
-- La barra laterale non ha più sezioni «in arrivo» (codice cancellato).
+1. Ordine — **A**: 10-A Maia, poi 10-B distribuzione (CSP, installatori, aggiornamenti), poi 10-C AI
+   locale. B: un altro ordine.
+2. Maia (avversario "umano", reti maia-1100…1900, GPL-3.0) — **A**: crate Rust `maia` che legge le
+   reti di Lc0 e fa da sé il calcolo (rete piccola: 6 blocchi, 64 filtri, una sola valutazione per
+   mossa), niente programmi esterni, uguale sui tre sistemi. B: Lc0 come sidecar (eseguibili
+   ufficiali solo per Windows; su macOS e Linux andrebbe compilato).
+3. Come gioca Maia — **A**: sceglie tra le mosse più probabili per una persona di quel livello (con
+   un po' di varietà); 9 livelli da 1100 a 1900 come avversario nella «Nuova partita», senza
+   orologio obbligatorio. B: sempre la mossa più probabile.
+4. Distribuzione — **A**: CSP restrittiva; installatori creati dalla CI di GitHub senza firma a
+   pagamento (Windows e macOS mostreranno un avviso al primo avvio); aggiornamenti con
+   `tauri-plugin-updater` da GitHub Releases, firmati con una chiave gratuita. B: anche la firma
+   a pagamento (certificato Windows, Apple Developer 99 $/anno).
+5. AI locale — **A**: facoltativa, tramite Ollama installato a parte (spenta di default); Rust le
+   passa i fatti già calcolati e lei li riscrive in italiano più naturale, senza mai valutare
+   mosse; se Ollama non c'è, restano le frasi di adesso. B: modello incluso nell'app (llama.cpp):
+   pesante (GB) e difficile da compilare.
 
 ## 7. Cosa resta da fare
 
