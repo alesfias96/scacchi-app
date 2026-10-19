@@ -9,6 +9,7 @@ pub mod archive;
 pub mod clipboard;
 pub mod engine;
 pub mod game;
+pub mod ideas;
 pub mod notes;
 pub mod pgn_file;
 pub mod position;

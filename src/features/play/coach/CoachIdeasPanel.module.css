@@ -1,0 +1,11 @@
+/* Lo sguardo lungo: il confronto con la mossa migliore e i messaggi d'attesa. */
+
+.comparison {
+  color: var(--color-accent);
+  line-height: var(--leading-body);
+}
+
+.message {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

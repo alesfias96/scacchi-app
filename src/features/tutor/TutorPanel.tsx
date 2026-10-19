@@ -9,7 +9,11 @@
  *   da ricordare) e le schede della base di conoscenza, da aprire;
  * - «Prova una mossa»: sulla piccola scacchiera si giocano mosse per conto
  *   proprio (anche per l'avversario) e per ognuna il tutor dice cosa cambia.
- *   La partita vera non cambia; «Torna alla posizione» chiude la prova.
+ *   La partita vera non cambia; «Torna alla posizione» chiude la prova;
+ * - «Guarda avanti» (3 secondi) e «Pensa più a lungo» (15 secondi): Stockfish
+ *   calcola le sue varianti migliori e il tutor ne spiega l'idea, guardando
+ *   lontano; «Guarda sulla scacchiera» fa vedere la variante sulla piccola
+ *   scacchiera (e su quella della sezione).
  * Durante una partita contro il computer il tutor è spento (sarebbe un
  * aiuto), ma si può accendere comunque; durante un puzzle si accende solo a
  * puzzle finito. L'interruttore «Giudizio di Stockfish» aggiunge valutazione
@@ -18,21 +22,29 @@
  * Riceve: niente (legge tutto dallo stato del tutor).
  * Restituisce: il contenuto della voce «Tutor».
  */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { LegalMove } from '../../bindings/LegalMove';
 import type { TutorItem } from '../../bindings/TutorItem';
 import { Button } from '../../components/button/Button';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { Switch } from '../../components/switch/Switch';
+import { useIdeaReplayStore } from '../../state/ideaReplayStore';
 import { useLoadedSettings } from '../../state/settingsStore';
 import { isTutorLocked, useTutorStore } from '../../state/tutorStore';
 import { KnowledgeCards } from '../../components/knowledge-cards/KnowledgeCards';
+import { PositionIdeasView } from './position-ideas/PositionIdeasView';
 import { TutorSections } from './tutor-sections/TutorSections';
 import styles from './TutorPanel.module.css';
+import { usePositionIdeas } from './usePositionIdeas';
 import { WhatIfResults } from './what-if-results/WhatIfResults';
 
 /** Nessuna mossa possibile (quando non si sta provando). */
 const NO_MOVES: readonly LegalMove[] = [];
+/** Nessuna mossa (quando non c'è una posizione). */
+const NO_MOVE_LIST: readonly string[] = [];
+/** Quanto pensa il motore per «Guarda avanti» e per «Pensa più a lungo» (millesimi di secondo). */
+const LOOK_AHEAD_MS = 3000;
+const THINK_LONGER_MS = 15000;
 
 export function TutorPanel() {
   const { notation } = useLoadedSettings();
@@ -49,6 +61,16 @@ export function TutorPanel() {
   const playWhatIf = useTutorStore((state) => state.playWhatIf);
   const undoWhatIf = useTutorStore((state) => state.undoWhatIf);
   const stopWhatIf = useTutorStore((state) => state.stopWhatIf);
+  const replayIdea = useIdeaReplayStore((state) => state.idea);
+  const replayFrame = useIdeaReplayStore((state) => state.frame);
+  const closeReplay = useIdeaReplayStore((state) => state.close);
+  const lookAhead = usePositionIdeas(target?.startFen ?? null, target?.moves ?? NO_MOVE_LIST);
+
+  // Se la posizione spiegata cambia, la variante di un'idea non vale più: si torna alla posizione.
+  const targetKey = target === null ? null : `${target.startFen}|${target.moves.join(' ')}`;
+  useEffect(() => {
+    closeReplay();
+  }, [targetKey, closeReplay]);
 
   /** La frase indicata con il mouse, da evidenziare sulla scacchiera. */
   const [highlighted, setHighlighted] = useState<TutorItem | null>(null);
@@ -74,6 +96,8 @@ export function TutorPanel() {
   /** La posizione sulla piccola scacchiera: l'ultima mossa provata, o quella spiegata. */
   const lastScenario = whatIf === null ? null : (whatIf[whatIf.length - 1] ?? null);
   const shown = lastScenario?.position ?? explanation?.position ?? null;
+  /** La posizione della variante di un'idea, se la si sta guardando. */
+  const replayed = replayIdea?.frames[replayFrame] ?? null;
 
   /** Prova la mossa fatta sulla scacchiera (la promozione è sempre a donna). */
   const handleMove = useCallback(
@@ -123,13 +147,13 @@ export function TutorPanel() {
       {shown !== null && (
         <div className={styles.board}>
           <Chessboard
-            boardFen={shown.boardFen}
-            turn={shown.turn}
-            inCheck={shown.inCheck}
+            boardFen={replayed?.boardFen ?? shown.boardFen}
+            turn={replayed?.turn ?? shown.turn}
+            inCheck={replayed?.inCheck ?? shown.inCheck}
             orientation={target.orientation}
-            lastMove={lastScenario?.lastMove ?? null}
-            legalMoves={isTrying ? shown.legalMoves : NO_MOVES}
-            onMove={isTrying && !isLoading ? handleMove : undefined}
+            lastMove={replayed === null ? (lastScenario?.lastMove ?? null) : replayed.lastMove}
+            legalMoves={isTrying && replayed === null ? shown.legalMoves : NO_MOVES}
+            onMove={isTrying && !isLoading && replayed === null ? handleMove : undefined}
             marks={marks}
             resyncKey={resyncKey}
           />
@@ -172,6 +196,45 @@ export function TutorPanel() {
             </p>
           ) : (
             <WhatIfResults scenarios={whatIf} notation={notation} onHighlight={setHighlighted} />
+          )}
+        </section>
+      )}
+
+      {!isTrying && (
+        <section className={styles.block} aria-label="Guarda avanti">
+          <h3 className={styles.blockTitle}>Guarda avanti</h3>
+          <p className={styles.message}>
+            Stockfish guarda molte mosse avanti e il tutor spiega l’idea delle sue varianti
+            migliori: dove vanno i pezzi, quali rotture e quali debolezze, cosa si vince.
+          </p>
+          <div className={styles.actions}>
+            <Button
+              disabled={lookAhead.isThinking}
+              onClick={() => {
+                lookAhead.look(LOOK_AHEAD_MS);
+              }}
+            >
+              Guarda avanti
+            </Button>
+            <Button
+              disabled={lookAhead.isThinking}
+              onClick={() => {
+                lookAhead.look(THINK_LONGER_MS);
+              }}
+            >
+              Pensa più a lungo
+            </Button>
+          </div>
+          {lookAhead.isThinking && (
+            <p className={styles.message}>Stockfish sta guardando avanti…</p>
+          )}
+          {lookAhead.error !== null && (
+            <p className={styles.error} role="alert">
+              {lookAhead.error}
+            </p>
+          )}
+          {lookAhead.ideas !== null && (
+            <PositionIdeasView ideas={lookAhead.ideas} notation={notation} />
           )}
         </section>
       )}

@@ -38,16 +38,30 @@ impl AnalysisUpdate {
     ///   una variante diversa dalla migliore).
     #[must_use]
     pub fn from_info(position: &SearchPosition, info: &EngineInfo) -> Option<Self> {
+        if info.multipv != 1 {
+            return None;
+        }
+        Self::from_any_line(position, info).map(|(_, update)| update)
+    }
+
+    /// Come [`AnalysisUpdate::from_info`], ma per qualsiasi variante: quando il
+    /// motore ne calcola più d'una (`MultiPV`) restituisce anche il suo numero
+    /// (1 = la migliore, 2 = la seconda, …).
+    #[must_use]
+    pub fn from_any_line(position: &SearchPosition, info: &EngineInfo) -> Option<(u32, Self)> {
         let score = info.score?;
-        if info.bound || info.pv.is_empty() || info.multipv != 1 {
+        if info.bound || info.pv.is_empty() {
             return None;
         }
         let line = describe_line(&position.start_fen, &position.moves, &info.pv).ok()?;
-        Some(Self {
-            depth: info.depth,
-            evaluation: Evaluation::from_score(score, line.turn),
-            line,
-        })
+        Some((
+            info.multipv,
+            Self {
+                depth: info.depth,
+                evaluation: Evaluation::from_score(score, line.turn),
+                line,
+            },
+        ))
     }
 }
 

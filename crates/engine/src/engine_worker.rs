@@ -1,6 +1,6 @@
 //! Il "lavoratore" che tiene in funzione un motore ed esegue le richieste.
 
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio::sync::{mpsc, oneshot};
@@ -56,7 +56,19 @@ enum Purpose {
         /// Dove consegnarlo.
         reply: oneshot::Sender<Result<AnalysisUpdate, EngineError>>,
     },
+    /// Più varianti insieme: si tiene l'ultima di ciascuna e le si consegna alla fine.
+    Lines {
+        /// La posizione valutata.
+        position: SearchPosition,
+        /// L'ultima versione di ogni variante, per numero (1 = la migliore).
+        latest: BTreeMap<u32, AnalysisUpdate>,
+        /// Dove consegnarle.
+        reply: oneshot::Sender<Result<Vec<AnalysisUpdate>, EngineError>>,
+    },
 }
+
+/// L'impostazione di Stockfish che dice quante varianti calcolare insieme.
+const MULTI_PV: &str = "MultiPV";
 
 impl<R, W> EngineWorker<R, W>
 where
@@ -109,6 +121,9 @@ where
                                 Some(EngineJob::Evaluate(old)) => {
                                     let _ = old.reply.send(Err(EngineError::Cancelled));
                                 }
+                                Some(EngineJob::EvaluateLines(old)) => {
+                                    let _ = old.reply.send(Err(EngineError::Cancelled));
+                                }
                                 _ => {}
                             }
                             pending = match job {
@@ -136,10 +151,30 @@ where
         }
     }
 
+    /// Manda un'impostazione al motore, solo se è cambiata rispetto all'ultima volta.
+    async fn apply(&mut self, name: &str, value: &str) -> Result<(), EngineError> {
+        if self.applied.get(name).map(String::as_str) != Some(value) {
+            self.engine.set_option(name, value).await?;
+            self.applied.insert(name.to_owned(), value.to_owned());
+        }
+        Ok(())
+    }
+
     /// Comincia a eseguire una richiesta.
     ///
     /// Restituisce la ricerca avviata, oppure `None` per la richiesta `Stop`.
+    /// Solo la richiesta di più varianti ne chiede più d'una al motore: tutte
+    /// le altre lo riportano a una sola, la migliore.
     async fn start(&mut self, job: EngineJob) -> Result<Option<Search>, EngineError> {
+        let wanted_lines = match &job {
+            EngineJob::Stop => return Ok(None),
+            EngineJob::EvaluateLines(request) => request.lines.max(1),
+            _ => 1,
+        };
+        // Il motore parte con una variante: si cambia solo se serve.
+        if wanted_lines != 1 || self.applied.contains_key(MULTI_PV) {
+            self.apply(MULTI_PV, &wanted_lines.to_string()).await?;
+        }
         let (position, limits, purpose) = match job {
             EngineJob::Stop => return Ok(None),
             EngineJob::Analyze(position) => {
@@ -148,10 +183,7 @@ where
             }
             EngineJob::FindMove(request) => {
                 for (name, value) in &request.options {
-                    if self.applied.get(name) != Some(value) {
-                        self.engine.set_option(name, value).await?;
-                        self.applied.insert(name.clone(), value.clone());
-                    }
+                    self.apply(name, value).await?;
                 }
                 (
                     request.position,
@@ -163,6 +195,14 @@ where
                 let purpose = Purpose::Evaluate {
                     position: request.position.clone(),
                     latest: None,
+                    reply: request.reply,
+                };
+                (request.position, request.limits, purpose)
+            }
+            EngineJob::EvaluateLines(request) => {
+                let purpose = Purpose::Lines {
+                    position: request.position.clone(),
+                    latest: BTreeMap::new(),
                     reply: request.reply,
                 };
                 (request.position, request.limits, purpose)
@@ -198,6 +238,13 @@ where
                     *latest = Some(update);
                 }
             }
+            Purpose::Lines {
+                position, latest, ..
+            } => {
+                if let Some((number, update)) = AnalysisUpdate::from_any_line(position, info) {
+                    latest.insert(number, update);
+                }
+            }
             Purpose::Move(_) => {}
         }
     }
@@ -218,6 +265,16 @@ where
                     Err(EngineError::Cancelled)
                 } else {
                     latest.ok_or(EngineError::NoMove)
+                };
+                let _ = reply.send(result);
+            }
+            Purpose::Lines { latest, reply, .. } => {
+                let result = if search.stopping {
+                    Err(EngineError::Cancelled)
+                } else if latest.is_empty() {
+                    Err(EngineError::NoMove)
+                } else {
+                    Ok(latest.into_values().collect())
                 };
                 let _ = reply.send(result);
             }
@@ -352,6 +409,35 @@ mod tests {
         assert_eq!(update.evaluation, crate::Evaluation::Centipawns(10));
         assert_eq!(update.line.san, ["Nf3"]);
         assert!(received(&log).contains(&"go movetime 300".to_owned()));
+    }
+
+    #[tokio::test]
+    async fn evaluates_several_lines_and_then_goes_back_to_one() {
+        let (handle, _updates, log) = running_engine().await;
+
+        let lines = handle
+            .evaluate_lines(start_position(), Duration::from_millis(300), 3)
+            .await
+            .expect("varianti");
+        handle
+            .evaluate(start_position(), Duration::from_millis(300))
+            .await
+            .expect("valutazione");
+
+        assert_eq!(lines.len(), 2, "il finto motore ne calcola due");
+        assert_eq!(lines[0].line.san, ["Nf3"]);
+        assert_eq!(lines[1].line.san, ["e4"]);
+        let options: Vec<String> = received(&log)
+            .into_iter()
+            .filter(|line| line.starts_with("setoption name MultiPV"))
+            .collect();
+        assert_eq!(
+            options,
+            [
+                "setoption name MultiPV value 3",
+                "setoption name MultiPV value 1"
+            ]
+        );
     }
 
     #[tokio::test]

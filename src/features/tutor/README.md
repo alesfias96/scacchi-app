@@ -25,12 +25,21 @@ computer, a partita in corso, è spento (sarebbe un aiuto) ma si può accendere 
 La sezione **Tutor** del menu principale, con i commenti dopo ogni mossa sotto la scacchiera, sta
 in `src/features/play/coach/`; le schede da aprire stanno in `src/components/knowledge-cards/`.
 
+**Guarda avanti** (circa 3 secondi) e **Pensa più a lungo** (15 secondi): Stockfish calcola le sue
+tre varianti migliori e il tutor spiega l'idea di ciascuna, guardando lontano (vedi
+`crates/tutor`, "Lo sguardo lungo"). Ogni idea si può guardare sulla scacchiera.
+
 ## Contenuto
 
-| Elemento                | Cosa fa                                                                               |
-| ----------------------- | ------------------------------------------------------------------------------------- |
-| `TutorPanel.tsx`        | Il contenuto della voce «Tutor»: scacchiera, interruttore, spiegazione, prove "e se…" |
-| `TutorPanel.module.css` | La sua disposizione                                                                   |
-| `TutorPanel.test.tsx`   | I test: senza posizione, contro il computer, puzzle, schede, mosse provate            |
-| `tutor-sections/`       | Le parti della spiegazione, con le frasi che si illuminano                            |
-| `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                             |
+| Elemento                | Cosa fa                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `TutorPanel.tsx`        | Il contenuto della voce «Tutor»: scacchiera, interruttore, spiegazione, prove "e se…"                                    |
+| `TutorPanel.module.css` | La sua disposizione                                                                                                      |
+| `TutorPanel.test.tsx`   | I test: senza posizione, contro il computer, puzzle, schede, mosse provate                                               |
+| `tutor-sections/`       | Le parti della spiegazione, con le frasi che si illuminano                                                               |
+| `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                                                                |
+| `idea-card/`            | Un'idea: frase principale, momenti chiave con la loro mossa, schede, variante e i comandi per guardarla sulla scacchiera |
+| `position-ideas/`       | Le idee della posizione, dalla preferita da Stockfish, con il confronto                                                  |
+| `usePositionIdeas.ts`   | Chiede le idee della posizione a richiesta («Guarda avanti», «Pensa più a lungo»)                                        |
+| `ideaMoves.ts`          | La mossa di un momento chiave scritta come nei libri ("12. ♞c6+"), nella notazione scelta                                |
+| `ideaMoves.test.ts`     | I suoi test                                                                                                              |

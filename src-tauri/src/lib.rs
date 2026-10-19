@@ -100,6 +100,8 @@ pub fn run() {
             commands::review::get_review,
             commands::stats::get_stats,
             commands::stats::analyze_missing_games,
+            commands::ideas::position_ideas,
+            commands::ideas::move_idea,
             commands::notes::list_notes,
             commands::notes::note_tags,
             commands::notes::save_note,

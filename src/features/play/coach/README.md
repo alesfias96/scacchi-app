@@ -22,14 +22,18 @@ fascia compare «Rivedi i commenti».
 
 ## Contenuto
 
-| File                         | Cosa fa                                                                    |
-| ---------------------------- | -------------------------------------------------------------------------- |
-| `buildCoachMessages.ts`      | Sceglie i messaggi, in ordine, senza ripetere quelli già visti             |
-| `buildCoachMessages.test.ts` | I suoi test                                                                |
-| `useCoachMessages.ts`        | Chiede a Rust commenti e spiegazione a ogni mossa, uno dopo l'altro        |
-| `useCoachPopup.ts`           | Quale messaggio è aperto; una mossa nuova riparte dal primo                |
-| `CoachPopup.tsx`             | Il messaggio sotto la scacchiera, con i pulsanti e la tastiera             |
-| `CoachPopup.module.css`      | I suoi stili: scheda nella fascia, con un leggero movimento quando compare |
-| `CoachPopup.test.tsx`        | I suoi test                                                                |
-| `CoachPanel.tsx`             | La scheda «Tutor» nella colonna di destra                                  |
-| `CoachPanel.module.css`      | I suoi stili                                                               |
+| File                         | Cosa fa                                                                                                                         |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `buildCoachMessages.ts`      | Sceglie i messaggi, in ordine, senza ripetere quelli già visti                                                                  |
+| `buildCoachMessages.test.ts` | I suoi test                                                                                                                     |
+| `useCoachMessages.ts`        | Chiede a Rust commenti e spiegazione a ogni mossa, uno dopo l'altro                                                             |
+| `useCoachPopup.ts`           | Quale messaggio è aperto; una mossa nuova riparte dal primo                                                                     |
+| `CoachPopup.tsx`             | Il messaggio sotto la scacchiera, con i pulsanti e la tastiera                                                                  |
+| `CoachPopup.module.css`      | I suoi stili: scheda nella fascia, con un leggero movimento quando compare                                                      |
+| `CoachPopup.test.tsx`        | I suoi test                                                                                                                     |
+| `CoachPanel.tsx`             | La scheda «Tutor» nella colonna di destra                                                                                       |
+| `CoachIdeasPanel.tsx`        | Lo sguardo lungo nella colonna di destra: «L'idea della tua mossa» (con la mossa migliore, se c'era) e «Le idee per continuare» |
+| `CoachIdeasPanel.module.css` | I suoi stili                                                                                                                    |
+| `CoachIdeasPanel.test.tsx`   | I suoi test                                                                                                                     |
+| `useCoachIdeas.ts`           | Dopo i commenti, chiede in sottofondo l'idea della tua ultima mossa e le idee della posizione                                   |
+| `CoachPanel.module.css`      | I suoi stili                                                                                                                    |

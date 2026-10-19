@@ -1,0 +1,90 @@
+/*
+ * Un'idea del tutor: titoletto, frase principale, momenti chiave cliccabili,
+ * variante e, quando la si guarda, i comandi per scorrerla.
+ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-medium);
+}
+
+.title,
+.meta,
+.line {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
+.title {
+  font-weight: var(--weight-semibold);
+}
+
+.headline {
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-body);
+}
+
+.moments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.momentButton {
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.momentButton:hover {
+  background: var(--color-surface-muted);
+}
+
+.move {
+  font-weight: var(--weight-semibold);
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding-top: var(--space-2);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.position {
+  font-weight: var(--weight-semibold);
+}
+
+.comment {
+  color: var(--color-accent);
+  line-height: var(--leading-body);
+}

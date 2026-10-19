@@ -87,6 +87,9 @@ import { CoachPanel } from './coach/CoachPanel';
 import { CoachPopup } from './coach/CoachPopup';
 import { useCoachMessages } from './coach/useCoachMessages';
 import { useCoachPopup } from './coach/useCoachPopup';
+import { CoachIdeasPanel } from './coach/CoachIdeasPanel';
+import { useCoachIdeas } from './coach/useCoachIdeas';
+import { useIdeaReplayStore } from '../../state/ideaReplayStore';
 import styles from './PlayPage.module.css';
 
 /** Una promozione in attesa della scelta del pezzo: le due case della mossa. */
@@ -201,6 +204,26 @@ export function PlayPage({ coached = false }: PlayPageProps) {
     [coachMessage, marks],
   );
   const coachCard = coach.explanation?.cards.find((card) => card.id === coachCardId) ?? null;
+  // Lo sguardo lungo della modalità Tutor: parte dopo i commenti (serve Stockfish).
+  const coachIdeas = useCoachIdeas(
+    game,
+    sessionId,
+    coached && coachWithEngine,
+    !coach.isLoading,
+    computerSide === undefined ? null : computerSide === 'white' ? 'black' : 'white',
+  );
+
+  // «Guarda l'idea sulla scacchiera»: al posto della partita si vede la variante.
+  // Appena la partita cambia (o si esce dalla sezione) si torna alla partita.
+  const replayIdea = useIdeaReplayStore((state) => state.idea);
+  const replayFrame = useIdeaReplayStore((state) => state.frame);
+  const closeReplay = useIdeaReplayStore((state) => state.close);
+  const replayed = replayIdea?.frames[replayFrame] ?? null;
+  const replayMoment = replayIdea?.moments.find((moment) => moment.ply === replayFrame - 1);
+  useEffect(() => {
+    closeReplay();
+    return closeReplay;
+  }, [shownFen, closeReplay]);
 
   /** A fine partita: comincia l'analisi e apre la sezione «Analisi partite». */
   const analyzeGame = useCallback(async () => {
@@ -378,17 +401,23 @@ export function PlayPage({ coached = false }: PlayPageProps) {
               </div>
             )}
             <Chessboard
-              boardFen={position.boardFen}
-              turn={position.turn}
-              inCheck={position.inCheck}
+              boardFen={replayed?.boardFen ?? position.boardFen}
+              turn={replayed?.turn ?? position.turn}
+              inCheck={replayed?.inCheck ?? position.inCheck}
               orientation={orientation}
-              lastMove={game.lastMove}
-              legalMoves={session.canMove ? position.legalMoves : NO_MOVES}
+              lastMove={replayed === null ? game.lastMove : replayed.lastMove}
+              legalMoves={session.canMove && replayed === null ? position.legalMoves : NO_MOVES}
               // Quando non si può muovere (tocca al computer, partita finita…)
               // la scacchiera è in sola lettura.
-              onMove={session.canMove ? handleMove : undefined}
-              arrow={analysis?.line.firstMove ?? null}
-              marks={boardMarks}
+              onMove={session.canMove && replayed === null ? handleMove : undefined}
+              arrow={replayed === null ? (analysis?.line.firstMove ?? null) : null}
+              marks={
+                replayed === null
+                  ? boardMarks
+                  : replayMoment === undefined
+                    ? null
+                    : { arrows: replayMoment.arrows, circles: replayMoment.squares }
+              }
               resyncKey={resyncKey}
             />
             {result !== null && (
@@ -472,6 +501,7 @@ export function PlayPage({ coached = false }: PlayPageProps) {
               <TutorPanel />
             ) : (
               <>
+                {coached && <CoachIdeasPanel ideas={coachIdeas} notation={notation} />}
                 {coached && (
                   <CoachPanel
                     withEngine={coachWithEngine}

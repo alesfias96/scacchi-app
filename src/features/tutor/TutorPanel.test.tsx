@@ -7,11 +7,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSettingsStore } from '../../state/settingsStore';
 import { useTutorStore, type TutorTarget } from '../../state/tutorStore';
 import { AFTER_E4_SCENARIO, START_EXPLANATION } from '../../test/tutorExplanations';
+import { POSITION_IDEAS } from '../../test/ideas';
 import { TutorPanel } from './TutorPanel';
 
 const serviceMock = vi.hoisted(() => ({
   explainPosition: vi.fn(),
   tryWhatIf: vi.fn(),
+  fetchPositionIdeas: vi.fn(),
+  isCancelled: () => false,
 }));
 
 vi.mock('../../services/tutorService', () => serviceMock);
@@ -97,6 +100,19 @@ describe('TutorPanel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Accendi comunque (è un aiuto)' }));
 
     expect(await screen.findByText('Tocca al Bianco')).toBeDefined();
+  });
+
+  it('«Guarda avanti» chiede a Stockfish le idee e le spiega', async () => {
+    serviceMock.fetchPositionIdeas.mockResolvedValue(POSITION_IDEAS);
+    useTutorStore.getState().setTarget(TARGET);
+    render(<TutorPanel />);
+    await screen.findByText('Tocca al Bianco');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Guarda avanti' }));
+
+    expect(await screen.findByText('Idea 1 · la preferita da Stockfish')).toBeDefined();
+    expect(serviceMock.fetchPositionIdeas).toHaveBeenCalledWith(TARGET.startFen, [], 3000);
+    expect(screen.getByText(/Stockfish preferisce la prima idea/)).toBeDefined();
   });
 
   it('durante un puzzle resta spento', () => {

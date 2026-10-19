@@ -21,13 +21,13 @@ Ogni file ha un solo compito. I test di ogni file stanno in fondo al file stesso
 
 ## La connessione e le richieste
 
-| File               | Cosa fa                                                                                                                                         |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `uci_engine.rs`    | La connessione: presentazione iniziale, invio dei comandi, lettura delle righe                                                                  |
-| `engine_job.rs`    | Le richieste possibili: analizza, trova la mossa, valuta per poco tempo, fermati                                                                |
-| `engine_handle.rs` | Il "telecomando": manda le richieste senza aspettare; per la mossa e per la valutazione breve (`evaluate`, usata dal tutor) aspetta la risposta |
-| `engine_worker.rs` | Il "lavoratore": esegue le richieste una alla volta, interrompendo quella vecchia quando ne arriva una nuova                                    |
-| `connect.rs`       | Avvia il programma del motore (senza aprire finestre del terminale su Windows) e lo collega                                                     |
+| File               | Cosa fa                                                                                                                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `uci_engine.rs`    | La connessione: presentazione iniziale, invio dei comandi, lettura delle righe                                                                                                                                           |
+| `engine_job.rs`    | Le richieste possibili: analizza, trova la mossa, valuta per poco tempo, fermati                                                                                                                                         |
+| `engine_handle.rs` | Il "telecomando": manda le richieste senza aspettare; per la mossa, per la valutazione breve (`evaluate`, usata dal tutor) e per più varianti insieme (`evaluate_lines`, lo sguardo lungo del tutor) aspetta la risposta |
+| `engine_worker.rs` | Il "lavoratore": esegue le richieste una alla volta, interrompendo quella vecchia quando ne arriva una nuova                                                                                                             |
+| `connect.rs`       | Avvia il programma del motore (senza aprire finestre del terminale su Windows) e lo collega                                                                                                                              |
 
 ## I dati per l'interfaccia e i livelli
 

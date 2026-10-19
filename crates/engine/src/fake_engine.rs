@@ -48,9 +48,10 @@ impl FakeEngine {
                     "go infinite" => ANALYSIS_LINES.to_owned(),
                     "stop" => "bestmove d2d4\n".to_owned(),
                     "quit" => break,
-                    go if go.starts_with("go") => {
-                        "info depth 1 score cp 10 pv g1f3\nbestmove g1f3\n".to_owned()
-                    }
+                    go if go.starts_with("go") => "info depth 1 score cp 10 pv g1f3\n\
+                         info depth 1 multipv 2 score cp 5 pv e2e4\n\
+                         bestmove g1f3\n"
+                        .to_owned(),
                     _ => String::new(),
                 };
                 if engine_output.write_all(reply.as_bytes()).await.is_err() {

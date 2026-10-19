@@ -7,7 +7,7 @@ use tokio::time::{Instant, sleep_until};
 
 use crate::analysis_update::AnalysisUpdate;
 use crate::engine_error::EngineError;
-use crate::engine_job::{EngineJob, EvaluateRequest, MoveRequest};
+use crate::engine_job::{EngineJob, EvaluateRequest, LinesRequest, MoveRequest};
 use crate::search_limits::SearchLimits;
 use crate::search_position::SearchPosition;
 
@@ -101,6 +101,37 @@ impl EngineHandle {
             .send(EngineJob::Evaluate(EvaluateRequest {
                 position,
                 limits,
+                reply,
+            }))
+            .map_err(|_| EngineError::Closed)?;
+        answer.await.map_err(|_| EngineError::Closed)?
+    }
+
+    /// Valuta una posizione con più varianti insieme (`MultiPV`).
+    ///
+    /// - Riceve: la posizione, per quanto tempo pensare e quante varianti volere.
+    /// - Restituisce: le varianti, dalla migliore, ciascuna con la sua
+    ///   valutazione (possono essere meno di quelle chieste, se le mosse sono poche).
+    ///
+    /// # Errors
+    ///
+    /// Gli stessi di [`EngineHandle::evaluate`].
+    pub async fn evaluate_lines(
+        &self,
+        position: SearchPosition,
+        think_for: Duration,
+        lines: u32,
+    ) -> Result<Vec<AnalysisUpdate>, EngineError> {
+        let (reply, answer) = oneshot::channel();
+        let limits = SearchLimits {
+            move_time_ms: Some(u64::try_from(think_for.as_millis()).unwrap_or(u64::MAX)),
+            ..SearchLimits::default()
+        };
+        self.jobs
+            .send(EngineJob::EvaluateLines(LinesRequest {
+                position,
+                limits,
+                lines,
                 reply,
             }))
             .map_err(|_| EngineError::Closed)?;

@@ -78,6 +78,11 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `StatsPeriod.ts`         | `crates/app-settings/src/stats_filter.rs`    | Il periodo: 30 giorni, 90 giorni, sempre                                                    |
 | `StatsOpponent.ts`       | `crates/app-settings/src/stats_filter.rs`    | Le partite: tutte, contro il computer, a due giocatori                                      |
 | `UpdateCheck.ts`         | `crates/app-settings/src/update_check.rs`    | Quando controllare gli aggiornamenti: `"manual"` o `"onStart"`                              |
+| `IdeaView.ts`            | `crates/tutor/src/idea_view.rs`              | L'idea di una variante: frase principale, momenti chiave, mosse, posizioni, schede          |
+| `IdeaMoment.ts`          | `crates/tutor/src/idea_view.rs`              | Un momento chiave di un'idea, con case e frecce                                             |
+| `IdeaFrame.ts`           | `crates/tutor/src/idea_view.rs`              | Una posizione della variante, da mostrare sulla scacchiera                                  |
+| `PositionIdeas.ts`       | `crates/tutor/src/idea_view.rs`              | Le idee di una posizione (le migliori varianti) e il confronto                              |
+| `MoveIdea.ts`            | `crates/tutor/src/idea_view.rs`              | L'idea della mossa giocata e, se c'era, quella della migliore                               |
 | `Note.ts`                | `crates/notes/src/note.rs`                   | Un appunto salvato: titolo, testo, etichette, collegamento, date                            |
 | `NoteInput.ts`           | `crates/notes/src/note.rs`                   | Un appunto come lo manda l'interfaccia quando lo si scrive                                  |
 | `NoteLink.ts`            | `crates/notes/src/note.rs`                   | La posizione (e la partita, la mossa) collegata a un appunto                                |

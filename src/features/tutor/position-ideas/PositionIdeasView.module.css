@@ -1,0 +1,12 @@
+/* Le idee della posizione, una sotto l'altra, e il confronto in fondo. */
+
+.ideas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

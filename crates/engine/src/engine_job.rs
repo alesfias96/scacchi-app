@@ -17,6 +17,8 @@ pub enum EngineJob {
     FindMove(MoveRequest),
     /// Valuta la posizione per poco tempo e consegna il giudizio finale.
     Evaluate(EvaluateRequest),
+    /// Valuta la posizione con più varianti insieme e le consegna tutte.
+    EvaluateLines(LinesRequest),
     /// Smetti di pensare.
     Stop,
 }
@@ -43,4 +45,17 @@ pub struct EvaluateRequest {
     pub limits: SearchLimits,
     /// Dove consegnare l'ultimo giudizio (valutazione e variante), o l'errore.
     pub reply: oneshot::Sender<Result<AnalysisUpdate, EngineError>>,
+}
+
+/// La richiesta di più varianti insieme (le migliori, in ordine).
+#[derive(Debug)]
+pub struct LinesRequest {
+    /// La posizione da valutare.
+    pub position: SearchPosition,
+    /// Per quanto tempo pensare.
+    pub limits: SearchLimits,
+    /// Quante varianti calcolare (almeno 1).
+    pub lines: u32,
+    /// Dove consegnare le varianti, dalla migliore, o l'errore.
+    pub reply: oneshot::Sender<Result<Vec<AnalysisUpdate>, EngineError>>,
 }

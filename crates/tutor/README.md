@@ -23,6 +23,19 @@ Il **tutor** spiega una posizione in italiano, a tre livelli (`PROGETTO.md` §4.
 Il motore lo avvia il ponte `src-tauri` (un terzo Stockfish, solo per il tutor): questa crate
 riceve già le valutazioni e non sa nulla di Tauri né dell'interfaccia.
 
+## Lo sguardo lungo (Fase 12-A)
+
+Per spiegare il **perché** di una mossa il tutor guarda dove porta: rigioca le varianti di
+Stockfish (12–20 mezze mosse) e confronta la posizione di oggi con quella lungo il percorso e alla
+fine. Ne ricava l'**idea**: un pezzo che con una manovra arriva su un avamposto o in settima
+traversa, una rottura di pedone, una colonna che si apre, materiale vinto (anche con una
+combinazione) o sacrificato, debolezze nuove dell'avversario, una struttura o un finale nuovi; nelle
+posizioni tranquille, il piano (arroccare, sviluppare, portare le torri al centro). La frase
+principale dice l'idea e **quando** si vede; i momenti chiave la mostrano passo per passo.
+
+Le frasi non contengono mosse: l'interfaccia le aggiunge nella notazione scelta. Un pezzo
+semplicemente "in presa" a metà di uno scambio o un'inchiodatura su un pedone non contano come tattica.
+
 ## Contenuto
 
 | Elemento     | Cosa contiene                                                                           |
