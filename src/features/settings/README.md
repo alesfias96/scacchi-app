@@ -2,6 +2,8 @@
 
 Qui si scelgono il **tema dell'app**, lo **stile della scacchiera**, lo **stile dei pezzi**,
 la **notazione delle mosse** e i **suoni** del gioco (riaccendendoli si sente subito una mossa d'esempio).
+In fondo, la scheda **Aggiornamenti**: versione installata, «Controlla aggiornamenti» e «Controlla a
+ogni avvio».
 Ogni scelta si applica subito in tutte le sezioni dell'app, viene salvata sul computer
 e ritrovata alla riapertura. Accanto alle scelte, una scacchiera di anteprima mostra il risultato.
 
@@ -14,3 +16,4 @@ e ritrovata alla riapertura. Accanto alle scelte, una scacchiera di anteprima mo
 | `SettingsPage.test.tsx`   | I test: scelte attuali, nuove scelte applicate e salvate, errore di salvataggio |
 | `options/`                | Gli elenchi delle scelte con testi e anteprime                                  |
 | `previews/`               | I disegni in miniatura mostrati in ogni scelta                                  |
+| `update-section/`         | La scheda «Aggiornamenti» (con i suoi stili e test)                             |

@@ -8,6 +8,7 @@ use crate::piece_style::PieceStyle;
 use crate::sound_setting::SoundSetting;
 use crate::stats_filter::StatsFilter;
 use crate::training_setup::TrainingSetup;
+use crate::update_check::UpdateCheck;
 
 /// Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
 ///
@@ -34,6 +35,8 @@ pub struct Settings {
     pub training_setup: TrainingSetup,
     /// I filtri scelti nella sezione «Progressi».
     pub stats_filter: StatsFilter,
+    /// Quando controllare se c'è una versione nuova dell'app.
+    pub update_check: UpdateCheck,
 }
 
 #[cfg(test)]
@@ -41,7 +44,7 @@ mod tests {
     use super::Settings;
     use crate::{
         AppTheme, BoardStyle, GameSetup, Notation, PieceStyle, SoundSetting, StatsFilter,
-        TrainingSetup,
+        TrainingSetup, UpdateCheck,
     };
 
     #[test]
@@ -53,6 +56,11 @@ mod tests {
         assert_eq!(settings.pieces, PieceStyle::Icona);
         assert_eq!(settings.notation, Notation::Figurine);
         assert_eq!(settings.sounds, SoundSetting::On);
+        assert_eq!(
+            settings.update_check,
+            UpdateCheck::Manual,
+            "offline finché non lo si chiede"
+        );
     }
 
     #[test]
@@ -66,13 +74,14 @@ mod tests {
             game_setup: GameSetup::default(),
             training_setup: TrainingSetup::default(),
             stats_filter: StatsFilter::default(),
+            update_check: UpdateCheck::OnStart,
         };
 
         let json = serde_json::to_string(&settings).expect("conversione in JSON");
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","engine":"stockfish","level":4,"maiaLevel":5,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5},"statsFilter":{"period":"all","opponent":"all"}}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","engine":"stockfish","level":4,"maiaLevel":5,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5},"statsFilter":{"period":"all","opponent":"all"},"updateCheck":"onStart"}"#
         );
     }
 

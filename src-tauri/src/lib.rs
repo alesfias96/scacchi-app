@@ -38,6 +38,8 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         // Gli appunti del sistema (Copia FEN, Copia PGN).
         .plugin(tauri_plugin_clipboard_manager::init())
+        // Gli aggiornamenti: solo a richiesta, e solo se firmati con la nostra chiave.
+        .plugin(tauri_plugin_updater::Builder::new().build())
         // La partita in corso, i motori e il puzzle in corso: Tauri li custodisce e li passa ai
         // comandi che li chiedono.
         .manage(state::session_state::SessionState::default())
@@ -98,6 +100,9 @@ pub fn run() {
             commands::review::get_review,
             commands::stats::get_stats,
             commands::stats::analyze_missing_games,
+            commands::updates::app_version,
+            commands::updates::check_update,
+            commands::updates::install_update,
         ])
         // `generate_context!` legge tauri.conf.json durante la compilazione
         // e incorpora nell'eseguibile configurazione, icone e interfaccia.

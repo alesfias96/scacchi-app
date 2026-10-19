@@ -51,6 +51,7 @@ describe('SettingsPage', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
       saveError: null,
     });
@@ -92,6 +93,7 @@ describe('SettingsPage', () => {
         visualizationSeconds: 5,
       },
       statsFilter: { period: 'all', opponent: 'all' },
+      updateCheck: 'manual',
     });
   });
 

@@ -52,6 +52,11 @@ maia.workspace = true
 tauri-plugin-dialog.workspace = true
 # Gli appunti del sistema: Copia FEN e Copia PGN.
 tauri-plugin-clipboard-manager.workspace = true
+# Gli aggiornamenti dell'app (solo a richiesta, firmati).
+tauri-plugin-updater.workspace = true
+# La configurazione dei plugin (in tauri.conf.json) viene inclusa nell'app come JSON:
+# Tauri la legge con questa libreria.
+serde_json.workspace = true
 # Per aspettare senza bloccare (ad esempio l'istante in cui scade il tempo).
 tokio.workspace = true
 

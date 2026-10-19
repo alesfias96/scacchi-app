@@ -48,6 +48,7 @@ describe('ThemeController', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
 
@@ -81,6 +82,7 @@ describe('ThemeController', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
 
@@ -114,6 +116,7 @@ describe('ThemeController', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
 

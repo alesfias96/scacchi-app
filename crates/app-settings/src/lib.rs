@@ -20,6 +20,7 @@
 //!   configurazione della partita;
 //! - [`training_setup`], [`training_mode`], [`difficulty`]: la configurazione dell'allenamento;
 //! - [`stats_filter`]: i filtri della sezione «Progressi»;
+//! - [`update_check`]: quando controllare gli aggiornamenti;
 //! - [`settings`]: l'insieme delle scelte e i valori predefiniti;
 //! - [`store`]: lettura e scrittura del file;
 //! - [`store_error`]: gli errori possibili durante la scrittura.
@@ -41,6 +42,7 @@ pub mod store_error;
 pub mod time_control;
 pub mod training_mode;
 pub mod training_setup;
+pub mod update_check;
 
 pub use app_theme::AppTheme;
 pub use board_style::BoardStyle;
@@ -59,3 +61,4 @@ pub use store_error::StoreError;
 pub use time_control::TimeControl;
 pub use training_mode::TrainingMode;
 pub use training_setup::TrainingSetup;
+pub use update_check::UpdateCheck;

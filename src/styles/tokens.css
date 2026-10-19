@@ -134,6 +134,7 @@
   --line-chart-height: 8rem; /* grafico a linea nel tempo */
   --bar-height: 0.75rem; /* barre orizzontali dei grafici */
   --bar-label-min-width: 6rem; /* colonna dei nomi accanto alle barre */
+  --update-notice-width: 22rem; /* avviso di una versione nuova, in basso a destra */
 
   /* ---------- Movimento ---------- */
   --duration-fast: 120ms;

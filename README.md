@@ -74,14 +74,59 @@ Cartelle che compaiono da sole e **non vanno modificate**: `node_modules/` (libr
 
 Da eseguire nella cartella del progetto:
 
-| Comando               | Cosa fa                                                                                                        |
-| --------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `npm install`         | Scarica le librerie dell'interfaccia (da fare la prima volta)                                                  |
-| `npm run engines`     | Scarica Stockfish per il sistema in uso (parte da solo con i comandi qui sotto; serve internet la prima volta) |
-| `npm run tauri dev`   | Avvia l'app in modalità sviluppo, con ricaricamento automatico                                                 |
-| `npm run tauri build` | Crea l'installatore finale per il sistema in uso                                                               |
-| `npm run build`       | Controlla e compila solo l'interfaccia                                                                         |
-| `npm run check`       | **Esegue tutti i controlli di qualità e tutti i test** (deve essere verde prima di ogni consegna)              |
-| `npm run format`      | Sistema automaticamente la formattazione dell'interfaccia                                                      |
+| Comando                      | Cosa fa                                                                                                        |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `npm install`                | Scarica le librerie dell'interfaccia (da fare la prima volta)                                                  |
+| `npm run engines`            | Scarica Stockfish per il sistema in uso (parte da solo con i comandi qui sotto; serve internet la prima volta) |
+| `npm run tauri dev`          | Avvia l'app in modalità sviluppo, con ricaricamento automatico                                                 |
+| `npm run tauri build`        | Crea l'installatore finale per il sistema in uso                                                               |
+| `npm run build`              | Controlla e compila solo l'interfaccia                                                                         |
+| `npm run check`              | **Esegue tutti i controlli di qualità e tutti i test** (deve essere verde prima di ogni consegna)              |
+| `npm run format`             | Sistema automaticamente la formattazione dell'interfaccia                                                      |
+| `npm run set-version 0.11.0` | Cambia il numero di versione in tutti i file che lo contengono (prima di pubblicare una versione nuova)        |
 
 L'elenco completo dei controlli è in `PROGETTO.md`, sezione 7.1.
+
+## Installare l'app
+
+Gli installatori di ogni versione sono nella pagina **Releases** del progetto:
+<https://github.com/alesfias96/scacchi-app/releases>.
+
+- **Windows**: il file `…_x64-setup.exe`. Al primo avvio Windows può mostrare «Windows ha protetto il
+  PC» (l'app non ha una firma a pagamento): si preme **Ulteriori informazioni**, poi **Esegui comunque**.
+- **macOS**: il file `.dmg` (per i Mac con processore Apple). Al primo avvio: tasto destro sull'app
+  → **Apri** → **Apri**.
+- **Linux**: il file `.AppImage` (si rende eseguibile e si avvia) oppure il `.deb`.
+
+Per creare l'installatore direttamente sul proprio computer: `npm run tauri build` (il file finisce
+in `target/release/bundle/`).
+
+## Aggiornamenti
+
+Nelle **Impostazioni → Aggiornamenti** si vede la versione installata e si controlla se ce n'è una
+nuova; se c'è, «Installa e riavvia» la scarica e la installa. Con «Controlla a ogni avvio» il
+controllo si fa anche da solo all'apertura (è spento di default: l'app non si collega a Internet se
+non lo si chiede).
+
+Ogni aggiornamento è **firmato**: l'app contiene la chiave pubblica (in `src-tauri/tauri.conf.json`)
+e installa solo i file firmati con la chiave privata corrispondente, che sta soltanto sul computer di
+Alessandro (`C:\Users\afias\.tauri\scacchi.key`) e tra i segreti del repository su GitHub. Se la
+chiave privata o la sua password si perdono, le app già installate non accettano più aggiornamenti
+(bisognerebbe reinstallarle a mano con una chiave nuova).
+
+## Pubblicare una versione nuova
+
+Una volta sola, su GitHub: **Settings → Secrets and variables → Actions → New repository secret**:
+
+- `TAURI_SIGNING_PRIVATE_KEY`: tutto il contenuto del file `scacchi.key`;
+- `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: la sua password.
+
+A ogni versione:
+
+1. `npm run set-version 0.11.0` (il numero nuovo), poi `npm run check`.
+2. Commit e invio su GitHub (`git push`).
+3. L'etichetta della versione: `git tag v0.11.0` e `git push origin v0.11.0`.
+4. Su GitHub, scheda **Actions**, il flusso «Release» crea gli installatori dei tre sistemi
+   (circa 20 minuti) in una **bozza** nella pagina **Releases**.
+5. Si apre la bozza, si controlla e si preme **Publish release**: da quel momento le app installate
+   trovano l'aggiornamento.

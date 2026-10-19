@@ -2,7 +2,8 @@
  * SettingsPage — la sezione "Impostazioni".
  *
  * Cosa fa: permette di scegliere il tema dell'app, lo stile della scacchiera,
- * lo stile dei pezzi, la notazione delle mosse e i suoni. Ogni scelta si applica
+ * lo stile dei pezzi, la notazione delle mosse e i suoni; in fondo, gli
+ * aggiornamenti dell'app (versione installata e controllo). Ogni scelta si applica
  * subito a tutta l'app, viene salvata e ritrovata alla riapertura. Accanto,
  * una scacchiera di anteprima mostra il risultato.
  *
@@ -21,6 +22,7 @@ import { PIECE_OPTIONS } from './options/pieceOptions';
 import { SOUND_OPTIONS } from './options/soundOptions';
 import { THEME_OPTIONS } from './options/themeOptions';
 import styles from './SettingsPage.module.css';
+import { UpdateSection } from './update-section/UpdateSection';
 
 export function SettingsPage() {
   const settings = useLoadedSettings();
@@ -97,6 +99,12 @@ export function SettingsPage() {
               if (sounds === 'on') {
                 playMoveSound();
               }
+            }}
+          />
+          <UpdateSection
+            checkOnStart={settings.updateCheck === 'onStart'}
+            onCheckOnStartChange={(checkOnStart) => {
+              change({ updateCheck: checkOnStart ? 'onStart' : 'manual' });
             }}
           />
         </div>

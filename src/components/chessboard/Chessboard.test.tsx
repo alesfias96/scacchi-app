@@ -59,6 +59,7 @@ describe('Chessboard', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
   });
@@ -124,6 +125,7 @@ describe('Chessboard', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
 

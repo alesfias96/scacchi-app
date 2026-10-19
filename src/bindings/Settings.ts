@@ -7,6 +7,7 @@ import type { PieceStyle } from "./PieceStyle";
 import type { SoundSetting } from "./SoundSetting";
 import type { StatsFilter } from "./StatsFilter";
 import type { TrainingSetup } from "./TrainingSetup";
+import type { UpdateCheck } from "./UpdateCheck";
 
 /**
  * Tutte le scelte dell'utente che valgono in ogni sezione dell'app.
@@ -47,4 +48,8 @@ trainingSetup: TrainingSetup,
 /**
  * I filtri scelti nella sezione «Progressi».
  */
-statsFilter: StatsFilter, };
+statsFilter: StatsFilter, 
+/**
+ * Quando controllare se c'è una versione nuova dell'app.
+ */
+updateCheck: UpdateCheck, };

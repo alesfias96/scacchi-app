@@ -30,6 +30,7 @@ vi.mock('../services/settingsService', () => ({
         visualizationSeconds: 5,
       },
       statsFilter: { period: 'all', opponent: 'all' },
+      updateCheck: 'manual',
     }),
   saveSettings: () => Promise.resolve(),
 }));

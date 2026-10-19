@@ -77,6 +77,7 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `StatsFilter.ts`         | `crates/app-settings/src/stats_filter.rs`    | I filtri di «Progressi»: periodo e partite                                                  |
 | `StatsPeriod.ts`         | `crates/app-settings/src/stats_filter.rs`    | Il periodo: 30 giorni, 90 giorni, sempre                                                    |
 | `StatsOpponent.ts`       | `crates/app-settings/src/stats_filter.rs`    | Le partite: tutte, contro il computer, a due giocatori                                      |
+| `UpdateCheck.ts`         | `crates/app-settings/src/update_check.rs`    | Quando controllare gli aggiornamenti: `"manual"` o `"onStart"`                              |
 | `StatsReport.ts`         | `crates/stats/src/stats_view.rs`             | Tutte le statistiche di «Progressi», con i conteggi delle partite                           |
 | `LevelStats.ts`          | `crates/stats/src/stats_view.rs`             | La scheda «Livello»: Elo stimato, rating dei puzzle, precisione                             |
 | `GameStats.ts`           | `crates/stats/src/stats_view.rs`             | La scheda «Partite»: risultati, fasi, poco tempo                                            |

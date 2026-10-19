@@ -5,7 +5,7 @@
 > rispiegare nulla. La memoria tecnica completa (architettura, struttura, registro delle decisioni,
 > trappole) è in **`PROGETTO.md`**: va letto per intero prima di qualsiasi modifica.
 >
-> **Ultimo aggiornamento: 2026-10-19 — Fase 10-A (Maia) approvata; proposto il piano della 10-B (distribuzione), in attesa di risposta.**
+> **Ultimo aggiornamento: 2026-10-19 — 10-B (distribuzione) fatta, in test: codice su GitHub, si aspettano i test a mano.**
 
 ---
 
@@ -62,47 +62,40 @@ App desktop **offline** per giocare, imparare e allenarsi a scacchi (Windows, ma
 
 ## 5. Stato: cosa è fatto
 
-| Fase     | Cosa ha portato                                                                                                                                                                                           |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1, 1-bis | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
-| 2        | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
-| 3        | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
-| 4        | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
-| 5        | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
-| 6        | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
-| 7        | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
-| 8        | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
-| 8-bis    | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
-| 9        | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                     |
-| 10-A     | Maia, il computer "umano": crate `maia` (reti calcolate in Rust), avversario «Umano» con 9 livelli (1100–1900)                                                                                            |
+| Fase           | Cosa ha portato                                                                                                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1, 1-bis       | Fondamenta, controlli di qualità, scacchiera (chessground), 4 temi, 6 scacchiere, 6 set di pezzi, impostazioni salvate                                                                                    |
+| 2              | Regole complete, lista mosse navigabile, fine partita, import/export FEN e PGN, suoni                                                                                                                     |
+| 3              | Stockfish, analisi in tempo reale con barra e freccia, computer a 10 livelli, orologio                                                                                                                    |
+| 4              | Database SQLite con migrazioni, salvataggio a ogni mossa, Archivio, ripresa della partita                                                                                                                 |
+| 5              | Rilevatori (minacce, tattiche, pedoni, re, attività), scheda «Osservazioni»                                                                                                                               |
+| 6              | Allenamento: ~100.000 puzzle Lichess, calcolo, visualizzazione, «cosa minaccia?», ripasso Leitner, rating Elo                                                                                             |
+| 7              | Tutor: crate `tutor` + 57 schede in `knowledge/`; voce «Tutor» in cima alla colonna destra (tasto T) con "e se…"; sezione **Tutor** del menu (commenti dopo ogni mossa in una fascia sotto la scacchiera) |
+| 8              | Analisi partite: crate `review`, quarto Stockfish, giudizio mosse (probabilità di vittoria persa), precisione, momenti critici, grafico, puzzle dagli errori gravi                                        |
+| 8-bis          | Varianti: albero di mosse, lista mosse come Lichess, PGN con varianti, Copia FEN/PGN funzionanti                                                                                                          |
+| 9              | Statistiche: crate `stats`, sezione **Progressi** (Livello, Partite, Aperture, Calcolo e tattica), filtri salvati, «Analizza le partite mancanti», grafici SVG nostri                                     |
+| 10-A           | Maia, il computer "umano": crate `maia` (reti calcolate in Rust), avversario «Umano» con 9 livelli (1100–1900)                                                                                            |
+| 10-B (in test) | CSP restrittiva, `npm run set-version`, flusso `release.yml` (installatori firmati), aggiornamenti dalle Impostazioni; repository GitHub                                                                  |
 
 Disposizione attuale delle sezioni con scacchiera: scacchiera a sinistra, colonna a destra **alta
 quanto la scacchiera** con scorrimento interno; menu principale a comparsa sul bordo sinistro (tasto M).
 
 ## 6. Dove eravamo rimasti — prossimo passo
 
-**Proposto il piano della 10-B (distribuzione), in attesa della risposta di Alessandro.**
+**10-B (distribuzione) implementata e in test.** Si aspetta che Alessandro faccia i test a mano.
+Quando approva: riga «Fase 10-B approvata» nel registro, commit, aggiornare questo file e proporre il
+piano di dettaglio della **10-C** (AI locale facoltativa tramite Ollama: riscrive in italiano i fatti
+già calcolati, senza mai valutare mosse; spenta di default).
 
-Situazione trovata: il progetto **non ha un repository remoto** (nessun `git remote`), quindi la CI
-di `.github/workflows/ci.yml` non è mai partita; la CSP è spenta (`"csp": null`); i permessi
-della finestra sono già minimi (`core:default`). Le immagini piccole sono incluse come `data:`.
+Cose da sapere sulla 10-B:
 
-Piano proposto (A = consigliata):
-
-0. Dove mettere il codice — **A**: repository GitHub **pubblico** (serve per gli aggiornamenti
-   automatici; il codice è comunque GPL). B: privato (CI e installatori sì, aggiornamenti no).
-   C: niente GitHub (solo installatore Windows creato sul PC). Il repository lo crea Alessandro.
-1. CSP — **A**: restrittiva (solo file dell'app, immagini anche `data:`, collegamento con Rust);
-   una CSP più larga solo durante lo sviluppo (`devCsp`, per Vite).
-2. Installatori — **A**: script Node `npm run version <numero>` che allinea la versione in tutti i
-   file; flusso GitHub "release" che, a ogni etichetta `v…`, crea gli installatori dei tre sistemi
-   in una bozza di Release; README con le istruzioni anche per crearlo sul PC.
-3. Aggiornamenti — **A**: `tauri-plugin-updater` (+ `tauri-plugin-process` per riavviare), file
-   firmati con chiave gratuita (`tauri signer generate`, chiave privata solo di Alessandro, come
-   segreto su GitHub); controllo **solo a richiesta** dal pulsante nelle Impostazioni, più
-   un interruttore "controlla all'avvio" spento di default (l'app resta offline). B: niente aggiornamenti.
-4. Firma a pagamento — **A**: no (avviso di Windows/macOS al primo avvio, spiegato nel README).
-5. Prima versione — **A**: 0.10.0 (fase 10), poi 1.0.0 a fine roadmap.
+- Repository: <https://github.com/alesfias96/scacchi-app> (pubblico), push con HTTPS.
+- Chiave degli aggiornamenti: privata in `C:\Users\afias\.tauri\scacchi.key` (con password, solo di
+  Alessandro), pubblica in `src-tauri/tauri.conf.json`. Su GitHub vanno i segreti
+  `TAURI_SIGNING_PRIVATE_KEY` e `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
+- Pubblicare: `npm run set-version X.Y.Z`, commit, push, `git tag vX.Y.Z` + push dell'etichetta,
+  poi pubblicare a mano la bozza di Release (istruzioni nel README principale).
+- Versione attuale: 0.10.0.
 
 ## 7. Cosa resta da fare
 

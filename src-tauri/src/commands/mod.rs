@@ -16,4 +16,5 @@ pub mod settings;
 pub mod stats;
 pub mod training;
 pub mod tutor;
+pub mod updates;
 pub mod variations;

@@ -21,6 +21,7 @@ Ogni file ha un solo compito. I test di ogni file stanno in fondo al file stesso
 | `training_mode.rs`   | Le modalità di allenamento: calcolo, visualizzazione, "cosa minaccia?", ripasso                                          |
 | `difficulty.rs`      | La difficoltà dei puzzle rispetto al proprio livello: più facile, normale, più difficile                                 |
 | `stats_filter.rs`    | I filtri della sezione «Progressi»: periodo (30 giorni, 90 giorni, sempre) e partite (tutte, computer, due giocatori)    |
+| `update_check.rs`    | Quando controllare gli aggiornamenti: solo a richiesta (predefinito) o anche a ogni avvio                                |
 | `settings.rs`        | L'insieme delle scelte e i valori predefiniti                                                                            |
 | `store.rs`           | Lettura e scrittura del file `settings.json`                                                                             |
 | `store_error.rs`     | Gli errori possibili nella lettura o scrittura, con messaggi chiari                                                      |

@@ -37,6 +37,7 @@ describe('PieceIcon', () => {
           visualizationSeconds: 5,
         },
         statsFilter: { period: 'all', opponent: 'all' },
+        updateCheck: 'manual',
       },
     });
   });

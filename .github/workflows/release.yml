@@ -1,0 +1,77 @@
+# =============================================================================
+# Pubblicazione di una versione nuova (installatori e aggiornamenti)
+# -----------------------------------------------------------------------------
+# Parte quando su GitHub arriva un'etichetta che comincia per "v" (es. v0.10.0,
+# vedi README "Pubblicare una versione nuova"). Tre computer (Windows, macOS,
+# Linux) compilano l'app e ne creano gli installatori; ogni file viene firmato
+# con la chiave degli aggiornamenti (segreto TAURI_SIGNING_PRIVATE_KEY).
+# Alla fine c'è una **bozza** di Release con gli installatori e il file
+# latest.json che l'app legge per sapere se c'è una versione nuova: diventa
+# visibile (e gli aggiornamenti partono) solo quando la si pubblica a mano.
+# =============================================================================
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: ${{ matrix.name }}
+    # Serve per creare la Release e caricarci gli installatori.
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: macOS
+            os: macos-latest
+          - name: Linux
+            os: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@v4
+
+      - name: Installa le librerie di sistema richieste da Tauri (solo Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf build-essential libssl-dev libxdo-dev
+
+      - name: Installa Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installa Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Riusa le compilazioni Rust precedenti (più veloce)
+        uses: Swatinem/rust-cache@v2
+
+      # Scarica anche Stockfish per il sistema di questo computer (npm run engines).
+      - name: Installa le dipendenze dell'interfaccia
+        run: npm ci
+
+      - name: Compila, firma e carica gli installatori nella bozza di Release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: Scacchi ${{ github.ref_name }}
+          releaseBody: Installatori per Windows, macOS e Linux. Le istruzioni sono nel README del progetto.
+          releaseDraft: true
+          prerelease: false
+          includeUpdaterJson: true
+          args: --config src-tauri/tauri.release.conf.json

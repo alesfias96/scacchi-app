@@ -46,7 +46,7 @@ members = [
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
 [workspace.package]
-version = "0.1.0"
+version = "0.10.0"
 edition = "2024"
 authors = ["Alessandro"]
 
@@ -111,4 +111,6 @@ sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio",
 tauri-plugin-dialog = "2"
 # Gli appunti del sistema (Copia FEN, Copia PGN).
 tauri-plugin-clipboard-manager = "2"
+# Gli aggiornamenti dell'app: scarica la nuova versione, ne controlla la firma e la installa.
+tauri-plugin-updater = "2"
 tokio = { version = "1", features = ["io-util", "macros", "process", "rt", "sync", "time"] }

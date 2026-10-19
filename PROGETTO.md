@@ -39,40 +39,42 @@ Obiettivi, in ordine di importanza:
 
 ## 3. Stack tecnologico
 
-| Ambito                   | Scelta                                                                                                                                                | Stato                                                  |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Contenitore desktop      | Tauri 2                                                                                                                                               | ✅ deciso                                              |
-| Logica, motore, dati     | Rust                                                                                                                                                  | ✅ deciso                                              |
-| Interfaccia              | React 19 + TypeScript                                                                                                                                 | ✅ deciso                                              |
-| Build interfaccia        | Vite                                                                                                                                                  | ✅ deciso                                              |
-| Regole degli scacchi     | `shakmaty` (Rust)                                                                                                                                     | ✅ deciso                                              |
-| Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`                                                                      | ✅ deciso                                              |
-| Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza                                                                   | ✅ deciso                                              |
-| Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)                                                                     | ✅ deciso                                              |
-| Motore "umano"           | Maia: le 9 reti originali (1100–1900, GPL-3.0) in `data/maia/`, calcolate in Rust dalla crate `maia` (niente lc0)                                     | ✅ deciso                                              |
-| Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app                                                                         | ✅ deciso                                              |
-| Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                                                                                         | ✅ deciso                                              |
-| File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust                                                                              | ✅ deciso                                              |
-| Rilevatori               | crate `analysis` (regole + scambio statico, senza motore); scheda "Osservazioni"                                                                      | ✅ deciso                                              |
-| Puzzle                   | ~100.000 puzzle di Lichess (CC0) in `data/puzzles/`, inclusi nell'app e tenuti in memoria; crate `training`                                           | ✅ deciso                                              |
-| Tutor                    | crate `tutor`: fatti dei rilevatori + schede TOML in `knowledge/` (incluse con `build.rs`); un terzo Stockfish per valutazioni brevi                  | ✅ deciso                                              |
-| Analisi partite          | crate `review`: probabilità di vittoria persa (come Lichess), precisione, momenti critici; un quarto Stockfish, 1 s per posizione; grafico SVG nostro | ✅ deciso                                              |
-| Statistiche              | crate `stats` (calcoli puri); `storage` legge i dati grezzi, il ponte li unisce; sezione «Progressi» con 4 schede e filtri salvati                    | ✅ deciso                                              |
-| Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                                                                                 | ✅ deciso (sostituisce `tauri-specta`, vedi registro)  |
-| Scacchiera               | `chessground` avvolto in un componente React                                                                                                          | ✅ deciso                                              |
-| Stato interfaccia        | Zustand                                                                                                                                               | ✅ deciso                                              |
-| Navigazione              | TanStack Router                                                                                                                                       | ✅ deciso                                              |
-| CSS                      | CSS Modules + design token                                                                                                                            | ✅ deciso                                              |
-| Font                     | uno per tema, inclusi nell'app (`@fontsource`): Outfit, Manrope, Plus Jakarta Sans                                                                    | ✅ deciso                                              |
-| Temi                     | Studio (predefinito), Sera, Giorno, Automatico; scelti nelle Impostazioni                                                                             | ✅ deciso                                              |
-| Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app                                                                       | ✅ deciso                                              |
-| Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app                                                                  | ✅ deciso                                              |
-| Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili                                                                                | ✅ deciso                                              |
-| Grafici statistiche      | disegnati da noi in SVG (`components/line-chart`, `components/bar-list`), colori del tema, nessuna libreria                                           | ✅ deciso                                              |
-| Linguaggio del tutor     | regole (Fase 7) → poi AI locale (Ollama, Fase 10)                                                                                                     | 🔵 regole fatte                                        |
-| Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                                                                                               | ✅ deciso                                              |
-| Test                     | `cargo test`, Vitest                                                                                                                                  | ✅ deciso                                              |
-| Sicurezza (CSP)          | Content Security Policy restrittiva                                                                                                                   | ⚪ aperto — da attivare quando l'interfaccia è stabile |
+| Ambito                   | Scelta                                                                                                                                                  | Stato                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Contenitore desktop      | Tauri 2                                                                                                                                                 | ✅ deciso                                             |
+| Logica, motore, dati     | Rust                                                                                                                                                    | ✅ deciso                                             |
+| Interfaccia              | React 19 + TypeScript                                                                                                                                   | ✅ deciso                                             |
+| Build interfaccia        | Vite                                                                                                                                                    | ✅ deciso                                             |
+| Regole degli scacchi     | `shakmaty` (Rust)                                                                                                                                       | ✅ deciso                                             |
+| Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`                                                                        | ✅ deciso                                             |
+| Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza                                                                     | ✅ deciso                                             |
+| Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)                                                                       | ✅ deciso                                             |
+| Motore "umano"           | Maia: le 9 reti originali (1100–1900, GPL-3.0) in `data/maia/`, calcolate in Rust dalla crate `maia` (niente lc0)                                       | ✅ deciso                                             |
+| Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app                                                                           | ✅ deciso                                             |
+| Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                                                                                           | ✅ deciso                                             |
+| File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust                                                                                | ✅ deciso                                             |
+| Rilevatori               | crate `analysis` (regole + scambio statico, senza motore); scheda "Osservazioni"                                                                        | ✅ deciso                                             |
+| Puzzle                   | ~100.000 puzzle di Lichess (CC0) in `data/puzzles/`, inclusi nell'app e tenuti in memoria; crate `training`                                             | ✅ deciso                                             |
+| Tutor                    | crate `tutor`: fatti dei rilevatori + schede TOML in `knowledge/` (incluse con `build.rs`); un terzo Stockfish per valutazioni brevi                    | ✅ deciso                                             |
+| Analisi partite          | crate `review`: probabilità di vittoria persa (come Lichess), precisione, momenti critici; un quarto Stockfish, 1 s per posizione; grafico SVG nostro   | ✅ deciso                                             |
+| Statistiche              | crate `stats` (calcoli puri); `storage` legge i dati grezzi, il ponte li unisce; sezione «Progressi» con 4 schede e filtri salvati                      | ✅ deciso                                             |
+| Tipi condivisi Rust → TS | generati automaticamente (`ts-rs`) in `src/bindings/`                                                                                                   | ✅ deciso (sostituisce `tauri-specta`, vedi registro) |
+| Scacchiera               | `chessground` avvolto in un componente React                                                                                                            | ✅ deciso                                             |
+| Stato interfaccia        | Zustand                                                                                                                                                 | ✅ deciso                                             |
+| Navigazione              | TanStack Router                                                                                                                                         | ✅ deciso                                             |
+| CSS                      | CSS Modules + design token                                                                                                                              | ✅ deciso                                             |
+| Font                     | uno per tema, inclusi nell'app (`@fontsource`): Outfit, Manrope, Plus Jakarta Sans                                                                      | ✅ deciso                                             |
+| Temi                     | Studio (predefinito), Sera, Giorno, Automatico; scelti nelle Impostazioni                                                                               | ✅ deciso                                             |
+| Scacchiere e pezzi       | 6 scacchiere e 6 set di pezzi, scelti nelle Impostazioni, validi in tutta l'app                                                                         | ✅ deciso                                             |
+| Impostazioni             | crate `app-settings`, file `settings.json` nella cartella di configurazione dell'app                                                                    | ✅ deciso                                             |
+| Suoni                    | creati al momento con la Web Audio API (nessun file audio), spegnibili                                                                                  | ✅ deciso                                             |
+| Grafici statistiche      | disegnati da noi in SVG (`components/line-chart`, `components/bar-list`), colori del tema, nessuna libreria                                             | ✅ deciso                                             |
+| Linguaggio del tutor     | regole (Fase 7) → poi AI locale (Ollama, Fase 10)                                                                                                       | 🔵 regole fatte                                       |
+| Qualità codice           | `rustfmt` + `clippy`, ESLint + Prettier                                                                                                                 | ✅ deciso                                             |
+| Test                     | `cargo test`, Vitest                                                                                                                                    | ✅ deciso                                             |
+| Sicurezza (CSP)          | Content Security Policy restrittiva: solo file dell'app, `data:` per immagini e font, `ipc:` (più larga solo in sviluppo)                               | ✅ deciso                                             |
+| Distribuzione            | installatori dal flusso GitHub `release.yml` (bozza di Release a ogni etichetta `v…`), senza firma a pagamento; versione con `npm run set-version`      | ✅ deciso                                             |
+| Aggiornamenti            | `tauri-plugin-updater` da Rust, file firmati (chiave gratuita), `latest.json` dalle Release di GitHub; controllo solo a richiesta o all'avvio se scelto | ✅ deciso                                             |
 
 Versioni minime: **Node.js 22.12+** (richiesto da Vitest 5), **Rust stabile** con edizione **2024**.
 
@@ -338,21 +340,21 @@ o in un modulo `tests` nello stesso file (Rust).
 
 ## 9. Stato di avanzamento
 
-| Fase                            | Stato                                |
-| ------------------------------- | ------------------------------------ |
-| 1. Fondamenta                   | ✅ completata                        |
-| 1-bis. Temi e personalizzazione | ✅ completata                        |
-| 2. Regole e partita             | ✅ completata                        |
-| 3. Motore                       | ✅ completata                        |
-| 4. Database                     | ✅ completata                        |
-| 5. Analisi                      | ✅ completata                        |
-| 6. Allenamento calcolo          | ✅ completata                        |
-| 7. Tutor                        | ✅ completata                        |
-| 8. Analisi partite              | ✅ completata                        |
-| 8-bis. Varianti                 | ✅ completata                        |
-| 9. Statistiche                  | ✅ completata                        |
-| 10. Estensioni                  | 🔵 10-A Maia ✅; 10-B e 10-C da fare |
-| 11. Appunti personali           | ⚪ da fare                           |
+| Fase                            | Stato                                                     |
+| ------------------------------- | --------------------------------------------------------- |
+| 1. Fondamenta                   | ✅ completata                                             |
+| 1-bis. Temi e personalizzazione | ✅ completata                                             |
+| 2. Regole e partita             | ✅ completata                                             |
+| 3. Motore                       | ✅ completata                                             |
+| 4. Database                     | ✅ completata                                             |
+| 5. Analisi                      | ✅ completata                                             |
+| 6. Allenamento calcolo          | ✅ completata                                             |
+| 7. Tutor                        | ✅ completata                                             |
+| 8. Analisi partite              | ✅ completata                                             |
+| 8-bis. Varianti                 | ✅ completata                                             |
+| 9. Statistiche                  | ✅ completata                                             |
+| 10. Estensioni                  | 🔵 10-A Maia ✅; 10-B distribuzione in test; 10-C da fare |
+| 11. Appunti personali           | ⚪ da fare                                                |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -493,6 +495,13 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Nella sessione due richieste distinte: `engine_request` (Stockfish) e `maia_request` (Maia, calcolata su un filo a parte con `spawn_blocking`)                                                   | Stockfish resta com'era, con i suoi test; Maia non blocca l'app                                                                                                                                                                               |
 | 2026-10-19 | Nelle statistiche Elo stimato e risultati per livello contano Stockfish e Maia insieme, i livelli in ordine di Elo                                                                               | Ogni livello ha un Elo indicativo: l'Elo di rendimento vale per entrambi                                                                                                                                                                      |
 | 2026-10-19 | Fase 10-A approvata                                                                                                                                                                              | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | 10-B: codice su GitHub, repository pubblico `alesfias96/scacchi-app`; prima versione 0.10.0                                                                                                      | Scelte 0A–5A approvate: serve un posto pubblico per gli aggiornamenti, e il codice è GPL                                                                                                                                                      |
+| 2026-10-19 | CSP restrittiva; `data:` permesso anche per i font                                                                                                                                               | Vite include nel codice le immagini e i font più piccoli (verificato compilando)                                                                                                                                                              |
+| 2026-10-19 | Comando `npm run set-version` (non `npm run version`)                                                                                                                                            | "version" per npm è un nome speciale che parte da solo con `npm version`                                                                                                                                                                      |
+| 2026-10-19 | Aggiornamenti gestiti da Rust (comandi `app_version`, `check_update`, `install_update`), senza le librerie JavaScript dei plugin                                                                 | Una sola libreria nuova (`tauri-plugin-updater`); l'interfaccia riceve solo testi                                                                                                                                                             |
+| 2026-10-19 | `requireSignedVersion` acceso; su Windows installazione "passive"                                                                                                                                | Nessuna versione vecchia da accettare; si vede l'avanzamento senza domande                                                                                                                                                                    |
+| 2026-10-19 | Il controllo degli aggiornamenti è un'impostazione (`updateCheck`: `manual` predefinito, oppure `onStart`)                                                                                       | L'app resta offline finché non lo si chiede                                                                                                                                                                                                   |
+| 2026-10-19 | I file firmati per gli aggiornamenti si creano solo nel flusso di pubblicazione (`tauri.release.conf.json`)                                                                                      | Così `npm run tauri build` e la CI funzionano anche senza la chiave privata                                                                                                                                                                   |
 
 ---
 
@@ -508,7 +517,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
-- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: CSP restrittiva, installatori dalla CI senza firma a pagamento, aggiornamenti con `tauri-plugin-updater` da GitHub Releases (chiave gratuita). 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
+- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta, in test (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
@@ -529,6 +538,8 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **ts-rs:** i numeri `u64` diventano `bigint` in TypeScript; per i dati verso l'interfaccia si usa `u32` (o `usize`).
 - **Librerie nuove:** aggiungere una dipendenza esterna (es. `flate2`) viene bloccato dai permessi; prima si cerca una strada senza (per le reti di Maia: file già decompressi).
 - **Reti di Lc0:** l'arrocco è "re sulla casa della torre" (e1h1) e la promozione a cavallo è la mossa senza lettera; il Nero si vede con la scacchiera ribaltata (vedi `crates/maia`).
+- **Configurazione dei plugin di Tauri:** con una sezione `plugins` in `tauri.conf.json`, `src-tauri` deve avere `serde_json` tra le sue dipendenze (lo usa `generate_context!`).
+- **Updater:** senza `plugins.updater.pubkey` l'app non parte; la chiave privata non va mai nel progetto.
 - **Tauri sidecar:** la compilazione (anche Clippy) fallisce se il file di Stockfish manca: `npm run engines`.
 - **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.
 - **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.
