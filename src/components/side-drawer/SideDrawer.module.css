@@ -1,0 +1,93 @@
+/*
+ * Barra laterale a comparsa: una striscia sottile sul bordo destro (con la
+ * linguetta) e la barra vera, fuori dallo schermo finché non si apre. Si
+ * anima solo lo spostamento (transform), che non costa nulla al computer.
+ */
+
+/* La striscia sul bordo destro: basta arrivarci con il mouse per aprire. */
+.edge {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  width: var(--drawer-edge-width);
+}
+
+/* La linguetta verticale che fa capire che la barra esiste. */
+.handle {
+  position: absolute;
+  right: 0;
+  padding: var(--space-3) var(--space-1);
+  border: none;
+  border-radius: var(--radius-medium) 0 0 var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-board);
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+
+.handle:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.handleLabel {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--drawer-width), 100vw);
+  background: var(--color-background);
+  box-shadow: var(--shadow-board);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition:
+    transform var(--duration-medium) var(--easing-standard),
+    visibility 0s linear var(--duration-medium);
+}
+
+.open {
+  transform: translateX(0);
+  visibility: visible;
+  transition:
+    transform var(--duration-medium) var(--easing-standard),
+    visibility 0s;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.title {
+  flex: 1;
+  font-size: var(--text-large);
+  font-weight: var(--weight-bold);
+}
+
+/* Il contenuto scorre per conto suo; la testata resta sempre visibile. */
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5) var(--space-6);
+  overscroll-behavior: contain;
+}

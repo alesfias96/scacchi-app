@@ -19,3 +19,4 @@ i test (`.test.tsx`) e un README.
 | `eval-bar/`     | La barra di valutazione del motore, accanto alla scacchiera                                           |
 | `switch/`       | L'interruttore acceso/spento (es. "Mostra analisi")                                                   |
 | `choice-group/` | Un gruppo di scelte a pastiglie, compatto (es. colore e livello nella finestra "Nuova partita")       |
+| `side-drawer/`  | La barra laterale a comparsa sul bordo destro (in "Gioca" contiene tutte le schede)                   |

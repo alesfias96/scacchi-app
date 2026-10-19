@@ -204,7 +204,8 @@ app-scacchi/
 │   │   ├── icon/               icone a tratto
 │   │   ├── eval-bar/           barra di valutazione
 │   │   ├── switch/             interruttore acceso/spento
-│   │   └── choice-group/       gruppo di scelte a pastiglie (compatto)
+│   │   ├── choice-group/       gruppo di scelte a pastiglie (compatto)
+│   │   └── side-drawer/        barra laterale a comparsa sul bordo destro
 │   ├── features/               aree dell'app, ognuna autonoma
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/, promotion-picker/,
@@ -319,7 +320,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 2. Regole e partita             | ✅ completata |
 | 3. Motore                       | ✅ completata |
 | 4. Database                     | ✅ completata |
-| 5. Analisi                      | 🔵 in test    |
+| 5. Analisi                      | ✅ completata |
 | 6. Allenamento calcolo          | ⚪ da fare    |
 | 7. Tutor                        | ⚪ da fare    |
 | 8. Analisi partite              | ⚪ da fare    |
@@ -401,6 +402,10 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Minacce calcolate solo dai rilevatori in Rust (non da Stockfish)                                                                   | Scelta 2A di Alessandro: istantanee e spiegabili; Stockfish servirà agli scenari "e se…" del tutor                                                                          |
 | 2026-10-19 | Tutti i rilevatori della roadmap, con filtri contro i falsi allarmi                                                                | Scelta 3A di Alessandro; i fatti devono essere veri e utili, non rumore                                                                                                     |
 | 2026-10-19 | Le frasi dei fatti le scrive Rust; le mosse citate restano a parte e l'interfaccia le traduce nella notazione scelta               | Una sola fonte per il contenuto, la notazione resta una scelta dell'utente                                                                                                  |
+| 2026-10-19 | Fase 5 approvata                                                                                                                   | Conferma di Alessandro; le frasi dei fatti si ritoccano man mano che le vede                                                                                                |
+| 2026-10-19 | "Gioca": solo la scacchiera; tutte le schede in una barra laterale a comparsa ("Partita")                                          | Richiesta di Alessandro: più spazio alla scacchiera mentre si gioca                                                                                                         |
+| 2026-10-19 | La barra si apre col mouse sul bordo destro, con il tasto I o la linguetta; "Fissa" la tiene aperta; Esc la chiude                 | Scelta 1A di Alessandro: funziona anche senza mouse                                                                                                                         |
+| 2026-10-19 | L'annuncio di fine partita compare sopra la scacchiera; "Nuova partita" resta nella barra                                          | Scelte 2A e 3A di Alessandro                                                                                                                                                |
 
 ---
 

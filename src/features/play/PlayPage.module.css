@@ -1,7 +1,7 @@
 /*
- * Sezione "Gioca": titolo, poi scacchiera grande (con i giocatori sopra e sotto
- * e, se l'analisi è accesa, la barra di valutazione a sinistra) e le schede
- * accanto (o sotto, se manca spazio).
+ * Sezione "Gioca": solo la scacchiera, centrata e grande quanto la finestra
+ * permette (con i giocatori sopra e sotto e, se l'analisi è accesa, la barra
+ * di valutazione a sinistra). Le schede stanno nella barra laterale a comparsa.
  */
 
 .page {
@@ -17,23 +17,31 @@
   line-height: var(--leading-tight);
 }
 
+/* Il titolo della pagina, presente per i lettori di schermo ma invisibile. */
+.hiddenTitle {
+  position: absolute;
+  width: var(--border-width);
+  height: var(--border-width);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .workspace {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--space-6);
+  justify-content: center;
 }
 
 /*
  * La scacchiera cresce fino alla dimensione massima, ma non supera mai l'altezza
- * della finestra (meno lo spazio per titolo e margini), così resta sempre visibile intera.
+ * della finestra (meno lo spazio per giocatori e margini), così resta sempre visibile intera.
  */
 .boardArea {
   display: flex;
   flex: 1 1 var(--board-min-size);
   flex-direction: column;
   gap: var(--space-3);
-  max-width: min(var(--board-max-size), calc(100vh - var(--board-vertical-reserve)));
+  max-width: min(var(--board-focus-max-size), calc(100vh - var(--board-vertical-reserve)));
 }
 
 /* La barra di valutazione accanto alla scacchiera, alta quanto lei. */
@@ -49,11 +57,13 @@
   min-width: 0;
 }
 
-.sidePanel {
-  display: flex;
-  flex: 0 1 var(--panel-width);
-  flex-direction: column;
-  gap: var(--space-4);
+/* L'annuncio di fine partita, in alto sopra la scacchiera. */
+.resultOverlay {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  left: var(--space-4);
+  z-index: 5;
 }
 
 .message {

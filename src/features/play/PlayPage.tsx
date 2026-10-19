@@ -1,14 +1,18 @@
 /**
  * PlayPage — la sezione "Gioca": una partita contro il computer o a due giocatori.
  *
- * Cosa fa: chiede a Rust la partita in corso e la mostra. Si muovono i pezzi
+ * Cosa fa: chiede a Rust la partita in corso e la mostra. Nella pagina c'è
+ * solo la scacchiera (con i giocatori, l'orologio e, se accesa, la barra di
+ * valutazione); tutte le schede stanno nella barra laterale a comparsa
+ * "Partita", che si apre portando il mouse sul bordo destro o con il tasto I. Si muovono i pezzi
  * trascinandoli o con due clic; sono permesse solo le mosse legali (arrocco,
  * presa en passant e promozione compresi), e solo quando Rust dice che si può
  * (ad esempio non mentre pensa il computer).
  * - Sopra e sotto la scacchiera: i due giocatori, con l'orologio se c'è.
  * - Accanto alla scacchiera, se l'analisi è accesa: la barra di valutazione;
  *   sulla scacchiera la freccia della mossa migliore.
- * - Nel pannello: l'annuncio di fine partita, le mosse con i comandi (scorri,
+ * - A fine partita: l'annuncio (motivo e punteggio) sopra la scacchiera.
+ * - Nella barra laterale: le mosse con i comandi (scorri,
  *   nuova partita, annulla, abbandona, gira) con il nome dell'apertura,
  *   l'analisi, le osservazioni dei rilevatori (passando il mouse su una, la
  *   scacchiera mostra le case coinvolte), la situazione, copia e incolla di posizioni (FEN) e partite
@@ -34,6 +38,7 @@ import { Button } from '../../components/button/Button';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { EvalBar } from '../../components/eval-bar/EvalBar';
 import { PanelCard } from '../../components/panel-card/PanelCard';
+import { SideDrawer } from '../../components/side-drawer/SideDrawer';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
 import { usePositionReport } from '../../hooks/usePositionReport';
@@ -264,7 +269,8 @@ export function PlayPage() {
 
   return (
     <section className={styles.page}>
-      <h1 className={styles.title}>Gioca</h1>
+      {/* Il titolo resta per i lettori di schermo, ma non occupa spazio. */}
+      <h1 className={styles.hiddenTitle}>Gioca</h1>
 
       <div className={styles.workspace}>
         <div className={styles.boardArea}>
@@ -288,6 +294,11 @@ export function PlayPage() {
                 marks={marks}
                 resyncKey={resyncKey}
               />
+              {result !== null && (
+                <div className={styles.resultOverlay}>
+                  <GameResultBanner result={result} />
+                </div>
+              )}
               {pendingPromotion !== null && (
                 <PromotionPicker
                   side={position.turn}
@@ -316,72 +327,74 @@ export function PlayPage() {
             </div>
           )}
         </div>
-
-        <div className={styles.sidePanel}>
-          {result !== null && <GameResultBanner result={result} />}
-
-          <PanelCard title="Mosse">
-            <OpeningLabel opening={session.opening} />
-            <MoveList
-              moves={game.moves}
-              cursor={game.cursor}
-              notation={notation}
-              onSelect={(ply) => {
-                void goTo(ply);
-              }}
-            />
-            <GameControls
-              cursor={game.cursor}
-              totalMoves={game.moves.length}
-              canUndo={session.canUndo}
-              canResign={session.canResign}
-              onGoTo={(ply) => {
-                void goTo(ply);
-              }}
-              onNewGame={() => {
-                setIsNewGameOpen(true);
-              }}
-              onUndo={() => {
-                void undo();
-              }}
-              onResign={() => {
-                void resign();
-              }}
-              onFlip={() => {
-                setOrientation((side) => (side === 'white' ? 'black' : 'white'));
-              }}
-            />
-          </PanelCard>
-
-          <AnalysisPanel
-            enabled={analysisEnabled}
-            onToggle={(enabled) => {
-              void setAnalysisEnabled(enabled);
-            }}
-            update={analysis}
-            isGameOver={result !== null}
-            notation={notation}
-          />
-
-          <ObservationsPanel
-            enabled={observationsEnabled}
-            onToggle={setObservationsEnabled}
-            report={report}
-            notation={notation}
-            onHighlight={setHighlighted}
-          />
-
-          <PositionPanel position={position} />
-
-          <PanelCard title="Copia e incolla">
-            <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
-          </PanelCard>
-
-          <PanelCard title="File PGN">
-            <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
-          </PanelCard>
-        </div>
       </div>
+
+      <SideDrawer
+        title="Partita"
+        shortcut="i"
+        shortcutEnabled={pendingPromotion === null && !isNewGameOpen}
+      >
+        <PanelCard title="Mosse">
+          <OpeningLabel opening={session.opening} />
+          <MoveList
+            moves={game.moves}
+            cursor={game.cursor}
+            notation={notation}
+            onSelect={(ply) => {
+              void goTo(ply);
+            }}
+          />
+          <GameControls
+            cursor={game.cursor}
+            totalMoves={game.moves.length}
+            canUndo={session.canUndo}
+            canResign={session.canResign}
+            onGoTo={(ply) => {
+              void goTo(ply);
+            }}
+            onNewGame={() => {
+              setIsNewGameOpen(true);
+            }}
+            onUndo={() => {
+              void undo();
+            }}
+            onResign={() => {
+              void resign();
+            }}
+            onFlip={() => {
+              setOrientation((side) => (side === 'white' ? 'black' : 'white'));
+            }}
+          />
+        </PanelCard>
+
+        <AnalysisPanel
+          enabled={analysisEnabled}
+          onToggle={(enabled) => {
+            void setAnalysisEnabled(enabled);
+          }}
+          update={analysis}
+          isGameOver={result !== null}
+          notation={notation}
+        />
+
+        <ObservationsPanel
+          enabled={observationsEnabled}
+          onToggle={setObservationsEnabled}
+          report={report}
+          notation={notation}
+          onHighlight={setHighlighted}
+        />
+
+        <PositionPanel position={position} />
+
+        <PanelCard title="Copia e incolla">
+          <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
+        </PanelCard>
+
+        <PanelCard title="File PGN">
+          <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
+        </PanelCard>
+      </SideDrawer>
 
       {isNewGameOpen && (
         <NewGameDialog
