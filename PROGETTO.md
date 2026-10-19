@@ -339,7 +339,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 5. Analisi                      | ✅ completata |
 | 6. Allenamento calcolo          | ✅ completata |
 | 7. Tutor                        | ✅ completata |
-| 8. Analisi partite              | 🔵 in test    |
+| 8. Analisi partite              | ✅ completata |
 | 8-bis. Varianti                 | ⚪ da fare    |
 | 9. Statistiche                  | ⚪ da fare    |
 | 10. Estensioni                  | ⚪ da fare    |
@@ -458,6 +458,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Gli errori gravi delle proprie partite diventano puzzle (posizione prima della mossa dell'avversario, una mossa da trovare), subito in ripasso; contro il computer solo i propri                 | Extra 6 approvato: è il modo più diretto di imparare dalle proprie partite                                                                                                                                                                    |
 | 2026-10-19 | La revisione si ricalcola ogni volta dai dati salvati (valutazioni e mossa migliore di ogni mossa)                                                                                               | Nel database restano solo i dati grezzi, già pronti per le statistiche della Fase 9                                                                                                                                                           |
 | 2026-10-19 | Le varianti nella lista mosse si fanno in una Fase 8-bis separata                                                                                                                                | Scelta 5A: cambiano il cuore della partita, il salvataggio e il PGN                                                                                                                                                                           |
+| 2026-10-19 | Fase 8 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
