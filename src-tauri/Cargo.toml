@@ -46,6 +46,8 @@ tutor = { workspace = true, features = ["bindings"] }
 review = { workspace = true, features = ["bindings"] }
 # Le statistiche dei progressi.
 stats = { workspace = true, features = ["bindings"] }
+# Il computer "umano" (le reti Maia).
+maia.workspace = true
 # Le finestre di sistema per salvare e aprire i file .pgn.
 tauri-plugin-dialog.workspace = true
 # Gli appunti del sistema: Copia FEN e Copia PGN.

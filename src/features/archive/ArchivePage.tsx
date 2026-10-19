@@ -32,7 +32,8 @@ export function ArchivePage() {
   const openSaved = useGameStore((state) => state.openSaved);
   const startReview = useReviewStore((state) => state.start);
   const lastFinished = useReviewStore((state) => state.lastFinished);
-  const levels = useEngineLevels();
+  const stockfishLevels = useEngineLevels('stockfish');
+  const maiaLevels = useEngineLevels('maia');
   const [filter, setFilter] = useState<GameFilter>(NO_FILTER);
   const { games, isLoading, error, reload } = useArchiveGames(filter);
   // Finita un'analisi, l'elenco si rilegge: il pulsante diventa «Vedi l'analisi».
@@ -109,7 +110,11 @@ export function ArchivePage() {
               <GameRow
                 key={game.id}
                 game={game}
-                levelName={levels.find((info) => info.level === game.level)?.name}
+                levelName={
+                  (game.engine === 'maia' ? maiaLevels : stockfishLevels).find(
+                    (info) => info.level === game.level,
+                  )?.name
+                }
                 onOpen={(id) => {
                   void openGame(id);
                 }}

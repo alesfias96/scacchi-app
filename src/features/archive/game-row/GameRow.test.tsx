@@ -11,6 +11,7 @@ const FINISHED: GameSummary = {
   startedAtMs: new Date(2026, 9, 18, 16, 35).getTime(),
   opponent: 'computer',
   computerSide: 'black',
+  engine: 'stockfish',
   level: 4,
   timeControl: { initialSeconds: 300, incrementSeconds: 3 },
   result: { winner: 'white', reason: 'checkmate', score: '1-0' },
@@ -20,7 +21,7 @@ const FINISHED: GameSummary = {
 };
 
 /** Disegna la riga con funzioni simulate. */
-function renderRow(game: GameSummary) {
+function renderRow(game: GameSummary, levelName = 'Circolo') {
   const onOpen = vi.fn();
   const onReview = vi.fn();
   const onDelete = vi.fn();
@@ -28,7 +29,7 @@ function renderRow(game: GameSummary) {
     <ul>
       <GameRow
         game={game}
-        levelName="Circolo"
+        levelName={levelName}
         onOpen={onOpen}
         onReview={onReview}
         onDelete={onDelete}
@@ -48,6 +49,13 @@ describe('GameRow', () => {
     const meta = screen.getByText(/Stockfish · Circolo · tu col Bianco/);
     expect(meta.textContent).toContain('5+3');
     expect(meta.textContent).toContain('21 mosse');
+  });
+
+  it('contro Maia scrive il suo livello', () => {
+    renderRow({ ...FINISHED, engine: 'maia', level: 5 }, 'Maia 1500');
+
+    expect(screen.getByText(/Maia 1500 · tu col Bianco/)).toBeDefined();
+    expect(screen.queryByText(/Stockfish/)).toBeNull();
   });
 
   it('una partita finita si rivede, una in corso si continua', () => {

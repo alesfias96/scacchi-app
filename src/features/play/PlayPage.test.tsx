@@ -53,6 +53,7 @@ vi.mock('../../services/tutorService', () => tutorMock);
 
 const engineServiceMock = vi.hoisted(() => ({
   fetchEngineLevels: vi.fn(),
+  fetchMaiaLevels: () => Promise.resolve([]),
   setAnalysis: vi.fn(),
   listenToAnalysis: vi.fn(),
   listenToEngineErrors: vi.fn(),
@@ -170,7 +171,7 @@ const COMPUTER_THINKING: SessionView = {
   ...AFTER_E4,
   id: 'partita-col-computer',
   opponent: 'computer',
-  computer: { side: 'black', level: { level: 4, name: 'Circolo', elo: 1400 } },
+  computer: { side: 'black', engine: 'stockfish', level: { level: 4, name: 'Circolo', elo: 1400 } },
   timeControl: { initialSeconds: 300, incrementSeconds: 0 },
   clock: { whiteMs: 300_000, blackMs: 299_000, running: 'black' },
   canMove: false,
@@ -221,7 +222,14 @@ describe('PlayPage', () => {
         pieces: 'icona',
         notation: 'italiana',
         sounds: 'on',
-        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        gameSetup: {
+          opponent: 'computer',
+          color: 'white',
+          engine: 'stockfish',
+          level: 4,
+          maiaLevel: 5,
+          timeControl: null,
+        },
         trainingSetup: {
           mode: 'depth',
           depth: 2,
@@ -358,7 +366,11 @@ describe('PlayPage', () => {
     serviceMock.startNewGame.mockResolvedValue({
       ...COMPUTER_THINKING,
       id: 'partita-nuova',
-      computer: { side: 'white', level: { level: 4, name: 'Circolo', elo: 1400 } },
+      computer: {
+        side: 'white',
+        engine: 'stockfish',
+        level: { level: 4, name: 'Circolo', elo: 1400 },
+      },
     });
     render(<PlayPage />);
     await pageReady();
@@ -429,7 +441,11 @@ describe('PlayPage', () => {
   it('una partita aperta col nero mostra il nero in basso', async () => {
     serviceMock.fetchGame.mockResolvedValue({
       ...COMPUTER_THINKING,
-      computer: { side: 'white', level: { level: 4, name: 'Circolo', elo: 1400 } },
+      computer: {
+        side: 'white',
+        engine: 'stockfish',
+        level: { level: 4, name: 'Circolo', elo: 1400 },
+      },
     });
 
     render(<PlayPage />);

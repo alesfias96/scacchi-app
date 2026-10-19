@@ -6,7 +6,8 @@
 
 use analysis::GamePhase;
 use app_settings::{OpponentKind, StatsFilter, StatsOpponent};
-use stats::{GameFacts, MoveFacts, PuzzleFacts, StatsInput, StatsReport};
+use game_session::computer_level;
+use stats::{ComputerFacts, GameFacts, MoveFacts, PuzzleFacts, StatsInput, StatsReport};
 use storage::{Database, GameStatRow, MoveStatRow, PuzzleStatRow, StatsQuery};
 use tauri::{AppHandle, Manager};
 use training::{OWN_GAME_THEME, START_RATING, puzzle_by_id};
@@ -46,7 +47,14 @@ fn phase(code: Option<&str>) -> Option<GamePhase> {
 
 fn game_facts(row: GameStatRow) -> GameFacts {
     GameFacts {
-        computer: row.computer_side.zip(row.level),
+        computer: row
+            .computer_side
+            .zip(row.level)
+            .map(|(side, level)| ComputerFacts {
+                side,
+                engine: row.engine,
+                level: computer_level(row.engine, level),
+            }),
         id: row.id,
         started_at_ms: row.started_at_ms,
         opponent: row.opponent,

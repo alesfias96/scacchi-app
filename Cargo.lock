@@ -1198,6 +1198,7 @@ dependencies = [
  "app-settings",
  "chess-core",
  "engine",
+ "maia",
  "openings",
  "serde",
  "thiserror 2.0.21",
@@ -2145,6 +2146,15 @@ name = "log"
 version = "0.4.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
+
+[[package]]
+name = "maia"
+version = "0.1.0"
+dependencies = [
+ "engine",
+ "shakmaty",
+ "thiserror 2.0.21",
+]
 
 [[package]]
 name = "markup5ever"
@@ -3106,6 +3116,7 @@ dependencies = [
  "chess-core",
  "engine",
  "game-session",
+ "maia",
  "review",
  "stats",
  "storage",

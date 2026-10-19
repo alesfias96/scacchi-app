@@ -49,7 +49,7 @@ Obiettivi, in ordine di importanza:
 | Motore forte             | Stockfish 19 nativo (sidecar Tauri), scaricato e verificato da `npm run engines`                                                                      | ✅ deciso                                              |
 | Dialogo con i motori     | crate `engine` (UCI), asincrona con `tokio`; un motore che gioca e uno che analizza                                                                   | ✅ deciso                                              |
 | Livelli del computer     | 10 livelli con nome ed Elo indicativo (`UCI_Elo` sopra 1320, `Skill Level` sotto)                                                                     | ✅ deciso                                              |
-| Motore "umano"           | Maia (via lc0), opzionale                                                                                                                             | ✅ deciso                                              |
+| Motore "umano"           | Maia: le 9 reti originali (1100–1900, GPL-3.0) in `data/maia/`, calcolate in Rust dalla crate `maia` (niente lc0)                                     | ✅ deciso                                              |
 | Database                 | SQLite tramite `sqlx` 0.9 (con migrazioni), file nella cartella dati dell'app                                                                         | ✅ deciso                                              |
 | Aperture                 | elenco di Lichess (CC0) in `data/openings/`, crate `openings`                                                                                         | ✅ deciso                                              |
 | File PGN                 | `tauri-plugin-dialog` (finestre di sistema); lettura e scrittura da Rust                                                                              | ✅ deciso                                              |
@@ -180,6 +180,7 @@ app-scacchi/
 │   ├── training/               puzzle: scelta, verifica delle mosse, rating Elo, ripasso (scatole)
 │   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
 │   │                           critici, dati per le statistiche, puzzle dagli errori gravi
+│   ├── maia/                   il computer "umano": reti Maia calcolate in Rust, 9 livelli
 │   ├── stats/                  statistiche di «Progressi»: Elo stimato, risultati, errori per fase
 │   │                           e con poco tempo, aperture, puzzle per profondità e per tema
 │   └── storage/                database SQLite: partite, archivio, tentativi dei puzzle, ripasso
@@ -251,7 +252,8 @@ app-scacchi/
 │   ├── middlegame/             concetti di mediogioco
 │   └── endgames/               finali
 │
-└── data/                       dati inclusi nell'app: openings/ e puzzles/ (di Lichess, CC0)
+└── data/                       dati inclusi nell'app: openings/ e puzzles/ (di Lichess, CC0),
+                                maia/ (le reti di Maia, GPL-3.0)
 ```
 
 ### Convenzione per ogni componente React
@@ -336,21 +338,21 @@ o in un modulo `tests` nello stesso file (Rust).
 
 ## 9. Stato di avanzamento
 
-| Fase                            | Stato         |
-| ------------------------------- | ------------- |
-| 1. Fondamenta                   | ✅ completata |
-| 1-bis. Temi e personalizzazione | ✅ completata |
-| 2. Regole e partita             | ✅ completata |
-| 3. Motore                       | ✅ completata |
-| 4. Database                     | ✅ completata |
-| 5. Analisi                      | ✅ completata |
-| 6. Allenamento calcolo          | ✅ completata |
-| 7. Tutor                        | ✅ completata |
-| 8. Analisi partite              | ✅ completata |
-| 8-bis. Varianti                 | ✅ completata |
-| 9. Statistiche                  | ✅ completata |
-| 10. Estensioni                  | ⚪ da fare    |
-| 11. Appunti personali           | ⚪ da fare    |
+| Fase                            | Stato                                     |
+| ------------------------------- | ----------------------------------------- |
+| 1. Fondamenta                   | ✅ completata                             |
+| 1-bis. Temi e personalizzazione | ✅ completata                             |
+| 2. Regole e partita             | ✅ completata                             |
+| 3. Motore                       | ✅ completata                             |
+| 4. Database                     | ✅ completata                             |
+| 5. Analisi                      | ✅ completata                             |
+| 6. Allenamento calcolo          | ✅ completata                             |
+| 7. Tutor                        | ✅ completata                             |
+| 8. Analisi partite              | ✅ completata                             |
+| 8-bis. Varianti                 | ✅ completata                             |
+| 9. Statistiche                  | ✅ completata                             |
+| 10. Estensioni                  | 🔵 10-A Maia in test; 10-B e 10-C da fare |
+| 11. Appunti personali           | ⚪ da fare                                |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -483,6 +485,13 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Errori con poco tempo = mosse giocate con meno di un quinto del tempo iniziale sull'orologio                                                                                                     | Soglia semplice, valida per ogni controllo del tempo                                                                                                                                                                                          |
 | 2026-10-19 | Barra laterale: tolte le sezioni «in arrivo» (Progressi era l'ultima); il codice delle voci disattivate è stato cancellato                                                                       | Codice morto                                                                                                                                                                                                                                  |
 | 2026-10-19 | Fase 9 approvata                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | Fase 10 divisa in tre passi: 10-A Maia, 10-B distribuzione, 10-C AI locale                                                                                                                       | Scelte 1A–5A approvate: ogni passo è grande quanto una fase                                                                                                                                                                                   |
+| 2026-10-19 | Maia calcolata in Rust (crate `maia`): lettura delle reti di Lc0, codifica a 112 piani, rete a 6 blocchi SE, testa delle mosse a convoluzione, tabelle delle mosse copiate da Lc0                | Lc0 ha eseguibili ufficiali solo per Windows; così niente programmi esterni, uguale sui tre sistemi, e verificabile con i test (circa 60 ms a mossa)                                                                                          |
+| 2026-10-19 | Le reti di Maia stanno in `data/maia/` già decompresse (`.pb`, 15,6 MB in tutto) e si includono con `include_bytes!`                                                                             | Per i `.pb.gz` serviva una libreria in più (`flate2`): la decompressione si è fatta una volta sola con Node; le impronte degli originali sono nel README                                                                                      |
+| 2026-10-19 | Maia sceglie a sorte tra le mosse con almeno un decimo della probabilità della migliore                                                                                                          | Varietà "umana" senza le mosse che quasi nessuno giocherebbe                                                                                                                                                                                  |
+| 2026-10-19 | Il motore del computer (`ComputerEngine`: Stockfish o Maia) affianca `OpponentKind`; Maia ha il suo livello (`maiaLevel`, 1–9) ricordato a parte; migrazione 0004 aggiunge `games.engine`        | Il livello 5 di Stockfish e quello di Maia sono diversi; le partite già salvate restano Stockfish; i filtri «contro il computer» includono entrambi                                                                                           |
+| 2026-10-19 | Nella sessione due richieste distinte: `engine_request` (Stockfish) e `maia_request` (Maia, calcolata su un filo a parte con `spawn_blocking`)                                                   | Stockfish resta com'era, con i suoi test; Maia non blocca l'app                                                                                                                                                                               |
+| 2026-10-19 | Nelle statistiche Elo stimato e risultati per livello contano Stockfish e Maia insieme, i livelli in ordine di Elo                                                                               | Ogni livello ha un Elo indicativo: l'Elo di rendimento vale per entrambi                                                                                                                                                                      |
 
 ---
 
@@ -498,7 +507,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
-- **Fase 10 — Estensioni.** Maia via lc0 (sidecar), AI locale (es. Ollama) che racconta senza decidere, installatori firmati e aggiornamenti (`tauri-plugin-updater`), CSP restrittiva.
+- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta, in test. 10-B distribuzione: CSP restrittiva, installatori dalla CI senza firma a pagamento, aggiornamenti con `tauri-plugin-updater` da GitHub Releases (chiave gratuita). 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
@@ -517,6 +526,8 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **npm audit:** mai `npm audit fix --force`.
 - **`tauri-specta`** è stato scartato perché instabile; non va riproposto. Il pacchetto chessground si chiama `@lichess-org/chessground`.
 - **ts-rs:** i numeri `u64` diventano `bigint` in TypeScript; per i dati verso l'interfaccia si usa `u32` (o `usize`).
+- **Librerie nuove:** aggiungere una dipendenza esterna (es. `flate2`) viene bloccato dai permessi; prima si cerca una strada senza (per le reti di Maia: file già decompressi).
+- **Reti di Lc0:** l'arrocco è "re sulla casa della torre" (e1h1) e la promozione a cavallo è la mossa senza lettera; il Nero si vede con la scacchiera ribaltata (vedi `crates/maia`).
 - **Tauri sidecar:** la compilazione (anche Clippy) fallisce se il file di Stockfish manca: `npm run engines`.
 - **tokio `select!`:** per leggere il motore si usa `Lines::next_line`, che si può interrompere senza perdere righe; i comandi `stop` vanno inviati subito (non in un compito separato) per non arrivare dopo una richiesta più recente.
 - **Clippy pedantic** vieta più di tre `bool` in una struttura: in `SessionView` è permesso, con la spiegazione.

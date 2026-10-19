@@ -49,7 +49,15 @@ const REPORT: StatsReport = {
     againstComputer: { wins: 3, draws: 1, losses: 2 },
     twoPlayerGames: 1,
     byColor: [{ side: 'white', score: { wins: 2, draws: 0, losses: 1 } }],
-    byLevel: [{ level: 4, name: 'Circolo', elo: 1400, score: { wins: 3, draws: 1, losses: 2 } }],
+    byLevel: [
+      {
+        engine: 'stockfish',
+        level: 4,
+        name: 'Circolo',
+        elo: 1400,
+        score: { wins: 3, draws: 1, losses: 2 },
+      },
+    ],
     phases: [],
     timePressure: null,
   },
@@ -79,7 +87,14 @@ describe('ProgressPage', () => {
         pieces: 'icona',
         notation: 'figurine',
         sounds: 'on',
-        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        gameSetup: {
+          opponent: 'computer',
+          color: 'white',
+          engine: 'stockfish',
+          level: 4,
+          maiaLevel: 5,
+          timeControl: null,
+        },
         trainingSetup: {
           mode: 'depth',
           depth: 2,

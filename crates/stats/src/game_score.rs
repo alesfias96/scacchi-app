@@ -8,7 +8,7 @@ use crate::stats_view::Score;
 /// due giocatori (lì vince sempre "la persona").
 #[must_use]
 pub fn user_score(game: &GameFacts) -> Option<Score> {
-    let (computer, _) = game.computer?;
+    let computer = game.computer.as_ref()?.side;
     if !game.finished {
         return None;
     }

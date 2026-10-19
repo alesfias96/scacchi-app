@@ -21,6 +21,7 @@ Le crate vengono aggiunte una alla volta, solo quando servono.
 | `tutor/`        | Il tutor: spiega le posizioni unendo i fatti dei rilevatori e la base di conoscenza (`knowledge/`)                 |
 | `review/`       | L'analisi delle partite giocate: giudizio delle mosse, precisione, momenti critici, puzzle dagli errori            |
 | `stats/`        | Le statistiche della sezione «Progressi»: livello stimato, risultati, errori per fase, aperture, calcolo e tattica |
+| `maia/`         | Il computer "umano": le reti Maia, calcolate in Rust, che giocano come una persona da 1100 a 1900 Elo              |
 
 Come si usano tra loro: `game-session` usa `chess-core` (le regole), `engine` (i livelli e le
 richieste), `app-settings` (la configurazione scelta) e `openings` (l'apertura giocata);
@@ -31,4 +32,5 @@ e `storage` ne salva tentativi, rating e ripasso; `tutor` usa `analysis` (i fatt
 (l'apertura), `chess-core` (le mosse provate) e i tipi della valutazione di `engine`. `review` usa `chess-core`,
 `analysis`, `tutor` e i tipi di `engine` per la revisione delle partite. `stats` usa `review` (lo stesso giudizio delle mosse), `training`
 (i nomi dei temi), `engine` (l'Elo dei livelli) e i tipi di `chess-core`, `analysis` e
-`app-settings`. Nessuna crate conosce Tauri.
+`app-settings`. `maia` usa le regole di `shakmaty` e la forma dei livelli di `engine`;
+`game-session` usa `maia` per i suoi livelli. Nessuna crate conosce Tauri.

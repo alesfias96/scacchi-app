@@ -7,7 +7,7 @@
 //! - [`Notation`]: il modo di scrivere le mosse;
 //! - [`SoundSetting`]: se suonano mosse, prese e fine partita;
 //! - [`GameSetup`]: l'ultima configurazione di partita scelta (avversario,
-//!   [`ColorChoice`], livello, [`TimeControl`]);
+//!   [`ColorChoice`], [`ComputerEngine`], livello, [`TimeControl`]);
 //! - [`TrainingSetup`]: l'ultima configurazione di allenamento scelta
 //!   ([`TrainingMode`], profondità, tema, [`Difficulty`], secondi di visualizzazione).
 //!
@@ -16,7 +16,7 @@
 //! Organizzazione (un file per responsabilità):
 //! - [`app_theme`], [`board_style`], [`piece_style`], [`notation`], [`sound_setting`]:
 //!   le singole scelte;
-//! - [`game_setup`], [`opponent_kind`], [`color_choice`], [`time_control`]: la
+//! - [`game_setup`], [`opponent_kind`], [`color_choice`], [`computer_engine`], [`time_control`]: la
 //!   configurazione della partita;
 //! - [`training_setup`], [`training_mode`], [`difficulty`]: la configurazione dell'allenamento;
 //! - [`stats_filter`]: i filtri della sezione «Progressi»;
@@ -27,6 +27,7 @@
 pub mod app_theme;
 pub mod board_style;
 pub mod color_choice;
+pub mod computer_engine;
 pub mod difficulty;
 pub mod game_setup;
 pub mod notation;
@@ -44,6 +45,7 @@ pub mod training_setup;
 pub use app_theme::AppTheme;
 pub use board_style::BoardStyle;
 pub use color_choice::ColorChoice;
+pub use computer_engine::ComputerEngine;
 pub use difficulty::Difficulty;
 pub use game_setup::GameSetup;
 pub use notation::Notation;

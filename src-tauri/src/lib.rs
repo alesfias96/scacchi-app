@@ -81,6 +81,7 @@ pub fn run() {
             commands::archive::open_game,
             commands::archive::delete_game,
             commands::engine::get_engine_levels,
+            commands::engine::get_maia_levels,
             commands::engine::set_analysis,
             commands::settings::get_settings,
             commands::settings::save_settings,

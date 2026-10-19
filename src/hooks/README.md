@@ -17,6 +17,6 @@ Qui stanno quelli usati da più parti dell'app.
 | `useMoveSound.test.tsx`       | I test dei suoni della partita                                                                                                           |
 | `useCountdown.ts`             | Fa scorrere i secondi dell'orologio sullo schermo tra un aggiornamento di Rust e l'altro                                                 |
 | `useCountdown.test.tsx`       | I suoi test                                                                                                                              |
-| `useEngineLevels.ts`          | Chiede a Rust i dieci livelli del computer (una volta sola) per la finestra "Nuova partita"                                              |
+| `useEngineLevels.ts`          | Chiede a Rust i livelli di un motore (i dieci di Stockfish o i nove di Maia), una volta sola                                             |
 | `usePositionReport.ts`        | Chiede a Rust i fatti dei rilevatori a ogni cambio di posizione, quando le osservazioni sono accese                                      |
 | `usePositionReport.test.tsx`  | I suoi test                                                                                                                              |

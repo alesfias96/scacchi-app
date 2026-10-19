@@ -12,6 +12,7 @@ function game(overrides: Partial<GameSummary>): GameSummary {
     startedAtMs: 0,
     opponent: 'computer',
     computerSide: 'black',
+    engine: 'stockfish',
     level: 4,
     timeControl: null,
     result: null,

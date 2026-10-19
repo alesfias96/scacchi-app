@@ -1,9 +1,21 @@
 //! I dati grezzi da cui si calcolano le statistiche.
 
 use analysis::GamePhase;
-use app_settings::OpponentKind;
+use app_settings::{ComputerEngine, OpponentKind};
 use chess_core::Side;
-use engine::Evaluation;
+use engine::{Evaluation, LevelInfo};
+
+/// Il computer avversario di una partita.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ComputerFacts {
+    /// Il suo colore.
+    pub side: Side,
+    /// Il motore: Stockfish o Maia.
+    pub engine: ComputerEngine,
+    /// Il livello, con il nome e l'Elo indicativo (li sceglie il ponte, che conosce
+    /// i livelli di entrambi i motori).
+    pub level: LevelInfo,
+}
 
 /// Una partita.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -14,8 +26,8 @@ pub struct GameFacts {
     pub started_at_ms: i64,
     /// Contro chi.
     pub opponent: OpponentKind,
-    /// Il colore e il livello del computer, se c'era.
-    pub computer: Option<(Side, u8)>,
+    /// Il computer, se c'era.
+    pub computer: Option<ComputerFacts>,
     /// `true` se la partita è finita.
     pub finished: bool,
     /// Chi ha vinto (`None` = patta o non finita).
@@ -33,8 +45,8 @@ impl GameFacts {
     /// giocatori entrambi (si gioca da soli o con un amico, ma è sempre l'utente).
     #[must_use]
     pub fn user_sides(&self) -> Vec<Side> {
-        match self.computer {
-            Some((computer, _)) => vec![computer.opponent()],
+        match &self.computer {
+            Some(computer) => vec![computer.side.opponent()],
             None => vec![Side::White, Side::Black],
         }
     }

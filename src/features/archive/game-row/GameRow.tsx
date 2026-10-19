@@ -11,7 +11,7 @@
  *
  * Riceve:
  * - `game`: il riassunto della partita;
- * - `levelName`: il nome del livello del computer (es. "Circolo"), se c'è;
+ * - `levelName`: il nome del livello del computer (es. "Circolo", "Maia 1500"), se c'è;
  * - `onOpen`, `onReview`, `onDelete`: chiamate con il nome unico della partita.
  * Restituisce: la riga.
  */
@@ -37,6 +37,14 @@ export interface GameRowProps {
   onDelete: (id: string) => void;
 }
 
+/** Chi era il computer: "Stockfish · Circolo" oppure "Maia 1500" (il nome del livello dice già tutto). */
+function computerName(game: GameSummary, levelName: string | undefined): string {
+  if (game.engine === 'maia') {
+    return levelName ?? 'Maia';
+  }
+  return `Stockfish${levelName === undefined ? '' : ` · ${levelName}`}`;
+}
+
 export function GameRow({ game, levelName, onOpen, onReview, onDelete }: GameRowProps) {
   /** `true` mentre si chiede conferma dell'eliminazione. */
   const [isConfirming, setIsConfirming] = useState(false);
@@ -45,7 +53,7 @@ export function GameRow({ game, levelName, onOpen, onReview, onDelete }: GameRow
   const opponent =
     game.computerSide === null
       ? 'Due giocatori'
-      : `Stockfish${levelName === undefined ? '' : ` · ${levelName}`} · tu col ${humanSide}`;
+      : `${computerName(game, levelName)} · tu col ${humanSide}`;
   const moves = Math.ceil(game.plyCount / 2);
 
   return (

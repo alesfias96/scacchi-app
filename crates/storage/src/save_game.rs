@@ -2,7 +2,7 @@
 
 use game_session::{SessionSnapshot, now_unix_ms};
 
-use crate::codes::{opponent_code, reason_code, side_code};
+use crate::codes::{engine_code, opponent_code, reason_code, side_code};
 use crate::database::Database;
 use crate::storage_error::StorageError;
 
@@ -12,8 +12,8 @@ const UPSERT_GAME: &str = "
         id, started_at, updated_at, opponent, computer_side, level,
         time_initial_seconds, time_increment_seconds, clock_white_ms, clock_black_ms,
         starting_fen, result_score, result_winner, result_reason,
-        opening_eco, opening_name, ply_count, pgn
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        opening_eco, opening_name, ply_count, pgn, engine
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT (id) DO UPDATE SET
         updated_at = excluded.updated_at,
         opponent = excluded.opponent,
@@ -30,7 +30,8 @@ const UPSERT_GAME: &str = "
         opening_eco = excluded.opening_eco,
         opening_name = excluded.opening_name,
         ply_count = excluded.ply_count,
-        pgn = excluded.pgn";
+        pgn = excluded.pgn,
+        engine = excluded.engine";
 
 /// Scrive (o aggiorna) una mossa. Se nella stessa mezza mossa c'era già la
 /// stessa mossa, i dati per le statistiche (valutazioni, …) restano; se la
@@ -107,6 +108,7 @@ impl Database {
             )
             .bind(ply_count)
             .bind(&snapshot.pgn)
+            .bind(engine_code(snapshot.engine))
             .execute(&mut *transaction)
             .await?;
 

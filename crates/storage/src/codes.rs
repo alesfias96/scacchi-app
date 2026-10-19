@@ -1,10 +1,11 @@
 //! Come i valori della partita vengono scritti come testo nel database.
 //!
-//! Il database contiene solo testi e numeri: colori, avversario e motivo
-//! della fine diventano parole fisse (`"white"`, `"computer"`, `"checkmate"`…).
+//! Il database contiene solo testi e numeri: colori, avversario, motore e
+//! motivo della fine diventano parole fisse (`"white"`, `"computer"`, `"maia"`,
+//! `"checkmate"`…).
 //! Queste parole **non vanno mai cambiate**: i database già salvati le usano.
 
-use app_settings::OpponentKind;
+use app_settings::{ComputerEngine, OpponentKind};
 use chess_core::{GameEndReason, Side};
 
 /// Il testo di un colore.
@@ -45,6 +46,26 @@ pub fn parse_opponent(code: &str) -> OpponentKind {
     }
 }
 
+/// Il testo del motore del computer.
+#[must_use]
+pub fn engine_code(engine: ComputerEngine) -> &'static str {
+    match engine {
+        ComputerEngine::Stockfish => "stockfish",
+        ComputerEngine::Maia => "maia",
+    }
+}
+
+/// Il motore scritto nel testo (se non è riconosciuto: Stockfish, come le partite
+/// salvate prima che ci fosse Maia).
+#[must_use]
+pub fn parse_engine(code: &str) -> ComputerEngine {
+    if code == "maia" {
+        ComputerEngine::Maia
+    } else {
+        ComputerEngine::Stockfish
+    }
+}
+
 /// Tutti i motivi di fine partita con il loro testo.
 const REASONS: [(GameEndReason, &str); 8] = [
     (GameEndReason::Checkmate, "checkmate"),
@@ -81,9 +102,10 @@ pub fn parse_reason(code: &str) -> Option<GameEndReason> {
 #[cfg(test)]
 mod tests {
     use super::{
-        REASONS, opponent_code, parse_opponent, parse_reason, parse_side, reason_code, side_code,
+        REASONS, engine_code, opponent_code, parse_engine, parse_opponent, parse_reason,
+        parse_side, reason_code, side_code,
     };
-    use app_settings::OpponentKind;
+    use app_settings::{ComputerEngine, OpponentKind};
     use chess_core::Side;
 
     #[test]
@@ -93,6 +115,9 @@ mod tests {
         }
         for opponent in [OpponentKind::Computer, OpponentKind::TwoPlayers] {
             assert_eq!(parse_opponent(opponent_code(opponent)), opponent);
+        }
+        for engine in [ComputerEngine::Stockfish, ComputerEngine::Maia] {
+            assert_eq!(parse_engine(engine_code(engine)), engine);
         }
         for (reason, _) in REASONS {
             assert_eq!(parse_reason(reason_code(reason)), Some(reason));

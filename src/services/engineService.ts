@@ -1,5 +1,5 @@
 /**
- * Servizio del motore: le chiamate al nucleo Rust che riguardano Stockfish.
+ * Servizio del motore: le chiamate al nucleo Rust che riguardano Stockfish e Maia.
  *
  * Insieme agli altri file di questa cartella, è l'unico punto dell'interfaccia
  * che conosce i nomi dei comandi e degli eventi Rust.
@@ -15,12 +15,21 @@ const ANALYSIS_UPDATE_EVENT = 'analysis-update';
 const ENGINE_ERROR_EVENT = 'engine-error';
 
 /**
- * Chiede a Rust i livelli di gioco del computer.
+ * Chiede a Rust i livelli di gioco di Stockfish.
  *
  * @returns i dieci livelli, dal più debole al più forte.
  */
 export function fetchEngineLevels(): Promise<LevelInfo[]> {
   return invoke<LevelInfo[]>('get_engine_levels');
+}
+
+/**
+ * Chiede a Rust i livelli di Maia, il computer "umano".
+ *
+ * @returns i nove livelli, da 1100 a 1900 Elo.
+ */
+export function fetchMaiaLevels(): Promise<LevelInfo[]> {
+  return invoke<LevelInfo[]>('get_maia_levels');
 }
 
 /**

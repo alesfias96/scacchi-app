@@ -1,6 +1,7 @@
 //! Le statistiche pronte per la sezione «Progressi».
 
 use analysis::GamePhase;
+use app_settings::ComputerEngine;
 use chess_core::Side;
 
 /// Un punto di un grafico nel tempo.
@@ -90,9 +91,11 @@ pub struct ColorScore {
     ts(export)
 )]
 pub struct LevelScore {
-    /// Il livello (1–10).
+    /// Il motore: Stockfish o Maia.
+    pub engine: ComputerEngine,
+    /// Il livello (da 1 a 10 per Stockfish, da 1 a 9 per Maia).
     pub level: u8,
-    /// Il nome del livello (es. "Circolo").
+    /// Il nome del livello (es. "Circolo", "Maia 1500").
     pub name: String,
     /// L'Elo indicativo del livello.
     pub elo: u32,

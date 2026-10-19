@@ -7,7 +7,7 @@ use openings::Opening;
 use sqlx::Row;
 use sqlx::sqlite::SqliteRow;
 
-use crate::codes::{parse_opponent, parse_reason, parse_side};
+use crate::codes::{parse_engine, parse_opponent, parse_reason, parse_side};
 use crate::database::Database;
 use crate::storage_error::StorageError;
 
@@ -15,14 +15,16 @@ use crate::storage_error::StorageError;
 const SELECT_BY_ID: &str = "
     SELECT id, started_at, opponent, computer_side, level,
            time_initial_seconds, time_increment_seconds, clock_white_ms, clock_black_ms,
-           starting_fen, result_score, result_winner, result_reason, opening_eco, opening_name, pgn
+           starting_fen, result_score, result_winner, result_reason, opening_eco, opening_name, pgn,
+           engine
     FROM games WHERE id = ?";
 
 /// Legge la partita non finita salvata più di recente.
 const SELECT_LATEST_UNFINISHED: &str = "
     SELECT id, started_at, opponent, computer_side, level,
            time_initial_seconds, time_increment_seconds, clock_white_ms, clock_black_ms,
-           starting_fen, result_score, result_winner, result_reason, opening_eco, opening_name, pgn
+           starting_fen, result_score, result_winner, result_reason, opening_eco, opening_name, pgn,
+           engine
     FROM games WHERE result_score IS NULL
     ORDER BY updated_at DESC, rowid DESC LIMIT 1";
 
@@ -122,6 +124,7 @@ impl Database {
             started_at_ms: row.try_get("started_at")?,
             opponent: parse_opponent(&row.try_get::<String, _>("opponent")?),
             computer_side,
+            engine: parse_engine(&row.try_get::<String, _>("engine")?),
             level: row.try_get("level")?,
             time_control,
             clock_ms,
@@ -160,19 +163,21 @@ fn move_from_row(row: &SqliteRow) -> Option<MoveSnapshot> {
 mod tests {
     use std::time::{Duration, Instant};
 
-    use app_settings::{ColorChoice, GameSetup, OpponentKind, TimeControl};
+    use app_settings::{ColorChoice, ComputerEngine, GameSetup, OpponentKind, TimeControl};
     use chess_core::Side;
     use game_session::GameSession;
 
     use crate::database::Database;
 
-    /// Una partita contro il computer, con l'orologio, dopo 1.e4 c5.
+    /// Una partita contro Maia, con l'orologio, dopo 1.e4 c5.
     fn sample_session() -> GameSession {
         let start = Instant::now();
         let setup = GameSetup {
             opponent: OpponentKind::Computer,
             color: ColorChoice::White,
+            engine: ComputerEngine::Maia,
             level: 5,
+            maia_level: 5,
             time_control: Some(TimeControl {
                 initial_seconds: 300,
                 increment_seconds: 3,
@@ -183,11 +188,11 @@ mod tests {
             .play("e2e4", start + Duration::from_secs(2))
             .expect("mossa legale");
         let request = session
-            .engine_request(start + Duration::from_secs(2))
-            .expect("tocca al computer");
+            .maia_request(start + Duration::from_secs(2))
+            .expect("tocca a Maia");
         session
             .play_engine(request.token, "c7c5", start + Duration::from_secs(3))
-            .expect("mossa del computer");
+            .expect("mossa di Maia");
         session
     }
 
@@ -204,6 +209,7 @@ mod tests {
             .expect("partita trovata");
 
         assert_eq!(loaded, snapshot);
+        assert_eq!(loaded.engine, ComputerEngine::Maia, "il motore si rilegge");
     }
 
     #[tokio::test]

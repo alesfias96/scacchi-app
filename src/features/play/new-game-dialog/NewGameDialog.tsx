@@ -2,9 +2,12 @@
  * NewGameDialog — la finestra "Nuova partita".
  *
  * Cosa fa: chiede come si vuole giocare e avvia la partita.
- * - **Avversario**: il computer (Stockfish) oppure due persone sulla stessa scacchiera.
- * - Contro il computer: il **colore** (bianco, nero o a sorte) e il **livello**,
- *   da Principiante a Sovrumano, con la forza indicativa in punti Elo.
+ * - **Avversario**: il computer (Stockfish), il computer "umano" (Maia, che gioca
+ *   come una persona di quel livello, errori tipici compresi) oppure due persone
+ *   sulla stessa scacchiera.
+ * - Contro il computer: il **colore** (bianco, nero o a sorte) e il **livello**:
+ *   per Stockfish da Principiante a Sovrumano, per Maia da 1100 a 1900, con la
+ *   forza indicativa in punti Elo. Ogni motore ricorda il suo livello.
  * - Il **tempo**: senza orologio, uno dei tempi più comuni (Bullet, Blitz,
  *   Rapid, Classica) oppure "Personalizzato", con minuti e secondi a scelta.
  * Si apre con le scelte dell'ultima partita. Esc o "Annulla" chiudono senza
@@ -19,7 +22,7 @@
 import { useEffect, useId, useState, type SyntheticEvent } from 'react';
 import type { ColorChoice } from '../../../bindings/ColorChoice';
 import type { GameSetup } from '../../../bindings/GameSetup';
-import type { OpponentKind } from '../../../bindings/OpponentKind';
+import type { ComputerEngine } from '../../../bindings/ComputerEngine';
 import type { TimeControl } from '../../../bindings/TimeControl';
 import { Button } from '../../../components/button/Button';
 import { ChoiceGroup, type Choice } from '../../../components/choice-group/ChoiceGroup';
@@ -36,9 +39,13 @@ export interface NewGameDialogProps {
   onClose: () => void;
 }
 
+/** L'avversario come lo si sceglie: uno dei due motori, oppure due persone. */
+type OpponentChoice = ComputerEngine | 'twoPlayers';
+
 /** Le scelte dell'avversario. */
-const OPPONENT_CHOICES: readonly Choice<OpponentKind>[] = [
-  { value: 'computer', label: 'Computer', detail: 'Stockfish' },
+const OPPONENT_CHOICES: readonly Choice<OpponentChoice>[] = [
+  { value: 'stockfish', label: 'Computer', detail: 'Stockfish' },
+  { value: 'maia', label: 'Umano', detail: 'Maia: gioca come una persona' },
   { value: 'twoPlayers', label: 'Due giocatori', detail: 'sulla stessa scacchiera' },
 ];
 
@@ -66,10 +73,16 @@ const MAX_MINUTES = 180;
 const MAX_INCREMENT = 60;
 
 export function NewGameDialog({ initialSetup, onStart, onClose }: NewGameDialogProps) {
-  const levels = useEngineLevels();
-  const [opponent, setOpponent] = useState(initialSetup.opponent);
+  const [opponent, setOpponent] = useState<OpponentChoice>(
+    initialSetup.opponent === 'computer' ? initialSetup.engine : 'twoPlayers',
+  );
   const [color, setColor] = useState(initialSetup.color);
   const [level, setLevel] = useState(initialSetup.level);
+  const [maiaLevel, setMaiaLevel] = useState(initialSetup.maiaLevel);
+  /** Il motore scelto (se si gioca a due conta l'ultimo usato, per la prossima volta). */
+  const engine: ComputerEngine = opponent === 'twoPlayers' ? initialSetup.engine : opponent;
+  const levels = useEngineLevels(engine);
+  const isMaia = engine === 'maia';
   const [presetId, setPresetId] = useState(() => presetIdFor(initialSetup.timeControl));
   const [custom, setCustom] = useState(initialSetup.timeControl ?? DEFAULT_CUSTOM);
   const titleId = useId();
@@ -95,7 +108,14 @@ export function NewGameDialog({ initialSetup, onStart, onClose }: NewGameDialogP
 
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onStart({ opponent, color, level, timeControl });
+    onStart({
+      opponent: opponent === 'twoPlayers' ? 'twoPlayers' : 'computer',
+      color,
+      engine,
+      level,
+      maiaLevel,
+      timeControl,
+    });
   };
 
   return (
@@ -120,7 +140,7 @@ export function NewGameDialog({ initialSetup, onStart, onClose }: NewGameDialogP
             onChange={setOpponent}
           />
 
-          {opponent === 'computer' && (
+          {opponent !== 'twoPlayers' && (
             <>
               <ChoiceGroup
                 legend="Il tuo colore"
@@ -131,16 +151,21 @@ export function NewGameDialog({ initialSetup, onStart, onClose }: NewGameDialogP
               />
               {levels.length > 0 && (
                 <ChoiceGroup
-                  legend="Livello del computer"
+                  legend={isMaia ? 'Livello di Maia' : 'Livello del computer'}
                   name="level"
                   options={levels.map((info) => ({
                     value: String(info.level),
-                    label: info.name,
-                    detail: `~${String(info.elo)} Elo`,
+                    // Per Maia il nome è già l'Elo ("Maia 1500"): basta il numero.
+                    label: isMaia ? String(info.elo) : info.name,
+                    detail: isMaia ? 'Elo, come una persona' : `~${String(info.elo)} Elo`,
                   }))}
-                  value={String(level)}
+                  value={String(isMaia ? maiaLevel : level)}
                   onChange={(value) => {
-                    setLevel(Number(value));
+                    if (isMaia) {
+                      setMaiaLevel(Number(value));
+                    } else {
+                      setLevel(Number(value));
+                    }
                   }}
                 />
               )}

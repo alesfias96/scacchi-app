@@ -18,6 +18,7 @@ vi.mock('../../services/archiveService', () => archiveMock);
 
 vi.mock('../../services/engineService', () => ({
   fetchEngineLevels: () => Promise.resolve([{ level: 4, name: 'Circolo', elo: 1400 }]),
+  fetchMaiaLevels: () => Promise.resolve([{ level: 5, name: 'Maia 1500', elo: 1500 }]),
 }));
 
 const GAME: GameSummary = {
@@ -25,6 +26,7 @@ const GAME: GameSummary = {
   startedAtMs: new Date(2026, 9, 18, 16, 35).getTime(),
   opponent: 'computer',
   computerSide: 'black',
+  engine: 'stockfish',
   level: 4,
   timeControl: null,
   result: null,

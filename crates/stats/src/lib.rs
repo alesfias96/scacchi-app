@@ -26,7 +26,7 @@ pub mod stats_view;
 pub mod tactics_stats;
 
 pub use report::build_report;
-pub use stats_input::{GameFacts, MoveFacts, PuzzleFacts, StatsInput};
+pub use stats_input::{ComputerFacts, GameFacts, MoveFacts, PuzzleFacts, StatsInput};
 pub use stats_view::{
     ChartPoint, ColorScore, DepthStats, GameStats, LevelScore, LevelStats, OpeningStats,
     PhaseStats, Score, StatsReport, TacticsStats, ThemeStats, TimePressure,

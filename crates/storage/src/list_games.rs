@@ -6,7 +6,7 @@ use openings::Opening;
 use sqlx::sqlite::SqliteRow;
 use sqlx::{QueryBuilder, Row, Sqlite};
 
-use crate::codes::{opponent_code, parse_opponent, parse_reason, parse_side};
+use crate::codes::{opponent_code, parse_engine, parse_opponent, parse_reason, parse_side};
 use crate::database::Database;
 use crate::game_filter::{GameFilter, OutcomeFilter};
 use crate::game_summary::GameSummary;
@@ -23,7 +23,7 @@ impl Database {
     /// [`StorageError::Database`] se la lettura non riesce.
     pub async fn list(&self, filter: &GameFilter) -> Result<Vec<GameSummary>, StorageError> {
         let mut query: QueryBuilder<Sqlite> = QueryBuilder::new(
-            "SELECT id, started_at, opponent, computer_side, level, time_initial_seconds,
+            "SELECT id, started_at, opponent, computer_side, engine, level, time_initial_seconds,
                     time_increment_seconds, result_score, result_winner, result_reason,
                     opening_eco, opening_name, ply_count, analyzed_at IS NOT NULL AS analyzed
              FROM games WHERE 1 = 1",
@@ -101,6 +101,7 @@ fn summary_from_row(row: &SqliteRow) -> Result<GameSummary, StorageError> {
             .try_get::<Option<String>, _>("computer_side")?
             .as_deref()
             .and_then(parse_side),
+        engine: parse_engine(&row.try_get::<String, _>("engine")?),
         level: row.try_get("level")?,
         time_control,
         result,
@@ -136,6 +137,7 @@ mod tests {
             color: ColorChoice::White,
             level: 3,
             time_control: None,
+            ..GameSetup::default()
         };
 
         // 1) Contro il computer, persa per abbandono.

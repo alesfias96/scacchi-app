@@ -3,7 +3,8 @@
 `chess-core` conosce le regole degli scacchi. Questa crate aggiunge ciò che serve per **giocare
 davvero** una partita:
 
-- **l'avversario**: un'altra persona sulla stessa scacchiera, oppure il computer a uno dei dieci livelli;
+- **l'avversario**: un'altra persona sulla stessa scacchiera, oppure il computer: Stockfish a uno dei
+  dieci livelli o Maia, il computer "umano", a uno dei nove (da 1100 a 1900 Elo);
 - **l'orologio**: il tempo di ciascuno, l'incremento a ogni mossa, la sconfitta quando il tempo finisce
   (patta se l'avversario non ha più pezzi per dare matto, come da regolamento);
 - **chi può fare cosa**: contro il computer si muovono solo i propri pezzi e solo dall'ultima posizione;

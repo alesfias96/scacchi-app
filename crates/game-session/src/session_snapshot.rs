@@ -2,7 +2,7 @@
 
 use std::time::Instant;
 
-use app_settings::{OpponentKind, TimeControl};
+use app_settings::{ComputerEngine, OpponentKind, TimeControl};
 use chess_core::{Game, GameEndReason, GameResult, MoveRecord, Side, from_pgn};
 use openings::Opening;
 
@@ -34,6 +34,8 @@ pub struct SessionSnapshot {
     pub opponent: OpponentKind,
     /// Il colore del computer, se si gioca contro il computer.
     pub computer_side: Option<Side>,
+    /// Il motore del computer (Stockfish anche a due giocatori, dove non conta).
+    pub engine: ComputerEngine,
     /// Il livello del computer, se si gioca contro il computer.
     pub level: Option<u8>,
     /// Il tempo di riflessione, se la partita ha l'orologio.
@@ -76,6 +78,9 @@ impl GameSession {
                 OpponentKind::TwoPlayers
             },
             computer_side: self.computer.map(|computer| computer.side),
+            engine: self
+                .computer
+                .map_or(ComputerEngine::default(), |computer| computer.engine),
             level: self.computer.map(|computer| computer.level),
             time_control: self.clock.as_ref().map(Clock::control),
             clock_ms: self.clock.as_ref().map(|clock| {
@@ -120,7 +125,11 @@ impl GameSession {
         let computer = snapshot
             .computer_side
             .zip(snapshot.level)
-            .map(|(side, level)| Computer { side, level });
+            .map(|(side, level)| Computer {
+                side,
+                engine: snapshot.engine,
+                level,
+            });
         let clock = snapshot.time_control.map(|control| {
             let initial = control.initial_seconds.saturating_mul(1000);
             let (white_ms, black_ms) = snapshot.clock_ms.unwrap_or((initial, initial));
@@ -178,7 +187,7 @@ fn reapply_adjudication(game: &mut Game, result: &GameResult) -> Result<(), Sess
 mod tests {
     use std::time::{Duration, Instant};
 
-    use app_settings::{ColorChoice, GameSetup, OpponentKind, TimeControl};
+    use app_settings::{ColorChoice, ComputerEngine, GameSetup, OpponentKind, TimeControl};
     use chess_core::{GameEndReason, Side};
 
     use crate::game_session::GameSession;
@@ -192,7 +201,30 @@ mod tests {
                 initial_seconds: 180,
                 increment_seconds: 2,
             }),
+            ..GameSetup::default()
         }
+    }
+
+    #[test]
+    fn a_game_against_maia_is_restored_against_maia() {
+        let now = Instant::now();
+        let setup = GameSetup {
+            engine: ComputerEngine::Maia,
+            maia_level: 7,
+            ..computer_blitz()
+        };
+        let mut session = GameSession::start(&setup, Side::White, now);
+        session.play("e2e4", now).expect("mossa legale");
+
+        let snapshot = session.snapshot(now);
+        let restored = GameSession::restore(&snapshot, now).expect("partita valida");
+
+        assert_eq!(snapshot.engine, ComputerEngine::Maia);
+        assert_eq!(snapshot.level, Some(7));
+        assert_eq!(
+            restored.maia_request(now).map(|request| request.level),
+            Some(7)
+        );
     }
 
     #[test]

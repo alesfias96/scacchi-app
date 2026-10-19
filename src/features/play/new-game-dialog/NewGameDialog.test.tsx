@@ -8,6 +8,7 @@ import { NewGameDialog } from './NewGameDialog';
 
 const engineServiceMock = vi.hoisted(() => ({
   fetchEngineLevels: vi.fn(),
+  fetchMaiaLevels: vi.fn(),
 }));
 
 vi.mock('../../../services/engineService', () => engineServiceMock);
@@ -15,7 +16,9 @@ vi.mock('../../../services/engineService', () => engineServiceMock);
 const LAST_SETUP: GameSetup = {
   opponent: 'computer',
   color: 'white',
+  engine: 'stockfish',
   level: 4,
+  maiaLevel: 5,
   timeControl: { initialSeconds: 300, incrementSeconds: 3 },
 };
 
@@ -24,6 +27,10 @@ describe('NewGameDialog', () => {
     engineServiceMock.fetchEngineLevels.mockResolvedValue([
       { level: 1, name: 'Principiante', elo: 800 },
       { level: 4, name: 'Circolo', elo: 1400 },
+    ]);
+    engineServiceMock.fetchMaiaLevels.mockResolvedValue([
+      { level: 1, name: 'Maia 1100', elo: 1100 },
+      { level: 5, name: 'Maia 1500', elo: 1500 },
     ]);
   });
 
@@ -48,9 +55,27 @@ describe('NewGameDialog', () => {
     expect(onStart).toHaveBeenCalledWith({
       opponent: 'computer',
       color: 'black',
+      engine: 'stockfish',
       level: 1,
+      maiaLevel: 5,
       timeControl: null,
     });
+  });
+
+  it('contro Maia propone i suoi livelli e li ricorda a parte', async () => {
+    const onStart = vi.fn();
+    render(<NewGameDialog initialSetup={LAST_SETUP} onStart={onStart} onClose={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('radio', { name: /Umano/ }));
+    expect(await screen.findByRole('group', { name: 'Livello di Maia' })).toBeDefined();
+    const level1500 = await screen.findByRole<HTMLInputElement>('radio', { name: /1500/ });
+    expect(level1500.checked).toBe(true);
+    fireEvent.click(screen.getByRole('radio', { name: /1100/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Inizia la partita' }));
+
+    expect(onStart).toHaveBeenCalledWith(
+      expect.objectContaining({ opponent: 'computer', engine: 'maia', level: 4, maiaLevel: 1 }),
+    );
   });
 
   it('a due giocatori non chiede colore e livello', () => {

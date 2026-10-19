@@ -126,7 +126,14 @@ describe('gameStore', () => {
   });
 
   it('comincia la partita scelta', async () => {
-    const setup: GameSetup = { opponent: 'computer', color: 'black', level: 7, timeControl: null };
+    const setup: GameSetup = {
+      opponent: 'computer',
+      color: 'black',
+      engine: 'stockfish',
+      level: 7,
+      maiaLevel: 5,
+      timeControl: null,
+    };
     serviceMock.startNewGame.mockResolvedValue(NEW_GAME);
 
     await useGameStore.getState().newGame(setup);

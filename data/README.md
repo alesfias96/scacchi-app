@@ -5,7 +5,8 @@ durante la compilazione, così l'app funziona offline.
 
 ## Contenuto
 
-| Cartella    | Cosa contiene                                                                                          |
-| ----------- | ------------------------------------------------------------------------------------------------------ |
-| `openings/` | L'elenco delle aperture di Lichess: codice ECO, nome e mosse (usato dalla crate `crates/openings`)     |
-| `puzzles/`  | Circa 100.000 puzzle scelti dal database di Lichess, licenza CC0 (usati dalla crate `crates/training`) |
+| Cartella    | Cosa contiene                                                                                                     |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- |
+| `openings/` | L'elenco delle aperture di Lichess: codice ECO, nome e mosse (usato dalla crate `crates/openings`)                |
+| `puzzles/`  | Circa 100.000 puzzle scelti dal database di Lichess, licenza CC0 (usati dalla crate `crates/training`)            |
+| `maia/`     | Le nove reti di Maia, il computer "umano" (da 1100 a 1900 Elo), licenza GPL-3.0 (usate dalla crate `crates/maia`) |

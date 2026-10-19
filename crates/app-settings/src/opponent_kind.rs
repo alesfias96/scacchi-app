@@ -5,7 +5,7 @@
 #[serde(rename_all = "camelCase")]
 #[cfg_attr(feature = "bindings", derive(ts_rs::TS), ts(export))]
 pub enum OpponentKind {
-    /// Il computer (Stockfish), al livello scelto (predefinito).
+    /// Il computer (Stockfish o Maia), al livello scelto (predefinito).
     #[default]
     Computer,
     /// Due persone sulla stessa scacchiera.

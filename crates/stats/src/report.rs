@@ -29,20 +29,27 @@ pub fn build_report(input: &StatsInput) -> StatsReport {
 #[cfg(test)]
 mod tests {
     use analysis::GamePhase;
-    use app_settings::OpponentKind;
+    use app_settings::{ComputerEngine, OpponentKind};
     use chess_core::Side;
-    use engine::Evaluation;
+    use engine::{Evaluation, LevelInfo};
 
     use super::build_report;
-    use crate::stats_input::{GameFacts, MoveFacts, PuzzleFacts, StatsInput};
+    use crate::stats_input::{ComputerFacts, GameFacts, MoveFacts, PuzzleFacts, StatsInput};
 
-    /// Una partita contro il computer (che ha il Nero), al livello indicato.
+    /// Una partita contro Stockfish (che ha il Nero), al livello indicato.
     fn computer_game(id: &str, level: u8, winner: Option<Side>, opening: &str) -> GameFacts {
         GameFacts {
             id: id.to_owned(),
             started_at_ms: 1_000,
             opponent: OpponentKind::Computer,
-            computer: Some((Side::Black, level)),
+            computer: Some(ComputerFacts {
+                side: Side::Black,
+                engine: ComputerEngine::Stockfish,
+                level: engine::levels()
+                    .into_iter()
+                    .find(|info| info.level == level)
+                    .expect("livello"),
+            }),
             finished: true,
             winner,
             opening_name: Some(opening.to_owned()),
@@ -125,6 +132,34 @@ mod tests {
         assert_eq!(report.results.against_computer.losses, 1);
         assert_eq!(report.results.against_computer.draws, 1);
         assert_eq!(report.analyzed_games, 1);
+    }
+
+    #[test]
+    fn games_against_maia_count_with_their_own_level() {
+        let mut input = sample();
+        let mut maia = computer_game("m", 5, Some(Side::White), "Italian Game");
+        maia.computer = Some(ComputerFacts {
+            side: Side::Black,
+            engine: ComputerEngine::Maia,
+            level: LevelInfo {
+                level: 5,
+                name: "Maia 1500".to_owned(),
+                elo: 1500,
+            },
+        });
+        input.games.push(maia);
+
+        let report = build_report(&input);
+
+        assert_eq!(report.level.elo_games, 6);
+        let names: Vec<&str> = report
+            .results
+            .by_level
+            .iter()
+            .map(|level| level.name.as_str())
+            .collect();
+        // In ordine di Elo: Circolo (1400), Maia 1500, Esperto (1800).
+        assert_eq!(names, ["Circolo", "Maia 1500", "Esperto"]);
     }
 
     #[test]

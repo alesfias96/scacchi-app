@@ -9,12 +9,13 @@ sono solo calcoli, facili da verificare con i test.
 
 - **Livello**
   - L'**Elo stimato** è un "Elo di rendimento": la media dell'Elo indicativo dei livelli del
-    computer affrontati, più 400 × (vittorie − sconfitte) ÷ partite. Compare solo con almeno
+    computer affrontati (Stockfish e Maia insieme), più 400 × (vittorie − sconfitte) ÷ partite. Compare solo con almeno
     5 partite finite contro il computer.
   - Il rating dei puzzle dopo ogni tentativo.
   - La precisione di ogni partita analizzata, e la media.
 - **Partite**
-  - Vinte, patte e perse contro il computer: in tutto, con ciascun colore, per livello.
+  - Vinte, patte e perse contro il computer: in tutto, con ciascun colore, per livello (i livelli di
+    Stockfish e di Maia in ordine di Elo).
   - La precisione e gli errori in apertura, nel mediogioco e nel finale.
   - Gli errori con poco tempo, cioè quando sull'orologio resta meno di un quinto del tempo
     iniziale, rispetto al resto della partita.

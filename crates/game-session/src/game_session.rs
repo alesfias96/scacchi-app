@@ -3,14 +3,16 @@
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
-use app_settings::{ColorChoice, GameSetup, OpponentKind};
+use app_settings::{ColorChoice, ComputerEngine, GameSetup, OpponentKind};
 use chess_core::{Game, NodeId, Side, to_pgn};
-use engine::{SearchLimits, SearchPosition, levels, strength};
+use engine::{SearchLimits, SearchPosition, strength};
 use openings::Opening;
 
 use crate::clock::{Clock, to_millis};
+use crate::computer_level::{clamp_level, computer_level};
 use crate::computer_view::ComputerView;
 use crate::engine_request::EngineRequest;
+use crate::maia_request::MaiaRequest;
 use crate::move_timer::MoveTimer;
 use crate::session_error::SessionError;
 use crate::session_id::{new_session_id, now_unix_ms};
@@ -39,7 +41,9 @@ pub(crate) fn next_token() -> u64 {
 pub(crate) struct Computer {
     /// Il suo colore.
     pub(crate) side: Side,
-    /// Il suo livello, da 1 a 10.
+    /// Il motore che sceglie le sue mosse.
+    pub(crate) engine: ComputerEngine,
+    /// Il suo livello (da 1 a 10 per Stockfish, da 1 a 9 per Maia).
     pub(crate) level: u8,
 }
 
@@ -135,9 +139,14 @@ impl GameSession {
                 ColorChoice::Black => Side::Black,
                 ColorChoice::Random => coin,
             };
+            let level = match setup.engine {
+                ComputerEngine::Stockfish => setup.level,
+                ComputerEngine::Maia => setup.maia_level,
+            };
             session.computer = Some(Computer {
                 side: human.opponent(),
-                level: setup.level.clamp(engine::MIN_LEVEL, engine::MAX_LEVEL),
+                engine: setup.engine,
+                level: clamp_level(setup.engine, level),
             });
         }
         session.clock = setup.time_control.map(Clock::new);
@@ -158,10 +167,8 @@ impl GameSession {
             },
             computer: self.computer.map(|computer| ComputerView {
                 side: computer.side,
-                level: levels()
-                    .into_iter()
-                    .find(|info| info.level == computer.level)
-                    .unwrap_or_else(|| levels().remove(0)),
+                engine: computer.engine,
+                level: computer_level(computer.engine, computer.level),
             }),
             time_control: self.clock.as_ref().map(Clock::control),
             clock: self.clock.as_ref().map(|clock| clock.view(now)),
@@ -242,50 +249,74 @@ impl GameSession {
         Ok(())
     }
 
-    /// La richiesta da mandare al motore, se tocca al computer.
+    /// Il tempo minimo prima della risposta del computer: senza orologio una
+    /// pausa fissa, con l'orologio una più breve (al massimo un sessantesimo
+    /// del tempo che gli resta).
+    fn min_reply(&self, computer: Computer, now: Instant) -> Duration {
+        self.clock.as_ref().map_or(MIN_REPLY_UNTIMED, |clock| {
+            MIN_REPLY_TIMED.min(clock.remaining(computer.side, now) / MIN_REPLY_TIME_FRACTION)
+        })
+    }
+
+    /// Il computer, se tocca a lui muovere con quel motore.
+    fn computer_turn(&self, wanted: ComputerEngine) -> Option<Computer> {
+        self.computer
+            .filter(|computer| computer.engine == wanted && self.computer_to_move())
+    }
+
+    /// La partita dalla posizione di partenza, come la vogliono i motori.
+    fn search_position(&self) -> SearchPosition {
+        SearchPosition {
+            start_fen: self.game.starting_fen(),
+            moves: self.mainline_uci(),
+        }
+    }
+
+    /// La richiesta da mandare a Maia, se il computer è Maia e tocca a lui.
+    #[must_use]
+    pub fn maia_request(&self, now: Instant) -> Option<MaiaRequest> {
+        let computer = self.computer_turn(ComputerEngine::Maia)?;
+        Some(MaiaRequest {
+            token: self.token,
+            position: self.search_position(),
+            level: computer.level,
+            min_reply: self.min_reply(computer, now),
+        })
+    }
+
+    /// La richiesta da mandare a Stockfish, se il computer è Stockfish e tocca a lui.
     ///
-    /// Restituisce `None` se non c'è il computer, se non è il suo turno o se
-    /// la partita è finita.
+    /// Restituisce `None` se non c'è il computer, se è Maia, se non è il suo
+    /// turno o se la partita è finita.
     #[must_use]
     pub fn engine_request(&self, now: Instant) -> Option<EngineRequest> {
-        let computer = self.computer?;
-        if !self.computer_to_move() {
-            return None;
-        }
+        let computer = self.computer_turn(ComputerEngine::Stockfish)?;
         let level = strength(computer.level);
-        let (limits, min_reply) = match &self.clock {
+        let limits = match &self.clock {
             Some(clock) => {
                 let ms = |side| Some(u64::from(to_millis(clock.remaining(side, now))));
                 let increment = Some(u64::from(clock.control().increment_seconds) * 1000);
-                let limits = SearchLimits {
+                SearchLimits {
                     white_time_ms: ms(Side::White),
                     black_time_ms: ms(Side::Black),
                     white_increment_ms: increment,
                     black_increment_ms: increment,
                     depth: level.depth,
                     ..SearchLimits::default()
-                };
-                let fraction = clock.remaining(computer.side, now) / MIN_REPLY_TIME_FRACTION;
-                (limits, MIN_REPLY_TIMED.min(fraction))
+                }
             }
-            None => (
-                SearchLimits {
-                    move_time_ms: Some(level.move_time_ms),
-                    depth: level.depth,
-                    ..SearchLimits::default()
-                },
-                MIN_REPLY_UNTIMED,
-            ),
+            None => SearchLimits {
+                move_time_ms: Some(level.move_time_ms),
+                depth: level.depth,
+                ..SearchLimits::default()
+            },
         };
         Some(EngineRequest {
             token: self.token,
-            position: SearchPosition {
-                start_fen: self.game.starting_fen(),
-                moves: self.mainline_uci(),
-            },
+            position: self.search_position(),
             limits,
             options: level.options,
-            min_reply,
+            min_reply: self.min_reply(computer, now),
         })
     }
 
@@ -516,7 +547,7 @@ impl GameSession {
 mod tests {
     use std::time::{Duration, Instant};
 
-    use app_settings::{ColorChoice, GameSetup, OpponentKind, TimeControl};
+    use app_settings::{ColorChoice, ComputerEngine, GameSetup, OpponentKind, TimeControl};
     use chess_core::{GameEndReason, Side};
 
     use super::GameSession;
@@ -526,9 +557,36 @@ mod tests {
         GameSetup {
             opponent: OpponentKind::Computer,
             color,
+            engine: ComputerEngine::Stockfish,
             level: 4,
+            maia_level: 5,
             time_control,
         }
+    }
+
+    #[test]
+    fn maia_gets_its_own_request_with_its_own_level() {
+        let now = Instant::now();
+        let setup = GameSetup {
+            engine: ComputerEngine::Maia,
+            maia_level: 3,
+            ..against_computer(ColorChoice::White, None)
+        };
+        let mut session = GameSession::start(&setup, Side::White, now);
+        session.play("e2e4", now).expect("mossa legale");
+
+        assert_eq!(session.engine_request(now), None, "Stockfish non c'entra");
+        let request = session.maia_request(now).expect("tocca a Maia");
+        assert_eq!(request.level, 3);
+        assert_eq!(request.position.moves, ["e2e4"]);
+        let computer = session.view(now).computer.expect("computer");
+        assert_eq!(computer.engine, ComputerEngine::Maia);
+        assert_eq!(computer.level.name, "Maia 1300");
+
+        session
+            .play_engine(request.token, "e7e5", now)
+            .expect("mossa di Maia");
+        assert_eq!(session.maia_request(now), None, "ora tocca alla persona");
     }
 
     const BLITZ: TimeControl = TimeControl {

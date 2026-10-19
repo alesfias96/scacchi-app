@@ -2,8 +2,6 @@
 
 use std::collections::BTreeMap;
 
-use engine::levels;
-
 use crate::game_score::user_score;
 use crate::judged_move::{JudgedMove, average_accuracy};
 use crate::stats_input::StatsInput;
@@ -21,24 +19,17 @@ fn time(ms: i64) -> f64 {
     ms as f64
 }
 
-/// L'Elo di rendimento contro i livelli del computer: la media dell'Elo
-/// indicativo degli avversari, più 400 × (vittorie − sconfitte) / partite.
+/// L'Elo di rendimento contro i livelli del computer (Stockfish e Maia insieme):
+/// la media dell'Elo indicativo degli avversari, più 400 × (vittorie − sconfitte) / partite.
 fn estimated_elo(input: &StatsInput) -> (Option<i32>, u32) {
-    let elo_of: BTreeMap<u8, u32> = levels()
-        .into_iter()
-        .map(|info| (info.level, info.elo))
-        .collect();
     let mut total_elo = 0.0;
     let mut balance = 0.0;
     let mut games = 0u32;
     for game in &input.games {
-        let (Some((_, level)), Some(score)) = (game.computer, user_score(game)) else {
+        let (Some(computer), Some(score)) = (&game.computer, user_score(game)) else {
             continue;
         };
-        let Some(elo) = elo_of.get(&level) else {
-            continue;
-        };
-        total_elo += f64::from(*elo);
+        total_elo += f64::from(computer.level.elo);
         balance += f64::from(score.wins) - f64::from(score.losses);
         games += 1;
     }

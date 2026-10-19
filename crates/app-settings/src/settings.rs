@@ -72,7 +72,7 @@ mod tests {
 
         assert_eq!(
             json,
-            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","level":4,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5},"statsFilter":{"period":"all","opponent":"all"}}"#
+            r#"{"theme":"sera","board":"marmo","pieces":"gettoni","notation":"italiana","sounds":"off","gameSetup":{"opponent":"computer","color":"white","engine":"stockfish","level":4,"maiaLevel":5,"timeControl":{"initialSeconds":600,"incrementSeconds":0}},"trainingSetup":{"mode":"depth","depth":2,"theme":null,"difficulty":"normal","visualizationSeconds":5},"statsFilter":{"period":"all","opponent":"all"}}"#
         );
     }
 

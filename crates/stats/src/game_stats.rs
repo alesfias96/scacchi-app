@@ -3,9 +3,8 @@
 use std::collections::BTreeMap;
 
 use analysis::GamePhase;
-use app_settings::OpponentKind;
+use app_settings::{ComputerEngine, OpponentKind};
 use chess_core::Side;
-use engine::levels;
 use review::MoveQuality;
 
 use crate::game_score::{add, user_score};
@@ -82,20 +81,31 @@ fn time_pressure(moves: &[JudgedMove<'_>]) -> Option<TimePressure> {
 pub fn game_stats(input: &StatsInput, moves: &[JudgedMove<'_>]) -> GameStats {
     let mut against_computer = Score::default();
     let mut by_color: BTreeMap<u8, (Side, Score)> = BTreeMap::new();
-    let mut by_level: BTreeMap<u8, Score> = BTreeMap::new();
+    // Per livello: in ordine di Elo, e a parità di Elo prima Stockfish poi Maia.
+    let mut by_level: BTreeMap<(u32, bool, u8), LevelScore> = BTreeMap::new();
     for game in &input.games {
-        let (Some((computer, level)), Some(score)) = (game.computer, user_score(game)) else {
+        let (Some(computer), Some(score)) = (&game.computer, user_score(game)) else {
             continue;
         };
         against_computer = add(against_computer, score);
-        let user = computer.opponent();
+        let user = computer.side.opponent();
         let key = u8::from(user == Side::Black);
         let entry = by_color.entry(key).or_insert((user, Score::default()));
         entry.1 = add(entry.1, score);
-        let level_entry = by_level.entry(level).or_default();
-        *level_entry = add(*level_entry, score);
+        let key = (
+            computer.level.elo,
+            computer.engine == ComputerEngine::Maia,
+            computer.level.level,
+        );
+        let level_entry = by_level.entry(key).or_insert_with(|| LevelScore {
+            engine: computer.engine,
+            level: computer.level.level,
+            name: computer.level.name.clone(),
+            elo: computer.level.elo,
+            score: Score::default(),
+        });
+        level_entry.score = add(level_entry.score, score);
     }
-    let names = levels();
     GameStats {
         against_computer,
         two_player_games: u32::try_from(
@@ -110,18 +120,7 @@ pub fn game_stats(input: &StatsInput, moves: &[JudgedMove<'_>]) -> GameStats {
             .into_values()
             .map(|(side, score)| ColorScore { side, score })
             .collect(),
-        by_level: by_level
-            .into_iter()
-            .filter_map(|(level, score)| {
-                let info = names.iter().find(|info| info.level == level)?;
-                Some(LevelScore {
-                    level,
-                    name: info.name.clone(),
-                    elo: info.elo,
-                    score,
-                })
-            })
-            .collect(),
+        by_level: by_level.into_values().collect(),
         phases: phases(moves),
         time_pressure: time_pressure(moves),
     }

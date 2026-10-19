@@ -1,6 +1,6 @@
 //! Una partita come compare nell'elenco dell'archivio.
 
-use app_settings::{OpponentKind, TimeControl};
+use app_settings::{ComputerEngine, OpponentKind, TimeControl};
 use chess_core::{GameResult, Side};
 use openings::Opening;
 
@@ -23,7 +23,10 @@ pub struct GameSummary {
     pub opponent: OpponentKind,
     /// Il colore del computer, se si è giocato contro il computer.
     pub computer_side: Option<Side>,
-    /// Il livello del computer (1–10), se si è giocato contro il computer.
+    /// Il motore del computer (Stockfish o Maia); conta solo contro il computer.
+    pub engine: ComputerEngine,
+    /// Il livello del computer, se si è giocato contro il computer (da 1 a 10
+    /// per Stockfish, da 1 a 9 per Maia).
     pub level: Option<u8>,
     /// Il tempo di riflessione, se la partita aveva l'orologio.
     pub time_control: Option<TimeControl>,

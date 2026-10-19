@@ -12,6 +12,7 @@ pub mod after_change;
 pub mod computer_move;
 pub mod flag_timer;
 pub mod follow_analysis;
+pub mod maia_move;
 pub mod resume_game;
 pub mod review_queue;
 pub mod review_worker;

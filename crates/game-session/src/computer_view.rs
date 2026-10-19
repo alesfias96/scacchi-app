@@ -1,5 +1,6 @@
 //! Il computer avversario, come lo mostra l'interfaccia.
 
+use app_settings::ComputerEngine;
 use chess_core::Side;
 use engine::LevelInfo;
 
@@ -14,6 +15,8 @@ use engine::LevelInfo;
 pub struct ComputerView {
     /// Il colore del computer.
     pub side: Side,
+    /// Il motore: Stockfish o Maia.
+    pub engine: ComputerEngine,
     /// Il livello del computer, con nome e forza indicativa.
     pub level: LevelInfo,
 }

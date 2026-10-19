@@ -1,0 +1,29 @@
+# =============================================================================
+# Crate "maia" — l'avversario "umano"
+# -----------------------------------------------------------------------------
+# Maia è una rete neurale addestrata su milioni di partite di persone vere
+# (progetto Maia dell'Università di Toronto, licenza GPL-3.0): data una
+# posizione, dice quanto è probabile ogni mossa per una persona di un certo
+# livello (da 1100 a 1900 Elo). Così il computer sbaglia come sbaglierebbe una
+# persona, invece di indebolirsi a caso.
+# Le nove reti sono in data/maia/ (già decompresse) e vengono incluse nell'app. Il calcolo della
+# rete lo fa questa crate, in Rust semplice: niente programmi esterni, uguale
+# su Windows, macOS e Linux. Non sa nulla dell'interfaccia né di Tauri.
+# =============================================================================
+
+[package]
+name = "maia"
+description = "Avversario umano: le reti Maia (Lc0) calcolate in Rust"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+# Le regole degli scacchi: posizioni, mosse legali, notazioni FEN e UCI.
+shakmaty.workspace = true
+# Il nome e la forza indicativa dei livelli (la stessa forma dei livelli di Stockfish).
+engine.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

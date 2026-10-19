@@ -46,7 +46,11 @@ describe('describePlayer', () => {
   it('contro il computer distingue Stockfish (con il livello) da te', () => {
     const playing = session({
       opponent: 'computer',
-      computer: { side: 'black', level: { level: 4, name: 'Circolo', elo: 1400 } },
+      computer: {
+        side: 'black',
+        engine: 'stockfish',
+        level: { level: 4, name: 'Circolo', elo: 1400 },
+      },
       computerThinking: true,
       canEditVariations: false,
     });
@@ -56,6 +60,22 @@ describe('describePlayer', () => {
     );
     expect(describePlayer(playing, 'white')).toEqual(
       expect.objectContaining({ name: 'Tu', thinking: false }),
+    );
+  });
+
+  it('contro Maia il computer si chiama Maia', () => {
+    const playing = session({
+      opponent: 'computer',
+      computer: {
+        side: 'white',
+        engine: 'maia',
+        level: { level: 5, name: 'Maia 1500', elo: 1500 },
+      },
+      canEditVariations: false,
+    });
+
+    expect(describePlayer(playing, 'white')).toEqual(
+      expect.objectContaining({ name: 'Maia', detail: 'Maia 1500 · ~1500 Elo' }),
     );
   });
 

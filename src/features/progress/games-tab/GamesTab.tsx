@@ -87,7 +87,7 @@ export function GamesTab({ results }: GamesTabProps) {
           <BarList
             label="Risultati per livello"
             items={results.byLevel.map((level) => ({
-              key: String(level.level),
+              key: `${level.engine}-${String(level.level)}`,
               label: `${level.name} (${String(level.elo)})`,
               detail: scoreDetail(level.score),
               segments: scoreSegments(level.score),

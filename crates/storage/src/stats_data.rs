@@ -3,12 +3,12 @@
 //! Qui non si calcola nulla: si leggono le righe che servono (filtrate per
 //! periodo e avversario). I calcoli li fa la crate `stats`.
 
-use app_settings::OpponentKind;
+use app_settings::{ComputerEngine, OpponentKind};
 use chess_core::Side;
 use sqlx::sqlite::SqliteRow;
 use sqlx::{QueryBuilder, Row, Sqlite};
 
-use crate::codes::{opponent_code, parse_opponent, parse_side};
+use crate::codes::{opponent_code, parse_engine, parse_opponent, parse_side};
 use crate::database::Database;
 use crate::storage_error::StorageError;
 
@@ -42,6 +42,8 @@ pub struct GameStatRow {
     pub opponent: OpponentKind,
     /// Il colore del computer, se c'era.
     pub computer_side: Option<Side>,
+    /// Il motore del computer (conta solo contro il computer).
+    pub engine: ComputerEngine,
     /// Il livello del computer, se c'era.
     pub level: Option<u8>,
     /// `true` se la partita è finita.
@@ -128,7 +130,7 @@ impl Database {
     /// [`StorageError::Database`] se la lettura non riesce.
     pub async fn stats_games(&self, filter: &StatsQuery) -> Result<Vec<GameStatRow>, StorageError> {
         let mut query: QueryBuilder<Sqlite> = QueryBuilder::new(
-            "SELECT g.id, g.started_at, g.opponent, g.computer_side, g.level, g.result_score,
+            "SELECT g.id, g.started_at, g.opponent, g.computer_side, g.engine, g.level, g.result_score,
                     g.result_winner, g.opening_name, g.time_initial_seconds,
                     g.analyzed_at IS NOT NULL AS analyzed
              FROM games g WHERE g.ply_count > 0",
@@ -143,6 +145,7 @@ impl Database {
                     started_at_ms: row.try_get("started_at")?,
                     opponent: parse_opponent(&row.try_get::<String, _>("opponent")?),
                     computer_side: side_column(row, "computer_side")?,
+                    engine: parse_engine(&row.try_get::<String, _>("engine")?),
                     level: row.try_get("level")?,
                     finished: row.try_get::<Option<String>, _>("result_score")?.is_some(),
                     winner: side_column(row, "result_winner")?,

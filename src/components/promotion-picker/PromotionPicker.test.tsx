@@ -16,7 +16,14 @@ describe('PromotionPicker', () => {
         pieces: 'gettoni',
         notation: 'figurine',
         sounds: 'on',
-        gameSetup: { opponent: 'computer', color: 'white', level: 4, timeControl: null },
+        gameSetup: {
+          opponent: 'computer',
+          color: 'white',
+          engine: 'stockfish',
+          level: 4,
+          maiaLevel: 5,
+          timeControl: null,
+        },
         trainingSetup: {
           mode: 'depth',
           depth: 2,
