@@ -67,6 +67,7 @@ pub fn run() {
             commands::game::resign_game,
             commands::pgn_file::save_pgn_file,
             commands::pgn_file::open_pgn_file,
+            commands::analysis::get_position_report,
             commands::archive::list_games,
             commands::archive::open_game,
             commands::archive::delete_game,

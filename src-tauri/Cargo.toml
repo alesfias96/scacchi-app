@@ -34,6 +34,8 @@ app-settings = { workspace = true, features = ["bindings"] }
 engine = { workspace = true, features = ["bindings"] }
 # La partita in corso: avversario, livello, orologio.
 game-session = { workspace = true, features = ["bindings"] }
+# I rilevatori (minacce, tattiche, pedoni, re, attività dei pezzi).
+analysis = { workspace = true, features = ["bindings"] }
 # Il database delle partite.
 storage = { workspace = true, features = ["bindings"] }
 # Le finestre di sistema per salvare e aprire i file .pgn.

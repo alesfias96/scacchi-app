@@ -1,0 +1,31 @@
+# =============================================================================
+# Crate "analysis" — i rilevatori
+# -----------------------------------------------------------------------------
+# Guarda una posizione e trova i fatti verificabili: pezzi in presa, minacce,
+# tattiche (forchette, inchiodature, infilate, scoperte, sovraccarico),
+# struttura pedonale, sicurezza del re, attività dei pezzi, materiale e fase
+# di gioco. È il "livello 1" del tutor: fatti, non opinioni.
+# Non usa il motore e non sa nulla dell'interfaccia grafica né di Tauri.
+# =============================================================================
+
+[package]
+name = "analysis"
+description = "Rilevatori di minacce, tattiche e caratteristiche della posizione"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[features]
+# "bindings": rende i tipi pubblici convertibili in JSON (serde) e genera
+# i corrispondenti tipi TypeScript (ts-rs). La attiva il ponte src-tauri.
+bindings = ["dep:serde", "dep:ts-rs", "chess-core/bindings"]
+
+[dependencies]
+shakmaty.workspace = true
+# Il colore dei giocatori (Side), lo stesso usato in tutta l'app.
+chess-core.workspace = true
+serde = { workspace = true, optional = true }
+ts-rs = { workspace = true, optional = true }
+
+[lints]
+workspace = true

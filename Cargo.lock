@@ -39,6 +39,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
+name = "analysis"
+version = "0.1.0"
+dependencies = [
+ "chess-core",
+ "serde",
+ "shakmaty",
+ "ts-rs",
+]
+
+[[package]]
 name = "android_system_properties"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2880,6 +2890,7 @@ dependencies = [
 name = "scacchi-app"
 version = "0.1.0"
 dependencies = [
+ "analysis",
  "app-settings",
  "chess-core",
  "engine",

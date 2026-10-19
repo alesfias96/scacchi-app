@@ -109,6 +109,12 @@ impl Game {
         Side::from(self.positions[self.moves.len()].turn())
     }
 
+    /// La posizione mostrata (quella del cursore) in notazione FEN.
+    #[must_use]
+    pub fn fen(&self) -> String {
+        Fen::from_position(self.current(), EnPassantMode::Legal).to_string()
+    }
+
     /// La posizione di partenza in notazione FEN.
     #[must_use]
     pub fn starting_fen(&self) -> String {
@@ -547,6 +553,7 @@ mod tests {
 
         assert_eq!(game.cursor(), 0);
         assert!(!game.is_at_end());
+        assert_eq!(game.fen(), game.starting_fen());
         assert_eq!(game.turn(), Side::White);
         assert_eq!(game.last_turn(), Side::Black);
     }

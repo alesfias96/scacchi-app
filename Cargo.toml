@@ -21,6 +21,7 @@ resolver = "3"
 # - crates/game-session: la partita in corso con avversario, livello e orologio.
 # - crates/openings: il riconoscimento delle aperture (elenco di Lichess).
 # - crates/storage: il database delle partite (SQLite).
+# - crates/analysis: i rilevatori (minacce, tattiche, pedoni, re, attività dei pezzi).
 # Le altre crate del nucleo verranno aggiunte qui una alla volta.
 members = [
     "src-tauri",
@@ -30,6 +31,7 @@ members = [
     "crates/game-session",
     "crates/openings",
     "crates/storage",
+    "crates/analysis",
 ]
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
@@ -68,6 +70,7 @@ engine = { path = "crates/engine" }
 game-session = { path = "crates/game-session" }
 openings = { path = "crates/openings" }
 storage = { path = "crates/storage" }
+analysis = { path = "crates/analysis" }
 
 # Desktop.
 tauri = { version = "2", features = [] }

@@ -356,6 +356,12 @@ impl GameSession {
         })
     }
 
+    /// La posizione mostrata, in notazione FEN.
+    #[must_use]
+    pub fn shown_fen(&self) -> String {
+        self.game.fen()
+    }
+
     /// La partita in formato PGN.
     #[must_use]
     pub fn export_pgn(&self) -> String {
