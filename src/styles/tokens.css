@@ -89,6 +89,7 @@
   --board-focus-max-size: 60rem; /* in "Gioca", dove c'è solo la scacchiera */
   --board-min-size: 20rem;
   --panel-width: 18rem;
+  --play-panel-width: 24rem; /* colonna "Partita" in Gioca */
   --drawer-width: 26rem; /* barra laterale a comparsa (es. le schede di "Gioca") */
   --drawer-edge-width: 0.75rem; /* striscia sul bordo destro che la fa comparire */
   /* spazio verticale da lasciare libero intorno alla scacchiera (titolo + margini) */

@@ -1,17 +1,25 @@
 /*
- * Barra di valutazione: colonna stretta alta quanto la scacchiera, con la
- * divisione bianco/nero che scorre dolcemente e il valore scritto in piccolo.
+ * Barra di valutazione: colonna stretta che riempie lo spazio che le dà chi la
+ * usa (in "Gioca": alta quanto la scacchiera), con la divisione bianco/nero
+ * che scorre dolcemente e il valore scritto in piccolo.
  */
 
 .bar {
   position: relative;
-  flex: 0 0 var(--eval-bar-width);
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: var(--radius-small);
   box-shadow: var(--shadow-board);
 }
 
+/*
+ * Il disegno è posato "sopra" la barra e la riempie: così non è lui a decidere
+ * l'altezza (con le sue proporzioni 1 × 1000 diventerebbe altissimo).
+ */
 .drawing {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;

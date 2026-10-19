@@ -17,11 +17,12 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 
 ## Come si usa
 
-- Nella pagina c'è **solo la scacchiera**, con i giocatori, l'orologio e (se accesa) la barra di
-  valutazione. Tutte le schede (mosse, analisi, osservazioni, situazione, copia e incolla, file)
-  stanno nella barra laterale **"Partita"**: si apre portando il mouse sul bordo destro della
-  finestra (c'è una linguetta), con un clic sulla linguetta o con il tasto **I**. "Fissa" la tiene
-  aperta; Esc la chiude. A fine partita l'annuncio compare sopra la scacchiera.
+- A sinistra la **scacchiera**, con i giocatori, l'orologio e (se accesa) la barra di valutazione
+  accanto, alta quanto lei. La scacchiera è grande quanto permette l'altezza della finestra e resta
+  sempre tutta visibile. A destra la colonna **"Partita"** con tutte le schede (mosse, analisi,
+  osservazioni, situazione, copia e incolla, file), sempre aperta e con il suo scorrimento interno.
+  Il menu principale delle sezioni è a comparsa sul bordo sinistro (tasto **M**). A fine partita
+  l'annuncio compare sopra la scacchiera.
 
 - **Nuova partita** apre la finestra in cui si sceglie l'avversario, il colore, il livello del
   computer e il tempo. La finestra ripropone le scelte dell'ultima partita.
@@ -41,21 +42,21 @@ l'ultima partita non finita riappare qui, con l'orologio fermo fino alla mossa s
 
 ## Contenuto
 
-| Elemento              | Cosa fa                                                                                                              |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `PlayPage.tsx`        | La pagina: la scacchiera con giocatori e annuncio di fine partita, e la barra laterale "Partita" con tutte le schede |
-| `PlayPage.module.css` | La disposizione della pagina: scacchiera centrata, grande quanto la finestra permette                                |
-| `PlayPage.test.tsx`   | I test: attesa, errore, mosse, promozione, fine partita, computer che pensa, nuova partita, analisi, tastiera        |
-| `player-bar/`         | La striscia di un giocatore sopra o sotto la scacchiera: nome, livello, "sta pensando", orologio                     |
-| `clock-face/`         | Il quadrante dell'orologio, con i secondi che scorrono                                                               |
-| `new-game-dialog/`    | La finestra "Nuova partita": avversario, colore, livello, tempo                                                      |
-| `analysis-panel/`     | La scheda "Analisi": interruttore, valutazione, profondità, variante                                                 |
-| `observations-panel/` | La scheda "Osservazioni": i fatti dei rilevatori, per gruppo; passandoci sopra si evidenziano sulla scacchiera       |
-| `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                                           |
-| `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                                                 |
-| `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, abbandona, gira la scacchiera                                  |
-| `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                                                 |
-| `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                                            |
-| `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                                  |
-| `pgn-file/`           | Salvare la partita in un file `.pgn` e aprirne uno, con la finestra del sistema                                      |
-| `opening-label/`      | Il nome dell'apertura giocata, sopra l'elenco delle mosse                                                            |
+| Elemento              | Cosa fa                                                                                                                             |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `PlayPage.tsx`        | La pagina: la scacchiera con giocatori, barra di valutazione e annuncio di fine partita, e la colonna "Partita" con tutte le schede |
+| `PlayPage.module.css` | La disposizione: scacchiera a sinistra (grande quanto la finestra permette), colonna "Partita" a destra con lo scorrimento interno  |
+| `PlayPage.test.tsx`   | I test: attesa, errore, mosse, promozione, fine partita, computer che pensa, nuova partita, analisi, tastiera                       |
+| `player-bar/`         | La striscia di un giocatore sopra o sotto la scacchiera: nome, livello, "sta pensando", orologio                                    |
+| `clock-face/`         | Il quadrante dell'orologio, con i secondi che scorrono                                                                              |
+| `new-game-dialog/`    | La finestra "Nuova partita": avversario, colore, livello, tempo                                                                     |
+| `analysis-panel/`     | La scheda "Analisi": interruttore, valutazione, profondità, variante                                                                |
+| `observations-panel/` | La scheda "Osservazioni": i fatti dei rilevatori, per gruppo; passandoci sopra si evidenziano sulla scacchiera                      |
+| `position-panel/`     | La scheda "Situazione": chi muove, mosse possibili, scacco                                                                          |
+| `move-list/`          | La scheda "Mosse": la partita scritta come nei libri                                                                                |
+| `game-controls/`      | I comandi: scorri la partita, nuova partita, annulla, abbandona, gira la scacchiera                                                 |
+| `promotion-picker/`   | La scelta del pezzo quando un pedone arriva in fondo                                                                                |
+| `game-result-banner/` | L'annuncio di fine partita (motivo, vincitore, punteggio)                                                                           |
+| `import-export/`      | Copia di posizione (FEN) e partita (PGN), e finestra per incollarle                                                                 |
+| `pgn-file/`           | Salvare la partita in un file `.pgn` e aprirne uno, con la finestra del sistema                                                     |
+| `opening-label/`      | Il nome dell'apertura giocata, sopra l'elenco delle mosse                                                                           |

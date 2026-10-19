@@ -1,6 +1,8 @@
 # src/app/sidebar — La barra laterale
 
-La colonna a sinistra: nome dell'app, sezioni e, in fondo, le Impostazioni.
+Il menu principale: nome dell'app, sezioni e, in fondo, le Impostazioni. Sta nella barra a comparsa
+sul bordo sinistro della finestra (vedi `src/app/app-layout/`): si apre col mouse sul bordo o con il
+tasto M.
 I colori arrivano dal tema scelto. La sezione aperta ha il fondo in rilievo e un pallino
 nel colore d'accento del tema. Le sezioni non ancora costruite sono visibili ma disattivate,
 con l'indicazione della fase in cui arriveranno.

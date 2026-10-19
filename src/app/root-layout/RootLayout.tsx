@@ -1,7 +1,8 @@
 /**
  * RootLayout — la cornice comune a tutte le pagine.
  *
- * Cosa fa: applica il tema, mostra la barra laterale e, nell'area di lavoro,
+ * Cosa fa: applica il tema, mette il menu principale nella barra a comparsa e,
+ * nell'area di lavoro,
  * la pagina corrispondente all'indirizzo aperto (`Outlet`).
  * È il componente della "radice" del router (vedi src/app/router.tsx).
  *
@@ -17,7 +18,7 @@ export function RootLayout() {
   return (
     <>
       <ThemeController />
-      <AppLayout sidebar={<Sidebar />}>
+      <AppLayout menu={<Sidebar />}>
         <Outlet />
       </AppLayout>
     </>

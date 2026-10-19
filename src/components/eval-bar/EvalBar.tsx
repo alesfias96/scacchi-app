@@ -7,7 +7,9 @@
  * è scritto all'estremità di chi è in vantaggio.
  *
  * Il disegno è un'immagine SVG: l'altezza delle due parti è un attributo del
- * disegno, così non servono stili scritti nel codice.
+ * disegno, così non servono stili scritti nel codice. La barra riempie lo
+ * spazio che le dà il contenitore (larghezza e altezza): è il contenitore a
+ * decidere quanto è grande.
  *
  * Riceve:
  * - `evaluation`: la valutazione dal punto di vista del Bianco, oppure `null`

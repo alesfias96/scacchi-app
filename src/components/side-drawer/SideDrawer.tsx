@@ -1,9 +1,9 @@
 /**
- * SideDrawer — una barra laterale a comparsa, sul bordo destro della finestra.
+ * SideDrawer — una barra laterale a comparsa, sul bordo sinistro o destro della finestra.
  *
  * Cosa fa: tiene a portata di mano dei contenuti senza occupare spazio. Si
  * apre in quattro modi:
- * - portando il mouse sul bordo destro della finestra (o sulla linguetta);
+ * - portando il mouse sul bordo della finestra (o sulla linguetta);
  * - con un clic sulla linguetta;
  * - con il tasto indicato in `shortcut` (es. "I"), che la apre e la chiude.
  * Si richiude da sola quando il mouse la lascia (dopo un breve ritardo, così
@@ -13,10 +13,13 @@
  * per conto suo se il contenuto è lungo.
  *
  * Riceve:
+ * - `side`: su quale bordo sta (predefinito: destra);
  * - `title`: il titolo della barra (letto anche dai lettori di schermo);
  * - `shortcut`: il tasto che la apre e la chiude (una lettera);
  * - `shortcutEnabled`: se falso il tasto è ignorato (ad esempio con una
  *   finestra di dialogo aperta);
+ * - `padded`: se falso il contenuto occupa tutta la barra, senza margini
+ *   (per contenuti che hanno già il loro fondo, come il menu principale);
  * - `children`: il contenuto.
  * Restituisce: la linguetta sul bordo e la barra.
  */
@@ -32,17 +35,28 @@ const CLOSE_DELAY_MS = 350;
 const TYPING_ELEMENTS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
 
 export interface SideDrawerProps {
+  /** Il bordo su cui sta la barra. Predefinito: `"right"`. */
+  side?: 'left' | 'right';
   /** Il titolo della barra. */
   title: string;
   /** Il tasto che apre e chiude la barra (una lettera, es. "i"). */
   shortcut: string;
   /** Se falso il tasto è ignorato. Predefinito: vero. */
   shortcutEnabled?: boolean;
+  /** Se falso il contenuto occupa tutta la barra, senza margini. Predefinito: vero. */
+  padded?: boolean;
   /** Il contenuto della barra. */
   children: ReactNode;
 }
 
-export function SideDrawer({ title, shortcut, shortcutEnabled = true, children }: SideDrawerProps) {
+export function SideDrawer({
+  side = 'right',
+  title,
+  shortcut,
+  shortcutEnabled = true,
+  padded = true,
+  children,
+}: SideDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const titleId = useId();
@@ -111,7 +125,7 @@ export function SideDrawer({ title, shortcut, shortcutEnabled = true, children }
 
   return (
     <>
-      <div className={styles.edge} onMouseEnter={open}>
+      <div className={classNames(styles.edge, styles[side])} onMouseEnter={open}>
         <button
           type="button"
           className={styles.handle}
@@ -130,7 +144,7 @@ export function SideDrawer({ title, shortcut, shortcutEnabled = true, children }
         </button>
       </div>
       <aside
-        className={classNames(styles.drawer, isOpen && styles.open)}
+        className={classNames(styles.drawer, styles[side], isOpen && styles.open)}
         aria-labelledby={titleId}
         onMouseEnter={open}
         onMouseLeave={scheduleClose}
@@ -158,7 +172,7 @@ export function SideDrawer({ title, shortcut, shortcutEnabled = true, children }
             ×
           </Button>
         </header>
-        <div className={styles.content}>{children}</div>
+        <div className={classNames(styles.content, padded && styles.padded)}>{children}</div>
       </aside>
     </>
   );

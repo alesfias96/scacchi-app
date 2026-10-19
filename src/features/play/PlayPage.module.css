@@ -1,13 +1,15 @@
 /*
- * Sezione "Gioca": solo la scacchiera, centrata e grande quanto la finestra
- * permette (con i giocatori sopra e sotto e, se l'analisi è accesa, la barra
- * di valutazione a sinistra). Le schede stanno nella barra laterale a comparsa.
+ * Sezione "Gioca": a sinistra la scacchiera, grande quanto l'altezza della
+ * finestra permette (con i giocatori sopra e sotto e, se l'analisi è accesa,
+ * la barra di valutazione accanto); a destra la colonna "Partita" con le
+ * schede, alta quanto la finestra e con il suo scorrimento interno.
  */
 
 .page {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  height: 100%;
 }
 
 .title {
@@ -28,8 +30,11 @@
 }
 
 .workspace {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--play-panel-width);
+  gap: var(--space-6);
+  height: 100%;
+  min-height: 0;
 }
 
 /*
@@ -38,23 +43,39 @@
  */
 .boardArea {
   display: flex;
-  flex: 1 1 var(--board-min-size);
   flex-direction: column;
   gap: var(--space-3);
+  justify-self: center;
+  width: 100%;
   max-width: min(var(--board-focus-max-size), calc(100vh - var(--board-vertical-reserve)));
-}
-
-/* La barra di valutazione accanto alla scacchiera, alta quanto lei. */
-.boardRow {
-  display: flex;
-  gap: var(--space-3);
+  min-width: var(--board-min-size);
+  /* Spazio fisso a sinistra per la barra di valutazione: quando compare, la scacchiera resta uguale. */
+  padding-left: calc(var(--eval-bar-width) + var(--space-3));
 }
 
 .boardWrap {
-  /* Riferimento per la scelta della promozione, che si sovrappone alla scacchiera. */
+  /* Riferimento per la barra di valutazione e per le finestre sopra la scacchiera. */
   position: relative;
-  flex: 1;
-  min-width: 0;
+}
+
+/* La barra di valutazione: a sinistra della scacchiera, alta esattamente quanto lei. */
+.evalSlot {
+  position: absolute;
+  top: 0;
+  right: calc(100% + var(--space-3));
+  bottom: 0;
+  width: var(--eval-bar-width);
+}
+
+/* La colonna "Partita": le schede una sotto l'altra, con lo scorrimento interno. */
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+  overscroll-behavior: contain;
 }
 
 /* L'annuncio di fine partita, in alto sopra la scacchiera. */

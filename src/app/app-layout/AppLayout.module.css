@@ -1,12 +1,14 @@
-/* Struttura della finestra: barra laterale fissa + area di lavoro che scorre. */
+/*
+ * Struttura della finestra: l'area di lavoro occupa tutto lo spazio e scorre se
+ * serve; il menu principale è a comparsa (vedi components/side-drawer).
+ */
 
 .layout {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   height: 100%;
 }
 
 .main {
+  height: 100%;
   overflow: auto;
   padding: var(--space-6) var(--space-7);
 }
