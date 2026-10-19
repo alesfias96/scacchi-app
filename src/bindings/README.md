@@ -81,6 +81,9 @@ dopo aver modificato un tipo Rust, esegui `npm run check` e salva i file rigener
 | `IdeaView.ts`            | `crates/tutor/src/idea_view.rs`              | L'idea di una variante: frase principale, momenti chiave, mosse, posizioni, schede          |
 | `IdeaMoment.ts`          | `crates/tutor/src/idea_view.rs`              | Un momento chiave di un'idea, con case e frecce                                             |
 | `IdeaFrame.ts`           | `crates/tutor/src/idea_view.rs`              | Una posizione della variante, da mostrare sulla scacchiera                                  |
+| `ImbalanceItem.ts`       | `crates/tutor/src/strategy_view.rs`          | Una voce del bilancio «Chi ha cosa»                                                         |
+| `StrategyPlanView.ts`    | `crates/tutor/src/strategy_view.rs`          | Un piano: perché, come, quando sì, quando no, segnali                                       |
+| `StrategyView.ts`        | `crates/tutor/src/strategy_view.rs`          | La strategia della posizione: centro, bilancio, piani                                       |
 | `PositionIdeas.ts`       | `crates/tutor/src/idea_view.rs`              | Le idee di una posizione (le migliori varianti) e il confronto                              |
 | `MoveIdea.ts`            | `crates/tutor/src/idea_view.rs`              | L'idea della mossa giocata e, se c'era, quella della migliore                               |
 | `Note.ts`                | `crates/notes/src/note.rs`                   | Un appunto salvato: titolo, testo, etichette, collegamento, date                            |

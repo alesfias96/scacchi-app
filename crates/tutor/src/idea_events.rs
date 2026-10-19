@@ -27,6 +27,7 @@ use analysis::{Fact, FactCategory, analyze};
 use shakmaty::fen::Fen;
 use shakmaty::{Bitboard, Board, Chess, Color, EnPassantMode, File, Piece, Position, Role, Square};
 
+use crate::board_query::is_outpost;
 use crate::line_walk::LineStep;
 use crate::recognition::recognize;
 use crate::topic::Topic;
@@ -126,30 +127,6 @@ fn relative_rank(square: Square, color: Color) -> u32 {
     } else {
         7 - rank
     }
-}
-
-/// I pedoni avversari che potrebbero, avanzando, attaccare `square`.
-fn enemy_pawns_that_can_chase(board: &Board, square: Square, color: Color) -> Bitboard {
-    let enemy = board.by_color(color.other()) & board.by_role(Role::Pawn);
-    let file = u32::from(square.file());
-    let rank = relative_rank(square, color);
-    enemy
-        .into_iter()
-        .filter(|pawn| {
-            u32::from(pawn.file()).abs_diff(file) == 1 && relative_rank(*pawn, color) > rank
-        })
-        .collect()
-}
-
-/// `true` se `square` è un avamposto per `color`: nella metà avversaria,
-/// difeso da un proprio pedone e senza pedoni avversari che possano cacciarlo.
-fn is_outpost(board: &Board, square: Square, color: Color) -> bool {
-    if !(3..=5).contains(&relative_rank(square, color)) {
-        return false;
-    }
-    let own_pawns = board.by_color(color) & board.by_role(Role::Pawn);
-    let defended = !(shakmaty::attacks::pawn_attacks(color.other(), square) & own_pawns).is_empty();
-    defended && enemy_pawns_that_can_chase(board, square, color).is_empty()
 }
 
 /// `true` se sulla colonna non ci sono pedoni di `color`.

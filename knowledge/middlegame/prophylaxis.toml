@@ -1,0 +1,34 @@
+title = "La profilassi"
+when = [
+  "middlegame:prophylaxis",
+]
+summary = "Prima di fare il proprio piano ci si chiede: cosa vuole fare l'avversario? Se il suo piano è pericoloso, la mossa migliore è spesso quella che glielo impedisce."
+ideas = [
+  "Ogni mossa dell'avversario ha uno scopo: capirlo è metà del lavoro.",
+  "Una mossa profilattica toglie una casa, copre una debolezza o blocca una spinta prima che arrivi.",
+  "La profilassi non è passività: tolto il gioco all'avversario, il tuo piano funziona meglio.",
+]
+mistakes = [
+  "Pensare solo al proprio piano senza guardare quello avversario.",
+  "Difendersi da minacce che non esistono.",
+]
+use_when = [
+  "L'avversario ha un piano chiaro e pericoloso.",
+  "Il tuo piano non è urgente.",
+]
+avoid_when = [
+  "Hai un attacco che arriva prima del suo.",
+  "La mossa di difesa peggiora troppo i tuoi pezzi.",
+]
+signs = [
+  "L'avversario non trova più un piano e muove a caso.",
+  "Le sue rotture di pedone non funzionano più.",
+]
+[[plans]]
+for = "owner"
+label = "Chi fa profilassi"
+steps = [
+  "Chiediti ogni volta: cosa farebbe l'avversario se toccasse a lui?",
+  "Se il suo piano è forte, cerca la mossa che lo impedisce senza peggiorare i tuoi pezzi.",
+  "Poi riprendi il tuo piano.",
+]

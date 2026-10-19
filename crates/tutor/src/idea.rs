@@ -23,6 +23,9 @@ use crate::idea_events::{
 use crate::idea_view::{IdeaFrame, IdeaMoment, IdeaView, MoveIdea, PositionIdeas};
 use crate::library::all_cards;
 use crate::line_walk::{LineStep, walk};
+use crate::recognition::recognize;
+use crate::strategy::describe_strategy;
+use crate::strategy_plans::confirming_kinds;
 use crate::tutor_error::TutorError;
 
 /// Quante mezze mosse della variante si guardano al massimo.
@@ -267,6 +270,31 @@ fn compare(best: Evaluation, second: Evaluation, side: Color) -> String {
     }
 }
 
+/// I piani della strategia di chi muove confermati dalla variante migliore:
+/// quelli per cui la variante contiene un evento dello stesso tipo (vedi
+/// `strategy_plans::confirming_kinds`).
+fn confirmed_plans(position: &Chess, best: Option<&(Vec<String>, Evaluation)>) -> Vec<String> {
+    let Some((line, evaluation)) = best else {
+        return Vec::new();
+    };
+    let side = position.turn();
+    let limit = line.len().min(LOOK_AHEAD_PLIES);
+    let steps = walk(position, &line[..limit]);
+    let found = events(position, &steps, side, Some(*evaluation));
+    let phase = analysis::game_phase::game_phase(position);
+    let strategy = describe_strategy(position, phase, &recognize(position, phase));
+    strategy
+        .plans
+        .iter()
+        .filter(|plan| {
+            let key = plan.key.rsplit('/').next().unwrap_or_default();
+            let kinds = confirming_kinds(key);
+            found.iter().any(|event| kinds.contains(&event.kind))
+        })
+        .map(|plan| plan.key.clone())
+        .collect()
+}
+
 /// Le idee della posizione: una per ogni variante di Stockfish (dalla migliore),
 /// per chi deve muovere, e il confronto tra la prima e le altre.
 #[must_use]
@@ -289,6 +317,7 @@ pub fn describe_position_ideas(
         fen: Fen::from_position(position, EnPassantMode::Legal).to_string(),
         ideas,
         comparison,
+        confirmed_plans: confirmed_plans(position, lines.first()),
     }
 }
 

@@ -1,0 +1,34 @@
+title = "Il centro aperto: contano i pezzi attivi"
+when = [
+  "middlegame:open-game",
+]
+summary = "Con pochi pedoni al centro le linee sono aperte: vincono la velocità dei pezzi, la sicurezza del re e la coppia degli alfieri."
+ideas = [
+  "In una posizione aperta ogni tempo conta: sviluppo rapido e re al sicuro.",
+  "Le torri vanno sulle colonne centrali aperte, gli alfieri sulle diagonali lunghe.",
+  "La coppia degli alfieri è molto forte in una posizione aperta.",
+]
+mistakes = [
+  "Lasciare il re al centro in una posizione aperta.",
+  "Perdere tempo con mosse di pedone.",
+]
+use_when = [
+  "Al centro sono rimasti pochi pedoni.",
+  "I tuoi pezzi sono già sviluppati.",
+]
+avoid_when = [
+  "Il tuo re è ancora al centro: prima mettilo al sicuro.",
+  "La posizione sta per chiudersi di nuovo.",
+]
+signs = [
+  "I tuoi pezzi controllano le linee aperte.",
+  "L'avversario fatica a coordinare i suoi pezzi.",
+]
+[[plans]]
+for = "both"
+label = "Con il centro aperto"
+steps = [
+  "Sviluppa in fretta e arrocca.",
+  "Occupa le colonne aperte con le torri.",
+  "Cerca le debolezze avversarie con i pezzi, non con i pedoni.",
+]

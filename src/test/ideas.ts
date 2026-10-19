@@ -52,6 +52,7 @@ export const POSITION_IDEAS: PositionIdeas = {
   fen: 'fen',
   ideas: [KNIGHT_IDEA, { ...KNIGHT_IDEA, headline: "L'idea: un piano tranquillo" }],
   comparison: 'Stockfish preferisce la prima idea: vale +0.4 per il Bianco, la seconda solo +0.1.',
+  confirmedPlans: ['middlegame/minority-attack'],
 };
 
 /** L'idea di una mossa, con una mossa migliore. */

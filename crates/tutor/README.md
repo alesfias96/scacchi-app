@@ -36,6 +36,18 @@ principale dice l'idea e **quando** si vede; i momenti chiave la mostrano passo 
 Le frasi non contengono mosse: l'interfaccia le aggiunge nella notazione scelta. Un pezzo
 semplicemente "in presa" a metà di uno scambio o un'inchiodatura su un pedone non contano come tattica.
 
+## La strategia (Fase 12-B)
+
+Ogni spiegazione ha anche **«La strategia»**: il bilancio **«Chi ha cosa»** per ciascun lato
+(materiale, coppia degli alfieri, pedoni deboli e passati, maggioranze sulle ali, spazio, pezzo
+peggiore, alfiere cattivo, colonne, avamposti, case deboli vicino al re, re e sviluppo), com'è il
+centro (chiuso, aperto, mobile) e da lì **uno o due piani** per chi muove, più il piano
+dell'avversario. Se l'avversario ha un piano pericoloso, il primo piano diventa la **profilassi**.
+Ogni piano dice il **perché** concreto in questa posizione e, dalla sua scheda, **come** si fa,
+**quando usarlo**, **quando no** e i **segnali** che funziona. Dopo «Guarda avanti», se la variante
+migliore di Stockfish va nella stessa direzione (es. una rottura di pedone per il piano «rottura
+centrale»), il piano è **confermato** (`confirmed_plans` delle idee della posizione).
+
 ## Contenuto
 
 | Elemento     | Cosa contiene                                                                           |

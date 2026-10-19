@@ -37,4 +37,16 @@ plans: Array<PlanView>,
 /**
  * Gli errori tipici.
  */
-mistakes: Array<string>, };
+mistakes: Array<string>, 
+/**
+ * Quando usarlo.
+ */
+useWhen: Array<string>, 
+/**
+ * Quando no.
+ */
+avoidWhen: Array<string>, 
+/**
+ * I segnali che funziona.
+ */
+signs: Array<string>, };

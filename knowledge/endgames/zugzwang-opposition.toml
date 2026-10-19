@@ -1,0 +1,34 @@
+title = "Lo zugzwang e l'opposizione"
+when = [
+  "endgame:zugzwang-opposition",
+]
+summary = "Nei finali di pedoni dover muovere può essere uno svantaggio (zugzwang). I re si fronteggiano: chi ha l'opposizione costringe l'altro a cedere il passo."
+ideas = [
+  "Opposizione: i re sono sulla stessa colonna (o traversa) con una casa in mezzo, e tocca all'altro muovere.",
+  "Chi ha l'opposizione tiene il re avversario lontano dalle case importanti.",
+  "A volte si perde un tempo apposta (con una mossa di re o di pedone) per riprendere l'opposizione.",
+]
+mistakes = [
+  "Muovere il re senza contare l'opposizione.",
+  "Sprecare i tempi di riserva dei pedoni troppo presto.",
+]
+use_when = [
+  "Sulla scacchiera ci sono solo re e pedoni.",
+  "I re si stanno avvicinando.",
+]
+avoid_when = [
+  "Un pedone passato decide prima dell'opposizione: conta quello.",
+  "Ci sono ancora pezzi: allora lo zugzwang è più raro.",
+]
+signs = [
+  "Il re avversario deve cedere il passo e il tuo entra.",
+  "L'avversario resta senza mosse utili.",
+]
+[[plans]]
+for = "both"
+label = "Nel finale di pedoni"
+steps = [
+  "Porta il re davanti ai pedoni, non dietro.",
+  "Conta le mosse: chi deve muovere quando i re si fronteggiano?",
+  "Usa un tempo di riserva (un pedone che può ancora muovere) per mettere l'avversario in zugzwang.",
+]

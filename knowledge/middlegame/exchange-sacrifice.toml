@@ -1,0 +1,34 @@
+title = "Il sacrificio di qualità"
+when = [
+  "middlegame:exchange-sacrifice",
+]
+summary = "Si dà una torre per un pezzo minore (la qualità) per eliminare un pezzo avversario fortissimo, rovinare la sua struttura o ottenere case e iniziativa."
+ideas = [
+  "Una torre vale circa due punti più di un cavallo, ma un cavallo su un avamposto può valere più di una torre passiva.",
+  "Spesso il sacrificio lascia all'avversario pedoni deboli e al sacrificante un pezzo minore dominante.",
+  "Non serve vincere subito: conta che dopo il sacrificio i tuoi pezzi siano migliori dei suoi.",
+]
+mistakes = [
+  "Sacrificare senza un compenso preciso.",
+  "Aprire poi la posizione alle torri avversarie.",
+]
+use_when = [
+  "Un pezzo avversario domina la posizione e non si può cacciare.",
+  "Dopo il sacrificio le torri avversarie non hanno colonne aperte.",
+]
+avoid_when = [
+  "La posizione si sta per aprire: lì le torri diventano fortissime.",
+  "Ci si avvicina al finale: nel finale la torre vale di più.",
+]
+signs = [
+  "Le torri avversarie restano senza gioco.",
+  "Il tuo pezzo minore domina case importanti.",
+]
+[[plans]]
+for = "owner"
+label = "Chi dà la qualità"
+steps = [
+  "Individua il pezzo avversario più forte, quello che domina la posizione.",
+  "Valuta cosa resta dopo: case, pedoni, iniziativa.",
+  "Dai la qualità se i tuoi pezzi minori rimasti saranno più attivi delle sue torri.",
+]

@@ -1,0 +1,58 @@
+/*
+ * «La strategia»: il centro, il bilancio «Chi ha cosa» su due colonne
+ * (Bianco e Nero) e i piani, uno sotto l'altro.
+ */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.center {
+  line-height: var(--leading-body);
+}
+
+.subtitle {
+  margin-top: var(--space-2);
+  font-weight: var(--weight-bold);
+}
+
+.balance {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.sideName {
+  font-weight: var(--weight-semibold);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-4);
+}
+
+.message {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}

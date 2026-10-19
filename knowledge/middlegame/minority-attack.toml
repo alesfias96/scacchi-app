@@ -1,0 +1,34 @@
+title = "L'attacco di minoranza"
+when = [
+  "middlegame:minority-attack",
+]
+summary = "Con meno pedoni su un'ala li si spinge contro quelli avversari: dopo i cambi all'avversario resta un pedone debole, isolato o arretrato, da attaccare con calma."
+ideas = [
+  "Si gioca soprattutto nella struttura Carlsbad: il Bianco spinge b4–b5 contro i pedoni a7, b7 e c6 del Nero.",
+  "Lo scopo non è aprire il re, ma creare una debolezza fissa (spesso un pedone in c6) da attaccare con torri e cavallo.",
+  "Le torri vanno sulle colonne b e c prima della spinta, così sono pronte quando le colonne si aprono.",
+]
+mistakes = [
+  "Spingere i pedoni senza aver preparato le torri.",
+  "Dimenticare la difesa del re mentre si attacca sull'altra ala.",
+]
+use_when = [
+  "Hai meno pedoni dell'avversario su un'ala e i tuoi pezzi sono pronti a seguire la spinta.",
+  "Il centro è stabile: l'avversario non può contrattaccare subito in mezzo.",
+]
+avoid_when = [
+  "Il tuo re è sotto attacco sull'altra ala: prima difenditi.",
+  "L'avversario può rispondere alla spinta chiudendo l'ala (ad esempio con b5 a sua volta).",
+]
+signs = [
+  "Dopo i cambi l'avversario ha un pedone isolato o arretrato che deve difendere con i pezzi.",
+  "Le tue torri entrano sulle colonne aperte b o c.",
+]
+[[plans]]
+for = "owner"
+label = "Chi attacca con la minoranza"
+steps = [
+  "Prepara la spinta: torre in b1 o c1, pedone in a3 se serve.",
+  "Spingi b4 e poi b5: dopo il cambio in c6 resta un pedone debole.",
+  "Attacca il pedone debole con le torri sulla colonna c e con un cavallo in a4 o e5.",
+]

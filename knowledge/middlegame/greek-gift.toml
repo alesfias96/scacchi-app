@@ -1,0 +1,34 @@
+title = "Il sacrificio greco (l'alfiere in h7)"
+when = [
+  "middlegame:greek-gift",
+]
+summary = "Il sacrificio dell'alfiere in h7 (o h2) contro il re arroccato corto: dopo la presa, il cavallo arriva in g5 e la donna in h5, e spesso è matto o si vince molto materiale."
+ideas = [
+  "Servono quattro cose: alfiere contro h7, cavallo pronto per g5, donna che arriva in h5, e nessun difensore in f6.",
+  "Dopo la presa dell'alfiere il re avversario ha tre case: in h8, g6 o g8, e per ognuna serve un seguito.",
+  "Un pedone in e5 che toglie f6 al cavallo avversario rende il sacrificio molto più forte.",
+]
+mistakes = [
+  "Sacrificare senza aver calcolato la risposta del re in g6.",
+  "Dimenticare che senza il cavallo in g5 l'attacco non c'è.",
+]
+use_when = [
+  "Le quattro condizioni ci sono tutte.",
+  "Il re avversario non può scappare verso il centro.",
+]
+avoid_when = [
+  "L'avversario può difendersi con il cavallo in f6 o con la donna in h4.",
+  "Il re avversario scappa in f7 e poi verso il centro.",
+]
+signs = [
+  "Dopo il sacrificio il re avversario è nudo e i tuoi pezzi arrivano per primi.",
+  "L'avversario deve restituire il pezzo per non subire il matto.",
+]
+[[plans]]
+for = "owner"
+label = "Chi sacrifica"
+steps = [
+  "Controlla che il cavallo avversario non possa difendere da f6 e che l'alfiere avversario non copra h7.",
+  "Calcola le tre risposte del re dopo la presa in h7.",
+  "Sacrifica solo se in ogni caso arrivi almeno a riprendere il materiale con attacco.",
+]

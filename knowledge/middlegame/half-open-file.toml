@@ -1,0 +1,34 @@
+title = "La colonna semiaperta"
+when = [
+  "middlegame:half-open-file",
+]
+summary = "Una colonna senza propri pedoni ma con un pedone avversario è semiaperta: le torri la usano per premere su quel pedone, spesso debole."
+ideas = [
+  "Si raddoppiano le torri sulla colonna semiaperta, a volte con la donna dietro.",
+  "Il pedone avversario sulla colonna diventa un bersaglio fisso, soprattutto se è arretrato o isolato.",
+  "Una colonna semiaperta verso il re avversario è un'arma d'attacco.",
+]
+mistakes = [
+  "Mettere una sola torre e lasciar perdere.",
+  "Dimenticare che anche l'avversario può usare le colonne semiaperte.",
+]
+use_when = [
+  "Sulla colonna c'è un pedone avversario debole.",
+  "Le tue torri non hanno altre colonne migliori.",
+]
+avoid_when = [
+  "L'avversario difende facilmente il pedone e intanto attacca altrove.",
+  "Il pedone può avanzare e cambiarsi, chiudendo la colonna.",
+]
+signs = [
+  "Il pedone avversario richiede sempre più difensori.",
+  "Le tue torri entrano nella posizione avversaria.",
+]
+[[plans]]
+for = "owner"
+label = "Chi usa la colonna semiaperta"
+steps = [
+  "Metti le torri sulla colonna, una dietro l'altra.",
+  "Attacca il pedone avversario anche con altri pezzi.",
+  "Se il pedone avanza, usa la casa che lascia libera.",
+]

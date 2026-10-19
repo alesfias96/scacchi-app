@@ -1,0 +1,81 @@
+/*
+ * Un piano strategico: per chi è, titolo, perché e, aprendolo, come si fa,
+ * quando sì, quando no e i segnali che funziona.
+ */
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.side {
+  color: var(--color-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.confirmed {
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-small);
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+}
+
+.title {
+  font-weight: var(--weight-semibold);
+}
+
+.why {
+  font-size: var(--text-small);
+  line-height: var(--leading-body);
+}
+
+.more {
+  font-size: var(--text-small);
+}
+
+.summary {
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.summary:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  line-height: var(--leading-body);
+}
+
+.heading {
+  margin-top: var(--space-1);
+  font-weight: var(--weight-bold);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+}

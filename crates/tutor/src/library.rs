@@ -69,6 +69,7 @@ mod tests {
     use super::{KNOWLEDGE_FILES, all_cards, belongs_to, card_for, opening_card};
     use crate::knowledge_card::KnowledgeCard;
     use crate::recognition::KNOWN_KEYS;
+    use crate::strategy_plans::STRATEGY_KEYS;
     use crate::topic::Topic;
 
     /// L'elenco delle aperture di Lichess, per controllare i nomi usati nelle schede.
@@ -123,8 +124,9 @@ mod tests {
                         trigger.key
                     );
                 } else {
+                    let key = (trigger.topic, trigger.key.as_str());
                     assert!(
-                        KNOWN_KEYS.contains(&(trigger.topic, trigger.key.as_str())),
+                        KNOWN_KEYS.contains(&key) || STRATEGY_KEYS.contains(&key),
                         "{}: il tutor non riconosce «{}»",
                         card.id,
                         trigger.key
@@ -138,6 +140,7 @@ mod tests {
     fn everything_the_tutor_recognizes_has_a_card() {
         let missing: HashSet<_> = KNOWN_KEYS
             .iter()
+            .chain(STRATEGY_KEYS)
             .filter(|(topic, key)| card_for(*topic, key).is_none())
             .collect();
 

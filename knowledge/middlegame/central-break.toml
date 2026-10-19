@@ -1,0 +1,34 @@
+title = "La rottura centrale"
+when = [
+  "middlegame:central-break",
+]
+summary = "Una spinta di pedone al centro che attacca i pedoni avversari apre linee e diagonali: è il modo classico di cambiare la posizione a proprio favore."
+ideas = [
+  "Si prepara la rottura con i pezzi: chi ha più pezzi pronti al centro guadagna dall'apertura.",
+  "Spesso la rottura si fa contro un pedone che l'avversario non può difendere con altri pedoni.",
+  "Prima di rompere conviene finire lo sviluppo e mettere il re al sicuro.",
+]
+mistakes = [
+  "Rompere troppo presto, prima di aver sviluppato i pezzi.",
+  "Rompere quando la posizione chiusa favoriva te.",
+]
+use_when = [
+  "Sei più sviluppato dell'avversario.",
+  "Dopo i cambi al centro i tuoi pezzi diventano più attivi.",
+]
+avoid_when = [
+  "Il tuo re è ancora al centro: aprire il gioco lo esporrebbe.",
+  "Dopo la rottura resterebbe a te un pedone debole.",
+]
+signs = [
+  "Si aprono colonne e diagonali verso la posizione avversaria.",
+  "I pezzi avversari restano indietro e non partecipano.",
+]
+[[plans]]
+for = "owner"
+label = "Chi prepara la rottura"
+steps = [
+  "Sostieni la casa della spinta con pezzi e pedoni.",
+  "Porta torri e donna sulle colonne che si apriranno.",
+  "Spingi il pedone quando i tuoi pezzi sono più attivi di quelli avversari.",
+]

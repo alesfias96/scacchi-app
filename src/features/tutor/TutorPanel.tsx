@@ -5,8 +5,12 @@
  * «Tutor» e «Allenamento» (il tasto T ci passa). Mostra:
  * - una piccola scacchiera con la posizione spiegata: passando il mouse su
  *   una frase, si vedono le case coinvolte;
+ * - «La strategia»: com'è il centro, chi ha cosa e i piani consigliati, con
+ *   perché, come, quando sì e quando no (vedi `strategy-section/`); dopo
+ *   «Guarda avanti» dice quali piani Stockfish conferma;
  * - la spiegazione divisa in parti (situazione, cosa succede adesso, piano,
- *   da ricordare) e le schede della base di conoscenza, da aprire;
+ *   da ricordare) e le schede della base di conoscenza, da aprire (anche
+ *   quelle dei piani);
  * - «Prova una mossa»: sulla piccola scacchiera si giocano mosse per conto
  *   proprio (anche per l'avversario) e per ognuna il tutor dice cosa cambia.
  *   La partita vera non cambia; «Torna alla posizione» chiude la prova;
@@ -33,6 +37,7 @@ import { useLoadedSettings } from '../../state/settingsStore';
 import { isTutorLocked, useTutorStore } from '../../state/tutorStore';
 import { KnowledgeCards } from '../../components/knowledge-cards/KnowledgeCards';
 import { PositionIdeasView } from './position-ideas/PositionIdeasView';
+import { StrategySection } from './strategy-section/StrategySection';
 import { TutorSections } from './tutor-sections/TutorSections';
 import styles from './TutorPanel.module.css';
 import { usePositionIdeas } from './usePositionIdeas';
@@ -92,6 +97,18 @@ export function TutorPanel() {
     setOpenCardId(cardId);
     document.getElementById(`tutor-card-${cardId}`)?.scrollIntoView({ block: 'nearest' });
   }, []);
+
+  /** Le schede da aprire: quelle della spiegazione e quelle dei piani, senza doppioni. */
+  const cards = useMemo(() => {
+    if (explanation === null) {
+      return [];
+    }
+    const known = new Set(explanation.cards.map((card) => card.id));
+    return [
+      ...explanation.cards,
+      ...explanation.strategy.cards.filter((card) => !known.has(card.id)),
+    ];
+  }, [explanation]);
 
   /** La posizione sulla piccola scacchiera: l'ultima mossa provata, o quella spiegata. */
   const lastScenario = whatIf === null ? null : (whatIf[whatIf.length - 1] ?? null);
@@ -200,6 +217,13 @@ export function TutorPanel() {
         </section>
       )}
 
+      {explanation !== null && !isTrying && (
+        <StrategySection
+          strategy={explanation.strategy}
+          confirmedPlans={lookAhead.ideas?.confirmedPlans ?? NO_MOVE_LIST}
+        />
+      )}
+
       {!isTrying && (
         <section className={styles.block} aria-label="Guarda avanti">
           <h3 className={styles.blockTitle}>Guarda avanti</h3>
@@ -247,14 +271,10 @@ export function TutorPanel() {
             onHighlight={setHighlighted}
             onOpenCard={openCard}
           />
-          {explanation.cards.length > 0 && (
+          {cards.length > 0 && (
             <section className={styles.block} aria-label="Approfondimenti">
               <h3 className={styles.blockTitle}>Approfondimenti</h3>
-              <KnowledgeCards
-                cards={explanation.cards}
-                openCardId={openCardId}
-                onToggle={setOpenCardId}
-              />
+              <KnowledgeCards cards={cards} openCardId={openCardId} onToggle={setOpenCardId} />
             </section>
           )}
         </>

@@ -178,7 +178,8 @@ app-scacchi/
 │   ├── analysis/               rilevatori: minacce, tattiche, struttura pedonale,
 │   │                           sicurezza del re, attività, materiale, fase di gioco
 │   ├── tutor/                  spiegazioni: riconosce strutture, finali, temi e principi, unisce
-│   │                           fatti e schede di knowledge/; scenari "e se…"
+│   │                           fatti e schede di knowledge/; scenari "e se…"; idee delle
+│   │                           varianti; strategia (squilibri e piani)
 │   ├── training/               puzzle: scelta, verifica delle mosse, rating Elo, ripasso (scatole)
 │   ├── review/                 analisi delle partite: giudizio delle mosse, precisione, momenti
 │   │                           critici, dati per le statistiche, puzzle dagli errori gravi
@@ -359,7 +360,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 9. Statistiche                    | ✅ completata                                             |
 | 10. Estensioni                    | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
 | 11. Appunti personali             | ✅ completata                                             |
-| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B e 12-C da fare                           |
+| 12. Il tutor che spiega il perché | 🔵 12-A ✅; 12-B in test; 12-C da fare                    |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -525,6 +526,10 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Modalità Tutor: dopo i commenti, in sottofondo, l'idea della tua ultima mossa (1,5 s per posizione, con la migliore se valeva almeno mezzo pedone in più) e le idee per continuare (3 s); nel pannello del tutor «Guarda avanti» (3 s) e «Pensa più a lungo» (15 s) | Il motore del tutor segue una richiesta alla volta; una mossa nuova annulla il calcolo vecchio                                                                                                                                                |
 | 2026-10-19 | «Guarda sulla scacchiera»: le scacchiere mostrano la variante (stato `ideaReplayStore`), i comandi stanno accanto all'idea nella colonna di destra                                                                                                                  | Nulla copre la scacchiera; si torna alla partita da soli appena la posizione cambia                                                                                                                                                           |
 | 2026-10-19 | Fase 12-A approvata                                                                                                                                                                                                                                                 | Test manuali superati                                                                                                                                                                                                                         |
+| 2026-10-19 | 12-B: «La strategia» = bilancio «Chi ha cosa» (crate `tutor`, `imbalances.rs`) + regole dei piani con punteggio (`strategy_plans.rs`); a chi muove al massimo due piani, più il piano dell'avversario; se il suo piano è forte, il primo diventa la profilassi      | Scelte 1A–4A approvate; i piani nascono da regole verificabili sulla scacchiera, non da ipotesi                                                                                                                                               |
+| 2026-10-19 | 28 schede nuove di strategia (23 di mediogioco, 5 di finale) con i campi facoltativi `use_when`, `avoid_when`, `signs`; le propone il tutor come piani, non i riconoscitori dei temi                                                                                | Spiegare quando usare una strategia e quando no                                                                                                                                                                                               |
+| 2026-10-19 | «Stockfish conferma»: un piano è confermato se nella variante migliore (dopo «Guarda avanti») c'è un evento dello stesso genere (es. rottura di pedone per la rottura centrale)                                                                                     | Collegare i piani generali allo sguardo lungo della 12-A                                                                                                                                                                                      |
+| 2026-10-19 | Modalità Tutor: scheda «Il piano» nella colonna di destra con l'etichetta «Piano nuovo» solo quando i piani cambiano; mentre il tutor prepara la posizione nuova resta il piano di prima                                                                            | Non ripetere a ogni mossa lo stesso consiglio                                                                                                                                                                                                 |
 
 ---
 
@@ -541,6 +546,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
+- **Fase 12 — Tutor che spiega il perché.** 12-A fatta e approvata; 12-B in test. Da valutare: evidenziare sulla scacchiera le case di un piano (i dati `squares` ci sono già), altre regole di piano man mano che Alessandro segnala posizioni dove il consiglio non torna. 12-C: tattica avanzata e metodo di pensiero.
 - **Fase 11 — Appunti personali.** Fatta (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 

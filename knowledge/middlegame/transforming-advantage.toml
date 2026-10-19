@@ -1,0 +1,34 @@
+title = "Trasformare il vantaggio"
+when = [
+  "middlegame:transforming-advantage",
+]
+summary = "Un vantaggio di un tipo (spazio, sviluppo, attacco) si trasforma in uno di un altro tipo più facile da far valere: materiale, un pedone passato, un finale vinto."
+ideas = [
+  "Un vantaggio temporaneo (sviluppo, iniziativa) va trasformato prima che sparisca.",
+  "Con un pedone in più si cambiano i pezzi e si va verso il finale.",
+  "Si sceglie la trasformazione che lascia meno controgioco all'avversario.",
+]
+mistakes = [
+  "Tenere un vantaggio temporaneo finché sparisce.",
+  "Semplificare in un finale che non si vince.",
+]
+use_when = [
+  "Sei in vantaggio ma la posizione può cambiare.",
+  "Il vantaggio attuale rischia di sparire.",
+]
+avoid_when = [
+  "Trasformando daresti controgioco all'avversario.",
+  "Il vantaggio attuale è già decisivo così com'è.",
+]
+signs = [
+  "Il vantaggio diventa stabile e semplice da far valere.",
+  "L'avversario non ha più occasioni tattiche.",
+]
+[[plans]]
+for = "owner"
+label = "Chi è in vantaggio"
+steps = [
+  "Capisci che tipo di vantaggio hai e se durerà.",
+  "Se è temporaneo, trasformalo: guadagna materiale o crea una debolezza fissa.",
+  "Se è materiale, semplifica e passa a un finale vinto.",
+]

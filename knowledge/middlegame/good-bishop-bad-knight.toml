@@ -1,0 +1,34 @@
+title = "L'alfiere buono contro il cavallo"
+when = [
+  "middlegame:good-bishop-bad-knight",
+]
+summary = "In una posizione aperta, con pedoni su tutte e due le ali, l'alfiere è più forte del cavallo: arriva lontano in una mossa, mentre il cavallo è lento."
+ideas = [
+  "L'alfiere controlla entrambe le ali; il cavallo ha bisogno di molte mosse per passare da un'ala all'altra.",
+  "Il cavallo è forte solo se ha avamposti; senza punti di appoggio è spesso il pezzo peggiore.",
+  "Nel finale, pedoni su due ali e un pedone passato sono il terreno ideale per l'alfiere.",
+]
+mistakes = [
+  "Chiudere la posizione con i propri pedoni.",
+  "Lasciare al cavallo un avamposto nel proprio campo.",
+]
+use_when = [
+  "La posizione è aperta o si sta aprendo.",
+  "Ci sono pedoni su tutte e due le ali.",
+]
+avoid_when = [
+  "La posizione è chiusa e il cavallo ha case stabili.",
+  "I pedoni sono tutti su un'ala sola: lì il cavallo vale quanto l'alfiere.",
+]
+signs = [
+  "Il cavallo avversario non trova case stabili.",
+  "L'alfiere attacca pedoni da lontano e l'avversario fatica a difenderli.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha l'alfiere"
+steps = [
+  "Apri la posizione e crea pedoni su tutte e due le ali.",
+  "Togli al cavallo gli avamposti spingendo i pedoni che li controllano.",
+  "Cambia i pezzi pesanti e vai verso il finale.",
+]

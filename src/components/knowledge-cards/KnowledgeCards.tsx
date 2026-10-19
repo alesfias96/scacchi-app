@@ -4,7 +4,8 @@
  * Cosa fa: mostra ogni scheda (apertura, struttura pedonale, tema di
  * mediogioco, finale, principio) chiusa, con il titolo e il perché vale qui.
  * Aprendola si leggono di cosa si tratta, le idee, i piani per ciascun
- * giocatore e gli errori tipici.
+ * giocatore, gli errori tipici e (per le schede di strategia) quando usarla,
+ * quando no e i segnali che sta funzionando.
  *
  * Riceve:
  * - `cards`: le schede;
@@ -20,6 +21,23 @@ export interface KnowledgeCardsProps {
   cards: readonly CardView[];
   openCardId: string | null;
   onToggle: (cardId: string | null) => void;
+}
+
+/** Un elenco con il suo titolo (niente, se l'elenco è vuoto). */
+function CardList({ title, items }: { title: string; items: readonly string[] }) {
+  if (items.length === 0) {
+    return null;
+  }
+  return (
+    <>
+      <h4 className={styles.heading}>{title}</h4>
+      <ul className={styles.list}>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </>
+  );
 }
 
 /** Il nome di ogni argomento, sopra il titolo della scheda. */
@@ -70,16 +88,10 @@ export function KnowledgeCards({ cards, openCardId, onToggle }: KnowledgeCardsPr
                 </ol>
               </div>
             ))}
-            {card.mistakes.length > 0 && (
-              <>
-                <h4 className={styles.heading}>Errori da evitare</h4>
-                <ul className={styles.list}>
-                  {card.mistakes.map((mistake) => (
-                    <li key={mistake}>{mistake}</li>
-                  ))}
-                </ul>
-              </>
-            )}
+            <CardList title="Quando usarlo" items={card.useWhen} />
+            <CardList title="Quando no" items={card.avoidWhen} />
+            <CardList title="Segnali che funziona" items={card.signs} />
+            <CardList title="Errori da evitare" items={card.mistakes} />
           </div>
         </details>
       ))}

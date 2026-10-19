@@ -16,3 +16,17 @@ Il formato delle schede è spiegato nel README della cartella `knowledge/`.
 | `rook-vs-minor.toml`      | Torre contro pezzo minore       | `rook-vs-minor`                                                  |
 | `mate-with-queen.toml`    | Il matto di re e donna          | `mate-with-queen`                                                |
 | `mate-with-rook.toml`     | Il matto di re e torre          | `mate-with-rook`                                                 |
+
+## Le schede di strategia (Fase 12-B)
+
+Queste schede non le riconosce un tema della scacchiera: le propone il tutor come **piani**,
+quando le regole di `crates/tutor/src/strategy_plans.rs` dicono che valgono (dagli squilibri della
+posizione). Hanno anche «Quando usarlo», «Quando no» e «Segnali che funziona».
+
+| File                       | Scheda                      | Chiave                |
+| -------------------------- | --------------------------- | --------------------- |
+| `outside-passed-pawn.toml` | Il pedone passato lontano   | `outside-passed-pawn` |
+| `choosing-endgame.toml`    | Scegliere il finale giusto  | `choosing-endgame`    |
+| `fortress.toml`            | La fortezza                 | `fortress`            |
+| `zugzwang-opposition.toml` | Lo zugzwang e l'opposizione | `zugzwang-opposition` |
+| `rule-of-square.toml`      | La regola del quadrato      | `rule-of-square`      |

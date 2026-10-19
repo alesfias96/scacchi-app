@@ -1,0 +1,34 @@
+title = "La maggioranza di pedoni su un'ala"
+when = [
+  "middlegame:pawn-majority",
+]
+summary = "Chi ha più pedoni su un'ala può crearsi un pedone passato: lo si fa avanzando con calma, spingendo per primo il pedone che non ha avversari davanti."
+ideas = [
+  "Si spinge prima il pedone libero (quello senza un pedone avversario sulla stessa colonna): è lui il candidato a diventare passato.",
+  "La maggioranza conta di più nel finale: con meno pezzi, il pedone passato diventa decisivo.",
+  "Una maggioranza sull'ala di donna è spesso più forte di una sull'ala di re, perché lontana dai re arroccati.",
+]
+mistakes = [
+  "Spingere per primo il pedone sbagliato, bloccando gli altri.",
+  "Avanzare troppo presto, quando i pedoni possono essere attaccati.",
+]
+use_when = [
+  "Hai più pedoni dell'avversario su un'ala e la posizione è calma.",
+  "Ci si avvicina al finale: meno pezzi ci sono, più vale.",
+]
+avoid_when = [
+  "Spingere i pedoni davanti al tuo re lo lascerebbe scoperto.",
+  "L'avversario ha un attacco sull'altra ala che arriva prima.",
+]
+signs = [
+  "Nasce un pedone passato che l'avversario deve bloccare con un pezzo.",
+  "I pezzi avversari diventano passivi per fermare i pedoni.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha la maggioranza"
+steps = [
+  "Spingi per primo il pedone candidato, sostenuto dagli altri.",
+  "Porta i pezzi (e nel finale il re) dietro ai pedoni che avanzano.",
+  "Cambia i pezzi: ogni cambio rende il futuro pedone passato più forte.",
+]

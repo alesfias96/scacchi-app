@@ -1,0 +1,42 @@
+title = "L'alfiere cattivo"
+when = [
+  "middlegame:bad-bishop",
+]
+summary = "Un alfiere è cattivo quando molti dei propri pedoni, soprattutto al centro, stanno sulle case del suo colore: si chiude la strada da solo e diventa poco più di un pedone."
+ideas = [
+  "Con l'alfiere cattivo si cerca di cambiarlo, oppure si spostano i pedoni sull'altro colore.",
+  "Contro un alfiere cattivo si fissano i pedoni avversari sulle sue case e si cambiano gli altri pezzi.",
+  "Un alfiere cattivo può essere utile in difesa: protegge i pedoni che gli stanno davanti.",
+]
+mistakes = [
+  "Mettere tutti i pedoni sulle case del proprio alfiere.",
+  "Cambiare l'alfiere buono e tenere quello cattivo.",
+]
+use_when = [
+  "La catena di pedoni è fissa e non si scioglierà presto.",
+  "I pedoni sono sulle case dello stesso colore dell'alfiere.",
+]
+avoid_when = [
+  "La posizione sta per aprirsi: l'alfiere tornerà buono.",
+  "L'alfiere cattivo è l'unico difensore di case importanti.",
+]
+signs = [
+  "L'alfiere ha pochissime mosse e non partecipa al gioco.",
+  "Nel finale il cavallo avversario domina l'alfiere.",
+]
+[[plans]]
+for = "opponent"
+label = "Chi gioca contro l'alfiere cattivo"
+steps = [
+  "Lascia i pedoni avversari fermi sulle case dell'alfiere (bloccali se serve).",
+  "Cambia gli altri pezzi, soprattutto l'alfiere buono dell'avversario.",
+  "Punta a un finale con cavallo buono contro alfiere cattivo.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha l'alfiere cattivo"
+steps = [
+  "Cerca di cambiarlo con un pezzo avversario.",
+  "Portalo fuori dalla catena dei pedoni, davanti a loro.",
+  "Sposta i pedoni sulle case dell'altro colore quando puoi.",
+]

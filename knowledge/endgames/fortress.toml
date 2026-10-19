@@ -1,0 +1,34 @@
+title = "La fortezza"
+when = [
+  "endgame:fortress",
+]
+summary = "Chi è sotto di materiale nel finale può a volte costruire una fortezza: una posizione in cui l'avversario, pur avendo di più, non riesce a entrare."
+ideas = [
+  "Una fortezza tiene chiuse tutte le porte: re e pezzi su case che l'avversario non può attaccare.",
+  "Gli alfieri di colore contrario sono il caso classico: il difensore blocca i pedoni sulle case del suo alfiere.",
+  "Si scambiano i pedoni avversari quando si può: meno pedoni restano, più facile è la patta.",
+]
+mistakes = [
+  "Difendersi passivamente senza una fortezza vera.",
+  "Lasciare che l'avversario crei un secondo pedone passato.",
+]
+use_when = [
+  "Sei sotto di materiale nel finale.",
+  "La posizione ha poche linee aperte.",
+]
+avoid_when = [
+  "L'avversario ha due pedoni passati lontani: lì le fortezze cadono.",
+  "Puoi ancora contrattaccare: a volte è meglio.",
+]
+signs = [
+  "L'avversario muove senza riuscire a fare progressi.",
+  "Si arriva alla regola delle cinquanta mosse o alla ripetizione.",
+]
+[[plans]]
+for = "owner"
+label = "Chi difende"
+steps = [
+  "Cambia più pedoni possibile.",
+  "Metti re e pezzi su case dove non possono essere attaccati.",
+  "Blocca i pedoni avversari sulle case del tuo alfiere.",
+]

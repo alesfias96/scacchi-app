@@ -79,6 +79,24 @@ pub fn file_name(file: File) -> char {
     file.char()
 }
 
+/// `true` se `square` è un avamposto per `color`: nella metà avversaria
+/// (traverse 4–6 viste da `color`), difeso da un proprio pedone e senza pedoni
+/// avversari che, avanzando, possano attaccarlo.
+#[must_use]
+pub fn is_outpost(board: &Board, square: Square, color: Color) -> bool {
+    let rank = relative_rank(square, color);
+    if !(4..=6).contains(&rank) {
+        return false;
+    }
+    let own = pieces(board, color, Role::Pawn);
+    let defended = (shakmaty::attacks::pawn_attacks(color.other(), square) & own).any();
+    let files = neighbour_files(square.file());
+    let chasers = pieces(board, color.other(), Role::Pawn)
+        .into_iter()
+        .any(|pawn| files.contains(&pawn.file()) && relative_rank(pawn, color) > rank);
+    defended && !chasers
+}
+
 #[cfg(test)]
 mod tests {
     use shakmaty::fen::Fen;

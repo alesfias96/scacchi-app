@@ -1,0 +1,34 @@
+title = "Cambiare per liberarsi dallo spazio"
+when = [
+  "middlegame:trades-against-space",
+]
+summary = "Chi ha meno spazio soffre perché i suoi pezzi non trovano posto: ogni cambio gli dà respiro, e una rottura di pedone può liberarlo del tutto."
+ideas = [
+  "In una posizione stretta i pezzi si ostacolano: con meno pezzi lo spazio basta per tutti.",
+  "La rottura di pedone giusta toglie all'avversario il vantaggio di spazio.",
+  "Non si spingono i pedoni a caso: si sceglie la rottura che apre linee ai propri pezzi.",
+]
+mistakes = [
+  "Restare passivi aspettando che l'avversario sbagli.",
+  "Spingere pedoni che creano nuove debolezze.",
+]
+use_when = [
+  "L'avversario ha molti più pedoni avanzati.",
+  "I tuoi pezzi non hanno case buone.",
+]
+avoid_when = [
+  "Il cambio lascia una debolezza grave nella tua posizione.",
+  "La rottura perde un pedone senza aprire linee.",
+]
+signs = [
+  "I tuoi pezzi trovano case migliori dopo ogni cambio.",
+  "Il centro avversario comincia a scricchiolare.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha meno spazio"
+steps = [
+  "Proponi cambi dei pezzi, soprattutto di quelli più attivi dell'avversario.",
+  "Prepara la rottura di pedone che attacca il suo centro.",
+  "Tieni i pezzi compatti, pronti a usare le linee che si aprono.",
+]

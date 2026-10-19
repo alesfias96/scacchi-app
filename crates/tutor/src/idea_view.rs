@@ -93,6 +93,9 @@ pub struct PositionIdeas {
     pub ideas: Vec<IdeaView>,
     /// Perché la prima idea è preferibile alle altre, se ce ne sono più d'una.
     pub comparison: Option<String>,
+    /// I piani della strategia (le loro schede, es. `"middlegame/minority-attack"`) che
+    /// la variante migliore di Stockfish conferma.
+    pub confirmed_plans: Vec<String>,
 }
 
 /// L'idea della mossa appena giocata e, se Stockfish preferiva altro, quella migliore.

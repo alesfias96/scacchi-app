@@ -1,0 +1,34 @@
+title = "Le case deboli (i buchi)"
+when = [
+  "middlegame:weak-squares",
+]
+summary = "Una casa che nessun pedone può più difendere è una casa debole: se è vicino al re o al centro, un pezzo avversario che ci arriva diventa fortissimo."
+ideas = [
+  "Una casa debole nasce quando i pedoni vicini sono avanzati o sono stati cambiati: i pedoni non tornano indietro.",
+  "Il pezzo migliore per occupare una casa debole è il cavallo: non può essere cacciato e controlla molte case.",
+  "Le case deboli intorno al re sono porte d'ingresso per l'attacco.",
+]
+mistakes = [
+  "Creare case deboli nella propria posizione spingendo pedoni senza motivo.",
+  "Occupare la casa con il pezzo sbagliato, facile da cambiare.",
+]
+use_when = [
+  "L'avversario ha spinto i pedoni davanti al re o al centro.",
+  "Hai un pezzo che può arrivare sulla casa in poche mosse.",
+]
+avoid_when = [
+  "L'avversario può cambiare subito il pezzo che arriva sulla casa.",
+  "La casa è debole ma lontana da tutto: non serve.",
+]
+signs = [
+  "Un tuo pezzo occupa la casa e non può essere cacciato.",
+  "I pezzi avversari devono restare a guardia invece di giocare.",
+]
+[[plans]]
+for = "owner"
+label = "Chi sfrutta le case deboli"
+steps = [
+  "Individua la casa debole più importante (vicino al re o al centro).",
+  "Porta un cavallo o un altro pezzo su quella casa.",
+  "Cambia i pezzi avversari che potrebbero difenderla.",
+]

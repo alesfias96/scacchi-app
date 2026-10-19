@@ -1,0 +1,34 @@
+title = "Il complesso di case di un colore"
+when = [
+  "middlegame:color-complex",
+]
+summary = "Quando un giocatore perde l'alfiere di un colore e ha i pedoni sull'altro colore, le case del colore rimasto senza alfiere diventano tutte deboli insieme."
+ideas = [
+  "Senza l'alfiere delle case scure (o chiare) nessun pezzo leggero difende bene quelle case.",
+  "Chi attacca porta donna, cavallo e alfiere proprio su quelle case, soprattutto vicino al re.",
+  "I pedoni del difensore, se stanno sull'altro colore, non aiutano: le case deboli restano tali.",
+]
+mistakes = [
+  "Cambiare il proprio alfiere buono, quello del colore giusto.",
+  "Lasciare i propri pedoni sulle case del proprio alfiere, creando lo stesso problema.",
+]
+use_when = [
+  "L'avversario ha cambiato o perso l'alfiere di un colore.",
+  "Le case di quel colore intorno al suo re sono vuote.",
+]
+avoid_when = [
+  "Il tuo alfiere di quel colore non c'è più: le case non le sfrutta nessuno.",
+  "L'avversario può chiudere le case con i pedoni.",
+]
+signs = [
+  "I tuoi pezzi si piazzano stabilmente sulle case di quel colore.",
+  "Il re avversario ha sempre meno case libere.",
+]
+[[plans]]
+for = "owner"
+label = "Chi sfrutta il complesso"
+steps = [
+  "Tieni il tuo alfiere dello stesso colore delle case deboli: è il pezzo più prezioso.",
+  "Porta la donna e un cavallo sulle case deboli vicino al re avversario.",
+  "Non cambiare quell'alfiere: è lui che domina le case.",
+]

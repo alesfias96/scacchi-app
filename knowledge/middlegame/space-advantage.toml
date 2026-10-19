@@ -1,0 +1,34 @@
+title = "Il vantaggio di spazio"
+when = [
+  "middlegame:space-advantage",
+]
+summary = "Chi ha più spazio ha più case per i suoi pezzi; l'avversario, stretto, fatica a spostarli e a difendersi. Lo spazio si sfrutta evitando i cambi e preparando una rottura."
+ideas = [
+  "Lo spazio si misura dalle case della metà avversaria controllate dai propri pedoni.",
+  "Con più spazio si evitano i cambi: ogni pezzo cambiato dà respiro all'avversario.",
+  "Lo spazio permette di spostare i pezzi da un'ala all'altra più in fretta dell'avversario.",
+]
+mistakes = [
+  "Cambiare i pezzi e lasciar respirare l'avversario.",
+  "Spingere i pedoni così avanti da non poterli più difendere.",
+]
+use_when = [
+  "I tuoi pedoni controllano molte case nella metà avversaria.",
+  "L'avversario non ha rotture di pedone pronte.",
+]
+avoid_when = [
+  "I pedoni avanzati diventano bersagli che non puoi difendere.",
+  "L'avversario ha una rottura che fa crollare il tuo centro.",
+]
+signs = [
+  "I pezzi avversari si ostacolano tra loro.",
+  "L'avversario non riesce a liberarsi con una spinta di pedone.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha più spazio"
+steps = [
+  "Non cambiare i pezzi senza motivo: lascia l'avversario stretto.",
+  "Prepara una rottura di pedone dove i tuoi pezzi sono più numerosi.",
+  "Sposta i pezzi verso l'ala dove l'avversario è più debole.",
+]

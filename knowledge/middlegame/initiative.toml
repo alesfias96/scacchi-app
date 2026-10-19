@@ -1,0 +1,34 @@
+title = "L'iniziativa e lo sviluppo"
+when = [
+  "middlegame:initiative",
+]
+summary = "Chi ha più pezzi in gioco deve agire subito: aprire il gioco, creare minacce, non dare tempo all'avversario di finire lo sviluppo."
+ideas = [
+  "Il vantaggio di sviluppo è temporaneo: se non lo usi, sparisce.",
+  "L'iniziativa si mantiene con mosse che minacciano qualcosa, costringendo l'avversario a rispondere.",
+  "Un re rimasto al centro è il bersaglio naturale dell'iniziativa.",
+]
+mistakes = [
+  "Giocare mosse tranquille e lasciar finire lo sviluppo all'avversario.",
+  "Andare a prendere pedoni invece di attaccare.",
+]
+use_when = [
+  "L'avversario ha ancora due o più pezzi da sviluppare.",
+  "Il suo re è ancora al centro.",
+]
+avoid_when = [
+  "Aprire il gioco esporrebbe anche il tuo re.",
+  "L'avversario può semplificare con cambi forzati.",
+]
+signs = [
+  "L'avversario risponde solo alle tue minacce e non sviluppa.",
+  "Il suo re non riesce ad arroccare.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha l'iniziativa"
+steps = [
+  "Apri il centro con una rottura di pedone.",
+  "Gioca mosse con minacce: scacchi, attacchi ai pezzi, inchiodature.",
+  "Porta le torri sulle colonne centrali aperte.",
+]

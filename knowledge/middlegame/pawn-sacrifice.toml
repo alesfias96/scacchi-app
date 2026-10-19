@@ -1,0 +1,34 @@
+title = "Il sacrificio posizionale di pedone"
+when = [
+  "middlegame:pawn-sacrifice",
+]
+summary = "Si dà un pedone non per un attacco immediato ma per qualcosa di duraturo: sviluppo, linee aperte, una casa importante o il re avversario bloccato al centro."
+ideas = [
+  "Un pedone vale meno di due o tre tempi di sviluppo quando il re avversario è ancora al centro.",
+  "Il compenso deve essere concreto: colonne aperte, pezzi attivi, l'avversario che non riesce ad arroccare.",
+  "Se il compenso svanisce, resta solo un pedone in meno: bisogna sfruttarlo in fretta.",
+]
+mistakes = [
+  "Sacrificare e poi giocare lentamente.",
+  "Dare il pedone in una posizione chiusa.",
+]
+use_when = [
+  "Sei molto più sviluppato e il re avversario è al centro.",
+  "Il pedone apre colonne o diagonali decisive.",
+]
+avoid_when = [
+  "L'avversario può restituire il pedone e liberarsi.",
+  "I tuoi pezzi non sono pronti ad approfittare delle linee aperte.",
+]
+signs = [
+  "L'avversario non riesce ad arroccare né a sviluppare.",
+  "I tuoi pezzi dominano le linee aperte.",
+]
+[[plans]]
+for = "owner"
+label = "Chi sacrifica il pedone"
+steps = [
+  "Dai il pedone per aprire linee verso il re o per guadagnare tempo.",
+  "Usa subito i tempi guadagnati: sviluppa e attacca.",
+  "Non cercare di riprendere il pedone a tutti i costi: conta l'iniziativa.",
+]

@@ -11,13 +11,13 @@ Italiana").
 
 ## Contenuto
 
-| Cartella      | Cosa contiene                                                    |
-| ------------- | ---------------------------------------------------------------- |
-| `principles/` | I principi generali (sviluppo, re al sicuro, centro, torri, …)   |
-| `structures/` | Le strutture pedonali (isolano, Carlsbad, catene, …)             |
-| `openings/`   | Le aperture più giocate, con le idee per il Bianco e per il Nero |
-| `middlegame/` | I temi del mediogioco (arrocchi opposti, avamposti, torre in 7ª) |
-| `endgames/`   | I tipi di finale (pedoni, torre, alfieri di colore contrario, …) |
+| Cartella      | Cosa contiene                                                                                      |
+| ------------- | -------------------------------------------------------------------------------------------------- |
+| `principles/` | I principi generali (sviluppo, re al sicuro, centro, torri, …)                                     |
+| `structures/` | Le strutture pedonali (isolano, Carlsbad, catene, …)                                               |
+| `openings/`   | Le aperture più giocate, con le idee per il Bianco e per il Nero                                   |
+| `middlegame/` | I temi e i piani del mediogioco (arrocchi opposti, avamposti, attacco di minoranza, profilassi, …) |
+| `endgames/`   | I tipi di finale (pedoni, torre, …) e i loro piani (regola del quadrato, fortezza, …)              |
 
 ## Com'è fatta una scheda
 
@@ -27,6 +27,9 @@ when = ["structure:isolated-queen-pawn"]      # quando vale
 summary = "Una o due frasi: di cosa si tratta."
 ideas = ["Prima idea.", "Seconda idea."]
 mistakes = ["Un errore tipico da evitare."]
+use_when = ["Quando conviene."]                # facoltativo: «Quando usarlo»
+avoid_when = ["Quando no."]                    # facoltativo: «Quando no»
+signs = ["Un segnale che sta funzionando."]    # facoltativo: «Segnali che funziona»
 
 [[plans]]                                    # un piano (se ne possono scrivere più di uno)
 for = "owner"                                # per chi: white, black, owner, opponent, both
@@ -39,6 +42,8 @@ steps = ["Primo passo.", "Secondo passo."]
   altri argomenti è una chiave che il tutor sa riconoscere (vedi il README di ogni cartella).
 - `owner` / `opponent`: chi "ha" la cosa riconosciuta e il suo avversario. Il tutor scrive il
   colore giusto, ad esempio "Chi ha l'isolano (il Bianco)".
+- `use_when`, `avoid_when`, `signs`: le usano soprattutto le schede di strategia (Fase 12-B), che
+  il tutor propone come piani; si possono lasciare fuori.
 - Le virgolette dentro i testi si scrivono «così».
 
 ## Aggiungere o modificare una scheda

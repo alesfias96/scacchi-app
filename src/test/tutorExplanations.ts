@@ -4,6 +4,7 @@
  * La posizione è quella iniziale, con una spiegazione corta e una scheda.
  */
 import type { Fact } from '../bindings/Fact';
+import type { StrategyView } from '../bindings/StrategyView';
 import type { TutorExplanation } from '../bindings/TutorExplanation';
 import type { WhatIfView } from '../bindings/WhatIfView';
 
@@ -13,6 +14,40 @@ const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 function fact(text: string, squares: string[] = []): Fact {
   return { category: 'activity', side: 'white', text, squares, arrows: [], moves: [] };
 }
+
+/** Una strategia di prova: un piano per il Bianco e uno per il Nero. */
+export const STRATEGY: StrategyView = {
+  center: 'Centro mobile: i pedoni centrali possono ancora muoversi o cambiarsi.',
+  imbalances: [
+    { side: 'white', text: 'più spazio (9 case contro 4)', squares: [] },
+    { side: 'black', text: 'la coppia degli alfieri', squares: [] },
+  ],
+  plans: [
+    {
+      key: 'middlegame/minority-attack',
+      side: 'white',
+      title: "L'attacco di minoranza",
+      why: 'Hai 2 pedoni sull’ala di donna contro 3.',
+      how: ['Spingi b4 e poi b5.'],
+      useWhen: ['Il centro è stabile.'],
+      avoidWhen: ['Il tuo re è sotto attacco.'],
+      signs: ['L’avversario ha un pedone debole.'],
+      squares: [],
+    },
+  ],
+  opponentPlan: {
+    key: 'middlegame/pawn-majority',
+    side: 'black',
+    title: "La maggioranza di pedoni su un'ala",
+    why: 'Il Nero ha la maggioranza sull’ala di donna.',
+    how: ['Spingi il pedone candidato.'],
+    useWhen: [],
+    avoidWhen: [],
+    signs: [],
+    squares: [],
+  },
+  cards: [],
+};
 
 export const START_EXPLANATION: TutorExplanation = {
   fen: START_FEN,
@@ -43,8 +78,12 @@ export const START_EXPLANATION: TutorExplanation = {
       ideas: ['I pedoni al centro danno spazio.'],
       plans: [{ label: 'Chi ha più pedoni al centro (il Bianco)', steps: ['Sostieni i pedoni.'] }],
       mistakes: ['Avanzare troppo presto.'],
+      useWhen: ['Sempre, in apertura.'],
+      avoidWhen: [],
+      signs: [],
     },
   ],
+  strategy: STRATEGY,
 };
 
 /** Lo scenario dopo 1.e4, con il giudizio di Stockfish. */

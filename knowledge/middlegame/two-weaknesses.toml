@@ -1,0 +1,34 @@
+title = "Il principio delle due debolezze"
+when = [
+  "middlegame:two-weaknesses",
+]
+summary = "Una sola debolezza si difende quasi sempre; due debolezze lontane tra loro no. Chi attacca crea una seconda debolezza sull'altra ala e sposta il gioco da una all'altra."
+ideas = [
+  "Si attacca la prima debolezza per legare i pezzi avversari alla sua difesa.",
+  "Poi si apre un secondo fronte sull'altra ala: i difensori non possono essere in due posti.",
+  "Il principio vale soprattutto nel finale, quando i pezzi sono pochi.",
+]
+mistakes = [
+  "Insistere solo sulla prima debolezza, ben difesa.",
+  "Aprire il secondo fronte troppo presto.",
+]
+use_when = [
+  "L'avversario ha già un pedone debole.",
+  "I tuoi pezzi sono più mobili dei suoi.",
+]
+avoid_when = [
+  "L'avversario ha un controgioco forte.",
+  "Aprire il secondo fronte indebolisce il tuo re.",
+]
+signs = [
+  "I pezzi avversari sono tutti legati alla difesa.",
+  "Alla fine l'avversario non riesce a coprire tutto e perde un pedone.",
+]
+[[plans]]
+for = "owner"
+label = "Chi sfrutta le debolezze"
+steps = [
+  "Attacca la prima debolezza con più pezzi di quanti la difendano.",
+  "Crea una seconda debolezza sull'altra ala (una rottura, un pedone passato).",
+  "Sposta i pezzi da un'ala all'altra più in fretta dell'avversario.",
+]

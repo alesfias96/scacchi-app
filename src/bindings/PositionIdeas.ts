@@ -16,4 +16,9 @@ ideas: Array<IdeaView>,
 /**
  * Perché la prima idea è preferibile alle altre, se ce ne sono più d'una.
  */
-comparison: string | null, };
+comparison: string | null, 
+/**
+ * I piani della strategia (le loro schede, es. `"middlegame/minority-attack"`) che
+ * la variante migliore di Stockfish conferma.
+ */
+confirmedPlans: Array<string>, };

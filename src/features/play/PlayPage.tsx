@@ -88,6 +88,7 @@ import { CoachPopup } from './coach/CoachPopup';
 import { useCoachMessages } from './coach/useCoachMessages';
 import { useCoachPopup } from './coach/useCoachPopup';
 import { CoachIdeasPanel } from './coach/CoachIdeasPanel';
+import { CoachPlanPanel } from './coach/CoachPlanPanel';
 import { useCoachIdeas } from './coach/useCoachIdeas';
 import { useIdeaReplayStore } from '../../state/ideaReplayStore';
 import styles from './PlayPage.module.css';
@@ -106,6 +107,8 @@ const SIDE_TABS: readonly TabOption<SideTab>[] = [
 
 /** Nessuna mossa possibile (quando non si può muovere). */
 const NO_MOVES: readonly LegalMove[] = [];
+/** Nessun piano confermato (finché Stockfish non ha guardato avanti). */
+const NO_PLANS: readonly string[] = [];
 
 export interface PlayPageProps {
   /** `true` nella modalità Tutor: dopo ogni mossa compaiono i commenti del tutor. */
@@ -501,6 +504,12 @@ export function PlayPage({ coached = false }: PlayPageProps) {
               <TutorPanel />
             ) : (
               <>
+                {coached && (
+                  <CoachPlanPanel
+                    strategy={coach.explanation?.strategy ?? null}
+                    confirmedPlans={coachIdeas.position?.confirmedPlans ?? NO_PLANS}
+                  />
+                )}
                 {coached && <CoachIdeasPanel ideas={coachIdeas} notation={notation} />}
                 {coached && (
                   <CoachPanel

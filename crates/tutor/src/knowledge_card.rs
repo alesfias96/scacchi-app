@@ -52,6 +52,15 @@ pub struct CardContent {
     /// Gli errori tipici da evitare.
     #[serde(default)]
     pub mistakes: Vec<String>,
+    /// Quando conviene seguire l'idea della scheda (soprattutto per i piani).
+    #[serde(default)]
+    pub use_when: Vec<String>,
+    /// Quando invece non conviene.
+    #[serde(default)]
+    pub avoid_when: Vec<String>,
+    /// I segnali che il piano sta funzionando.
+    #[serde(default)]
+    pub signs: Vec<String>,
 }
 
 /// Una scheda pronta da usare.

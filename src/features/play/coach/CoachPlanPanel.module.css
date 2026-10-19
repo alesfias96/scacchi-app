@@ -1,0 +1,11 @@
+/* «Il piano» della modalità Tutor: l'etichetta «Piano nuovo». */
+
+.badge {
+  align-self: flex-start;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-small);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+}

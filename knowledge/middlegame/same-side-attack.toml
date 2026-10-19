@@ -1,0 +1,34 @@
+title = "L'attacco al re con gli arrocchi dallo stesso lato"
+when = [
+  "middlegame:same-side-attack",
+]
+summary = "Quando i re sono arroccati dalla stessa parte, spingere i propri pedoni contro il re avversario apre anche il proprio: l'attacco si fa soprattutto con i pezzi."
+ideas = [
+  "I pezzi attaccano: donna, cavalli e alfieri puntati verso il re, una torre che arriva in terza traversa.",
+  "Una spinta di pedone (spesso h4–h5 o f4–f5) si fa solo se apre una colonna decisiva.",
+  "Un pezzo che difende il re avversario (spesso il cavallo in f6) è il bersaglio da cambiare o deviare.",
+]
+mistakes = [
+  "Spingere i pedoni davanti al proprio re.",
+  "Attaccare con troppo pochi pezzi.",
+]
+use_when = [
+  "Il re avversario ha pochi pedoni davanti o case deboli.",
+  "Hai più pezzi vicino al suo re di quanti lui ne abbia in difesa.",
+]
+avoid_when = [
+  "Il centro è aperto e l'avversario può contrattaccare lì.",
+  "Spingendo i pedoni scopriresti il tuo re più del suo.",
+]
+signs = [
+  "L'avversario deve spostare pezzi in difesa e perde l'iniziativa.",
+  "Si aprono linee verso il suo re.",
+]
+[[plans]]
+for = "owner"
+label = "Chi attacca"
+steps = [
+  "Porta tre o quattro pezzi verso il re avversario.",
+  "Elimina o allontana il suo difensore principale.",
+  "Spingi un pedone solo se apre una linea ai tuoi pezzi.",
+]

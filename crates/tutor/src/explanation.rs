@@ -19,6 +19,7 @@ use crate::evaluation_words::describe_evaluation;
 use crate::explanation_view::{CardView, TutorExplanation, TutorItem, TutorSection};
 use crate::library::{card_for, opening_card};
 use crate::recognition::{Recognition, recognize};
+use crate::strategy::describe_strategy;
 use crate::topic::Topic;
 use crate::tutor_error::TutorError;
 
@@ -222,6 +223,7 @@ pub fn explain(
         turn: side_to_move,
         sections,
         cards: cards(opening.as_ref(), &recognized),
+        strategy: describe_strategy(&position, report.phase, &recognized),
     })
 }
 

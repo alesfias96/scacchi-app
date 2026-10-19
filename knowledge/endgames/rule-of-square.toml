@@ -1,0 +1,34 @@
+title = "La regola del quadrato"
+when = [
+  "endgame:rule-of-square",
+]
+summary = "Per sapere se un re ferma un pedone passato si disegna un quadrato: dal pedone alla casa di promozione, e altrettante case di lato. Se il re entra nel quadrato, lo ferma."
+ideas = [
+  "Il lato del quadrato è lungo quanto le case che mancano al pedone per promuovere.",
+  "Se tocca al re muovere, basta che con una mossa entri nel quadrato.",
+  "Un pedone alla seconda traversa (quarta per il Nero) conta come se fosse già avanzato di una casa, per il doppio passo.",
+]
+mistakes = [
+  "Spingere il pedone quando il re avversario è già nel quadrato.",
+  "Dimenticare il doppio passo del pedone in partenza.",
+]
+use_when = [
+  "C'è un pedone passato e i pezzi sono pochi o assenti.",
+  "Devi decidere se spingere subito o aspettare.",
+]
+avoid_when = [
+  "Altri pezzi possono fermare il pedone: la regola vale per il re da solo.",
+  "Il re avversario ha ostacoli sulla strada (propri pedoni).",
+]
+signs = [
+  "Il re avversario resta fuori dal quadrato e non arriva.",
+  "Il pedone promuove senza che nessuno lo fermi.",
+]
+[[plans]]
+for = "both"
+label = "Con un pedone passato"
+steps = [
+  "Disegna il quadrato del pedone fino alla promozione.",
+  "Se il re avversario è fuori dal quadrato, spingi: il pedone promuove.",
+  "Se è dentro, porta il tuo re ad aiutare il pedone.",
+]

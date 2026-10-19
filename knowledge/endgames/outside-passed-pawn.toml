@@ -1,0 +1,34 @@
+title = "Il pedone passato lontano"
+when = [
+  "endgame:outside-passed-pawn",
+]
+summary = "Un pedone passato lontano dagli altri pedoni (e dai re) è un'arma decisiva nel finale: il re avversario deve andarlo a fermare, lasciando liberi gli altri pedoni."
+ideas = [
+  "Il pedone lontano fa da esca: attira il re avversario da una parte.",
+  "Mentre il re avversario lo insegue, il tuo re va a mangiare i pedoni dall'altra parte.",
+  "Nei finali di pedoni un pedone passato lontano vale spesso la vittoria.",
+]
+mistakes = [
+  "Spingere il pedone troppo presto, quando il re avversario è vicino.",
+  "Dimenticare il proprio re lontano dagli altri pedoni.",
+]
+use_when = [
+  "Sei nel finale con pochi pezzi.",
+  "Il tuo pedone passato è lontano dai re.",
+]
+avoid_when = [
+  "Il re avversario è già davanti al pedone e gli altri tuoi pedoni sono deboli.",
+  "Spingerlo ora lo farebbe solo catturare.",
+]
+signs = [
+  "Il re avversario si allontana dal centro.",
+  "Il tuo re entra tra i pedoni avversari.",
+]
+[[plans]]
+for = "owner"
+label = "Chi ha il pedone lontano"
+steps = [
+  "Spingi il pedone lontano quanto basta per attirare il re avversario.",
+  "Porta il tuo re verso gli altri pedoni.",
+  "Mangia i pedoni avversari e promuovi.",
+]

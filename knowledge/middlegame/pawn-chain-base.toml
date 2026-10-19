@@ -1,0 +1,34 @@
+title = "La catena di pedoni: attaccare la base"
+when = [
+  "middlegame:pawn-chain-base",
+]
+summary = "Una catena di pedoni si attacca alla base, il pedone più arretrato: è l'unico che non è difeso da altri pedoni. Caduta la base, tutta la catena diventa debole."
+ideas = [
+  "Nella Francese (pedoni bianchi d4 ed e5) il Nero attacca la base d4 con c5; il Bianco attacca la base e6 con f4–f5.",
+  "La testa della catena è difesa dal pedone dietro: attaccarla serve a poco.",
+  "Si attacca la base con un pedone, poi la si mette sotto pressione con i pezzi.",
+]
+mistakes = [
+  "Attaccare la testa della catena invece della base.",
+  "Spingere i pedoni senza il sostegno dei pezzi.",
+]
+use_when = [
+  "C'è una catena di pedoni bloccata.",
+  "La base è raggiungibile con una spinta.",
+]
+avoid_when = [
+  "Attaccare la base apre il gioco verso il tuo re.",
+  "L'avversario può difendere la base con molti pezzi.",
+]
+signs = [
+  "La base deve essere difesa da pezzi e diventa un peso.",
+  "Dopo il cambio della base la catena crolla.",
+]
+[[plans]]
+for = "both"
+label = "Contro una catena"
+steps = [
+  "Trova la base della catena avversaria (il pedone più arretrato).",
+  "Attaccala con una spinta di pedone.",
+  "Aumenta la pressione con pezzi sulla stessa colonna o diagonale.",
+]

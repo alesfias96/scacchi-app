@@ -49,6 +49,9 @@ pub fn card_view(card: &KnowledgeCard, context: String, owner: Option<Color>) ->
             })
             .collect(),
         mistakes: written.mistakes.clone(),
+        use_when: written.use_when.clone(),
+        avoid_when: written.avoid_when.clone(),
+        signs: written.signs.clone(),
     }
 }
 

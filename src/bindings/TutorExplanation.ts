@@ -2,6 +2,7 @@
 import type { CardView } from "./CardView";
 import type { PositionView } from "./PositionView";
 import type { Side } from "./Side";
+import type { StrategyView } from "./StrategyView";
 import type { TutorSection } from "./TutorSection";
 
 /**
@@ -27,4 +28,8 @@ sections: Array<TutorSection>,
 /**
  * Le schede che riguardano la posizione: apertura, struttura, temi, finale, principi.
  */
-cards: Array<CardView>, };
+cards: Array<CardView>, 
+/**
+ * La strategia: com'è il centro, chi ha cosa, i piani consigliati.
+ */
+strategy: StrategyView, };

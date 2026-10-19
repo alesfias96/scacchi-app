@@ -3,6 +3,7 @@
 use analysis::Fact;
 use chess_core::{PositionView, Side};
 
+use crate::strategy_view::StrategyView;
 use crate::topic::Topic;
 
 /// Una frase della spiegazione, con le case da evidenziare (dentro `fact`)
@@ -76,6 +77,12 @@ pub struct CardView {
     pub plans: Vec<PlanView>,
     /// Gli errori tipici.
     pub mistakes: Vec<String>,
+    /// Quando usarlo.
+    pub use_when: Vec<String>,
+    /// Quando no.
+    pub avoid_when: Vec<String>,
+    /// I segnali che funziona.
+    pub signs: Vec<String>,
 }
 
 /// La spiegazione completa di una posizione.
@@ -97,4 +104,6 @@ pub struct TutorExplanation {
     pub sections: Vec<TutorSection>,
     /// Le schede che riguardano la posizione: apertura, struttura, temi, finale, principi.
     pub cards: Vec<CardView>,
+    /// La strategia: com'è il centro, chi ha cosa, i piani consigliati.
+    pub strategy: StrategyView,
 }

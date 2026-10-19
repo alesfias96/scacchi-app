@@ -1,0 +1,34 @@
+title = "Quando cambiare i pezzi (e quando no)"
+when = [
+  "middlegame:when-to-trade",
+]
+summary = "I cambi non sono mai neutri: aiutano chi ha più materiale, chi ha meno spazio e chi ha il pezzo migliore che resta. Chi è in svantaggio li evita."
+ideas = [
+  "Chi è avanti di materiale cambia i pezzi (non i pedoni): con meno pezzi il vantaggio pesa di più.",
+  "Chi è indietro evita i cambi e cerca complicazioni: più pezzi ci sono, più occasioni ha.",
+  "Si cambia volentieri il pezzo attivo dell'avversario con un proprio pezzo passivo.",
+]
+mistakes = [
+  "Cambiare per abitudine, senza chiedersi a chi giova.",
+  "Cambiare i pedoni invece dei pezzi quando si è avanti.",
+]
+use_when = [
+  "Devi decidere se accettare o proporre uno scambio.",
+  "Il materiale o lo spazio sono sbilanciati.",
+]
+avoid_when = [
+  "Il cambio ti fa perdere una casa o una colonna importante.",
+  "Dopo il cambio il pezzo avversario rimasto è molto più forte del tuo.",
+]
+signs = [
+  "Dopo i cambi i tuoi pezzi rimasti sono più attivi di quelli avversari.",
+  "Il vantaggio (se lo hai) diventa più facile da far valere.",
+]
+[[plans]]
+for = "owner"
+label = "Chi è sotto di materiale"
+steps = [
+  "Evita i cambi di pezzi.",
+  "Cerca posizioni complicate, con attacchi e tattiche.",
+  "Se proprio cambi, tieni i pezzi che danno più gioco.",
+]

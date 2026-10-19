@@ -1,0 +1,34 @@
+title = "Scegliere il finale giusto"
+when = [
+  "endgame:choosing-endgame",
+]
+summary = "Quando si è in vantaggio, non tutti i finali sono uguali: alcuni si vincono facilmente, altri sono patti anche con un pedone in più. Si sceglie cosa cambiare."
+ideas = [
+  "Con un pedone in più i finali di pedoni sono spesso vinti; quelli con alfieri di colore contrario spesso patti.",
+  "I finali di torre sono i più frequenti e i più difficili da vincere: la torre attiva conta moltissimo.",
+  "Si cambiano i pezzi che l'avversario usa meglio, e si tiene quello più adatto alla struttura.",
+]
+mistakes = [
+  "Cambiare tutto per abitudine e finire in un finale patto.",
+  "Andare negli alfieri di colore contrario con un pedone in più.",
+]
+use_when = [
+  "Sei in vantaggio e i pezzi sono pochi.",
+  "Puoi scegliere tra più cambi.",
+]
+avoid_when = [
+  "Sei tu a difenderti: allora cerca proprio i finali patti.",
+  "Il cambio ti fa perdere il pedone in più.",
+]
+signs = [
+  "Il finale che resta ha un piano di vittoria chiaro.",
+  "L'avversario non ha controgioco.",
+]
+[[plans]]
+for = "owner"
+label = "Chi è in vantaggio"
+steps = [
+  "Prima di ogni cambio chiediti: il finale che resta si vince?",
+  "Evita gli alfieri di colore contrario se sei tu ad attaccare.",
+  "Tieni la torre attiva e i pedoni su tutte e due le ali.",
+]

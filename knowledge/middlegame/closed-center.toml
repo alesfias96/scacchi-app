@@ -1,0 +1,34 @@
+title = "Il centro chiuso: si gioca sulle ali"
+when = [
+  "middlegame:closed-center",
+]
+summary = "Quando i pedoni centrali sono bloccati, al centro non si passa: ognuno attacca sull'ala verso cui punta la propria catena di pedoni."
+ideas = [
+  "La catena di pedoni indica la direzione: si attacca dalla parte verso cui i pedoni puntano.",
+  "Con il centro chiuso il re può restare al centro più a lungo e gli attacchi sulle ali sono più lenti ma più sicuri.",
+  "Chi arriva prima con la rottura di pedone sull'ala di solito ha l'iniziativa.",
+]
+mistakes = [
+  "Cercare di sfondare al centro chiuso.",
+  "Attaccare sull'ala sbagliata, contro la direzione della catena.",
+]
+use_when = [
+  "I pedoni centrali sono bloccati e non si cambieranno presto.",
+  "Hai una rottura di pedone sull'ala.",
+]
+avoid_when = [
+  "L'avversario può riaprire il centro con una spinta.",
+  "Il tuo attacco sull'ala è molto più lento del suo.",
+]
+signs = [
+  "La tua rottura sull'ala apre una colonna.",
+  "I pezzi avversari arrivano tardi a difendere.",
+]
+[[plans]]
+for = "owner"
+label = "Chi gioca con il centro chiuso"
+steps = [
+  "Guarda verso quale ala punta la tua catena di pedoni.",
+  "Prepara lì una spinta di pedone (ad esempio c4–c5 o f4–f5).",
+  "Porta i pezzi su quell'ala prima della spinta.",
+]

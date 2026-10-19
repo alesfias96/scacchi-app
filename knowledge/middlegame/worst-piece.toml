@@ -1,0 +1,34 @@
+title = "Il pezzo peggiore"
+when = [
+  "middlegame:worst-piece",
+]
+summary = "Quando non c'è niente di urgente, il miglior piano è migliorare il pezzo che sta peggio: quello con meno mosse, che non partecipa al gioco."
+ideas = [
+  "La forza di una posizione dipende dal pezzo più debole: un pezzo passivo è quasi un pezzo in meno.",
+  "Si cerca per quel pezzo una casa dove abbia più mosse e collabori con gli altri.",
+  "Spesso il pezzo peggiore è un alfiere chiuso dai propri pedoni, o un cavallo sul bordo.",
+]
+mistakes = [
+  "Muovere sempre gli stessi pezzi già attivi.",
+  "Lasciare un pezzo inattivo fino al finale.",
+]
+use_when = [
+  "La posizione è tranquilla e non ci sono minacce.",
+  "Un tuo pezzo ha pochissime mosse.",
+]
+avoid_when = [
+  "C'è una minaccia avversaria da fermare subito.",
+  "C'è un'occasione tattica da sfruttare prima che sparisca.",
+]
+signs = [
+  "Tutti i tuoi pezzi partecipano al gioco.",
+  "Le tue mosse diventano più facili da trovare.",
+]
+[[plans]]
+for = "owner"
+label = "Chi migliora il pezzo peggiore"
+steps = [
+  "Trova il tuo pezzo con meno mosse.",
+  "Cerca una casa migliore per lui (al centro, su un avamposto, su una colonna aperta).",
+  "Portalo lì anche in più mosse, se l'avversario non ha minacce.",
+]
