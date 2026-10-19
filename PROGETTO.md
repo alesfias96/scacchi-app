@@ -338,21 +338,21 @@ o in un modulo `tests` nello stesso file (Rust).
 
 ## 9. Stato di avanzamento
 
-| Fase                            | Stato                                     |
-| ------------------------------- | ----------------------------------------- |
-| 1. Fondamenta                   | ✅ completata                             |
-| 1-bis. Temi e personalizzazione | ✅ completata                             |
-| 2. Regole e partita             | ✅ completata                             |
-| 3. Motore                       | ✅ completata                             |
-| 4. Database                     | ✅ completata                             |
-| 5. Analisi                      | ✅ completata                             |
-| 6. Allenamento calcolo          | ✅ completata                             |
-| 7. Tutor                        | ✅ completata                             |
-| 8. Analisi partite              | ✅ completata                             |
-| 8-bis. Varianti                 | ✅ completata                             |
-| 9. Statistiche                  | ✅ completata                             |
-| 10. Estensioni                  | 🔵 10-A Maia in test; 10-B e 10-C da fare |
-| 11. Appunti personali           | ⚪ da fare                                |
+| Fase                            | Stato                                |
+| ------------------------------- | ------------------------------------ |
+| 1. Fondamenta                   | ✅ completata                        |
+| 1-bis. Temi e personalizzazione | ✅ completata                        |
+| 2. Regole e partita             | ✅ completata                        |
+| 3. Motore                       | ✅ completata                        |
+| 4. Database                     | ✅ completata                        |
+| 5. Analisi                      | ✅ completata                        |
+| 6. Allenamento calcolo          | ✅ completata                        |
+| 7. Tutor                        | ✅ completata                        |
+| 8. Analisi partite              | ✅ completata                        |
+| 8-bis. Varianti                 | ✅ completata                        |
+| 9. Statistiche                  | ✅ completata                        |
+| 10. Estensioni                  | 🔵 10-A Maia ✅; 10-B e 10-C da fare |
+| 11. Appunti personali           | ⚪ da fare                           |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -492,6 +492,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Il motore del computer (`ComputerEngine`: Stockfish o Maia) affianca `OpponentKind`; Maia ha il suo livello (`maiaLevel`, 1–9) ricordato a parte; migrazione 0004 aggiunge `games.engine`        | Il livello 5 di Stockfish e quello di Maia sono diversi; le partite già salvate restano Stockfish; i filtri «contro il computer» includono entrambi                                                                                           |
 | 2026-10-19 | Nella sessione due richieste distinte: `engine_request` (Stockfish) e `maia_request` (Maia, calcolata su un filo a parte con `spawn_blocking`)                                                   | Stockfish resta com'era, con i suoi test; Maia non blocca l'app                                                                                                                                                                               |
 | 2026-10-19 | Nelle statistiche Elo stimato e risultati per livello contano Stockfish e Maia insieme, i livelli in ordine di Elo                                                                               | Ogni livello ha un Elo indicativo: l'Elo di rendimento vale per entrambi                                                                                                                                                                      |
+| 2026-10-19 | Fase 10-A approvata                                                                                                                                                                              | Test manuali superati                                                                                                                                                                                                                         |
 
 ---
 
@@ -507,7 +508,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8 — Analisi partite.** Fatta (vedi registro §10).
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
-- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta, in test. 10-B distribuzione: CSP restrittiva, installatori dalla CI senza firma a pagamento, aggiornamenti con `tauri-plugin-updater` da GitHub Releases (chiave gratuita). 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
+- **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: CSP restrittiva, installatori dalla CI senza firma a pagamento, aggiornamenti con `tauri-plugin-updater` da GitHub Releases (chiave gratuita). 10-C AI locale facoltativa tramite Ollama, che riscrive i fatti senza valutare mosse. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
 - **Fase 11 — Appunti personali.** Richiesta di Alessandro, da fare alla fine: note libere (idee, pensieri, studio), salvate nel database della Fase 4, con ricerca; collegabili a una partita o a una posizione.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
