@@ -4,8 +4,9 @@
  * Cosa fa: chiede a Rust la partita in corso e la mostra. A sinistra la
  * scacchiera (con i giocatori, l'orologio e, se accesa, la barra di
  * valutazione accanto), grande quanto permette la finestra e sempre tutta
- * visibile; a destra la colonna "Partita" con tutte le schede, sempre aperta
- * e con il suo scorrimento interno. Si muovono i pezzi
+ * visibile; a destra la colonna "Partita", alta quanto la scacchiera e con il
+ * suo scorrimento interno: in cima un selettore passa da «Partita» (tutte le
+ * schede) a «Tutor» (la spiegazione della posizione). Si muovono i pezzi
  * trascinandoli o con due clic; sono permesse solo le mosse legali (arrocco,
  * presa en passant e promozione compresi), e solo quando Rust dice che si può
  * (ad esempio non mentre pensa il computer).
@@ -22,16 +23,17 @@
  * partita (dall'archivio o all'avvio) il proprio colore va in basso.
  * Le frecce ←/→ e i tasti Home/Fine scorrono la partita. Ogni mossa ha il suo
  * suono (mossa, presa, fine partita), se i suoni sono attivi nelle Impostazioni.
- * Il tutor (tasto T) spiega la posizione mostrata; contro il computer, a
- * partita in corso, resta spento finché non lo si accende comunque.
+ * La voce «Tutor» (o il tasto T) spiega la posizione mostrata; contro il
+ * computer, a partita in corso, resta spento finché non lo si accende comunque.
  *
  * Tutte le regole sono applicate da Rust: questa pagina invia le richieste e
  * mostra la partita aggiornata che riceve (anche quando cambia da sola, per
  * una mossa del computer o il tempo scaduto).
  *
  * Con `coached` la stessa pagina diventa la sezione **Tutor** del menu: dopo
- * ogni mossa il tutor la commenta con dei messaggi sopra la scacchiera, uno
+ * ogni mossa il tutor la commenta con dei messaggi sotto la scacchiera, uno
  * alla volta, mostrando sulla scacchiera le case di cui parla (vedi `coach/`).
+ * La scacchiera è un po' più piccola, per lasciare posto ai messaggi.
  * La partita è la stessa di «Gioca»: si passa da una sezione all'altra senza perderla.
  *
  * Riceve: `coached` (facoltativo), `true` nella modalità Tutor.
@@ -46,9 +48,11 @@ import { Button } from '../../components/button/Button';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { EvalBar } from '../../components/eval-bar/EvalBar';
 import { PanelCard } from '../../components/panel-card/PanelCard';
+import { TabSwitch, type TabOption } from '../../components/tab-switch/TabSwitch';
 import { useGameKeyboard } from '../../hooks/useGameKeyboard';
 import { useMoveSound } from '../../hooks/useMoveSound';
 import { usePositionReport } from '../../hooks/usePositionReport';
+import { useTutorTab, type SideTab } from '../../hooks/useTutorTab';
 import { useTutorTarget } from '../../hooks/useTutorTarget';
 import { exportPgn, savePgnFile } from '../../services/gameService';
 import { useEngineStore } from '../../state/engineStore';
@@ -72,6 +76,8 @@ import {
   PromotionPicker,
   type PromotionPiece,
 } from '../../components/promotion-picker/PromotionPicker';
+import { classNames } from '../../lib/classNames';
+import { TutorPanel } from '../tutor/TutorPanel';
 import { CoachPanel } from './coach/CoachPanel';
 import { CoachPopup } from './coach/CoachPopup';
 import { useCoachMessages } from './coach/useCoachMessages';
@@ -83,6 +89,12 @@ interface PendingPromotion {
   from: string;
   to: string;
 }
+
+/** Le due voci in cima alla colonna di destra. */
+const SIDE_TABS: readonly TabOption<SideTab>[] = [
+  { value: 'main', label: 'Partita' },
+  { value: 'tutor', label: 'Tutor' },
+];
 
 /** Nessuna mossa possibile (quando non si può muovere). */
 const NO_MOVES: readonly LegalMove[] = [];
@@ -119,6 +131,8 @@ export function PlayPage({ coached = false }: PlayPageProps) {
   const observationsEnabled = useObservationsStore((state) => state.enabled);
   const setObservationsEnabled = useObservationsStore((state) => state.setEnabled);
 
+  /** La voce scelta in cima alla colonna di destra (il tasto T passa al tutor). */
+  const [sideTab, setSideTab] = useTutorTab();
   /** Il colore mostrato in basso sulla scacchiera. */
   const [orientation, setOrientation] = useState<Side>('white');
   /** La promozione in attesa della scelta del pezzo, oppure `null`. */
@@ -335,7 +349,7 @@ export function PlayPage({ coached = false }: PlayPageProps) {
       <h1 className={styles.hiddenTitle}>{title}</h1>
 
       <div className={styles.workspace}>
-        <div className={styles.boardArea}>
+        <div className={classNames(styles.boardArea, coached && styles.coached)}>
           <PlayerBar {...describePlayer(session, opponentSide)} />
           <div className={styles.boardWrap}>
             {analysisEnabled && (
@@ -370,18 +384,33 @@ export function PlayPage({ coached = false }: PlayPageProps) {
                 onCancel={cancelPromotion}
               />
             )}
-            {coached && popup.isOpen && (
-              <CoachPopup
-                messages={coach.messages}
-                index={popup.index}
-                notation={notation}
-                onIndexChange={popup.setIndex}
-                onClose={popup.close}
-                onOpenCard={setCoachCardId}
-              />
-            )}
           </div>
           <PlayerBar {...describePlayer(session, orientation)} />
+          {coached && (
+            // Sotto la scacchiera, in uno spazio di altezza fissa: la scacchiera resta tutta visibile.
+            <div className={styles.coachSlot}>
+              {popup.isOpen ? (
+                <CoachPopup
+                  messages={coach.messages}
+                  index={popup.index}
+                  notation={notation}
+                  onIndexChange={popup.setIndex}
+                  onClose={popup.close}
+                  onOpenCard={setCoachCardId}
+                />
+              ) : (
+                <div className={styles.coachIdle}>
+                  {coach.isLoading ? (
+                    <p>Il tutor sta guardando la posizione…</p>
+                  ) : coach.messages.length > 0 ? (
+                    <Button onClick={popup.reopen}>Rivedi i commenti</Button>
+                  ) : (
+                    <p>Gioca una mossa: il tutor la commenterà qui.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           {actionError !== null && (
             <p className={styles.error} role="alert">
               {actionError}
@@ -402,79 +431,90 @@ export function PlayPage({ coached = false }: PlayPageProps) {
         </div>
 
         <aside className={styles.sidePanel} aria-label="Partita">
-          {coached && (
-            <CoachPanel
-              withEngine={coachWithEngine}
-              onWithEngineChange={setCoachWithEngine}
-              isLoading={coach.isLoading}
-              canReopen={!popup.isOpen && coach.messages.length > 0}
-              onReopen={popup.reopen}
-              card={coachCard}
-              onCloseCard={() => {
-                setCoachCardId(null);
-              }}
-            />
-          )}
-          <PanelCard title="Mosse">
-            <OpeningLabel opening={session.opening} />
-            <MoveList
-              moves={game.moves}
-              cursor={game.cursor}
-              notation={notation}
-              onSelect={(ply) => {
-                void goTo(ply);
-              }}
-            />
-            <GameControls
-              cursor={game.cursor}
-              totalMoves={game.moves.length}
-              canUndo={session.canUndo}
-              canResign={session.canResign}
-              onGoTo={(ply) => {
-                void goTo(ply);
-              }}
-              onNewGame={() => {
-                setIsNewGameOpen(true);
-              }}
-              onUndo={() => {
-                void undo();
-              }}
-              onResign={() => {
-                void resign();
-              }}
-              onFlip={() => {
-                setOrientation((side) => (side === 'white' ? 'black' : 'white'));
-              }}
-            />
-          </PanelCard>
-
-          <AnalysisPanel
-            enabled={analysisEnabled}
-            onToggle={(enabled) => {
-              void setAnalysisEnabled(enabled);
-            }}
-            update={analysis}
-            isGameOver={result !== null}
-            notation={notation}
+          <TabSwitch
+            label="Contenuto della colonna (tasto T)"
+            options={SIDE_TABS}
+            value={sideTab}
+            onChange={setSideTab}
           />
+          <div className={styles.sideContent}>
+            {sideTab === 'tutor' ? (
+              <TutorPanel />
+            ) : (
+              <>
+                {coached && (
+                  <CoachPanel
+                    withEngine={coachWithEngine}
+                    onWithEngineChange={setCoachWithEngine}
+                    card={coachCard}
+                    onCloseCard={() => {
+                      setCoachCardId(null);
+                    }}
+                  />
+                )}
+                <PanelCard title="Mosse">
+                  <OpeningLabel opening={session.opening} />
+                  <MoveList
+                    moves={game.moves}
+                    cursor={game.cursor}
+                    notation={notation}
+                    onSelect={(ply) => {
+                      void goTo(ply);
+                    }}
+                  />
+                  <GameControls
+                    cursor={game.cursor}
+                    totalMoves={game.moves.length}
+                    canUndo={session.canUndo}
+                    canResign={session.canResign}
+                    onGoTo={(ply) => {
+                      void goTo(ply);
+                    }}
+                    onNewGame={() => {
+                      setIsNewGameOpen(true);
+                    }}
+                    onUndo={() => {
+                      void undo();
+                    }}
+                    onResign={() => {
+                      void resign();
+                    }}
+                    onFlip={() => {
+                      setOrientation((side) => (side === 'white' ? 'black' : 'white'));
+                    }}
+                  />
+                </PanelCard>
 
-          <ObservationsPanel
-            enabled={observationsEnabled}
-            onToggle={setObservationsEnabled}
-            report={report}
-            notation={notation}
-            onHighlight={setHighlighted}
-          />
+                <AnalysisPanel
+                  enabled={analysisEnabled}
+                  onToggle={(enabled) => {
+                    void setAnalysisEnabled(enabled);
+                  }}
+                  update={analysis}
+                  isGameOver={result !== null}
+                  notation={notation}
+                />
 
-          <PositionPanel position={position} />
+                <ObservationsPanel
+                  enabled={observationsEnabled}
+                  onToggle={setObservationsEnabled}
+                  report={report}
+                  notation={notation}
+                  onHighlight={setHighlighted}
+                />
 
-          <PanelCard title="Copia e incolla">
-            <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
-          </PanelCard>
+                <PositionPanel position={position} />
 
-          <PanelCard title="File PGN">
-            <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
-          </PanelCard>
+                <PanelCard title="Copia e incolla">
+                  <ImportExport fen={position.fen} onRequestPgn={exportPgn} onImport={importText} />
+                </PanelCard>
+
+                <PanelCard title="File PGN">
+                  <PgnFileButtons onSave={savePgnFile} onOpen={openFile} />
+                </PanelCard>
+              </>
+            )}
+          </div>
         </aside>
       </div>
 

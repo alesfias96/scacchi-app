@@ -1,10 +1,10 @@
 # src/features/tutor — Il tutor
 
-Il tutor spiega la posizione mostrata dalla sezione aperta. Sta in una **barra a comparsa sul
-bordo destro**, uguale in ogni sezione: si apre portando il mouse sul bordo, con la linguetta
-«Tutor» o con il tasto **T**, e si può fissare aperta.
+Il tutor spiega la posizione mostrata dalla sezione aperta. In «Gioca», «Tutor» e «Allenamento»
+in cima alla colonna di destra c'è un **selettore** («Partita | Tutor», «Allenamento | Tutor»):
+la voce «Tutor», o il tasto **T**, mostra questo pannello al posto delle schede della sezione.
 
-Dentro la barra:
+Nel pannello:
 
 - una **piccola scacchiera** con la posizione spiegata: passando il mouse su una frase si vedono
   le case coinvolte;
@@ -20,17 +20,17 @@ Dentro la barra:
 
 Quali posizioni spiega: in «Gioca» quella sulla scacchiera (anche scorrendo le mosse); contro il
 computer, a partita in corso, è spento (sarebbe un aiuto) ma si può accendere comunque. In
-«Allenamento» si accende solo a puzzle finito. Lavora solo quando la barra è aperta.
+«Allenamento» si accende solo a puzzle finito. Lavora solo quando la voce «Tutor» è scelta.
 
-La sezione **Tutor** del menu principale, con i commenti dopo ogni mossa sopra la scacchiera, sta
+La sezione **Tutor** del menu principale, con i commenti dopo ogni mossa sotto la scacchiera, sta
 in `src/features/play/coach/`; le schede da aprire stanno in `src/components/knowledge-cards/`.
 
 ## Contenuto
 
-| Elemento                | Cosa fa                                                                        |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| `TutorPanel.tsx`        | Il contenuto della barra: scacchiera, interruttore, spiegazione, prove "e se…" |
-| `TutorPanel.module.css` | La sua disposizione                                                            |
-| `TutorPanel.test.tsx`   | I test: senza posizione, contro il computer, puzzle, schede, mosse provate     |
-| `tutor-sections/`       | Le parti della spiegazione, con le frasi che si illuminano                     |
-| `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                      |
+| Elemento                | Cosa fa                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| `TutorPanel.tsx`        | Il contenuto della voce «Tutor»: scacchiera, interruttore, spiegazione, prove "e se…" |
+| `TutorPanel.module.css` | La sua disposizione                                                                   |
+| `TutorPanel.test.tsx`   | I test: senza posizione, contro il computer, puzzle, schede, mosse provate            |
+| `tutor-sections/`       | Le parti della spiegazione, con le frasi che si illuminano                            |
+| `what-if-results/`      | Le mosse provate e cosa cambia con ognuna                                             |

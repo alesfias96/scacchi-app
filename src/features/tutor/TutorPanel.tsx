@@ -1,8 +1,8 @@
 /**
  * TutorPanel — il tutor: spiega la posizione mostrata dalla sezione aperta.
  *
- * Cosa fa: sta nella barra a comparsa «Tutor» (bordo destro, tasto T), uguale
- * in ogni sezione. Mostra:
+ * Cosa fa: è la voce «Tutor» in cima alla colonna di destra di «Gioca»,
+ * «Tutor» e «Allenamento» (il tasto T ci passa). Mostra:
  * - una piccola scacchiera con la posizione spiegata: passando il mouse su
  *   una frase, si vedono le case coinvolte;
  * - la spiegazione divisa in parti (situazione, cosa succede adesso, piano,
@@ -16,7 +16,7 @@
  * e mossa migliore (circa mezzo secondo di attesa).
  *
  * Riceve: niente (legge tutto dallo stato del tutor).
- * Restituisce: il contenuto della barra del tutor.
+ * Restituisce: il contenuto della voce «Tutor».
  */
 import { useCallback, useMemo, useState } from 'react';
 import type { LegalMove } from '../../bindings/LegalMove';
@@ -93,8 +93,7 @@ export function TutorPanel() {
   if (target === null) {
     return (
       <p className={styles.message}>
-        Apri una partita in «Gioca» (anche dall’Archivio) o finisci un puzzle in «Allenamento»: il
-        tutor spiegherà la posizione sulla scacchiera.
+        Comincia una partita o un puzzle: il tutor spiegherà la posizione sulla scacchiera.
       </p>
     );
   }

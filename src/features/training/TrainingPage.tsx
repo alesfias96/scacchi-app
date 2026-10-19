@@ -2,7 +2,7 @@
  * TrainingPage — la sezione "Allenamento": puzzle per allenare il calcolo.
  *
  * Cosa fa: a sinistra la scacchiera del puzzle, a destra la colonna con le
- * schede (sempre aperta, con il suo scorrimento interno, come in "Gioca"):
+ * schede (alta quanto la scacchiera, con il suo scorrimento interno, come in "Gioca"):
  * - "Il tuo livello": il rating dei puzzle, quanti risolti, quanti da ripassare;
  * - "Allenamento": le scelte (modalità, mosse da trovare, tema, difficoltà) e
  *   il pulsante "Nuovo puzzle";
@@ -14,7 +14,8 @@
  * in "Gioca" (anche la promozione). Una mossa sbagliata torna indietro e si
  * può riprovare; una giusta riceve subito la risposta dell'avversario.
  * Nella visualizzazione, dopo i secondi scelti, i pezzi spariscono.
- * Il tutor (tasto T) spiega la posizione solo a puzzle finito: prima
+ * In cima alla colonna un selettore passa da «Allenamento» a «Tutor» (o il
+ * tasto T): il tutor spiega la posizione solo a puzzle finito, prima
  * rivelerebbe la soluzione.
  *
  * Tutte le regole (mossa giusta o sbagliata, rating, ripasso) sono in Rust.
@@ -28,16 +29,19 @@ import type { LegalMove } from '../../bindings/LegalMove';
 import type { TrainingSetup } from '../../bindings/TrainingSetup';
 import { Chessboard } from '../../components/chessboard/Chessboard';
 import { PanelCard } from '../../components/panel-card/PanelCard';
+import { TabSwitch, type TabOption } from '../../components/tab-switch/TabSwitch';
 import {
   PromotionPicker,
   type PromotionPiece,
 } from '../../components/promotion-picker/PromotionPicker';
 import { useInitialPosition } from '../../hooks/useInitialPosition';
 import { useMoveSound } from '../../hooks/useMoveSound';
+import { useTutorTab, type SideTab } from '../../hooks/useTutorTab';
 import { useTutorTarget } from '../../hooks/useTutorTarget';
 import { useLoadedSettings, useSettingsStore } from '../../state/settingsStore';
 import { useTrainingStore } from '../../state/trainingStore';
 import type { TutorTarget } from '../../state/tutorStore';
+import { TutorPanel } from '../tutor/TutorPanel';
 import { PuzzleReveal } from './puzzle-reveal/PuzzleReveal';
 import { PuzzleStatus } from './puzzle-status/PuzzleStatus';
 import { TrainingSetupPanel } from './training-setup/TrainingSetupPanel';
@@ -49,6 +53,12 @@ interface PendingPromotion {
   from: string;
   to: string;
 }
+
+/** Le due voci in cima alla colonna di destra. */
+const SIDE_TABS: readonly TabOption<SideTab>[] = [
+  { value: 'main', label: 'Allenamento' },
+  { value: 'tutor', label: 'Tutor' },
+];
 
 /** Nessuna mossa possibile (a puzzle finito). */
 const NO_MOVES: readonly LegalMove[] = [];
@@ -66,6 +76,8 @@ export function TrainingPage() {
   const showSolution = useTrainingStore((state) => state.showSolution);
   const initial = useInitialPosition();
 
+  /** La voce scelta in cima alla colonna di destra (il tasto T passa al tutor). */
+  const [sideTab, setSideTab] = useTutorTab();
   /** La promozione in attesa della scelta del pezzo, oppure `null`. */
   const [pendingPromotion, setPendingPromotion] = useState<PendingPromotion | null>(null);
   /** Cambiandolo, la scacchiera torna alla posizione ricevuta da Rust. */
@@ -219,62 +231,76 @@ export function TrainingPage() {
         </div>
 
         <aside className={styles.sidePanel} aria-label="Allenamento">
-          <PanelCard title="Il tuo livello">
-            {overview === null ? (
-              <p className={styles.message}>Leggo i tuoi risultati…</p>
-            ) : (
-              <dl className={styles.stats}>
-                <dt>Rating dei puzzle</dt>
-                <dd>{overview.rating}</dd>
-                <dt>Puzzle risolti</dt>
-                <dd>
-                  {overview.solved} su {overview.attempted}
-                </dd>
-                <dt>Da ripassare oggi</dt>
-                <dd>{overview.dueReviews}</dd>
-              </dl>
-            )}
-          </PanelCard>
-
-          <TrainingSetupPanel
-            setup={trainingSetup}
-            themes={overview?.themes ?? []}
-            dueReviews={overview?.dueReviews ?? 0}
-            onChange={changeSetup}
-            onStart={startPuzzle}
+          <TabSwitch
+            label="Contenuto della colonna (tasto T)"
+            options={SIDE_TABS}
+            value={sideTab}
+            onChange={setSideTab}
           />
+          <div className={styles.sideContent}>
+            {sideTab === 'tutor' ? (
+              <TutorPanel />
+            ) : (
+              <>
+                <PanelCard title="Il tuo livello">
+                  {overview === null ? (
+                    <p className={styles.message}>Leggo i tuoi risultati…</p>
+                  ) : (
+                    <dl className={styles.stats}>
+                      <dt>Rating dei puzzle</dt>
+                      <dd>{overview.rating}</dd>
+                      <dt>Puzzle risolti</dt>
+                      <dd>
+                        {overview.solved} su {overview.attempted}
+                      </dd>
+                      <dt>Da ripassare oggi</dt>
+                      <dd>{overview.dueReviews}</dd>
+                    </dl>
+                  )}
+                </PanelCard>
 
-          {attempt === null ? (
-            <PanelCard title="Puzzle">
-              <p className={styles.message}>
-                Scegli come allenarti e premi «Nuovo puzzle». Il puzzle comincia dopo la mossa
-                dell’avversario: tocca a te trovare la continuazione migliore.
-              </p>
-            </PanelCard>
-          ) : (
-            <PuzzleStatus
-              attempt={attempt}
-              memorizing={memorizing}
-              notation={notation}
-              onHint={() => {
-                void hint();
-              }}
-              onShowSolution={() => {
-                void showSolution();
-              }}
-              onNext={startPuzzle}
-            />
-          )}
+                <TrainingSetupPanel
+                  setup={trainingSetup}
+                  themes={overview?.themes ?? []}
+                  dueReviews={overview?.dueReviews ?? 0}
+                  onChange={changeSetup}
+                  onStart={startPuzzle}
+                />
 
-          {attempt?.reveal && (
-            <PuzzleReveal
-              reveal={attempt.reveal}
-              rating={attempt.rating}
-              ratingChange={attempt.ratingChange}
-              notation={notation}
-              onHighlight={setHighlighted}
-            />
-          )}
+                {attempt === null ? (
+                  <PanelCard title="Puzzle">
+                    <p className={styles.message}>
+                      Scegli come allenarti e premi «Nuovo puzzle». Il puzzle comincia dopo la mossa
+                      dell’avversario: tocca a te trovare la continuazione migliore.
+                    </p>
+                  </PanelCard>
+                ) : (
+                  <PuzzleStatus
+                    attempt={attempt}
+                    memorizing={memorizing}
+                    notation={notation}
+                    onHint={() => {
+                      void hint();
+                    }}
+                    onShowSolution={() => {
+                      void showSolution();
+                    }}
+                    onNext={startPuzzle}
+                  />
+                )}
+
+                {attempt?.reveal && (
+                  <PuzzleReveal
+                    reveal={attempt.reveal}
+                    rating={attempt.rating}
+                    ratingChange={attempt.ratingChange}
+                    notation={notation}
+                    onHighlight={setHighlighted}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </aside>
       </div>
     </section>

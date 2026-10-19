@@ -3,8 +3,9 @@
  * mosse provate ("e se…").
  *
  * Le sezioni dicono al tutor quale posizione stanno mostrando (con
- * `useTutorTarget`); il pannello del tutor, che sta nella cornice dell'app,
- * la spiega quando è aperto. Tutte le spiegazioni le compone Rust.
+ * `useTutorTarget`); il pannello del tutor, la voce «Tutor» in cima alla
+ * colonna di destra, la spiega quando è mostrato (`useTutorTab`). Tutte le
+ * spiegazioni le compone Rust.
  */
 import { create } from 'zustand';
 import type { Side } from '../bindings/Side';
@@ -37,7 +38,7 @@ export interface TutorTarget {
 export interface TutorState {
   /** La posizione mostrata dalla sezione aperta; `null` se non ce n'è. */
   target: TutorTarget | null;
-  /** `true` mentre il pannello del tutor è aperto. */
+  /** `true` mentre il pannello del tutor è mostrato. */
   isOpen: boolean;
   /** Se chiedere anche il giudizio di Stockfish. */
   withEngine: boolean;
@@ -53,7 +54,7 @@ export interface TutorState {
   whatIf: WhatIfView[] | null;
   /** Cambia la posizione mostrata (la chiamano le sezioni). */
   setTarget: (target: TutorTarget | null) => void;
-  /** Il pannello si apre o si chiude. */
+  /** Il pannello viene mostrato o nascosto. */
   setOpen: (isOpen: boolean) => void;
   /** Accende o spegne il giudizio di Stockfish. */
   setWithEngine: (withEngine: boolean) => void;

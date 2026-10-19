@@ -78,7 +78,7 @@ describe('TutorPanel', () => {
   it('senza una posizione invita ad aprirne una', () => {
     render(<TutorPanel />);
 
-    expect(screen.getByText(/Apri una partita in «Gioca»/)).toBeDefined();
+    expect(screen.getByText(/Comincia una partita o un puzzle/)).toBeDefined();
   });
 
   it('contro il computer chiede di accenderlo comunque', async () => {

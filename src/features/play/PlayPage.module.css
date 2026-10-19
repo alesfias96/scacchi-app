@@ -29,11 +29,16 @@
   white-space: nowrap;
 }
 
+/*
+ * Una sola riga, alta quanto l'area della scacchiera: la colonna di destra
+ * non conta nel calcolo dell'altezza (vedi .sidePanel), quindi la pagina non
+ * si allunga mai e la colonna scorre al suo interno.
+ */
 .workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--play-panel-width);
+  align-content: start;
   gap: var(--space-6);
-  height: 100%;
   min-height: 0;
 }
 
@@ -53,6 +58,34 @@
   padding-left: calc(var(--eval-bar-width) + var(--space-3));
 }
 
+/* Modalità Tutor: la scacchiera lascia posto, sotto di sé, alla fascia dei messaggi. */
+.coached {
+  max-width: min(
+    var(--board-focus-max-size),
+    calc(100vh - var(--board-vertical-reserve) - var(--coach-strip-height) - var(--space-3))
+  );
+}
+
+/* La fascia dei messaggi del tutor: altezza fissa, così la scacchiera non si sposta. */
+.coachSlot {
+  display: flex;
+  flex-direction: column;
+  height: var(--coach-strip-height);
+}
+
+/* Quando non c'è un messaggio aperto: un riquadro tratteggiato con un avviso. */
+.coachIdle {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  border: var(--border-width) dashed var(--color-border);
+  border-radius: var(--radius-large);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+}
+
 .boardWrap {
   /* Riferimento per la barra di valutazione e per le finestre sopra la scacchiera. */
   position: relative;
@@ -68,8 +101,21 @@
 }
 
 /* La colonna "Partita": le schede una sotto l'altra, con lo scorrimento interno. */
+/*
+ * La colonna di destra: in cima il selettore «Partita | Tutor», sotto il
+ * contenuto che scorre. "contain: size" la esclude dal calcolo dell'altezza
+ * della riga: così è alta esattamente quanto l'area della scacchiera.
+ */
 .sidePanel {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  contain: size;
+}
+
+.sideContent {
+  display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-4);
   min-height: 0;

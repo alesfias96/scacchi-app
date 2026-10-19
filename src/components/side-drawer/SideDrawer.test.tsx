@@ -88,20 +88,4 @@ describe('SideDrawer', () => {
     fireEvent.keyDown(window, { key: 'i' });
     expect(handle().getAttribute('aria-expanded')).toBe('false');
   });
-
-  it('avvisa quando si apre e quando si chiude', () => {
-    const onOpenChange = vi.fn<(isOpen: boolean) => void>();
-    render(
-      <SideDrawer title="Tutor" shortcut="t" onOpenChange={onOpenChange}>
-        <p>Contenuto</p>
-      </SideDrawer>,
-    );
-    expect(onOpenChange).toHaveBeenLastCalledWith(false);
-
-    fireEvent.keyDown(window, { key: 't' });
-    expect(onOpenChange).toHaveBeenLastCalledWith(true);
-
-    fireEvent.keyDown(window, { key: 'Escape' });
-    expect(onOpenChange).toHaveBeenLastCalledWith(false);
-  });
 });

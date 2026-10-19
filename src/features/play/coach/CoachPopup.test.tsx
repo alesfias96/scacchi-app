@@ -64,13 +64,10 @@ describe('CoachPopup', () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
-  it('apre la scheda con «Approfondisci» e si sposta in alto', () => {
+  it('apre la scheda con «Approfondisci»', () => {
     const { onOpenCard } = renderPopup(0);
 
     fireEvent.click(screen.getByRole('button', { name: 'Approfondisci' }));
     expect(onOpenCard).toHaveBeenCalledWith('principles/center');
-
-    fireEvent.click(screen.getByRole('button', { name: 'Sposta in alto' }));
-    expect(screen.getByRole('button', { name: 'Sposta in basso' })).toBeDefined();
   });
 });

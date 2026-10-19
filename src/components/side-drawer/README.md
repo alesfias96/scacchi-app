@@ -16,5 +16,3 @@ spostarla, e dentro scorre per conto suo.
 | `SideDrawer.tsx`        | Il componente                                                      |
 | `SideDrawer.module.css` | L'aspetto: striscia sul bordo, linguetta, barra che scivola dentro |
 | `SideDrawer.test.tsx`   | I test: apertura, chiusura ritardata, "fissa", scorciatoia, Esc    |
-
-Chi la usa può sapere quando si apre e si chiude (`onOpenChange`): il tutor lavora solo a barra aperta.

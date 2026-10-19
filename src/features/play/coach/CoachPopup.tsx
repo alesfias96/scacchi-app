@@ -1,13 +1,13 @@
 /**
- * CoachPopup — il messaggio del tutor sopra la scacchiera (modalità Tutor).
+ * CoachPopup — il messaggio del tutor sotto la scacchiera (modalità Tutor).
  *
  * Cosa fa: mostra un messaggio alla volta, con il titoletto, la frase (nella
  * notazione scelta), la risposta migliore se c'è e il conteggio ("2 di 5").
  * Le case e le frecce del messaggio le disegna la scacchiera (le passa la
  * pagina). Si scorre con «Indietro» / «Avanti», oppure con Invio o Spazio;
  * Esc lo chiude. «Approfondisci» apre la scheda della base di conoscenza.
- * Sta in basso sulla scacchiera; con «Sposta in alto» va in alto, se copre
- * la zona interessante.
+ * Sta nella fascia sotto la scacchiera, così non copre nulla; se il testo è
+ * lungo scorre al suo interno.
  *
  * Riceve:
  * - `messages`, `index`: i messaggi e quello mostrato;
@@ -17,10 +17,9 @@
  * - `onOpenCard`: apre una scheda della base di conoscenza.
  * Restituisce: il popup.
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import type { Notation } from '../../../bindings/Notation';
 import { Button } from '../../../components/button/Button';
-import { classNames } from '../../../lib/classNames';
 import { formatFact } from '../../../lib/formatFact';
 import { formatLine } from '../../../lib/formatLine';
 import type { CoachMessage } from './buildCoachMessages';
@@ -49,8 +48,6 @@ export function CoachPopup({
   onClose,
   onOpenCard,
 }: CoachPopupProps) {
-  /** `true` se il popup è stato spostato in alto. */
-  const [isOnTop, setIsOnTop] = useState(false);
   const message = messages[index];
   const isLast = index >= messages.length - 1;
 
@@ -85,7 +82,7 @@ export function CoachPopup({
   return (
     <section
       key={index}
-      className={classNames(styles.popup, isOnTop ? styles.top : styles.bottom)}
+      className={styles.popup}
       aria-label="Messaggio del tutor"
       aria-live="polite"
     >
@@ -136,13 +133,6 @@ export function CoachPopup({
           </Button>
         )}
         <span className={styles.spacer} />
-        <Button
-          onClick={() => {
-            setIsOnTop((top) => !top);
-          }}
-        >
-          {isOnTop ? 'Sposta in basso' : 'Sposta in alto'}
-        </Button>
         <Button variant="icon" aria-label="Chiudi i messaggi (Esc)" onClick={onClose}>
           ×
         </Button>

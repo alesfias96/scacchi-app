@@ -210,7 +210,7 @@ app-scacchi/
 │   │   ├── choice-group/       gruppo di scelte a pastiglie (compatto)
 │   │   ├── side-drawer/        barra laterale a comparsa (il menu principale, a sinistra)
 │   │   ├── promotion-picker/   scelta del pezzo nella promozione (Gioca e Allenamento)
-│   │   └── knowledge-cards/    schede della base di conoscenza (barra del tutor e modalità Tutor)
+│   │   └── knowledge-cards/    schede della base di conoscenza (pannello del tutor e modalità Tutor)
 │   ├── features/               aree dell'app, ognuna autonoma
 │   │   ├── play/               partita contro il computer o a due giocatori, con orologio
 │   │   │                       move-list/, game-controls/,
@@ -221,7 +221,7 @@ app-scacchi/
 │   │   ├── archive/            archivio delle partite: filtri, rivedi, continua, elimina
 │   │   ├── training/           puzzle: calcolo, visualizzazione, "cosa minaccia?", ripasso
 │   │   │                       training-setup/, puzzle-status/, puzzle-reveal/
-│   │   ├── tutor/              pannello del tutor (barra a destra, tasto T): spiegazione, schede,
+│   │   ├── tutor/              pannello del tutor (voce «Tutor» della colonna di destra, tasto T):
 │   │   │                       "e se…"; tutor-sections/, what-if-results/
 │   │   ├── review/             analisi delle partite giocate
 │   │   ├── progress/           statistiche e livello
@@ -438,6 +438,9 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | Sezione «Tutor» nel menu: la partita di «Gioca» con i commenti dopo ogni mossa, in popup sopra la scacchiera, uno alla volta, con le case mostrate sulla scacchiera                              | Richiesta di Alessandro: imparare mentre si gioca                                                                                                                                                                                             |
 | 2026-10-19 | Ordine dei messaggi: commento alle mosse appena giocate (anche la risposta del computer), minacce attuali, poi solo le novità                                                                    | Evitare di ripetere a ogni mossa le stesse frasi                                                                                                                                                                                              |
 | 2026-10-19 | Popup scorsi a mano (Avanti/Indietro, Invio/Spazio, Esc), in basso e spostabili in alto; giudizio di Stockfish acceso di base                                                                    | Si legge al proprio ritmo, senza coprire la zona interessante                                                                                                                                                                                 |
+| 2026-10-19 | Cambio: i messaggi della modalità Tutor stanno in una fascia sotto la scacchiera (non sopra); la scacchiera è un po' più piccola                                                                 | Richiesta di Alessandro: vedere sempre tutta la scacchiera                                                                                                                                                                                    |
+| 2026-10-19 | La colonna di destra è alta quanto l'area della scacchiera, con scorrimento interno (`contain: size`); la pagina non scorre                                                                      | Lo scroll della pagina era eccessivo                                                                                                                                                                                                          |
+| 2026-10-19 | Cambio: niente più barra a comparsa del tutor; in cima alla colonna di destra un selettore «Partita \| Tutor» («Allenamento \| Tutor»), tasto T                                                  | Prima la barra si sovrapponeva alla colonna                                                                                                                                                                                                   |
 
 ---
 

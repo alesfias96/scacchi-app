@@ -20,8 +20,6 @@
  *   finestra di dialogo aperta);
  * - `padded`: se falso il contenuto occupa tutta la barra, senza margini
  *   (per contenuti che hanno già il loro fondo, come il menu principale);
- * - `onOpenChange`: facoltativa, chiamata quando la barra si apre o si chiude
- *   (ad esempio il tutor lavora solo quando la sua barra è aperta);
  * - `children`: il contenuto.
  * Restituisce: la linguetta sul bordo e la barra.
  */
@@ -47,8 +45,6 @@ export interface SideDrawerProps {
   shortcutEnabled?: boolean;
   /** Se falso il contenuto occupa tutta la barra, senza margini. Predefinito: vero. */
   padded?: boolean;
-  /** Chiamata con `true` quando la barra si apre e con `false` quando si chiude. */
-  onOpenChange?: (isOpen: boolean) => void;
   /** Il contenuto della barra. */
   children: ReactNode;
 }
@@ -59,7 +55,6 @@ export function SideDrawer({
   shortcut,
   shortcutEnabled = true,
   padded = true,
-  onOpenChange,
   children,
 }: SideDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -124,16 +119,6 @@ export function SideDrawer({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, shortcut, shortcutEnabled, open, close]);
-
-  // Avvisa chi lo ha chiesto quando la barra si apre o si chiude. La funzione
-  // sta in un riferimento: se il genitore ne crea una nuova non si riavvisa.
-  const onOpenChangeRef = useRef(onOpenChange);
-  useEffect(() => {
-    onOpenChangeRef.current = onOpenChange;
-  }, [onOpenChange]);
-  useEffect(() => {
-    onOpenChangeRef.current?.(isOpen);
-  }, [isOpen]);
 
   // Alla rimozione del componente, nessun timer resta in sospeso.
   useEffect(() => cancelClose, [cancelClose]);

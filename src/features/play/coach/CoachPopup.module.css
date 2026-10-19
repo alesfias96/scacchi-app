@@ -1,31 +1,20 @@
 /*
- * Il messaggio del tutor: una scheda semitrasparente sopra la scacchiera, in
- * basso (o in alto), che compare con un leggero movimento. Le case
- * evidenziate restano visibili attraverso il fondo.
+ * Il messaggio del tutor: una scheda nella fascia sotto la scacchiera, che
+ * compare con un leggero movimento. Se il testo è lungo scorre al suo interno.
  */
 
 .popup {
-  position: absolute;
-  right: var(--space-4);
-  left: var(--space-4);
-  z-index: 6;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-2);
+  min-height: 0;
   padding: var(--space-3) var(--space-4);
+  overflow-y: auto;
   border-radius: var(--radius-large);
-  background: var(--coach-popup-background);
-  box-shadow: var(--shadow-popover);
-  backdrop-filter: blur(var(--coach-popup-blur));
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-border);
   animation: appear var(--duration-medium) var(--easing-standard);
-}
-
-.bottom {
-  bottom: var(--space-4);
-}
-
-.top {
-  top: var(--space-4);
 }
 
 .header {
@@ -64,6 +53,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  margin-top: auto;
 }
 
 .spacer {
