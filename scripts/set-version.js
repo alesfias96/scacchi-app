@@ -27,25 +27,40 @@ if (version === undefined || !/^\d+\.\d+\.\d+$/.test(version)) {
   process.exit(1);
 }
 
-/** Cambia un file JSON e lo riscrive con lo stesso aspetto (due spazi, a capo finale). */
-function updateJson(path, change) {
+/**
+ * Cambia le prime `count` righe `"version": "…"` di un file JSON, lasciando
+ * tutto il resto com'è scritto (così la formattazione di Prettier non cambia).
+ * Poi controlla, rileggendo il file, che la versione sia dove deve essere.
+ */
+function updateJson(path, count, check) {
   const full = join(ROOT, path);
-  const data = JSON.parse(readFileSync(full, 'utf8'));
-  change(data);
-  writeFileSync(full, `${JSON.stringify(data, null, 2)}\n`);
+  let changed = 0;
+  const text = readFileSync(full, 'utf8').replace(
+    /("version": ")[^"]*(")/g,
+    (match, start, end) => {
+      if (changed === count) {
+        return match;
+      }
+      changed += 1;
+      return `${start}${version}${end}`;
+    },
+  );
+  if (changed !== count || !check(JSON.parse(text))) {
+    console.error(`${path}: non ho trovato la versione dove me l'aspettavo`);
+    process.exit(1);
+  }
+  writeFileSync(full, text);
   console.log(`${path}: ${version}`);
 }
 
-updateJson('package.json', (data) => {
-  data.version = version;
-});
-updateJson('package-lock.json', (data) => {
-  data.version = version;
-  data.packages[''].version = version;
-});
-updateJson('src-tauri/tauri.conf.json', (data) => {
-  data.version = version;
-});
+updateJson('package.json', 1, (data) => data.version === version);
+// In package-lock.json le prime due sono quella del progetto e quella del pacchetto principale.
+updateJson(
+  'package-lock.json',
+  2,
+  (data) => data.version === version && data.packages[''].version === version,
+);
+updateJson('src-tauri/tauri.conf.json', 1, (data) => data.version === version);
 
 // In Cargo.toml la versione comune è la riga `version = "…"` della sezione [workspace.package].
 const cargoPath = join(ROOT, 'Cargo.toml');

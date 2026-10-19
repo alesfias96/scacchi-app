@@ -357,7 +357,7 @@ o in un modulo `tests` nello stesso file (Rust).
 | 8-bis. Varianti                 | ✅ completata                                             |
 | 9. Statistiche                  | ✅ completata                                             |
 | 10. Estensioni                  | ✅ 10-A Maia, 10-B distribuzione; 10-C AI locale rinviata |
-| 11. Appunti personali           | 🔵 in test                                                |
+| 11. Appunti personali           | ✅ completata                                             |
 
 Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 
@@ -514,6 +514,7 @@ Legenda: ⚪ da fare · 🔵 in test · ✅ completata (tutti i test verdi)
 | 2026-10-19 | In Gioca la partita si collega solo se è già nell'archivio e la posizione è sulla linea principale                                                                                               | Le varianti non si salvano mossa per mossa, quindi non si potrebbero riaprire                                                                                                                                                                 |
 | 2026-10-19 | Salvataggio automatico dopo 700 ms senza scrivere, e subito chiudendo l'appunto                                                                                                                  | Come le partite: nulla va perso                                                                                                                                                                                                               |
 | 2026-10-19 | Le migrazioni si applicano con `set_ignore_missing(true)`: una versione più vecchia apre anche un database aggiornato da una più nuova                                                           | Provando la versione di sviluppo si aggiorna lo stesso database dell'app installata; la 0.10.0 (già pubblicata) non ce l'ha, quindi va aggiornata alla 0.11.0                                                                                 |
+| 2026-10-19 | Fase 11 approvata                                                                                                                                                                                | Test manuali superati; Alessandro chiede un tutor che spieghi il perché delle mosse, strategie e quando usarle                                                                                                                                |
 
 ---
 
@@ -530,7 +531,7 @@ Base per il piano di ogni fase: va sempre presentato ad Alessandro e approvato p
 - **Fase 8-bis — Varianti.** Fatta (vedi registro §10). Da valutare: commenti `{…}` nei PGN, varianti anche nell'analisi delle partite.
 - **Fase 9 — Statistiche.** Fatta (vedi registro §10). Da valutare: statistiche per tempo di riflessione (blitz, rapid), punti del grafico distanziati per data, esportare le statistiche.
 - **Fase 10 — Estensioni.** Divisa in tre passi (registro §10). 10-A Maia: fatta e approvata. 10-B distribuzione: fatta e approvata, v0.10.0 pubblicata (repository <https://github.com/alesfias96/scacchi-app>; chiave privata in `C:\Users\afias\.tauri\scacchi.key`). Da valutare: anche il Mac Intel e Windows ARM tra gli installatori. 10-C AI locale **rinviata** (Alessandro: «va vista per bene»); piano già proposto: paragrafo «In parole semplici» a richiesta, Ollama su localhost, modello scelto tra quelli installati, risposte scartate se citano mosse o case non presenti nei fatti. Da valutare per Maia: usarla anche nel tutor ("cosa giocherebbe una persona del tuo livello").
-- **Fase 11 — Appunti personali.** Fatta, in test (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
+- **Fase 11 — Appunti personali.** Fatta (vedi registro §10). Da valutare: esportare gli appunti (testo o PDF), collegare un appunto a una variante.
 - **Prima di distribuire:** chessground e Stockfish sono GPL-3.0; per uso personale nessun problema.
 
 ---
