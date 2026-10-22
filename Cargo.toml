@@ -48,7 +48,7 @@ members = [
 
 # Valori comuni ereditati da tutte le crate, così sono scritti una volta sola.
 [workspace.package]
-version = "0.11.0"
+version = "0.12.0"
 edition = "2024"
 authors = ["Alessandro"]
 

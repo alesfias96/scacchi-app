@@ -40,7 +40,7 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "analysis"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "chess-core",
  "serde",
@@ -65,7 +65,7 @@ checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
 name = "app-settings"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -424,7 +424,7 @@ dependencies = [
 
 [[package]]
 name = "chess-core"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "serde",
  "shakmaty",
@@ -957,7 +957,7 @@ checksum = "4ef6b89e5b37196644d8796de5268852ff179b44e96276cf4290264843743bb7"
 
 [[package]]
 name = "engine"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "chess-core",
  "serde",
@@ -1233,7 +1233,7 @@ dependencies = [
 
 [[package]]
 name = "game-session"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "app-settings",
  "chess-core",
@@ -2247,7 +2247,7 @@ checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
 name = "maia"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "engine",
  "shakmaty",
@@ -2417,7 +2417,7 @@ dependencies = [
 
 [[package]]
 name = "notes"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "serde",
  "ts-rs",
@@ -2678,7 +2678,7 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "openings"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "serde",
  "shakmaty",
@@ -3177,7 +3177,7 @@ dependencies = [
 
 [[package]]
 name = "review"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "analysis",
  "chess-core",
@@ -3345,7 +3345,7 @@ dependencies = [
 
 [[package]]
 name = "scacchi-app"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "analysis",
  "app-settings",
@@ -4000,7 +4000,7 @@ checksum = "ff7589a1859b09232522bb9edf076ca7fcf14ded96685d3fa629db73023ffbb7"
 
 [[package]]
 name = "stats"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "analysis",
  "app-settings",
@@ -4014,7 +4014,7 @@ dependencies = [
 
 [[package]]
 name = "storage"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "app-settings",
  "chess-core",
@@ -4954,7 +4954,7 @@ dependencies = [
 
 [[package]]
 name = "training"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "analysis",
  "app-settings",
@@ -5028,7 +5028,7 @@ dependencies = [
 
 [[package]]
 name = "tutor"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "analysis",
  "chess-core",

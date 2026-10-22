@@ -137,7 +137,7 @@ Tutor, di più a richiesta); come mostrare l'idea (A: variante animata sulla sca
 Distribuzione (10-B, fatta): repository <https://github.com/alesfias96/scacchi-app> (pubblico, push
 HTTPS); chiave privata degli aggiornamenti in `C:\Users\afias\.tauri\scacchi.key`, password in
 `segreti/` (cartella ignorata da git); segreti GitHub già inseriti; pubblicare: `npm run set-version`,
-commit, push, `git tag vX.Y.Z` + push dell'etichetta, poi pubblicare la bozza. Versione attuale 0.10.0.
+commit, push, `git tag vX.Y.Z` + push dell'etichetta, poi pubblicare la bozza. Versione attuale 0.12.0 (etichetta `v0.12.0`, con tutta la Fase 12).
 
 Piano della 10-C, rinviato (A = consigliata):
 
